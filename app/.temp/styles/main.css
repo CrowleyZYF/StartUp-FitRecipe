@@ -1,0 +1,49 @@
+/* line 4, ../../app/styles/main.scss */
+.bar {
+  background-color: #49BDCC !important;
+}
+/* line 6, ../../app/styles/main.scss */
+.bar .title {
+  color: #fff !important;
+}
+
+/* line 11, ../../app/styles/main.scss */
+.tab-nav {
+  background-color: #49BDCC !important;
+  border: none !important;
+  padding-top: 0 !important;
+}
+/* line 15, ../../app/styles/main.scss */
+.tab-nav .tab-title {
+  color: #fff;
+}
+/* line 18, ../../app/styles/main.scss */
+.tab-nav .tab-item-active {
+  background-color: #badc2d;
+  border: none !important;
+  margin-top: 0px !important;
+}
+/* line 23, ../../app/styles/main.scss */
+.tab-nav .icon {
+  background-repeat: no-repeat;
+  background-position: 50%;
+  height: 20px;
+  background-size: contain;
+  margin: 6px;
+}
+/* line 30, ../../app/styles/main.scss */
+.tab-nav .fit-icon-index {
+  background-image: url("../images/icon-index.png");
+}
+/* line 33, ../../app/styles/main.scss */
+.tab-nav .fit-icon-category {
+  background-image: url("../images/icon-category.png");
+}
+/* line 36, ../../app/styles/main.scss */
+.tab-nav .fit-icon-plan {
+  background-image: url("../images/icon-plan.png");
+}
+/* line 39, ../../app/styles/main.scss */
+.tab-nav .fit-icon-knowledge {
+  background-image: url("../images/icon-knowledge.png");
+}
