@@ -1,1 +1,15 @@
 settings.py
+node_modules
+www
+.idea
+.tmp
+.sass-cache
+app/bower_components
+coverage
+platforms
+plugins
+*.swp
+*.swo
+*.log
+*.DS_Store
+app/scripts/config.js
