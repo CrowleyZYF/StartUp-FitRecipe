@@ -7,4 +7,6 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
+    # If you're intending to use the browsable API you'll probably also want to add REST framework's login and logout views.
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 )
