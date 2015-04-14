@@ -14,3 +14,4 @@ plugins
 *.DS_Store
 app/scripts/config.js
 dump.rdb
+UserInterfaceState.xcuserstate
