@@ -20,25 +20,17 @@ Hello, here is the API document.
 9. run server now. `python manage.py runserver`. port 8000 is default
 
 ## API Documents
-### GET /api/recipes
-List all recipes
+Read the document in [wiki](https://github.com/CrowleyZYF/fitRecipe/wiki/Back-End-API "wiki")
 
-+ Response 200 (application/json)
+## CMS
+After you started the server, you can access into the CMS.
 
-        [
-            {
-                "id": 1, 
-                "created_time": "2015-04-26 07:32:29", 
-                "updated_time": "2015-04-26 16:17:07", 
-                "img_height": 2309, 
-                "img_width": 3464, 
-                "img": "static/images/DSC05069.jpg", 
-                "thumbnail": "", 
-                "title": "test123", 
-                "type": 0, 
-                "duration": "", 
-                "calorie": ""
-            }
-        ]
+Using the superuser account and password to login.
 
+The superuser account is created when you ran `python manage.py syncdb` command.
 
+If you didn't create the superuser, you can use `python manage.py createsuperuser` command to create one.
+
+## Browsable API
+You can access the APIV URL with your browser directly. If you want to turn off it, you can delete the following url config in `urls.py`. 
+        url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
