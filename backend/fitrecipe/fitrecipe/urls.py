@@ -11,5 +11,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     # If you're intending to use the browsable API you'll probably also want to add REST framework's login and logout views.
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^recipes/$', recipe_views.RecipeList.as_view()),
+    # Recipe
+    url(r'^api/recipes/$', recipe_views.RecipeList.as_view()),
+    url(r'^api/recipe/(\d+)/$', recipe_views.RecipeDetail.as_view()),
 )
