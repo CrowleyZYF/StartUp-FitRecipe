@@ -2,12 +2,12 @@
 
 Hello, here is the API document.
 
-## Requires
+## Requirements
 - Python 2.7+
 - Django 1.7.*
 - djangorestframework 3.1
 
-## Install
+## Installation
 1. create a new virtual enviroment with [virtualenv](https://github.com/pypa/virtualenv "virtualenv")
 2. install requirements. `pip install -r requirements.txt`
 2. get into `fitrecipe` folders.
@@ -19,26 +19,26 @@ Hello, here is the API document.
 8. run `python manage.py migrate`.
 9. run server now. `python manage.py runserver`. port 8000 is default
 
-## API
-# GET /api/recipes
+## API Documents
+### GET /api/recipes
 List all recipes
 
 + Response 200 (application/json)
 
-    [
-        {
-            "id": 1, 
-            "created_time": "2015-04-26 07:32:29", 
-            "updated_time": "2015-04-26 16:17:07", 
-            "img_height": 2309, 
-            "img_width": 3464, 
-            "img": "static/images/DSC05069.jpg", 
-            "thumbnail": "", 
-            "title": "test123", 
-            "type": 0, 
-            "duration": "", 
-            "calorie": ""
-        }
-    ]
+        [
+            {
+                "id": 1, 
+                "created_time": "2015-04-26 07:32:29", 
+                "updated_time": "2015-04-26 16:17:07", 
+                "img_height": 2309, 
+                "img_width": 3464, 
+                "img": "static/images/DSC05069.jpg", 
+                "thumbnail": "", 
+                "title": "test123", 
+                "type": 0, 
+                "duration": "", 
+                "calorie": ""
+            }
+        ]
 
 
