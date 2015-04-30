@@ -19,16 +19,7 @@ fitRecipeRouter.config(function($stateProvider, $urlRouterProvider) {
             views: {
                 'content':{
                     templateUrl: '../views/indexContainer.html',
-                    controller: 'IndexContainerController'                    
-                },
-                'slide': {
-                    templateUrl: '../views/slide.html'
-                },
-                'content1':{
-                    templateUrl: '../views/about.html'
-                },
-                'content2':{
-                    templateUrl: '../views/main.html'
+                    controller: 'IndexContainerController'
                 }
             }
         })
@@ -47,11 +38,13 @@ fitRecipeRouter.config(function($stateProvider, $urlRouterProvider) {
             }
         })
         .state('404', {
-            url: '/404',
+            url: '/403',
             views: {
                 '': {
                     templateUrl: '../views/about.html'
                 }
             }
         })   
+
+        $urlRouterProvider.otherwise('/');
 });
