@@ -13,16 +13,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/login"
+            android:text="@string/register"
             android:textColor="#333333"
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/register_btn"
+            android:id="@+id/login_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/register"
+            android:text="@string/login"
             android:textColor="@color/base_color"
             android:textSize="12sp"
             android:padding="15dp"
@@ -71,7 +71,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="3"
+            android:layout_weight="4"
             android:orientation="vertical"
             android:gravity="center_horizontal"
             android:layout_marginLeft="30dp"
@@ -88,17 +88,69 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:text="@string/phone"
+                    android:textSize="15sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_marginRight="10dp"/>
+
+                <EditText
+                    android:id="@+id/account"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:inputType="textPassword"
+                    android:background="@drawable/login_input" />
+
+                <LinearLayout
+                    android:id="@+id/get_code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="@string/get_code"
+                        android:textSize="10sp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:textColor="@color/login_input_text_color"
+                        android:background="@drawable/code_button"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/line"
+                android:layout_marginBottom="5dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/code"
                     android:textColor="@color/login_input_text_color"
                     android:textSize="15sp"
                     android:layout_marginRight="10dp"/>
 
                 <EditText
-                    android:id="@+id/account"
+                    android:id="@+id/code"
                     android:inputType="number"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/login_input"/>
-                </LinearLayout>
+            </LinearLayout>
 
             <ImageView
                 android:layout_width="match_parent"
@@ -117,41 +169,17 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:text="@string/password"
-                    android:textSize="15sp"
                     android:textColor="@color/login_input_text_color"
+                    android:textSize="15sp"
                     android:layout_marginRight="10dp"/>
 
                 <EditText
                     android:id="@+id/password"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
+                    android:inputType="number"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:inputType="textPassword"
-                    android:background="@drawable/login_input" />
-
-                <LinearLayout
-                    android:id="@+id/forget_password"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:text="@string/forget_password"
-                        android:textSize="12sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:layout_marginRight="5dp"/>
-
-                    <ImageView
-                        android:layout_width="14dp"
-                        android:layout_height="14dp"
-                        android:background="@drawable/icon_question"
-                        />
-                    </LinearLayout>
-                </LinearLayout>
+                    android:background="@drawable/login_input"/>
+            </LinearLayout>
 
             <ImageView
                 android:layout_width="match_parent"
@@ -170,10 +198,10 @@
             android:paddingRight="30dp">
 
             <Button
-                android:id="@+id/login_btn"
+                android:id="@+id/register_btn"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
-                android:text="@string/login"
+                android:text="@string/register"
                 android:textColor="@color/login_text_color"
                 android:background="@drawable/login_button"
                 android:layout_marginLeft="10dp"
@@ -184,88 +212,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="4"
+            android:layout_weight="3"
             android:orientation="vertical"
             android:paddingLeft="30dp"
             android:paddingRight="30dp">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/other_part"
-                android:layout_marginBottom="10dp"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:id="@+id/wechat_login"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center_horizontal">
-
-                    <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:src="@drawable/icon_wechat"
-                        android:layout_marginBottom="3dp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/login_wechat"/>
-
-                    </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/sina_login"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center_horizontal">
-
-                    <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:src="@drawable/icon_sina"
-                        android:layout_marginBottom="3dp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/login_sina"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/qq_login"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center_horizontal">
-
-                    <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:src="@drawable/icon_qq"
-                        android:layout_marginBottom="3dp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/login_qq"/>
-
-                </LinearLayout>
-
-
-                </LinearLayout>
-
 
             </LinearLayout>
 

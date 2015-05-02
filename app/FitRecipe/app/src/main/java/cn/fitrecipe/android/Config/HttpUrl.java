@@ -6,6 +6,11 @@ package cn.fitrecipe.android.Config;
 public class HttpUrl {
     //URL
     public static final String API_HOST = "http://42.121.108.228/";
+    //登陆 POST
+    public static final String LOGIN_URL = API_HOST+"login";
+    public static final int LOGIN_SUCCESS = 0;
+    public static final int NOT_EXIST = 1;
+    public static final int PASS_ERROR = 2;
     //首页推荐内容 GET 参数int time: 0（早餐）/1（上午加餐）/2（午餐）/3（下午加餐）/4（晚餐）
     public static final String RECOMMEND_RECIPE_VIEWPAGER = API_HOST+"indexRecommendRecipe";
     //首页主题封面 GET
@@ -17,6 +22,8 @@ public class HttpUrl {
 
 
     //TEST
+    //登陆 POST
+    public static final String LOGIN_URL_JSON = "{'result':'0','account':'13661846821','username':'Crowley'}";
     //首页推荐内容，菜谱id号，推荐特别封面图片url
     public static final String RECOMMEND_RECIPE_VIEWPAGER_JSON = "[{'id':'1','imgUrl':'http://ww3.sinaimg.cn/mw690/b5c47ffbgw1ergtmnxfdpj20ku0b1wih.jpg'},{'id':'2','imgUrl':'http://ww3.sinaimg.cn/mw690/b5c47ffbgw1ergtmnxfdpj20ku0b1wih.jpg'},{'id':'3','imgUrl':'http://ww3.sinaimg.cn/mw690/b5c47ffbgw1ergtmnxfdpj20ku0b1wih.jpg'}]";
     //首页主题封面，主题id号，主题特别封面图片url

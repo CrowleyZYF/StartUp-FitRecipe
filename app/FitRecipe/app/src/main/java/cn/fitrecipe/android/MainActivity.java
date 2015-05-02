@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.fitrecipe.android.fragment.CategoryFragment;
+import cn.fitrecipe.android.fragment.MeFragment;
 import cn.fitrecipe.android.fragment.IndexFragment;
 import cn.fitrecipe.android.fragment.KnowledgeFragment;
 import cn.fitrecipe.android.fragment.PlanFragment;
@@ -22,12 +22,12 @@ import cn.fitrecipe.android.fragment.PlanFragment;
 public class MainActivity extends FragmentActivity implements OnClickListener
 {
     private LinearLayout frTabIndex;
-    private LinearLayout frTabCategory;
+    private LinearLayout frTabMe;
     private LinearLayout frTabPlan;
     private LinearLayout frTabKnowledge;
 
     private Fragment frIndexFragment;
-    private Fragment frCategoryFragment;
+    private Fragment frMeFragment;
     private Fragment frPlanFragment;
     private Fragment frKnowledgeFragment;
 
@@ -46,7 +46,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     private void initEvent()
     {
         frTabIndex.setOnClickListener(this);
-        frTabCategory.setOnClickListener(this);
+        frTabMe.setOnClickListener(this);
         frTabPlan.setOnClickListener(this);
         frTabKnowledge.setOnClickListener(this);
     }
@@ -54,13 +54,13 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     private void initView()
     {
         frTabIndex = (LinearLayout) findViewById(R.id.tab_index);
-        frTabCategory = (LinearLayout) findViewById(R.id.tab_category);
+        frTabMe = (LinearLayout) findViewById(R.id.tab_me);
         frTabPlan = (LinearLayout) findViewById(R.id.tab_plan);
         frTabKnowledge = (LinearLayout) findViewById(R.id.tab_knowledge);
         frTabs.add(frTabIndex);
-        frTabs.add(frTabCategory);
         frTabs.add(frTabPlan);
         frTabs.add(frTabKnowledge);
+        frTabs.add(frTabMe);
     }
 
     private void setSelect(int i)
@@ -79,14 +79,6 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                 }
                 break;
             case 1:
-                if (frCategoryFragment == null){
-                    frCategoryFragment = new CategoryFragment();
-                    transaction.add(R.id.content, frCategoryFragment);
-                } else{
-                    transaction.show(frCategoryFragment);
-                }
-                break;
-            case 2:
                 if (frPlanFragment == null){
                     frPlanFragment = new PlanFragment();
                     transaction.add(R.id.content, frPlanFragment);
@@ -94,12 +86,20 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                     transaction.show(frPlanFragment);
                 }
                 break;
-            case 3:
+            case 2:
                 if (frKnowledgeFragment == null){
                     frKnowledgeFragment = new KnowledgeFragment();
                     transaction.add(R.id.content, frKnowledgeFragment);
                 } else{
                     transaction.show(frKnowledgeFragment);
+                }
+                break;
+            case 3:
+                if (frMeFragment == null){
+                    frMeFragment = new MeFragment();
+                    transaction.add(R.id.content, frMeFragment);
+                } else{
+                    transaction.show(frMeFragment);
                 }
                 break;
             default:
@@ -114,8 +114,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         if (frIndexFragment != null){
             transaction.hide(frIndexFragment);
         }
-        if (frCategoryFragment != null){
-            transaction.hide(frCategoryFragment);
+        if (frMeFragment != null){
+            transaction.hide(frMeFragment);
         }
         if (frPlanFragment != null){
             transaction.hide(frPlanFragment);
@@ -134,16 +134,15 @@ public class MainActivity extends FragmentActivity implements OnClickListener
             case R.id.tab_index:
                 setSelect(0);
                 break;
-            case R.id.tab_category:
+            case R.id.tab_plan:
                 setSelect(1);
                 break;
-            case R.id.tab_plan:
+            case R.id.tab_knowledge:
                 setSelect(2);
                 break;
-            case R.id.tab_knowledge:
+            case R.id.tab_me:
                 setSelect(3);
                 break;
-
             default:
                 break;
         }
