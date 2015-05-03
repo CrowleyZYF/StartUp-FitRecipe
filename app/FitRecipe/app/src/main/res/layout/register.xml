@@ -84,7 +84,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="50dp"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:text="@string/phone"
@@ -97,7 +97,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="match_parent"
-                    android:inputType="textPassword"
+                    android:inputType="number"
                     android:background="@drawable/login_input" />
 
                 <LinearLayout
@@ -105,9 +105,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical|center_horizontal">
 
                     <TextView
+                        android:id="@+id/get_enable"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
@@ -119,6 +120,21 @@
                         android:paddingRight="10dp"
                         android:textColor="@color/login_input_text_color"
                         android:background="@drawable/code_button"/>
+
+                    <TextView
+                        android:id="@+id/get_disable"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="@string/get_code_disable"
+                        android:textSize="10sp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:textColor="@color/login_input_text_color"
+                        android:background="@drawable/code_button_disabled"
+                        android:visibility="gone"/>
 
                 </LinearLayout>
             </LinearLayout>
@@ -136,7 +152,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="50dp"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:text="@string/code"
@@ -165,7 +181,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="50dp"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:text="@string/password"
@@ -175,7 +191,7 @@
 
                 <EditText
                     android:id="@+id/password"
-                    android:inputType="number"
+                    android:inputType="textPassword"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/login_input"/>
@@ -222,7 +238,7 @@
         </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/register_linearlayout"
+        android:id="@+id/login_linearlayout"
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:background="@color/login_color"

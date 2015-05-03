@@ -1,6 +1,7 @@
 package cn.fitrecipe.android;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -9,6 +10,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
@@ -31,6 +33,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     private Fragment frPlanFragment;
     private Fragment frKnowledgeFragment;
 
+    private ImageView category_btn;
+
     private List<LinearLayout> frTabs = new ArrayList<LinearLayout>();
 
     @Override
@@ -49,6 +53,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         frTabMe.setOnClickListener(this);
         frTabPlan.setOnClickListener(this);
         frTabKnowledge.setOnClickListener(this);
+
+        category_btn.setOnClickListener(this);
     }
 
     private void initView()
@@ -61,6 +67,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         frTabs.add(frTabPlan);
         frTabs.add(frTabKnowledge);
         frTabs.add(frTabMe);
+
+        category_btn = (ImageView) findViewById(R.id.category_btn);
     }
 
     private void setSelect(int i)
@@ -142,6 +150,9 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                 break;
             case R.id.tab_me:
                 setSelect(3);
+                break;
+            case R.id.category_btn:
+                startActivity(new Intent(this, CategoryActivity.class));
                 break;
             default:
                 break;

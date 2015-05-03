@@ -106,10 +106,16 @@ public class LandingPageActivity extends Activity implements ViewPager.OnPageCha
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.login_button:
-                startActivity(new Intent(this, LoginActivity.class));
+                Intent intent = new Intent(this, LoginActivity.class);
+                intent.putExtra("back","landingPage");
+                startActivity(intent);
+                LandingPageActivity.this.finish();
                 break;
             case R.id.register_button:
-                startActivity(new Intent(this, RegisterActivity.class));
+                Intent intent2 = new Intent(this, RegisterActivity.class);
+                intent2.putExtra("back","landingPage");
+                startActivity(intent2);
+                LandingPageActivity.this.finish();
                 break;
             case R.id.index_button:
                 startActivity(new Intent(this, MainActivity.class));

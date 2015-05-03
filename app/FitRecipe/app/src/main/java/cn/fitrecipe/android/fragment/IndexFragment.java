@@ -1,5 +1,6 @@
 package cn.fitrecipe.android.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
@@ -24,8 +25,10 @@ import java.util.Map;
 
 import cn.fitrecipe.android.Adpater.RecipeCardAdapter;
 import cn.fitrecipe.android.Config.HttpUrl;
+import cn.fitrecipe.android.LandingPageActivity;
 import cn.fitrecipe.android.MainActivity;
 import cn.fitrecipe.android.R;
+import cn.fitrecipe.android.ThemeActivity;
 import cn.fitrecipe.android.UI.rcListLinearLayoutManager;
 import cn.fitrecipe.android.UI.rcRecommendViewPagerAdapter;
 import cn.fitrecipe.android.model.RecipeCard;
@@ -33,12 +36,14 @@ import cn.fitrecipe.android.model.RecipeCard;
 /**
  * Created by 奕峰 on 2015/4/11.
  */
-public class IndexFragment extends Fragment implements ViewPager.OnPageChangeListener {
+public class IndexFragment extends Fragment implements ViewPager.OnPageChangeListener, View.OnClickListener {
     private ViewPager frRecommendViewPager;
     private rcRecommendViewPagerAdapter rcViewPagerAdapter;
 
     private RecyclerView frUpdateRecipeRecyclerView;
     private rcListLinearLayoutManager frUpdateRecipeLayoutManager;
+
+    private ImageView theme_test;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,6 +60,7 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
 
     private void initEvent() {
         frRecommendViewPager.setOnPageChangeListener(this);
+        theme_test.setOnClickListener(this);
     }
 
     private void initData() {
@@ -101,6 +107,8 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
         frUpdateRecipeLayoutManager = new rcListLinearLayoutManager(this.getActivity());
         frUpdateRecipeLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         frUpdateRecipeRecyclerView.setLayoutManager(frUpdateRecipeLayoutManager);
+
+        theme_test = (ImageView) view.findViewById(R.id.theme_test);
     }
 
 
@@ -117,5 +125,16 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.theme_test:
+                startActivity(new Intent(this.getActivity(), ThemeActivity.class));
+                break;
+            default:
+                break;
+        }
     }
 }

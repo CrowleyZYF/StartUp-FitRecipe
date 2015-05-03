@@ -44,6 +44,12 @@
         <activity
             android:name=".RegisterActivity">
         </activity>
+        <activity
+            android:name=".CategoryActivity">
+        </activity>
+        <activity
+            android:name=".ThemeActivity">
+        </activity>
         <!-- ###################注册SDK使用的Activity###################### -->
         <!--分享编辑页-->
         <activity
