@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">健身食谱</string>
+    <string name="app_name">健食记</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -8,6 +8,10 @@
     <string name="tab_me">我</string>
     <string name="tab_plan">计划</string>
     <string name="tab_knowledge">指南</string>
+
+    <!--首页-->
+    <string name="check_category">查看菜谱分类</string>
+    <string name="advice">意见反馈</string>
 
     <string name="login">登陆</string>
     <string name="phone">手机</string>
@@ -27,5 +31,9 @@
     <string name="follow">关注</string>
 
     <string name="category_chicken">鸡肉</string>
+
+    <!--搜索-->
+    <string name="search_hint">搜索食材、菜谱、标签</string>
+    <string name="search">搜索</string>
 
 </resources>

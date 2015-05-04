@@ -19,12 +19,14 @@
             android:textStyle="bold" />
 
         <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginLeft="15dp"
+            android:id="@+id/back_btn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="15dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/icon_back_white"/>
+            android:src="@drawable/icon_back_white"
+            android:background="@drawable/icon_selector"/>
 
         <ImageView
             android:layout_width="25dp"
@@ -66,7 +68,7 @@
                     android:layout_marginLeft="35dp"
                     android:layout_marginRight="35dp"
                     android:textColor="#333333"
-                    android:textSize="10sp"
+                    android:textSize="12sp"
                     android:textStyle="normal"
                     android:lineSpacingExtra="3dp"
                     android:text="再也不用抱怨只能吃食堂那油腻的饭菜啦，只要一个电饭煲,变着花样吃得好。"/>

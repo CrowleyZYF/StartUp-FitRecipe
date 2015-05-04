@@ -2,6 +2,7 @@ package cn.fitrecipe.android;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -16,9 +17,17 @@ public class WelcomeActivity extends Activity{
             @Override
             public void run() {
                 // TODO Auto-generated method stub
-                Intent mainIntent = new Intent(WelcomeActivity.this, LandingPageActivity.class);
-                WelcomeActivity.this.startActivity(mainIntent);
-                WelcomeActivity.this.finish();
+                SharedPreferences preferences=getSharedPreferences("user", MODE_PRIVATE);
+                boolean isLogined = preferences.getBoolean("isLogined", false);
+                if(isLogined){
+                    Intent mainIntent = new Intent(WelcomeActivity.this, MainActivity.class);
+                    WelcomeActivity.this.startActivity(mainIntent);
+                    WelcomeActivity.this.finish();
+                }else{
+                    Intent mainIntent = new Intent(WelcomeActivity.this, LandingPageActivity.class);
+                    WelcomeActivity.this.startActivity(mainIntent);
+                    WelcomeActivity.this.finish();
+                }
             }
         }, SPLASH_DISPLAY_LENGHT);
     }

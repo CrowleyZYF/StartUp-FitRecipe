@@ -13,10 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.umeng.fb.FeedbackAgent;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,7 +28,9 @@ import java.util.List;
 import java.util.Map;
 
 import cn.fitrecipe.android.Adpater.RecipeCardAdapter;
+import cn.fitrecipe.android.CategoryActivity;
 import cn.fitrecipe.android.Config.HttpUrl;
+import cn.fitrecipe.android.Config.LocalDemo;
 import cn.fitrecipe.android.LandingPageActivity;
 import cn.fitrecipe.android.MainActivity;
 import cn.fitrecipe.android.R;
@@ -44,6 +50,8 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
     private rcListLinearLayoutManager frUpdateRecipeLayoutManager;
 
     private ImageView theme_test;
+    private TextView feedback;
+    private Button category_btn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,6 +69,8 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
     private void initEvent() {
         frRecommendViewPager.setOnPageChangeListener(this);
         theme_test.setOnClickListener(this);
+        feedback.setOnClickListener(this);
+        category_btn.setOnClickListener(this);
     }
 
     private void initData() {
@@ -68,14 +78,14 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
         rcViewPagerAdapter = new rcRecommendViewPagerAdapter(getActivity(),dataList,frRecommendViewPager.getLayoutParams().width,frRecommendViewPager.getLayoutParams().height);
         frRecommendViewPager.setAdapter(rcViewPagerAdapter);
 
-        RecipeCardAdapter recipeCardAdapter = new RecipeCardAdapter(getUpdateRecipe());
+        RecipeCardAdapter recipeCardAdapter = new RecipeCardAdapter(getActivity(), getUpdateRecipe());
         frUpdateRecipeRecyclerView.setAdapter(recipeCardAdapter);
     }
 
     private List<RecipeCard> getUpdateRecipe() {
         List<RecipeCard> result = new ArrayList<RecipeCard>();
         for (int i=0;i<5;i++){
-            RecipeCard rc = new RecipeCard("牛油果鸡蛋三明治"+i,0,(20+i),(200+i*10),(50+i*10));
+            RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],0,(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
             result.add(rc);
         }
         return result;
@@ -109,6 +119,8 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
         frUpdateRecipeRecyclerView.setLayoutManager(frUpdateRecipeLayoutManager);
 
         theme_test = (ImageView) view.findViewById(R.id.theme_test);
+        feedback = (TextView) view.findViewById(R.id.feedback);
+        category_btn = (Button) view.findViewById(R.id.check_category);
     }
 
 
@@ -132,6 +144,13 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
         switch (v.getId()){
             case R.id.theme_test:
                 startActivity(new Intent(this.getActivity(), ThemeActivity.class));
+                break;
+            case R.id.feedback:
+                FeedbackAgent agent = new FeedbackAgent(getActivity());
+                agent.startFeedbackActivity();
+                break;
+            case R.id.check_category:
+                startActivity(new Intent(this.getActivity(), CategoryActivity.class));
                 break;
             default:
                 break;

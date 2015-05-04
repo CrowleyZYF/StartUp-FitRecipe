@@ -13,6 +13,8 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.umeng.fb.FeedbackAgent;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +36,9 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     private Fragment frKnowledgeFragment;
 
     private ImageView category_btn;
+    private ImageView search_btn;
+
+    private int tab_index = 0;
 
     private List<LinearLayout> frTabs = new ArrayList<LinearLayout>();
 
@@ -42,9 +47,17 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        FeedbackAgent agent = new FeedbackAgent(this);
+        agent.sync();
         initView();
         initEvent();
         setSelect(0);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        frTabs.get(tab_index).setBackgroundColor(getResources().getColor(R.color.active_color));
     }
 
     private void initEvent()
@@ -55,6 +68,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         frTabKnowledge.setOnClickListener(this);
 
         category_btn.setOnClickListener(this);
+        search_btn.setOnClickListener(this);
     }
 
     private void initView()
@@ -69,6 +83,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         frTabs.add(frTabMe);
 
         category_btn = (ImageView) findViewById(R.id.category_btn);
+        search_btn = (ImageView) findViewById(R.id.search_btn);
     }
 
     private void setSelect(int i)
@@ -85,6 +100,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                 } else{
                     transaction.show(frIndexFragment);
                 }
+                tab_index = 0;
                 break;
             case 1:
                 if (frPlanFragment == null){
@@ -93,6 +109,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                 } else{
                     transaction.show(frPlanFragment);
                 }
+                tab_index = 1;
                 break;
             case 2:
                 if (frKnowledgeFragment == null){
@@ -101,6 +118,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                 } else{
                     transaction.show(frKnowledgeFragment);
                 }
+                tab_index = 2;
                 break;
             case 3:
                 if (frMeFragment == null){
@@ -109,6 +127,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                 } else{
                     transaction.show(frMeFragment);
                 }
+                tab_index = 3;
                 break;
             default:
                 break;
@@ -152,7 +171,12 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                 setSelect(3);
                 break;
             case R.id.category_btn:
+                frTabs.get(tab_index).setBackgroundColor(getResources().getColor(R.color.active_color));
                 startActivity(new Intent(this, CategoryActivity.class));
+                break;
+            case R.id.search_btn:
+                frTabs.get(tab_index).setBackgroundColor(getResources().getColor(R.color.active_color));
+                startActivity(new Intent(this, SearchActivity.class));
                 break;
             default:
                 break;

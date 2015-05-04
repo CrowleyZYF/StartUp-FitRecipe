@@ -4,15 +4,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/recipe_card_container"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
-    card_view:cardCornerRadius="4dp"
+    android:layout_height="180dp"
     android:layout_margin="10dp"
     card_view:cardPreventCornerOverlap="false"
     >
     <RelativeLayout
+        android:id="@+id/recipe_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/update_init"
+        android:background="@drawable/ztest001"
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
 
@@ -29,6 +29,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:text="牛油果鸡蛋三明治"
+                android:shadowColor="@color/login_input_text_color"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="4"
                 android:textSize="15sp"
                 android:textColor="#ffffff"
                 android:textStyle="bold"/>
@@ -72,6 +76,10 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:text="烹饪时间：20min"
+                    android:shadowColor="@color/login_input_text_color"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:shadowRadius="4"
                     android:textSize="12sp"
                     android:textColor="#ffffff"/>
 
@@ -81,6 +89,10 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:text="热量：220kcal/人份"
+                    android:shadowColor="@color/login_input_text_color"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:shadowRadius="4"
                     android:textSize="12sp"
                     android:textColor="#ffffff"/>
             </LinearLayout>
@@ -104,6 +116,10 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="3dp"
                 android:text="收藏 182"
+                android:shadowColor="@color/login_input_text_color"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="4"
                 android:textSize="12sp"
                 android:textColor="#ffffff"/>
         </LinearLayout>

@@ -50,6 +50,17 @@
         <activity
             android:name=".ThemeActivity">
         </activity>
+        <activity
+            android:name=".SearchActivity">
+        </activity>
+        <activity
+            android:name="com.umeng.fb.ConversationActivity"/>
+        <meta-data
+            android:value="552d1b9ffd98c532ad001857"
+            android:name="UMENG_APPKEY"/>
+        <meta-data
+            android:value="Test"
+            android:name="UMENG_CHANNEL"/>
         <!-- ###################注册SDK使用的Activity###################### -->
         <!--分享编辑页-->
         <activity

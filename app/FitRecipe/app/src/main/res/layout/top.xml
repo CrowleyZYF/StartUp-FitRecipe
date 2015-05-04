@@ -17,7 +17,8 @@
             android:padding="15dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/icon_category"/>
+            android:src="@drawable/icon_category"
+            android:background="@drawable/icon_selector"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -29,12 +30,14 @@
             android:textStyle="bold" />
 
         <ImageView
+            android:id="@+id/search_btn"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:padding="15dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/icon_search"/>
+            android:src="@drawable/icon_search"
+            android:background="@drawable/icon_selector"/>
 
         </RelativeLayout>
 

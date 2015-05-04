@@ -24,19 +24,34 @@ public class CategoryActivity extends Activity{
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category);
-        gridView=(GridView) findViewById(R.id.gridView);
+
+        initView();
+        initData();
+        initEvent();
         dataList=new ArrayList<Map<String,Object>>();
         adapter=new SimpleAdapter(this, getData(), R.layout.category_item, new String[]{"pic","name"}, new int[]{R.id.pic,R.id.name});
         gridView.setAdapter(adapter);
+    }
+
+    private void initView() {
+
+    }
+
+    private void initData() {
+
+    }
+
+    private void initEvent() {
+
     }
 
     private List<Map<String, Object>> getData() {
 
         int[] drawable = { R.drawable.category_chicken, R.drawable.category_beef,
                 R.drawable.category_fish, R.drawable.category_egg, R.drawable.category_seafood,
-                R.drawable.category_milk, R.drawable.category_rice, R.drawable.category_fruit,
+                R.drawable.category_rice, R.drawable.category_fruit,
                 R.drawable.category_dessert, R.drawable.category_other };
-        String[] iconName = { "鸡肉", "牛肉", "鱼肉", "鸡蛋", "海鲜", "奶制品", "米面", "果蔬",
+        String[] iconName = { "鸡肉", "牛肉", "鱼肉", "蛋/奶", "海鲜", "米面", "果蔬",
                 "点心", "其他"};
         for (int i = 0; i < drawable.length; i++) {
             Map<String, Object> map = new HashMap<String, Object>();

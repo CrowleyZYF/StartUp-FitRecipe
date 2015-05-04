@@ -11,7 +11,7 @@
         android:gravity="center">
 
         <ImageView
-            android:id="@+id/category_btn"
+            android:id="@+id/back_btn"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:padding="15dp"
@@ -37,25 +37,20 @@
             android:src="@drawable/icon_search"/>
 
     </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        >
-
-        </LinearLayout>
-
     <GridView
         android:id="@+id/gridView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
         android:gravity="center_horizontal"
-        android:horizontalSpacing="10dp"
+        android:listSelector="@android:color/transparent"
+        android:paddingTop="1dp"
+        android:paddingBottom="1dp"
+        android:layout_margin="0dp"
         android:numColumns="3"
-        android:verticalSpacing="10dp"
-        android:background="#ffffff">
+        android:background="#e5e5e5"
+        android:horizontalSpacing="1dp"
+        android:verticalSpacing="1dp"
+        android:scrollbars="none">
         </GridView>
 
 </LinearLayout>

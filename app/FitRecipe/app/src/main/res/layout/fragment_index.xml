@@ -76,11 +76,28 @@
             android:scrollbars="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
             />
 
+        <Button
+            android:id="@+id/check_category"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:text="@string/check_category"
+            android:textColor="@color/login_text_color"
+            android:background="@drawable/login_button"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="30dp"/>
 
-
-
+        <TextView
+            android:id="@+id/feedback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/advice"
+            android:textColor="@color/login_input_text_color"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="15dp"/>
 
     </LinearLayout>
 

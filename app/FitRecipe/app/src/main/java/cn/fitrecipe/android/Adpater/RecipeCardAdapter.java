@@ -1,9 +1,11 @@
 package cn.fitrecipe.android.Adpater;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -17,8 +19,10 @@ import cn.fitrecipe.android.model.RecipeCard;
 public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.RecipeCardViewHolder> {
 
     private List<RecipeCard> recipeCardsList;
+    private Context context;
 
-    public RecipeCardAdapter(List<RecipeCard> recipeCardsList) {
+    public RecipeCardAdapter(Context context, List<RecipeCard> recipeCardsList) {
+        this.context = context;
         this.recipeCardsList = recipeCardsList;
     }
 
@@ -39,6 +43,7 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Re
         contactViewHolder.recipe_calorie.setText(rc.getRecipe_calorie());
         contactViewHolder.recipe_time.setText(rc.getRecipe_time());
         contactViewHolder.recipe_like.setText(rc.getRecipe_like());
+        contactViewHolder.recipe_background.setBackground (this.context.getResources().getDrawable(rc.getRecipe_background()));
     }
 
     @Override
@@ -52,6 +57,7 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Re
         protected TextView recipe_time;
         protected TextView recipe_calorie;
         protected TextView recipe_like;
+        protected RelativeLayout recipe_background;
 
         public RecipeCardViewHolder(View itemView) {
             super(itemView);
@@ -60,6 +66,7 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Re
             recipe_time = (TextView)  itemView.findViewById(R.id.recipe_time);
             recipe_calorie = (TextView) itemView.findViewById(R.id.recipe_calorie);
             recipe_like = (TextView) itemView.findViewById(R.id.recipe_like);
+            recipe_background = (RelativeLayout) itemView.findViewById(R.id.recipe_background);
         }
     }
 }

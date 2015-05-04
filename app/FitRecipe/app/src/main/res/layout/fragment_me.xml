@@ -9,23 +9,43 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="健身食谱——我"
+        android:layout_marginBottom="20dp"
         android:textSize="30sp"
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/me_test0"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:gravity="center"
+        android:text="未登录"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/me_test1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
         android:gravity="center"
         android:text="用户名：暂无"
-        android:textSize="30sp"
-        android:textStyle="bold" />
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/me_test2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="25dp"
+        android:gravity="center"
+        android:text="平台：暂无"
+        android:textSize="20sp" />
 
     <Button
+        android:id="@+id/me_test3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="登陆"
-        android:textSize="30sp"
-        android:textStyle="bold" />
+        android:textSize="20sp" />
 
 </LinearLayout>
