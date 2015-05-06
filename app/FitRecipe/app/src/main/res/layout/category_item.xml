@@ -12,7 +12,8 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:src="@drawable/category_chicken" />
+        android:src="@drawable/category_chicken"
+        android:clickable="false"/>
 
     <TextView
         android:id="@+id/name"
@@ -21,6 +22,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="15dp"
         android:text="@string/category_chicken"
-        android:textColor="#333333" />
+        android:textColor="#333333"
+        android:clickable="false" />
 
 </LinearLayout>

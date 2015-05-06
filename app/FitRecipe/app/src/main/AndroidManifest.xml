@@ -16,10 +16,15 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- QQ、QQ空间所需权限 -->
     <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- 允许程序录制音频 -->
+
+    <!-- 可选-->
+    <uses-permission android:name="android.permission.READ_LOGS" /> <!-- 获取logcat日志 -->
 
 
     <application
-        tools:replace="android:icon"
+        android:name=".FrApplication"
+        tools:replace="android:icon,android:theme"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -52,6 +57,9 @@
         </activity>
         <activity
             android:name=".SearchActivity">
+        </activity>
+        <activity
+            android:name=".CategoryResultActivity">
         </activity>
         <activity
             android:name="com.umeng.fb.ConversationActivity"/>
