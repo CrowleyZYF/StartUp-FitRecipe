@@ -64,43 +64,6 @@
                     android:orientation="vertical">
 
                     <LinearLayout
-                        android:id="@+id/category_intro"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:background="@color/theme_color"
-                        android:visibility="gone">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp"
-                            android:layout_marginBottom="10dp"
-                            android:layout_marginLeft="35dp"
-                            android:layout_marginRight="35dp"
-                            android:textColor="#333333"
-                            android:textSize="16sp"
-                            android:lineSpacingExtra="3dp"
-                            android:text="增肌正餐菜谱：鸡肉"
-                            />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="15dp"
-                            android:layout_marginLeft="35dp"
-                            android:layout_marginRight="35dp"
-                            android:textColor="#333333"
-                            android:textSize="14sp"
-                            android:textStyle="normal"
-                            android:lineSpacingExtra="3dp"
-                            android:text="鸡肉营养丰富，高蛋白，低脂肪，尤其是鸡胸肉，是增肌中最为常用的家禽肉。"/>
-
-                    </LinearLayout>
-
-
-
-                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:orientation="horizontal">

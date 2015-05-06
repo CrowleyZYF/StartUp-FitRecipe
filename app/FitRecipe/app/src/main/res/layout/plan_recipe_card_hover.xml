@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="180dp">
+
+    <LinearLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#66000000"
+        android:layout_centerInParent="true"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:src="@drawable/icon_like_noshadow"
+                android:layout_width="12dp"
+                android:layout_height="12dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="烹饪时间：10min"
+                android:textSize="12sp"
+                android:textColor="@color/white"
+                android:paddingLeft="5dp"/>
+
+            <ImageView
+                android:src="@drawable/icon_like_noshadow"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginLeft="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="卡路里：600Kcal/人份"
+                android:textSize="12sp"
+                android:textColor="@color/white"
+                android:paddingLeft="5dp"/>
+
+            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/white"
+                android:lineSpacingExtra="3dp"
+                android:text="唯有爱和美食不可辜负，这么好吃的早餐不能错过，你说是吧O(∩_∩)O~" />
+
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:gravity="right"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/cat"
+            android:src="@drawable/icon_like_noshadow"
+            android:layout_width="39dp"
+            android:layout_height="39dp"
+            android:padding="12dp"/>
+        <ImageView
+            android:id="@+id/mail"
+            android:layout_toRightOf="@+id/cat"
+            android:src="@drawable/icon_category"
+            android:layout_width="39dp"
+            android:layout_height="39dp"
+            android:padding="12dp" />
+        <ImageView
+            android:id="@+id/last"
+            android:layout_toRightOf="@+id/mail"
+            android:src="@drawable/icon_filter"
+            android:layout_width="39dp"
+            android:layout_height="39dp"
+            android:padding="12dp" />
+    </LinearLayout>
+
+</RelativeLayout>

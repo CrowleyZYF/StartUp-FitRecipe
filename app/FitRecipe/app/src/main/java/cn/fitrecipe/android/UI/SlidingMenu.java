@@ -32,7 +32,7 @@ public class SlidingMenu extends HorizontalScrollView {
 	public SlidingMenu(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		// TODO Auto-generated constructor stub
-		TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.SlidingMenu, defStyle, 0);
+		/*TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.SlidingMenu, defStyle, 0);
 		int n = a.getIndexCount();		
 		for(int i=0;i<n;i++){
 			int attr = a.getIndex(i);
@@ -44,12 +44,13 @@ public class SlidingMenu extends HorizontalScrollView {
 				break;
 			}
 		}
-		a.recycle();
+		a.recycle();*/
 		WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 		DisplayMetrics outMetrics = new DisplayMetrics();
 		wm.getDefaultDisplay().getMetrics(outMetrics);
-		
+
 		mScreenWidth=outMetrics.widthPixels;
+        mMenuLeftPadding = mScreenWidth - (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,125,context.getResources().getDisplayMetrics());
 	}
 
 
@@ -77,6 +78,11 @@ public class SlidingMenu extends HorizontalScrollView {
 		}
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 	}
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        return false;
+    }
 
 
 	@Override
@@ -136,8 +142,11 @@ public class SlidingMenu extends HorizontalScrollView {
 	}
 	
 	public void openMenu(){
-		if(isOpen) return;
-		this.smoothScrollTo(mMenuWidth, 0);
+		if(isOpen) {
+            return;
+        }else{
+            this.smoothScrollTo(mMenuWidth, 0);
+        }
 		isOpen = true;
 	}
 	

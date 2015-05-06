@@ -10,7 +10,7 @@
         android:id="@+id/filter_menu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        fitrecipe:leftPadding="150dp">
+        fitrecipe:leftPadding="250dp">
 
         <LinearLayout
             android:layout_width="wrap_content"

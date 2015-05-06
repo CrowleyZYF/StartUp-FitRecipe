@@ -38,7 +38,6 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
     private rcListLinearLayoutManager frThemeRecipeLayoutManager;
 
     private ScrollView category_result_list;
-    private LinearLayout category_intro;
 
     private int needShow;
 
@@ -66,7 +65,6 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
         frThemeRecipeRecyclerView.setLayoutManager(frThemeRecipeLayoutManager);
 
         category_result_list = (ScrollView) findViewById(R.id.category_result_list);
-        category_intro = (LinearLayout) findViewById(R.id.category_intro);
     }
 
     private void initData() {

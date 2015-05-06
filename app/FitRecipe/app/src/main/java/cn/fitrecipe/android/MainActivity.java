@@ -12,12 +12,15 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.umeng.fb.FeedbackAgent;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.fitrecipe.android.UI.SlidingMenu;
+import cn.fitrecipe.android.UI.SlidingPage;
 import cn.fitrecipe.android.fragment.MeFragment;
 import cn.fitrecipe.android.fragment.IndexFragment;
 import cn.fitrecipe.android.fragment.KnowledgeFragment;
@@ -90,6 +93,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         hideFragment(transaction);
         switch (i)
         {
@@ -171,8 +175,15 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                 setSelect(3);
                 break;
             case R.id.category_btn:
-                frTabs.get(tab_index).setBackgroundColor(getResources().getColor(R.color.active_color));
-                startActivity(new Intent(this, CategoryActivity.class));
+                if(tab_index==1){
+                    SlidingPage mRightMenu;
+                    mRightMenu = (SlidingPage) findViewById(R.id.filter_menu);
+                    mRightMenu.toggle();
+                    frTabs.get(tab_index).setBackgroundColor(getResources().getColor(R.color.active_color));
+                }else{
+                    frTabs.get(tab_index).setBackgroundColor(getResources().getColor(R.color.active_color));
+                    startActivity(new Intent(this, CategoryActivity.class));
+                }
                 break;
             case R.id.search_btn:
                 frTabs.get(tab_index).setBackgroundColor(getResources().getColor(R.color.active_color));
