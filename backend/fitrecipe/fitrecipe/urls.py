@@ -2,6 +2,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
 from recipe import views as recipe_views
+from accounts import views as accounts_views
 
 urlpatterns = patterns('',
     # Examples:
@@ -14,4 +15,7 @@ urlpatterns = patterns('',
     # Recipe
     url(r'^api/recipes/$', recipe_views.RecipeList.as_view()),
     url(r'^api/recipe/(\d+)/$', recipe_views.RecipeDetail.as_view()),
+    url(r'^api/accounts/login/$', accounts_views.LoginView.as_view()),
+    url(r'^api/accounts/regiester/$', accounts_views.RegisterView.as_view()),
+
 )

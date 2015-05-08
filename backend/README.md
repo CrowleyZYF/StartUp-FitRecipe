@@ -33,4 +33,5 @@ If you didn't create the superuser, you can use `python manage.py createsuperuse
 
 ## Browsable API
 You can access the APIV URL with your browser directly. If you want to turn off it, you can delete the following url config in `urls.py`. 
+
         url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
