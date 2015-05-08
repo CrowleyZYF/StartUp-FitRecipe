@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import cn.fitrecipe.android.LoginActivity;
@@ -21,10 +22,11 @@ import static com.tencent.open.utils.Global.getSharedPreferences;
  */
 public class MeFragment extends Fragment implements View.OnClickListener {
 
-    private TextView me_test0;
-    private TextView me_test1;
-    private TextView me_test2;
-    private Button me_test3;
+
+    private TextView login_name;
+    private TextView login_platform;
+    private LinearLayout login_btn;
+    private TextView login_btn_text;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,38 +42,35 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initView(View view) {
-        me_test0 = (TextView) view.findViewById(R.id.me_test0);
-        me_test1 = (TextView) view.findViewById(R.id.me_test1);
-        me_test2 = (TextView) view.findViewById(R.id.me_test2);
-        me_test3 = (Button) view.findViewById(R.id.me_test3);
+        login_name = (TextView) view.findViewById(R.id.login_name);
+        login_platform = (TextView) view.findViewById(R.id.login_platform);
+        login_btn = (LinearLayout) view.findViewById(R.id.login_btn);
+        login_btn_text = (TextView) view.findViewById(R.id.login_btn_text);
     }
 
     private void initData() {
         SharedPreferences preferences=getActivity().getSharedPreferences("user", getActivity().MODE_PRIVATE);
         boolean isLogined = preferences.getBoolean("isLogined", false);
         if(isLogined){
-            me_test0.setText("已登录");
-            me_test1.setText("用户名："+preferences.getString("username", "出错啦"));
-            me_test2.setText("平台："+preferences.getString("platform", "出错啦"));
-            me_test3.setText("退出登陆");
+            login_name.setText(preferences.getString("username", "出错啦"));
+            login_platform.setText("平台："+preferences.getString("platform", "出错啦"));
+            login_btn_text.setText("退出登陆");
         }else{
-            me_test0.setText("未登录");
-            me_test1.setText("用户名：暂无");
-            me_test2.setText("平台：暂无");
-            me_test3.setText("登陆");
+            login_name.setText("暂无");
+            login_platform.setText("平台：暂无");
+            login_btn_text.setText("登陆");
         }
     }
 
     private void initEvent() {
-        me_test3.setOnClickListener(this);
-
+        login_btn.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.me_test3:
-                if(me_test3.getText().toString().equals("退出登陆")){
+            case R.id.login_btn:
+                if(login_btn_text.getText().toString().equals("退出登陆")){
                     SharedPreferences preferences=getActivity().getSharedPreferences("user", getActivity().MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putBoolean("isLogined", false);

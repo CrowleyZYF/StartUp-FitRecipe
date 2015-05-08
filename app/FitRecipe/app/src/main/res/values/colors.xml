@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="white">#ffffff</color>
+    <color name="gray">#ffb4b4b4</color>
     <color name="background_color">#fbf7ed</color>
     <color name="base_color">#49BDCC</color>
     <color name="base_color_selected">#ff449ead</color>
@@ -11,4 +12,7 @@
     <color name="login_input_text_color">#545454</color>
     <color name="theme_color">#fdfcf6</color>
     <color name="list_select">#e5e5e5</color>
+    <color name="temp001">#ffefac32</color>
+    <color name="temp002">#ff00a47b</color>
+    <color name="temp003">#ff633a4a</color>
 </resources>

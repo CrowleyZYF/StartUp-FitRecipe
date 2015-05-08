@@ -175,19 +175,40 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                 setSelect(3);
                 break;
             case R.id.category_btn:
-                if(tab_index==1){
-                    SlidingPage mRightMenu;
-                    mRightMenu = (SlidingPage) findViewById(R.id.filter_menu);
-                    mRightMenu.toggle();
-                    frTabs.get(tab_index).setBackgroundColor(getResources().getColor(R.color.active_color));
-                }else{
-                    frTabs.get(tab_index).setBackgroundColor(getResources().getColor(R.color.active_color));
-                    startActivity(new Intent(this, CategoryActivity.class));
+                switch (tab_index){
+                    case 0:
+                        startActivity(new Intent(this, CategoryActivity.class));
+                        break;
+                    case 1:
+                        SlidingPage mRightMenu;
+                        mRightMenu = (SlidingPage) findViewById(R.id.filter_menu);
+                        mRightMenu.toggle();
+                        break;
+                    case 2:
+                        startActivity(new Intent(this, FollowActivity.class));
+                        break;
+                    case 3:
+                        startActivity(new Intent(this, LetterActivity.class));
+                        break;
                 }
+                frTabs.get(tab_index).setBackgroundColor(getResources().getColor(R.color.active_color));
                 break;
             case R.id.search_btn:
+                switch (tab_index){
+                    case 0:
+                        startActivity(new Intent(this, SearchActivity.class));
+                        break;
+                    case 1:
+                        startActivity(new Intent(this, IngredientActivity.class));
+                        break;
+                    case 2:
+                        startActivity(new Intent(this, SearchActivity.class));
+                        break;
+                    case 3:
+                        startActivity(new Intent(this, SetActivity.class));
+                        break;
+                }
                 frTabs.get(tab_index).setBackgroundColor(getResources().getColor(R.color.active_color));
-                startActivity(new Intent(this, SearchActivity.class));
                 break;
             default:
                 break;

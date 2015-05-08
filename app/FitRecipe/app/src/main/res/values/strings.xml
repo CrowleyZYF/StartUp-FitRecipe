@@ -26,6 +26,9 @@
     <string name="addmeal">加餐</string>
     <string name="dinner">正餐</string>
 
+    <!--指南-->
+    <string name="info">资讯</string>
+
     <!--登陆注册-->
     <string name="login">登陆</string>
     <string name="phone">手机</string>

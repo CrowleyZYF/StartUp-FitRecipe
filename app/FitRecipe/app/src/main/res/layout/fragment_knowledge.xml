@@ -4,12 +4,70 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:gravity="center"
-        android:text="健身食谱——指南"
-        android:textSize="30sp"
-        android:textStyle="bold" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/temp001">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/muscle"
+            android:textColor="@color/white"
+            android:layout_alignParentBottom="true"
+            android:textSize="50sp"
+            android:layout_marginBottom="30dp"
+            android:layout_marginLeft="20dp"
+            android:shadowColor="@color/login_input_text_color"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="4"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/temp002">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fat"
+            android:textColor="@color/white"
+            android:layout_alignParentBottom="true"
+            android:textSize="50sp"
+            android:layout_marginBottom="30dp"
+            android:layout_marginLeft="20dp"
+            android:shadowColor="@color/login_input_text_color"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="4"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/temp003">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/info"
+            android:textColor="@color/white"
+            android:layout_alignParentBottom="true"
+            android:textSize="50sp"
+            android:layout_marginBottom="30dp"
+            android:layout_marginLeft="20dp"
+            android:shadowColor="@color/login_input_text_color"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="4"
+            />
+    </RelativeLayout>
 
 </LinearLayout>
