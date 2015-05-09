@@ -3,8 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 15:44:45
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-08 19:13:30
-from rest_framework.response import Response
+# @Last Modified time: 2015-05-08 20:42:24
 
 from base.views import BaseView
 from .models import Recipe
@@ -19,7 +18,7 @@ class RecipeList(BaseView):
         '''
         recipes = Recipe.objects.all()
         serializer = RecipeSerializer(recipes, many=True)
-        return Response(serializer.data)
+        return self.success_response(serializer.data)
 
 
 class RecipeDetail(BaseView):
@@ -29,7 +28,7 @@ class RecipeDetail(BaseView):
         '''
         recipe = self.get_object(Recipe, pk)
         serializer = RecipeSerializer(recipe)
-        return Response(serializer.data)
+        return self.success_response(serializer.data)
 
 
 class RecipeRecommand(BaseView):
@@ -46,4 +45,4 @@ class RecipeRecommand(BaseView):
             'theme': list(),
             'update': list(),
         }
-        return Response(result)
+        return self.success_response(result)

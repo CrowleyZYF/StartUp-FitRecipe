@@ -16,6 +16,6 @@ urlpatterns = patterns('',
     url(r'^api/recipes/$', recipe_views.RecipeList.as_view()),
     url(r'^api/recipe/(\d+)/$', recipe_views.RecipeDetail.as_view()),
     url(r'^api/accounts/login/$', accounts_views.LoginView.as_view()),
-    url(r'^api/accounts/regiester/$', accounts_views.RegisterView.as_view()),
-
+    url(r'^api/accounts/register/$', accounts_views.RegisterView.as_view()),
+    url(r'^api/accounts/thirdparty/$', accounts_views.ThirdPartyLogin.as_view()),
 )

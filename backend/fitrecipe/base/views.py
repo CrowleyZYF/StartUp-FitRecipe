@@ -3,8 +3,9 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 15:44:45
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-04-26 23:34:06
+# @Last Modified time: 2015-05-08 20:45:31
 from django.http import Http404
+from rest_framework.response import Response
 from rest_framework.views import APIView
 
 
@@ -18,3 +19,11 @@ class BaseView(APIView):
             return model.objects.get(pk=pk)
         except model.DoesNotExist:
             raise Http404
+
+    def success_response(self, body):
+        r = {'status': 200, 'error_message': None, 'data': body}
+        return Response(r)
+
+    def fail_response(self, status_code, error_message):
+        r = {'status': status_code, 'error_message': error_message, 'data': None}
+        return Response(r, status=status_code)
