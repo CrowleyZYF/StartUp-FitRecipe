@@ -1,0 +1,248 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Fit Recipe API</title><link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"><link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,700|Inconsolata|Raleway:200"><style>/* Highlight.js Theme Tomorrow */
+.hljs-comment,.hljs-title{color:#8e908c}.hljs-variable,.hljs-attribute,.hljs-tag,.hljs-regexp,.ruby .hljs-constant,.xml .hljs-tag .hljs-title,.xml .hljs-pi,.xml .hljs-doctype,.html .hljs-doctype,.css .hljs-id,.css .hljs-class,.css .hljs-pseudo{color:#c82829}.hljs-number,.hljs-preprocessor,.hljs-pragma,.hljs-built_in,.hljs-literal,.hljs-params,.hljs-constant{color:#f5871f}.ruby .hljs-class .hljs-title,.css .hljs-rules .hljs-attribute{color:#eab700}.hljs-string,.hljs-value,.hljs-inheritance,.hljs-header,.ruby .hljs-symbol,.xml .hljs-cdata{color:#718c00}.css .hljs-hexcolor{color:#3e999f}.hljs-function,.python .hljs-decorator,.python .hljs-title,.ruby .hljs-function .hljs-title,.ruby .hljs-title .hljs-keyword,.perl .hljs-sub,.javascript .hljs-title,.coffeescript .hljs-title{color:#4271ae}.hljs-keyword,.javascript .hljs-function{color:#8959a8}.hljs{display:block;background:white;color:#4d4d4c;padding:.5em}.coffeescript .javascript,.javascript .xml,.tex .hljs-formula,.xml .javascript,.xml .vbscript,.xml .css,.xml .hljs-cdata{opacity:.5}</style><style>body,
+h4,
+h5 {
+  font-family: 'Roboto' sans-serif !important;
+}
+h1,
+h2,
+h3,
+.aglio {
+  font-family: 'Raleway' sans-serif !important;
+}
+h1 a,
+h2 a,
+h3 a,
+h4 a,
+h5 a {
+  display: none;
+}
+h1:hover a,
+h2:hover a,
+h3:hover a,
+h4:hover a,
+h5:hover a {
+  display: inline;
+}
+code {
+  color: #444;
+  background-color: #ddd;
+  font-family: 'Inconsolata' monospace !important;
+}
+a[data-target] {
+  cursor: pointer;
+}
+h4 {
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.back-to-top {
+  position: fixed;
+  z-index: 1;
+  bottom: 0px;
+  right: 24px;
+  padding: 4px 8px;
+  background-color: #eee;
+  text-decoration: none !important;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  border-left: 1px solid rgba(0,0,0,0.1);
+  border-right: 1px solid rgba(0,0,0,0.1);
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+.panel {
+  overflow: hidden;
+}
+.panel-heading code {
+  margin-left: 3px;
+  color: #c7254e;
+  background-color: rgba(255,255,255,0.7);
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+.panel-heading h3 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+a.list-group-item:hover {
+  background-color: #f8f8f8;
+  border-left: 2px solid #555;
+  padding-left: 15px;
+}
+.indent {
+  display: block;
+  text-indent: 16px;
+}
+.list-group-item {
+  padding-left: 16px;
+}
+.list-group-item .toggle .open {
+  display: block;
+}
+.list-group-item .toggle .closed {
+  display: none;
+}
+.list-group-item.collapsed .toggle .open {
+  display: none;
+}
+.list-group-item.collapsed .toggle .closed {
+  display: block;
+}
+a.list-group-item {
+  font-size: 13px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+a.list-group-item.heading {
+  font-size: 15px;
+  background-color: #f5f5f5;
+}
+a.list-group-item.heading:hover {
+  background-color: #f8f8f8;
+}
+.list-group-item.collapse {
+  display: none;
+}
+.list-group-item.collapse.in {
+  display: block;
+}
+.list-group-item a span.closed {
+  display: none;
+}
+.list-group-item a span.open {
+  display: block;
+}
+.list-group-item a.collapsed span.closed {
+  display: block;
+}
+.list-group-item a.collapsed span.open {
+  display: none;
+}
+#nav {
+  width: inherit;
+  margin-top: 38px;
+  max-width: 255px;
+  top: 0;
+  bottom: 0;
+  padding-right: 12px;
+  padding-bottom: 12px;
+  overflow-y: auto;
+}
+@media (max-width: 1199px) {
+  #nav {
+    max-width: 212px;
+  }
+}
+</style></head><body><a href="#top" class="text-muted back-to-top"><i class="fa fa-toggle-up"></i>&nbsp;Back to top</a><div class="container"><div class="row"><div class="col-md-3"><nav id="nav" class="hidden-sm hidden-xs affix nav"><div class="list-group"><a data-toggle="" data-target="#recipe-menu" href="#recipe" class="list-group-item heading collapsed">Recipe</a><div id="recipe-menu"><a href="#recipe-recipe-detail" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-info"><i class="fa fa-arrow-down"></i></span>Recipe Detail</a><a href="#recipe-recipe-list" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-info"><i class="fa fa-arrow-down"></i></span>Recipe List</a></div></div><div class="list-group"><a data-toggle="" data-target="#authorization-menu" href="#authorization" class="list-group-item heading collapsed">Authorization</a><div id="authorization-menu"><a href="#authorization-register" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-success"><i class="fa fa-plus"></i></span>Register</a><a href="#authorization-login" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-success"><i class="fa fa-plus"></i></span>Login</a><a href="#authorization-third-party-login" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-success"><i class="fa fa-plus"></i></span>Third-Party Login</a></div></div></nav></div><div class="col-md-8"><div><header><div class="page-header"><h1 id="top">Fit Recipe API</h1></div></header><div class="description"></div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="recipe">Recipe&nbsp;<a href="#recipe"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><h4 id="recipe-recipe-detail">Recipe Detail&nbsp;<a href="#recipe-recipe-detail"><i class="fa fa-link"></i></a></h4><section id="recipe-recipe-detail-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Retrieve Recipe</span></div><div style="float:left"><a href="#recipe-recipe-detail-get" class="btn btn-xs btn-primary">GET</a></div><div style="overflow:hidden"><code>/api/recipe/{id}/</code></div></div><div class="panel-body"><p>获取指定 ID 的菜谱详细信息</p>
+</div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>id</dt><dd><code>number</code>&nbsp;<span class="required">(required)</span>&nbsp;<p>菜谱的 ID</p>
+</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#407df4dfe99883918266af7d911648ba" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="407df4dfe99883918266af7d911648ba" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
+    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>, 
+    "<span class="hljs-attribute">created_time</span>": <span class="hljs-value"><span class="hljs-string">"2015-04-26 07:32:29"</span></span>, 
+    "<span class="hljs-attribute">updated_time</span>": <span class="hljs-value"><span class="hljs-string">"2015-04-26 16:17:07"</span></span>, 
+    "<span class="hljs-attribute">img_height</span>": <span class="hljs-value"><span class="hljs-number">2309</span></span>, 
+    "<span class="hljs-attribute">img_width</span>": <span class="hljs-value"><span class="hljs-number">3464</span></span>, 
+    "<span class="hljs-attribute">img</span>": <span class="hljs-value"><span class="hljs-string">"static/images/DSC05069.jpg"</span></span>, 
+    "<span class="hljs-attribute">thumbnail</span>": <span class="hljs-value"><span class="hljs-string">""</span></span>, 
+    "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"test123"</span></span>, 
+    "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-number">0</span></span>, 
+    "<span class="hljs-attribute">duration</span>": <span class="hljs-value"><span class="hljs-string">""</span></span>, 
+    "<span class="hljs-attribute">calorie</span>": <span class="hljs-value"><span class="hljs-string">""</span>
+</span>}
+</code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>404</code></strong><a data-toggle="collapse" data-target="#10b5dfacdb1943abf05749a6d99f101a" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="10b5dfacdb1943abf05749a6d99f101a" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
+    "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"Not found"</span>
+</span>}
+</code></pre></li></ul></section><h4 id="recipe-recipe-list">Recipe List&nbsp;<a href="#recipe-recipe-list"><i class="fa fa-link"></i></a></h4><p><strong>这个 URL 要改的</strong></p>
+<section id="recipe-recipe-list-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Retrieve all Recipes</span></div><div style="float:left"><a href="#recipe-recipe-list-get" class="btn btn-xs btn-primary">GET</a></div><div style="overflow:hidden"><code>/api/recipes/</code></div></div><div class="panel-body"><p>获取所有的菜谱</p>
+</div><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#c6c91aa530e25313cce694df06fbff50" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="c6c91aa530e25313cce694df06fbff50" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>[
+    {
+        "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>, 
+        "<span class="hljs-attribute">created_time</span>": <span class="hljs-value"><span class="hljs-string">"2015-04-26 07:32:29"</span></span>, 
+        "<span class="hljs-attribute">updated_time</span>": <span class="hljs-value"><span class="hljs-string">"2015-04-26 16:17:07"</span></span>, 
+        "<span class="hljs-attribute">img_height</span>": <span class="hljs-value"><span class="hljs-number">2309</span></span>, 
+        "<span class="hljs-attribute">img_width</span>": <span class="hljs-value"><span class="hljs-number">3464</span></span>, 
+        "<span class="hljs-attribute">img</span>": <span class="hljs-value"><span class="hljs-string">"static/images/DSC05069.jpg"</span></span>, 
+        "<span class="hljs-attribute">thumbnail</span>": <span class="hljs-value"><span class="hljs-string">""</span></span>, 
+        "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"test123"</span></span>, 
+        "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-number">0</span></span>, 
+        "<span class="hljs-attribute">duration</span>": <span class="hljs-value"><span class="hljs-string">""</span></span>, 
+        "<span class="hljs-attribute">calorie</span>": <span class="hljs-value"><span class="hljs-string">""</span>
+    </span>},
+    {
+        "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">2</span></span>,
+        "<span class="hljs-attribute">...</span>":<span class="hljs-value"><span class="hljs-string">"..."</span>
+    </span>}
+]
+</code></pre></li></ul></section></div></div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="authorization">Authorization&nbsp;<a href="#authorization"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><p>我们使用 Token 的验证方式，保证 <code>https</code> 访问所有接口。</p>
+<p>在需要认证的 Request Headers 中加入 <code>Authorization</code> 头， 它的值是 <code>Token {your-token-here}</code>。注意，是 <code>Token</code> 开头，后面跟着一个 <code>空格</code>，然后再加上登录注册时返回的 <code>Token</code>.</p>
+<p>登录注册和第三方登录不用带着 Token</p>
+<h4 id="authorization-register">Register&nbsp;<a href="#authorization-register"><i class="fa fa-link"></i></a></h4><section id="authorization-register-post" class="panel panel-success"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Normal Account Register</span></div><div style="float:left"><a href="#authorization-register-post" class="btn btn-xs btn-success">POST</a></div><div style="overflow:hidden"><code>/api/accounts/register/</code></div></div><div class="panel-body"><p>注册帐号
+正常的注册，需要密码和手机号</p>
+</div><ul class="list-group"><li class="list-group-item"><strong>Request</strong><a data-toggle="collapse" data-target="#71365fddc1e85b18e03c578c6536f4b7" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="71365fddc1e85b18e03c578c6536f4b7" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
+    "<span class="hljs-attribute">password</span>":<span class="hljs-value"><span class="hljs-string">"123"</span></span>,
+    "<span class="hljs-attribute">phone</span>":<span class="hljs-value"><span class="hljs-string">"123"</span>
+</span>}
+</code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#de3665dd4ef5bb2c399ec41d2f478b36" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="de3665dd4ef5bb2c399ec41d2f478b36" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
+    "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">200</span></span>,
+    "<span class="hljs-attribute">error_message</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+    "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
+        "<span class="hljs-attribute">token</span>": <span class="hljs-value"><span class="hljs-string">"156c6c47e4ef408ff494513c755a3c42881428c0"</span>
+    </span>}
+</span>}
+</code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>400</code></strong><a data-toggle="collapse" data-target="#1bae6a71b8df23f3372b2e61e085dd33" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="1bae6a71b8df23f3372b2e61e085dd33" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
+    "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">400</span></span>, 
+    "<span class="hljs-attribute">error_message</span>": <span class="hljs-value"><span class="hljs-string">"Phone registed"</span></span>,
+    "<span class="hljs-attribute">data</span>": <span class="hljs-value"><span class="hljs-literal">null</span>
+</span>}
+</code></pre></li></ul></section><h4 id="authorization-login">Login&nbsp;<a href="#authorization-login"><i class="fa fa-link"></i></a></h4><section id="authorization-login-post" class="panel panel-success"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Normal Account Login</span></div><div style="float:left"><a href="#authorization-login-post" class="btn btn-xs btn-success">POST</a></div><div style="overflow:hidden"><code>/api/accounts/login/</code></div></div><div class="panel-body"><p>正常帐号登录</p>
+</div><ul class="list-group"><li class="list-group-item"><strong>Request</strong><a data-toggle="collapse" data-target="#b3cdc463ce83cbede198e2ea663fe12c" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="b3cdc463ce83cbede198e2ea663fe12c" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
+    "<span class="hljs-attribute">password</span>":<span class="hljs-value"><span class="hljs-string">"123"</span></span>,
+    "<span class="hljs-attribute">phone</span>":<span class="hljs-value"><span class="hljs-string">"123"</span>
+</span>}
+</code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#327218ff466af9ad7cfb94a65ac8803f" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="327218ff466af9ad7cfb94a65ac8803f" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
+    "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">200</span></span>,
+    "<span class="hljs-attribute">error_message</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+    "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
+        "<span class="hljs-attribute">token</span>": <span class="hljs-value"><span class="hljs-string">"156c6c47e4ef408ff494513c755a3c42881428c0"</span>
+    </span>}
+</span>}
+</code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>401</code></strong><a data-toggle="collapse" data-target="#01ab804e50667cacb63e81cfcd37b74d" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="01ab804e50667cacb63e81cfcd37b74d" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
+    "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">401</span></span>, 
+    "<span class="hljs-attribute">error_message</span>": <span class="hljs-value"><span class="hljs-string">"password is not correct"</span></span>,
+    "<span class="hljs-attribute">data</span>": <span class="hljs-value"><span class="hljs-literal">null</span>
+</span>}
+</code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>402</code></strong><a data-toggle="collapse" data-target="#a6f11cc3218e572a9e77bca5aa80a8bd" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="a6f11cc3218e572a9e77bca5aa80a8bd" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
+    "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">402</span></span>, 
+    "<span class="hljs-attribute">error_message</span>": <span class="hljs-value"><span class="hljs-string">"Account not existed"</span></span>,
+    "<span class="hljs-attribute">data</span>": <span class="hljs-value"><span class="hljs-literal">null</span>
+</span>}
+</code></pre></li></ul></section><h4 id="authorization-third-party-login">Third-Party Login&nbsp;<a href="#authorization-third-party-login"><i class="fa fa-link"></i></a></h4><section id="authorization-third-party-login-post" class="panel panel-success"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Third-Party Login &amp; Register</span></div><div style="float:left"><a href="#authorization-third-party-login-post" class="btn btn-xs btn-success">POST</a></div><div style="overflow:hidden"><code>/api/accounts/thirdparty/</code></div></div><div class="panel-body"><p>第三方帐号登录。后面除了 <code>nick_name</code> 可能还需要类似头像之类的。</p>
+</div><ul class="list-group"><li class="list-group-item"><strong>Request</strong><a data-toggle="collapse" data-target="#269a24d54c6193edb9d19d60b0d9b4d6" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="269a24d54c6193edb9d19d60b0d9b4d6" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
+    "<span class="hljs-attribute">nick_name</span>":<span class="hljs-value"><span class="hljs-string">"123"</span></span>,
+    "<span class="hljs-attribute">external_source</span>":<span class="hljs-value"><span class="hljs-string">"test"</span></span>,
+    "<span class="hljs-attribute">external_id</span>":<span class="hljs-value"><span class="hljs-string">"12344"</span>
+</span>}
+</code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#e569f5b793b5b81999fcdda937f5a561" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="e569f5b793b5b81999fcdda937f5a561" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
+    "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">200</span></span>,
+    "<span class="hljs-attribute">error_message</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+    "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
+        "<span class="hljs-attribute">token</span>": <span class="hljs-value"><span class="hljs-string">"156c6c47e4ef408ff494513c755a3c42881428c0"</span>
+    </span>}
+</span>}
+</code></pre></li></ul></section></div></div></div></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 09 May 2015</p><div id="localFile" style="display: none; position: absolute; top: 0; left: 0; width: 100%; color: white; background: red; font-size: 150%; text-align: center; padding: 1em;">This page may not display correctly when opened as a local file. Instead, view it from a web server.
+
+</div></body><script src="//code.jquery.com/jquery-1.11.0.min.js"></script><script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script><script>(function() {
+  if (location.protocol === 'file:') {
+    document.getElementById('localFile').style.display = 'block';
+  }
+
+}).call(this);
+</script><script>(function() {
+  $('table').addClass('table');
+
+}).call(this);
+</script></html>
