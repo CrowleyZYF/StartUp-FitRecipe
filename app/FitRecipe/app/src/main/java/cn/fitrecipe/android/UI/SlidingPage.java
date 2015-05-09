@@ -4,10 +4,12 @@ package cn.fitrecipe.android.UI;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 
@@ -149,8 +151,11 @@ public class SlidingPage extends HorizontalScrollView {
 	}
 	
 	public void closeMenu(){
-		if(!isOpen) return;
-		this.smoothScrollTo(0, 0);
+		if(!isOpen){
+            return;
+        }else {
+            this.smoothScrollTo(0, 0);
+        }
 		isOpen = false;
 	}
 	

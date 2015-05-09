@@ -1,6 +1,7 @@
 package cn.fitrecipe.android.Adpater;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +12,14 @@ import android.widget.TextView;
 import java.util.List;
 
 import cn.fitrecipe.android.R;
+import cn.fitrecipe.android.RecipeActivity;
+import cn.fitrecipe.android.ThemeActivity;
 import cn.fitrecipe.android.model.RecipeCard;
 
 /**
  * Created by 奕峰 on 2015/4/24.
  */
-public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.RecipeCardViewHolder> {
+public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.RecipeCardViewHolder> implements View.OnClickListener {
 
     private List<RecipeCard> recipeCardsList;
     private Context context;
@@ -31,6 +34,8 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Re
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
                 inflate(R.layout.recipe_card, viewGroup, false);
+
+        itemView.setOnClickListener(this);
 
         return new RecipeCardViewHolder(itemView);
     }
@@ -49,6 +54,11 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Re
     @Override
     public int getItemCount() {
         return recipeCardsList.size();
+    }
+
+    @Override
+    public void onClick(View v) {
+        this.context.startActivity(new Intent(this.context, RecipeActivity.class));
     }
 
     public static class RecipeCardViewHolder extends RecyclerView.ViewHolder {

@@ -74,6 +74,9 @@
             android:name=".SetActivity">
         </activity>
         <activity
+            android:name=".RecipeActivity">
+        </activity>
+        <activity
             android:name="com.umeng.fb.ConversationActivity"/>
         <meta-data
             android:value="552d1b9ffd98c532ad001857"
