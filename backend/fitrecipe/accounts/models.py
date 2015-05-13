@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-05-04 14:50:49
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-09 13:25:51
+# @Last Modified time: 2015-05-13 20:59:01
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -24,6 +24,9 @@ class Account(User):
     nick_name = models.CharField(max_length=100)
     is_changed_nick = models.BooleanField(default=False)
 
+    def __unicode__(self):
+        return self.phone
+
 
 class External(BaseModel):
     '''
@@ -35,3 +38,6 @@ class External(BaseModel):
 
     class Meta:
         unique_together = ('external_id', 'external_source',)
+
+    def __unicode__(self):
+        return u'%s_%s' % (self.external_source, self.external_id)
