@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 14:30:44
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-12 21:29:10
+# @Last Modified time: 2015-05-13 21:24:01
 from django.db import models
 
 from base.models import BaseModel
@@ -18,7 +18,13 @@ class Recipe(BaseModel):
     thumbnail = models.URLField(max_length=200)
     title = models.CharField(max_length=100)
     duration = models.IntegerField()  # 烹饪时间
-    labels = models.ManyToManyField('Label')
+    effect_labels = models.ManyToManyField('Label', limit_choices_to={'type': '功效'}, related_name='effect_set', null=True, blank=True)
+    time_labels = models.ManyToManyField('Label', limit_choices_to={'type': '用餐时间'}, related_name='time_set', null=True, blank=True)
+    meat_labels = models.ManyToManyField('Label', limit_choices_to={'type': '食材'}, related_name='meat_set', null=True, blank=True)
+    other_labels = models.ManyToManyField('Label', limit_choices_to={'type': '其他'}, related_name='other_set', null=True, blank=True)
+
+    def __unicode__(self):
+        return self.title
 
 
 class Component(BaseModel):
@@ -29,6 +35,9 @@ class Component(BaseModel):
     ingredient = models.ForeignKey('Ingredient')
     amount = models.IntegerField()  # 克数 没有小数
     remark = models.CharField(max_length=100, null=True, blank=True)
+
+    def __unicode__(self):
+        return u'%s 的食材【%s】' % (self.recipe.title, self.ingredient.name)
 
 
 class Procedure(BaseModel):
@@ -43,6 +52,9 @@ class Procedure(BaseModel):
     class Meta:
         unique_together = (('recipe', 'num'),)  # 有必要嘛？是不是太强制了一点？
 
+    def __unicode__(self):
+        return u'%s的步骤 第%s步 ' % (self.recipe.title, self.num)
+
 
 class Label(BaseModel):
     '''
@@ -51,10 +63,16 @@ class Label(BaseModel):
     name = models.CharField(max_length=25)
     type = models.CharField(max_length=25)
 
+    def __unicode__(self):
+        return self.name
+
 
 class Ingredient(BaseModel):
     name = models.CharField(max_length=25)
     # nutrition_set can get all nutritions
+
+    def __unicode__(self):
+        return self.name
 
 
 class Nutrition(BaseModel):
@@ -63,3 +81,6 @@ class Nutrition(BaseModel):
     amount = models.FloatField()
     unit = models.CharField(max_length=25)
     ingredient = models.ForeignKey('Ingredient')
+
+    def __unicode__(self):
+        return u'%s 的营养 【%s】' % (self.ingredient.name, self.name)
