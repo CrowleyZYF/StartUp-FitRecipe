@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 15:52:14
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-13 21:40:38
+# @Last Modified time: 2015-05-13 21:44:50
 from rest_framework import serializers
 
 from .models import Recipe, Component, Procedure, Label, Ingredient, Nutrition
@@ -43,4 +43,3 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        depth = 1
