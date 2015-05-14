@@ -3,20 +3,20 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 15:52:14
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-13 21:44:50
+# @Last Modified time: 2015-05-14 20:24:07
 from rest_framework import serializers
 
 from .models import Recipe, Component, Procedure, Label, Ingredient, Nutrition
 
 
-class ComponentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Component
-
-
 class ProcedureSerializer(serializers.ModelSerializer):
     class Meta:
         model = Procedure
+
+
+class NutritionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Nutrition
 
 
 class LabelSerializer(serializers.ModelSerializer):
@@ -26,13 +26,18 @@ class LabelSerializer(serializers.ModelSerializer):
 
 
 class IngredientSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Ingredient
+        fields = ('id', 'name')
 
 
-class NutritionSerializer(serializers.ModelSerializer):
+class ComponentSerializer(serializers.ModelSerializer):
+    ingredient = IngredientSerializer()
+
     class Meta:
-        model = Nutrition
+        model = Component
+        fields = ('id', 'ingredient', 'amount', 'remark')
 
 
 class RecipeSerializer(serializers.ModelSerializer):
@@ -40,6 +45,7 @@ class RecipeSerializer(serializers.ModelSerializer):
     time_labels = LabelSerializer(many=True)
     effect_labels = LabelSerializer(many=True)
     other_labels = LabelSerializer(many=True)
+    component_set = ComponentSerializer(many=True)
 
     class Meta:
         model = Recipe
