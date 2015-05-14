@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 14:30:44
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-14 21:54:40
+# @Last Modified time: 2015-05-14 22:12:09
 from django.db import models
 
 from base.models import BaseModel
@@ -96,6 +96,8 @@ class Ingredient(BaseModel):
             for nu in content['nutrients']:
                 # loop nutritions, 把他转成id做key的dict，不然查起来太费劲了
                 nutri_dict[nu['nutrient_id']] = (nu['value'], nu['unit'])
+            # 先把表里的营养都删掉，不然要重复
+            Nutrition.objects.filter(ingredient=self).delete()
             for item in settings.NDB_NUTRITION_ID_LIST:
                 total = 0.0
                 unit = ''
