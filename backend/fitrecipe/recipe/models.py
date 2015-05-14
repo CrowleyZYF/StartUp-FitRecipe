@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 14:30:44
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-13 21:24:01
+# @Last Modified time: 2015-05-14 21:54:40
 from django.db import models
 
 from base.models import BaseModel
@@ -69,10 +69,50 @@ class Label(BaseModel):
 
 class Ingredient(BaseModel):
     name = models.CharField(max_length=25)
+    eng_name = models.CharField(max_length=100, null=True, blank=True)  # 营养网站上的英文名名字，自动填入
+    ndbno = models.CharField(max_length=25)  # 营养网站上的id, 要保留前面的0呐
     # nutrition_set can get all nutritions
 
     def __unicode__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        '''
+        捕捉save事件，通过英文名，去录入营养物质
+        '''
+        import requests
+        import json
+        from django.conf import settings
+        # 先保存，不然后面外键指不到吧
+        url = u'http://api.nal.usda.gov/usda/ndb/reports/?ndbno=%s&type=f&format=json&api_key=%s' % (self.ndbno, settings.NDB_API_KEY)
+        resp = requests.get(url)
+        if resp.status_code == 200:
+            content = json.loads(resp.content)['report']['food']
+            self.eng_name = content['name']
+            # 在这里执行保存操作，不然后面外键指不到了。
+            r = super(Ingredient, self).save(*args, **kwargs)
+            # 保存完之后开始处理 nutritions
+            nutri_dict = dict()
+            for nu in content['nutrients']:
+                # loop nutritions, 把他转成id做key的dict，不然查起来太费劲了
+                nutri_dict[nu['nutrient_id']] = (nu['value'], nu['unit'])
+            for item in settings.NDB_NUTRITION_ID_LIST:
+                total = 0.0
+                unit = ''
+                if isinstance(item[0], tuple):
+                    # 不饱和脂肪酸要求和
+                    for sid in item[0]:
+                        total += nutri_dict[sid][0]
+                        unit = nutri_dict[sid][1]
+                else:
+                    total = nutri_dict[item[0]][0]
+                    unit = nutri_dict[item[0]][1]
+                Nutrition.objects.create(name=item[2], eng_name=item[1], amount=total, unit=unit, ingredient=self)
+            return r
+        elif resp.status_code == 400:
+            raise AssertionError('400, check ndbno, dont forget the 0 before it')
+        else:
+            raise AssertionError('remote website said: %s' % resp.status_code)
 
 
 class Nutrition(BaseModel):
