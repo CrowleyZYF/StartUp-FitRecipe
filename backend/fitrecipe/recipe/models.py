@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 14:30:44
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-15 19:53:04
+# @Last Modified time: 2015-05-15 20:42:19
 from django.db import models
 
 from base.models import BaseModel
@@ -18,10 +18,10 @@ class Recipe(BaseModel):
     thumbnail = models.URLField(max_length=200, verbose_name=u'缩略图 URL')
     title = models.CharField(max_length=100, verbose_name=u'菜谱名称')
     duration = models.IntegerField(help_text='分钟', verbose_name=u'烹饪时间')  # 烹饪时间
-    effect_labels = models.ManyToManyField('Label', limit_choices_to={'type': '功效'}, related_name='effect_set', null=True, blank=True, verbose_name=u'功效标签')
-    time_labels = models.ManyToManyField('Label', limit_choices_to={'type': '用餐时间'}, related_name='time_set', null=True, blank=True, verbose_name=u'用餐时间标签')
-    meat_labels = models.ManyToManyField('Label', limit_choices_to={'type': '食材'}, related_name='meat_set', null=True, blank=True, verbose_name=u'食材标签')
-    other_labels = models.ManyToManyField('Label', limit_choices_to={'type': '其他'}, related_name='other_set', null=True, blank=True, verbose_name=u'其他标签')
+    effect_labels = models.ManyToManyField('Label', limit_choices_to={'type': u'功效'}, related_name='effect_set', null=True, blank=True, verbose_name=u'功效标签')
+    time_labels = models.ManyToManyField('Label', limit_choices_to={'type': u'用餐时间'}, related_name='time_set', null=True, blank=True, verbose_name=u'用餐时间标签')
+    meat_labels = models.ManyToManyField('Label', limit_choices_to={'type': u'食材'}, related_name='meat_set', null=True, blank=True, verbose_name=u'食材标签')
+    other_labels = models.ManyToManyField('Label', limit_choices_to={'type': u'其他'}, related_name='other_set', null=True, blank=True, verbose_name=u'其他标签')
 
     class Meta:
         verbose_name = '菜谱'
@@ -83,7 +83,7 @@ class Label(BaseModel):
     标签 (功效) 增肌 减脂 (用餐时间) 早餐 加餐 正餐 (食材) 鸡肉 鱼肉 牛肉 海鲜 蛋奶 果蔬 米面 点心 (其他标签) 酸甜 等等
     '''
     name = models.CharField(max_length=25, verbose_name=u'标签名称')
-    type = models.CharField(max_length=25, choices=(('功效', '功效'), ('用餐时间', '用餐时间'), ('食材', '食材'), ('其他', '其他'),), verbose_name=u'标签类型')
+    type = models.CharField(max_length=25, choices=((u'功效', u'功效'), (u'用餐时间', u'用餐时间'), (u'食材', u'食材'), (u'其他', u'其他'),), verbose_name=u'标签类型')
 
     class Meta:
         verbose_name = '标签'
