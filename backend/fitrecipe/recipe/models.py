@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 14:30:44
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-15 19:11:24
+# @Last Modified time: 2015-05-15 19:53:04
 from django.db import models
 
 from base.models import BaseModel
@@ -14,14 +14,18 @@ class Recipe(BaseModel):
     recipe models
     '''
     # 菜谱id号(auto)，菜谱封面url，菜谱名称，功效，烹饪时间，卡路里，收藏数(redis)
-    img = models.URLField(max_length=200)  # 图片全部使用 CDN
-    thumbnail = models.URLField(max_length=200)
-    title = models.CharField(max_length=100)
-    duration = models.IntegerField()  # 烹饪时间
-    effect_labels = models.ManyToManyField('Label', limit_choices_to={'type': '功效'}, related_name='effect_set', null=True, blank=True)
-    time_labels = models.ManyToManyField('Label', limit_choices_to={'type': '用餐时间'}, related_name='time_set', null=True, blank=True)
-    meat_labels = models.ManyToManyField('Label', limit_choices_to={'type': '食材'}, related_name='meat_set', null=True, blank=True)
-    other_labels = models.ManyToManyField('Label', limit_choices_to={'type': '其他'}, related_name='other_set', null=True, blank=True)
+    img = models.URLField(max_length=200, verbose_name=u'大图 URL')  # 图片全部使用 CDN
+    thumbnail = models.URLField(max_length=200, verbose_name=u'缩略图 URL')
+    title = models.CharField(max_length=100, verbose_name=u'菜谱名称')
+    duration = models.IntegerField(help_text='分钟', verbose_name=u'烹饪时间')  # 烹饪时间
+    effect_labels = models.ManyToManyField('Label', limit_choices_to={'type': '功效'}, related_name='effect_set', null=True, blank=True, verbose_name=u'功效标签')
+    time_labels = models.ManyToManyField('Label', limit_choices_to={'type': '用餐时间'}, related_name='time_set', null=True, blank=True, verbose_name=u'用餐时间标签')
+    meat_labels = models.ManyToManyField('Label', limit_choices_to={'type': '食材'}, related_name='meat_set', null=True, blank=True, verbose_name=u'食材标签')
+    other_labels = models.ManyToManyField('Label', limit_choices_to={'type': '其他'}, related_name='other_set', null=True, blank=True, verbose_name=u'其他标签')
+
+    class Meta:
+        verbose_name = '菜谱'
+        verbose_name_plural = verbose_name + '表'
 
     def __unicode__(self):
         return self.title
@@ -32,9 +36,9 @@ class Recipe(BaseModel):
             c_amount = item.amount
             for n in item.ingredient.nutrition_set.all():
                 if n.id in r.keys():
-                    r[n.id]["amount"] += round(n.amount/100*c_amount, 2)
+                    r[n.id]['amount'] += round(n.amount/100*c_amount, 2)
                 else:
-                    r[n.id] = {"amount": round(n.amount/100*c_amount, 2), "unit": n.unit, "name": n.name}
+                    r[n.id] = {'amount': round(n.amount/100*c_amount, 2), 'unit': n.unit, 'name': n.name}
         return r
 
 
@@ -46,6 +50,10 @@ class Component(BaseModel):
     ingredient = models.ForeignKey('Ingredient')
     amount = models.IntegerField()  # 克数 没有小数
     remark = models.CharField(max_length=100, null=True, blank=True)
+
+    class Meta:
+        verbose_name = '构成'
+        verbose_name_plural = verbose_name + '表'
 
     def __unicode__(self):
         return u'%s 的食材【%s】' % (self.recipe.title, self.ingredient.name)
@@ -62,6 +70,8 @@ class Procedure(BaseModel):
 
     class Meta:
         unique_together = (('recipe', 'num'),)  # 有必要嘛？是不是太强制了一点？
+        verbose_name = '步骤'
+        verbose_name_plural = verbose_name + '表'
         # ordering = ['-recipe', 'num']
 
     def __unicode__(self):
@@ -72,8 +82,12 @@ class Label(BaseModel):
     '''
     标签 (功效) 增肌 减脂 (用餐时间) 早餐 加餐 正餐 (食材) 鸡肉 鱼肉 牛肉 海鲜 蛋奶 果蔬 米面 点心 (其他标签) 酸甜 等等
     '''
-    name = models.CharField(max_length=25)
-    type = models.CharField(max_length=25)
+    name = models.CharField(max_length=25, verbose_name=u'标签名称')
+    type = models.CharField(max_length=25, choices=(('功效', '功效'), ('用餐时间', '用餐时间'), ('食材', '食材'), ('其他', '其他'),), verbose_name=u'标签类型')
+
+    class Meta:
+        verbose_name = '标签'
+        verbose_name_plural = verbose_name + '表'
 
     def __unicode__(self):
         return self.name
@@ -84,6 +98,10 @@ class Ingredient(BaseModel):
     eng_name = models.CharField(max_length=100, null=True, blank=True)  # 营养网站上的英文名名字，自动填入
     ndbno = models.CharField(max_length=25)  # 营养网站上的id, 要保留前面的0呐
     # nutrition_set can get all nutritions
+
+    class Meta:
+        verbose_name = '原料'
+        verbose_name_plural = verbose_name + '表'
 
     def __unicode__(self):
         return self.name
@@ -135,6 +153,10 @@ class Nutrition(BaseModel):
     amount = models.FloatField()
     unit = models.CharField(max_length=25)
     ingredient = models.ForeignKey('Ingredient')
+
+    class Meta:
+        verbose_name = '营养'
+        verbose_name_plural = verbose_name + '表'
 
     def __unicode__(self):
         return u'%s 的营养 【%s】' % (self.ingredient.name, self.name)
