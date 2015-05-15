@@ -138,7 +138,30 @@ a.list-group-item.heading:hover {
     max-width: 212px;
   }
 }
-</style></head><body><a href="#top" class="text-muted back-to-top"><i class="fa fa-toggle-up"></i>&nbsp;Back to top</a><div class="container"><div class="row"><div class="col-md-3"><nav id="nav" class="hidden-sm hidden-xs affix nav"><div class="list-group"><a data-toggle="" data-target="#recipe-menu" href="#recipe" class="list-group-item heading collapsed">Recipe</a><div id="recipe-menu"><a href="#recipe-recipe-detail" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-info"><i class="fa fa-arrow-down"></i></span>Recipe Detail</a><a href="#recipe-recipe-list" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-info"><i class="fa fa-arrow-down"></i></span>Recipe List</a></div></div><div class="list-group"><a data-toggle="" data-target="#authorization-menu" href="#authorization" class="list-group-item heading collapsed">Authorization</a><div id="authorization-menu"><a href="#authorization-register" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-success"><i class="fa fa-plus"></i></span>Register</a><a href="#authorization-login" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-success"><i class="fa fa-plus"></i></span>Login</a><a href="#authorization-third-party-login" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-success"><i class="fa fa-plus"></i></span>Third-Party Login</a></div></div></nav></div><div class="col-md-8"><div><header><div class="page-header"><h1 id="top">Fit Recipe API</h1></div></header><div class="description"></div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="recipe">Recipe&nbsp;<a href="#recipe"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><h4 id="recipe-recipe-detail">Recipe Detail&nbsp;<a href="#recipe-recipe-detail"><i class="fa fa-link"></i></a></h4><section id="recipe-recipe-detail-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Retrieve Recipe</span></div><div style="float:left"><a href="#recipe-recipe-detail-get" class="btn btn-xs btn-primary">GET</a></div><div style="overflow:hidden"><code>/api/recipe/{id}/</code></div></div><div class="panel-body"><p>获取指定 ID 的菜谱详细信息</p>
+</style></head><body><a href="#top" class="text-muted back-to-top"><i class="fa fa-toggle-up"></i>&nbsp;Back to top</a><div class="container"><div class="row"><div class="col-md-3"><nav id="nav" class="hidden-sm hidden-xs affix nav"><div class="list-group"><a data-toggle="" data-target="#recipe-menu" href="#recipe" class="list-group-item heading collapsed">Recipe</a><div id="recipe-menu"><a href="#recipe-recipe-detail" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-info"><i class="fa fa-arrow-down"></i></span>Recipe Detail</a><a href="#recipe-recipe-list" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-info"><i class="fa fa-arrow-down"></i></span>Recipe List</a></div></div><div class="list-group"><a data-toggle="" data-target="#knowledge-menu" href="#knowledge" class="list-group-item heading collapsed">Knowledge</a><div id="knowledge-menu"></div></div><div class="list-group"><a data-toggle="" data-target="#authorization-menu" href="#authorization" class="list-group-item heading collapsed">Authorization</a><div id="authorization-menu"><a href="#authorization-register" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-success"><i class="fa fa-plus"></i></span>Register</a><a href="#authorization-login" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-success"><i class="fa fa-plus"></i></span>Login</a><a href="#authorization-third-party-login" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-success"><i class="fa fa-plus"></i></span>Third-Party Login</a></div></div></nav></div><div class="col-md-8"><div><header><div class="page-header"><h1 id="top">Fit Recipe API</h1></div></header><div class="description"></div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="recipe">Recipe&nbsp;<a href="#recipe"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><ul>
+<li><p>菜谱名称</p></li>
+<li><p>菜谱图片</p></li>
+<li><p>烹饪时间</p></li>
+<li><p>作者（还没加上，需要头像，名称）</p></li>
+<li><p>菜谱简介</p></li>
+<li><p>功效标签： 增肌 减脂</p></li>
+<li><p>用餐时间标签： 早餐 加餐 正餐</p></li>
+<li><p>食材标签： 鸡肉 鱼肉 牛肉 海鲜 蛋奶 果蔬 米面 点心</p></li>
+<li><p>其他标签： 酸甜 等等</p></li>
+<li><p>配料表</p>
+<ul>
+<li>食材名 大米</li>
+<li>重量 200克</li>
+<li>备注 约一小碗</li>
+</ul></li>
+<li><p>营养表</p></li>
+<li><p>菜谱步骤表</p>
+<ul>
+<li>步骤简述</li>
+<li>步骤配图</li>
+</ul></li>
+</ul>
+<h4 id="recipe-recipe-detail">Recipe Detail&nbsp;<a href="#recipe-recipe-detail"><i class="fa fa-link"></i></a></h4><section id="recipe-recipe-detail-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Retrieve Recipe</span></div><div style="float:left"><a href="#recipe-recipe-detail-get" class="btn btn-xs btn-primary">GET</a></div><div style="overflow:hidden"><code>/api/recipe/{id}/</code></div></div><div class="panel-body"><p>获取指定 ID 的菜谱详细信息</p>
 </div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>id</dt><dd><code>number</code>&nbsp;<span class="required">(required)</span>&nbsp;<p>菜谱的 ID</p>
 </dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#407df4dfe99883918266af7d911648ba" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="407df4dfe99883918266af7d911648ba" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>, 
@@ -156,8 +179,7 @@ a.list-group-item.heading:hover {
 </code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>404</code></strong><a data-toggle="collapse" data-target="#10b5dfacdb1943abf05749a6d99f101a" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="10b5dfacdb1943abf05749a6d99f101a" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
     "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"Not found"</span>
 </span>}
-</code></pre></li></ul></section><h4 id="recipe-recipe-list">Recipe List&nbsp;<a href="#recipe-recipe-list"><i class="fa fa-link"></i></a></h4><p><strong>这个 URL 要改的</strong></p>
-<section id="recipe-recipe-list-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Retrieve all Recipes</span></div><div style="float:left"><a href="#recipe-recipe-list-get" class="btn btn-xs btn-primary">GET</a></div><div style="overflow:hidden"><code>/api/recipes/</code></div></div><div class="panel-body"><p>获取所有的菜谱</p>
+</code></pre></li></ul></section><h4 id="recipe-recipe-list">Recipe List&nbsp;<a href="#recipe-recipe-list"><i class="fa fa-link"></i></a></h4><section id="recipe-recipe-list-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Retrieve all Recipes</span></div><div style="float:left"><a href="#recipe-recipe-list-get" class="btn btn-xs btn-primary">GET</a></div><div style="overflow:hidden"><code>/api/recipe/list/</code></div></div><div class="panel-body"><p>获取所有的菜谱</p>
 </div><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#c6c91aa530e25313cce694df06fbff50" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="c6c91aa530e25313cce694df06fbff50" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>[
     {
         "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>, 
@@ -177,7 +199,37 @@ a.list-group-item.heading:hover {
         "<span class="hljs-attribute">...</span>":<span class="hljs-value"><span class="hljs-string">"..."</span>
     </span>}
 ]
-</code></pre></li></ul></section></div></div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="authorization">Authorization&nbsp;<a href="#authorization"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><p>我们使用 Token 的验证方式，保证 <code>https</code> 访问所有接口。</p>
+</code></pre></li></ul></section></div></div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="knowledge">Knowledge&nbsp;<a href="#knowledge"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><p>知识体系中的数据结构是这样的：</p>
+<ul>
+<li><p>最大的概念是 <code>类别</code>，例如：减脂类，增肌类，小提示</p></li>
+<li><p><code>类别</code> 中会包含多个 <code>系列</code>，例如： 增肌类下面会有斌卡系列、陈柏霖系列等</p></li>
+<li><p>每个 <code>系列</code> 里会有多个 <code>文章</code></p></li>
+</ul>
+<h2>类别的数据结构</h2>
+<ul>
+<li><p>名字</p></li>
+<li><p>描述</p></li>
+</ul>
+<h2>系列的数据结构</h2>
+<ul>
+<li><p>名字</p></li>
+<li><p>作者</p></li>
+<li><p>作者头像</p></li>
+<li><p>作者类型</p></li>
+<li><p>阅读数</p></li>
+<li><p>关注数</p></li>
+</ul>
+<h2>文章的数据结构</h2>
+<ul>
+<li><p>标题</p></li>
+<li><p>封面</p></li>
+<li><p>阅读人数</p></li>
+<li><p>评论数</p></li>
+<li><p>转发数</p></li>
+<li><p>发布时间</p></li>
+<li><p>内容</p></li>
+</ul>
+</div></div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="authorization">Authorization&nbsp;<a href="#authorization"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><p>我们使用 Token 的验证方式，保证 <code>https</code> 访问所有接口。</p>
 <p>在需要认证的 Request Headers 中加入 <code>Authorization</code> 头， 它的值是 <code>Token {your-token-here}</code>。注意，是 <code>Token</code> 开头，后面跟着一个 <code>空格</code>，然后再加上登录注册时返回的 <code>Token</code>.</p>
 <p>登录注册和第三方登录不用带着 Token</p>
 <h4 id="authorization-register">Register&nbsp;<a href="#authorization-register"><i class="fa fa-link"></i></a></h4><section id="authorization-register-post" class="panel panel-success"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Normal Account Register</span></div><div style="float:left"><a href="#authorization-register-post" class="btn btn-xs btn-success">POST</a></div><div style="overflow:hidden"><code>/api/accounts/register/</code></div></div><div class="panel-body"><p>注册帐号
@@ -233,7 +285,7 @@ a.list-group-item.heading:hover {
         "<span class="hljs-attribute">token</span>": <span class="hljs-value"><span class="hljs-string">"156c6c47e4ef408ff494513c755a3c42881428c0"</span>
     </span>}
 </span>}
-</code></pre></li></ul></section></div></div></div></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 09 May 2015</p><div id="localFile" style="display: none; position: absolute; top: 0; left: 0; width: 100%; color: white; background: red; font-size: 150%; text-align: center; padding: 1em;">This page may not display correctly when opened as a local file. Instead, view it from a web server.
+</code></pre></li></ul></section></div></div></div></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 15 May 2015</p><div id="localFile" style="display: none; position: absolute; top: 0; left: 0; width: 100%; color: white; background: red; font-size: 150%; text-align: center; padding: 1em;">This page may not display correctly when opened as a local file. Instead, view it from a web server.
 
 </div></body><script src="//code.jquery.com/jquery-1.11.0.min.js"></script><script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script><script>(function() {
   if (location.protocol === 'file:') {
