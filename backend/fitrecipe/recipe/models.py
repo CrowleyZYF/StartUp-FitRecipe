@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 14:30:44
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-14 22:12:09
+# @Last Modified time: 2015-05-15 19:11:24
 from django.db import models
 
 from base.models import BaseModel
@@ -25,6 +25,17 @@ class Recipe(BaseModel):
 
     def __unicode__(self):
         return self.title
+
+    def get_nutrition(self):
+        r = dict()
+        for item in self.component_set.all():
+            c_amount = item.amount
+            for n in item.ingredient.nutrition_set.all():
+                if n.id in r.keys():
+                    r[n.id]["amount"] += round(n.amount/100*c_amount, 2)
+                else:
+                    r[n.id] = {"amount": round(n.amount/100*c_amount, 2), "unit": n.unit, "name": n.name}
+        return r
 
 
 class Component(BaseModel):
@@ -51,6 +62,7 @@ class Procedure(BaseModel):
 
     class Meta:
         unique_together = (('recipe', 'num'),)  # 有必要嘛？是不是太强制了一点？
+        # ordering = ['-recipe', 'num']
 
     def __unicode__(self):
         return u'%s的步骤 第%s步 ' % (self.recipe.title, self.num)
