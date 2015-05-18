@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-05-04 14:50:49
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-13 20:59:01
+# @Last Modified time: 2015-05-18 19:41:26
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -21,6 +21,7 @@ class Account(User):
     phone 注册用的手机号，唯一
     '''
     phone = models.CharField(max_length=30, null=True, unique=True)
+    avatar = models.URLField(max_length=200, default='http://tp2.sinaimg.cn/1937464505/180/5708528601/1')
     nick_name = models.CharField(max_length=100)
     is_changed_nick = models.BooleanField(default=False)
 
