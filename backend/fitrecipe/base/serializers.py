@@ -3,11 +3,9 @@
 # @Author: chaihaotian
 # @Date:   2015-05-18 23:06:06
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-19 00:10:27
+# @Last Modified time: 2015-05-19 00:27:44
 
 from rest_framework import serializers
-from django.db import models
-import datetime
 
 
 class BaseSerializer(serializers.ModelSerializer):
@@ -18,41 +16,17 @@ class BaseSerializer(serializers.ModelSerializer):
         return super(BaseSerializer, self).__init__(*args, **kwargs)
 
     def to_representation(self, obj):
-        parent_result = super(BaseSerializer, self).to_representation(obj)
+        '''
+        重写 to_representation 方法，这个方法会在解析data时被调用。
+
+        其中的逻辑是西安调用父类的 to_representation，生成根据 fields 产生的 dict。如果没有 fields 则会使用所有的 key。
+        然后在根据传入 value，去从父类的结果中拷贝出需要用到的 key。
+        '''
+        parent_result = super(BaseSerializer, self).to_representation(obj)  # 父类方法会判断 fields 是否有值，所以这里不用做判断了
         if self.value is None:
-            if self.fields is not None:
-                self.value = self.fields  # 非空，就把 fields 赋值给 value
-            else:
-                return parent_result
+            # 没有传入 value，则直接返回父类结果
+            return parent_result
         r = dict()
         for k in self.value:
             r[k] = parent_result[k]
         return r
-        # # 自定义的解对象方法
-        # for attribute_name in self.value:
-        #     attribute = getattr(obj, attribute_name)
-        #     if attribute_name.startswith('_'):
-        #         # Ignore private attributes.
-        #         pass
-        #     elif hasattr(attribute, '__call__'):
-        #         # Ignore methods and other callables.
-        #         pass
-        #     elif isinstance(attribute, (str, unicode, int, bool, float, type(None))):
-        #         # Primitive types can be passed through unmodified.
-        #         r[attribute_name] = attribute
-        #     elif isinstance(attribute, list):
-        #         # Recursively deal with items in lists.
-        #         r[attribute_name] = [
-        #             self.to_representation(item) for item in attribute
-        #         ]
-        #     elif isinstance(attribute, dict):
-        #         # Recursively deal with items in dictionaries.
-        #         r[attribute_name] = {str(key): self.to_representation(value) for key, value in attribute.items()}
-        #     elif isinstance(attribute, models.Model):
-        #         r[attribute_name] = self.to_representation(attribute)
-        #     elif isinstance(attribute, (datetime.datetime)):
-        #         r[attribute_name] = attribute.strftime('%Y-%m-%d %H-%M-%S')
-        #     else:
-        #         # Force anything else to its string representation.
-        #         r[attribute_name] = str(attribute)
-        # return r
