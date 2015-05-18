@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 15:44:45
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-15 20:28:27
+# @Last Modified time: 2015-05-18 23:41:39
 
 from base.views import BaseView
 from .models import Recipe, Component, Ingredient, Label, Nutrition, Procedure

@@ -3,12 +3,20 @@
 # @Author: chaihaotian
 # @Date:   2015-05-04 15:38:57
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-04 15:40:13
-from rest_framework import serializers
+# @Last Modified time: 2015-05-18 23:46:54
+from .models import Account, External
+from base.serializers import BaseSerializer
 
-from .models import Account
+
+class ExternalSerializer(BaseSerializer):
+    class Meta:
+        model = External
+        fields = ('id', 'external_source', 'external_id')
 
 
-class AccountSerializer(serializers.ModelSerializer):
+class AccountSerializer(BaseSerializer):
+    externals = ExternalSerializer(many=True)
+
     class Meta:
         model = Account
+        fields = ('id', 'nick_name', 'externals', 'avatar', 'is_changed_nick', 'phone')

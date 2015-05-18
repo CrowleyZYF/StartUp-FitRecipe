@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-05-04 14:50:49
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-18 19:41:26
+# @Last Modified time: 2015-05-18 19:50:57
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -26,7 +26,7 @@ class Account(User):
     is_changed_nick = models.BooleanField(default=False)
 
     def __unicode__(self):
-        return self.phone
+        return u'%s_%s' % (self.id, self.phone or self.nick_name)
 
 
 class External(BaseModel):
