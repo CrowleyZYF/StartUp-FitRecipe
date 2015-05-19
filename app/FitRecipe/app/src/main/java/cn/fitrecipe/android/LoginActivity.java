@@ -1,17 +1,10 @@
 package cn.fitrecipe.android;
 
-import static cn.smssdk.framework.utils.R.getStringRes;
-
 import cn.fitrecipe.android.Config.HttpUrl;
 import cn.fitrecipe.android.Http.HttpUtils;
 import cn.fitrecipe.android.function.Common;
-import cn.smssdk.EventHandler;
-import cn.smssdk.SMSSDK;
-
-import cn.pedant.SweetAlert.SweetAlertDialog;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -38,16 +31,12 @@ import com.umeng.socialize.sso.SinaSsoHandler;
 import com.umeng.socialize.sso.UMQQSsoHandler;
 import com.umeng.socialize.sso.UMSsoHandler;
 import com.umeng.socialize.utils.Log;
-import com.umeng.socialize.weixin.controller.UMWXHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 
 public class LoginActivity extends Activity implements View.OnClickListener {
@@ -113,7 +102,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
+        setContentView(R.layout.activity_login);
         nowContext=this;
         
         initViews();
@@ -142,7 +131,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         backActivity = intent.getStringExtra("back");
 
         //sina
-        mController = UMServiceFactory.getUMSocialService("com.umeng.login");
+        mController = UMServiceFactory.getUMSocialService("com.umeng.activity_login");
         //设置新浪SSO handler
         mController.getConfig().setSsoHandler(new SinaSsoHandler());
 

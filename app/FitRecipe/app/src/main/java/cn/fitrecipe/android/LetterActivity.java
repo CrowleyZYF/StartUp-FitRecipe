@@ -11,7 +11,7 @@ public class LetterActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.letter);
+        setContentView(R.layout.activity_letter_container);
     }
 
 }

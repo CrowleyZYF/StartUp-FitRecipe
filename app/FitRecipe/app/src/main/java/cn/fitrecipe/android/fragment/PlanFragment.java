@@ -1,26 +1,20 @@
 package cn.fitrecipe.android.fragment;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
-import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidviewhover.BlurLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.fitrecipe.android.R;
-import cn.fitrecipe.android.UI.SlidingMenu;
 import cn.fitrecipe.android.UI.SlidingPage;
 import cn.fitrecipe.android.UI.rcPlanViewPagerAdapter;
-import cn.fitrecipe.android.UI.rcRecommendViewPagerAdapter;
 
 /**
  * Created by 奕峰 on 2015/4/11.
@@ -73,19 +67,19 @@ public class PlanFragment extends Fragment
         listViews3 = new ArrayList<View>();
         for (int i = 0; i < imgs.length; i++) {
             View view1 = LayoutInflater.from(this.getActivity()).inflate(
-                    R.layout.plan_recipe_card, null);
+                    R.layout.fragment_plan_recipe_list_card, null);
             BlurLayout iv1 = (BlurLayout) view1.findViewById(R.id.sample);
             iv1.setBackgroundResource(imgs[i]);
             listViews1.add(view1);
 
             View view2 = LayoutInflater.from(this.getActivity()).inflate(
-                    R.layout.plan_recipe_card, null);
+                    R.layout.fragment_plan_recipe_list_card, null);
             BlurLayout iv2 = (BlurLayout) view2.findViewById(R.id.sample);
             iv2.setBackgroundResource(imgs[i]);
             listViews2.add(view2);
 
             View view3 = LayoutInflater.from(this.getActivity()).inflate(
-                    R.layout.plan_recipe_card, null);
+                    R.layout.fragment_plan_recipe_list_card, null);
             BlurLayout iv3 = (BlurLayout) view3.findViewById(R.id.sample);
             iv3.setBackgroundResource(imgs[i]);
             listViews3.add(view3);

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fitrecipe="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff">
+
+
+    <cn.fitrecipe.android.UI.SlidingMenu
+        android:id="@+id/container_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        fitrecipe:leftPadding="150dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <include layout="@layout/activity_category_result_list" />
+
+            <include layout="@layout/activity_category_gridview_filter" />
+
+
+        </LinearLayout>
+
+
+    </cn.fitrecipe.android.UI.SlidingMenu>
+
+
+
+</RelativeLayout>
+

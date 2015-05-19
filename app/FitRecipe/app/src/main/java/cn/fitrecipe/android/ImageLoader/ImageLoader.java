@@ -43,6 +43,7 @@ public class ImageLoader {
     }
 
     final int stub_id= R.drawable.theme_student;
+
     public void DisplayImage(String url, ImageView imageView)
     {
         imageViews.put(imageView, url);

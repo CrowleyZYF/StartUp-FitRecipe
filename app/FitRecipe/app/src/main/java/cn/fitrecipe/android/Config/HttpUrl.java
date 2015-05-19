@@ -7,13 +7,13 @@ public class HttpUrl {
     //URL
     public static final String API_HOST = "http://42.121.108.228/";
     //登陆 POST
-    public static final String LOGIN_URL = API_HOST+"login";
-    public static final String OTHER_LOGIN_URL = API_HOST+"login";
+    public static final String LOGIN_URL = API_HOST+"activity_login";
+    public static final String OTHER_LOGIN_URL = API_HOST+"activity_login";
     public static final int LOGIN_SUCCESS = 0;
     public static final int NOT_EXIST = 1;
     public static final int PASS_ERROR = 2;
     //注册 POST
-    public static final String REGISTER_URL = API_HOST+"register";
+    public static final String REGISTER_URL = API_HOST+"activity_register";
     public static final int REGISTER_SUCCESS = 0;
     public static final int ACCOUNT_EXIST = 1;
     //首页推荐内容 GET 参数int time: 0（早餐）/1（上午加餐）/2（午餐）/3（下午加餐）/4（晚餐）

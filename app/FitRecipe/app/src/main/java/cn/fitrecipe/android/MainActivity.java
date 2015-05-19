@@ -9,17 +9,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.umeng.fb.FeedbackAgent;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.fitrecipe.android.UI.SlidingMenu;
 import cn.fitrecipe.android.UI.SlidingPage;
 import cn.fitrecipe.android.fragment.MeFragment;
 import cn.fitrecipe.android.fragment.IndexFragment;
@@ -49,7 +46,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.framework_main_container);
         FeedbackAgent agent = new FeedbackAgent(this);
         agent.sync();
         initView();
@@ -85,8 +82,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         frTabs.add(frTabKnowledge);
         frTabs.add(frTabMe);
 
-        category_btn = (ImageView) findViewById(R.id.category_btn);
-        search_btn = (ImageView) findViewById(R.id.search_btn);
+        category_btn = (ImageView) findViewById(R.id.left_btn);
+        search_btn = (ImageView) findViewById(R.id.right_btn);
     }
 
     private void setSelect(int i)
@@ -174,7 +171,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
             case R.id.tab_me:
                 setSelect(3);
                 break;
-            case R.id.category_btn:
+            case R.id.left_btn:
                 switch (tab_index){
                     case 0:
                         startActivity(new Intent(this, CategoryActivity.class));
@@ -193,7 +190,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                 }
                 frTabs.get(tab_index).setBackgroundColor(getResources().getColor(R.color.active_color));
                 break;
-            case R.id.search_btn:
+            case R.id.right_btn:
                 switch (tab_index){
                     case 0:
                         startActivity(new Intent(this, SearchActivity.class));

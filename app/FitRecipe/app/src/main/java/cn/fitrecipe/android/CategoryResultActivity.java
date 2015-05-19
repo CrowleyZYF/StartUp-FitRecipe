@@ -1,25 +1,19 @@
 package cn.fitrecipe.android;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.SimpleAdapter;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import cn.fitrecipe.android.Adpater.RecipeCardAdapter;
 import cn.fitrecipe.android.Config.LocalDemo;
@@ -27,25 +21,39 @@ import cn.fitrecipe.android.UI.SlidingMenu;
 import cn.fitrecipe.android.UI.rcListLinearLayoutManager;
 import cn.fitrecipe.android.model.RecipeCard;
 
-public class CategoryResultActivity extends Activity implements View.OnClickListener, View.OnTouchListener {
+public class CategoryResultActivity extends Activity implements View.OnClickListener {
 
     private SlidingMenu mRightMenu;
 
     private ImageView back_btn;
     private ImageView filter_btn;
+    private ImageView filter_btn_2;
 
     private RecyclerView frThemeRecipeRecyclerView;
     private rcListLinearLayoutManager frThemeRecipeLayoutManager;
+    private RecipeCardAdapter recipeCardAdapter;
+    private List<RecipeCard> dataList;
 
-    private ScrollView category_result_list;
+    private LinearLayout time_sort_btn;
+    private TextView time_sort_text;
+    private ImageView time_sort_icon;
 
-    private int needShow;
+    private LinearLayout like_sort_btn;
+    private TextView like_sort_text;
+    private ImageView like_sort_icon;
+
+    private LinearLayout calorie_sort_btn;
+    private TextView calorie_sort_text;
+    private ImageView calorie_sort_icon;
+
+    private int sort_type = 0;
+    private boolean sort_des = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.category_result);
+        setContentView(R.layout.activity_category_result_container);
 
         initView();
         initData();
@@ -54,83 +62,152 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
     }
 
     private void initView() {
-        back_btn = (ImageView) findViewById(R.id.back_btn);
-        filter_btn = (ImageView) findViewById(R.id.filter_btn);
+        back_btn = (ImageView) findViewById(R.id.left_btn);
+        back_btn.setImageResource(R.drawable.icon_back_white);
 
-        mRightMenu = (SlidingMenu) findViewById(R.id.filter_menu);
+        filter_btn = (ImageView) findViewById(R.id.right_btn);
+        filter_btn.setImageResource(R.drawable.icon_filter);
+
+        filter_btn_2 = (ImageView) findViewById(R.id.close_menu_btn);
+
+        mRightMenu = (SlidingMenu) findViewById(R.id.container_layout);
 
         frThemeRecipeRecyclerView = (RecyclerView) findViewById(R.id.theme_recipe_recycler_view);
         frThemeRecipeLayoutManager = new rcListLinearLayoutManager(this);
         frThemeRecipeLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         frThemeRecipeRecyclerView.setLayoutManager(frThemeRecipeLayoutManager);
 
-        category_result_list = (ScrollView) findViewById(R.id.category_result_list);
+        time_sort_btn = (LinearLayout) findViewById(R.id.time_sort_btn);
+        time_sort_text = (TextView) findViewById(R.id.time_sort_text);
+        time_sort_icon = (ImageView) findViewById(R.id.time_sort_icon);
+
+        like_sort_btn = (LinearLayout) findViewById(R.id.like_sort_btn);
+        like_sort_text = (TextView) findViewById(R.id.like_sort_text);
+        like_sort_icon = (ImageView) findViewById(R.id.like_sort_icon);
+
+        calorie_sort_btn = (LinearLayout) findViewById(R.id.calorie_sort_btn);
+        calorie_sort_text = (TextView) findViewById(R.id.calorie_sort_text);
+        calorie_sort_icon = (ImageView) findViewById(R.id.calorie_sort_icon);
     }
 
     private void initData() {
-        RecipeCardAdapter recipeCardAdapter = new RecipeCardAdapter(this, getThemeRecipe());
+        dataList = new ArrayList<RecipeCard>();
+        getThemeRecipe(sort_type,sort_des);
+        recipeCardAdapter = new RecipeCardAdapter(this, dataList);
         frThemeRecipeRecyclerView.setAdapter(recipeCardAdapter);
-        needShow = 0;
     }
 
     private void initEvent() {
         back_btn.setOnClickListener(this);
         filter_btn.setOnClickListener(this);
-        category_result_list.setOnTouchListener(this);
+        time_sort_btn.setOnClickListener(this);
+        like_sort_btn.setOnClickListener(this);
+        calorie_sort_btn.setOnClickListener(this);
     }
 
-    private List<RecipeCard> getThemeRecipe() {
-        List<RecipeCard> result = new ArrayList<RecipeCard>();
-        for (int i=5;i<9;i++){
-            RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],0,(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
-            result.add(rc);
+    private void getThemeRecipe(int type,boolean des) {
+        dataList.clear();
+        if(type==0){
+            if(des){
+                for (int i=5;i<9;i++){
+                    RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],0,(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
+                    dataList.add(rc);
+                }
+            }else{
+                for (int i=8;i>4;i--){
+                    RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],0,(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
+                    dataList.add(rc);
+                }
+            }
         }
-        return result;
+        else if(type==1){
+            if(des){
+                for (int i=1;i<5;i++){
+                    RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],0,(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
+                    dataList.add(rc);
+                }
+            }else{
+                for (int i=4;i>0;i--){
+                    RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],0,(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
+                    dataList.add(rc);
+                }
+            }
+        }
+        else if(type==2){
+            if(des){
+                for (int i=3;i<7;i++){
+                    RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],0,(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
+                    dataList.add(rc);
+                }
+            }else{
+                for (int i=6;i>2;i--){
+                    RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],0,(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
+                    dataList.add(rc);
+                }
+            }
+        }
+
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.back_btn:
+            case R.id.left_btn:
                 finish();
                 break;
-            case R.id.filter_btn:
+            case R.id.right_btn:
                 mRightMenu.toggle();
+                break;
+            case R.id.time_sort_btn:
+                resetTextColor();
+                time_sort_text.setTextColor(getResources().getColor(R.color.base_color));
+                sort_type = 0;
+                if(sort_des){
+                    time_sort_icon.setImageResource(R.drawable.icon_arrow_up);
+                }else{
+                    time_sort_icon.setImageResource(R.drawable.icon_arrow_down);
+                }
+                sort_des = !sort_des;
+                getThemeRecipe(sort_type,sort_des);
+                recipeCardAdapter.notifyDataSetChanged();
+                break;
+            case R.id.like_sort_btn:
+                resetTextColor();
+                like_sort_text.setTextColor(getResources().getColor(R.color.base_color));
+                sort_type = 1;
+                if(sort_des){
+                    like_sort_icon.setImageResource(R.drawable.icon_arrow_up);
+                }else{
+                    like_sort_icon.setImageResource(R.drawable.icon_arrow_down);
+                }
+                sort_des = !sort_des;
+                getThemeRecipe(sort_type,sort_des);
+                recipeCardAdapter.notifyDataSetChanged();
+                break;
+            case R.id.calorie_sort_btn:
+                resetTextColor();
+                calorie_sort_text.setTextColor(getResources().getColor(R.color.base_color));
+                sort_type = 2;
+                if(sort_des){
+                    calorie_sort_icon.setImageResource(R.drawable.icon_arrow_up);
+                }else{
+                    calorie_sort_icon.setImageResource(R.drawable.icon_arrow_down);
+                }
+                sort_des = !sort_des;
+                getThemeRecipe(sort_type,sort_des);
+                recipeCardAdapter.notifyDataSetChanged();
                 break;
             default:
                 break;
         }
     }
 
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                break;
-            case MotionEvent.ACTION_MOVE:
-                if (v.getScrollY() == 0) {
-                    needShow++;
-                    if(needShow==10){
-                        //category_intro.setVisibility(View.VISIBLE);
-                        needShow=0;
-                    }
-                    //Toast.makeText(this, "Top", Toast.LENGTH_SHORT).show();
-
-                }/* else if (category_result_list.getChildAt(0).getMeasuredHeight() <= v.getHeight() + v.getScrollY()) {
-                    Toast.makeText(this, "Bottom", Toast.LENGTH_SHORT).show();
-                    Toast.makeText(this, "view.getMeasuredHeight() = " + v.getMeasuredHeight()
-                            + ", v.getHeight() = " + v.getHeight()
-                            + ", v.getScrollY() = " + v.getScrollY()
-                            + ", view.getChildAt(0).getMeasuredHeight() = " + category_result_list.getChildAt(0).getMeasuredHeight(), Toast.LENGTH_SHORT).show();
-                }*/
-                else{
-                    //category_intro.setVisibility(View.GONE);
-                }
-                Log.i("my_info",Integer.toString(v.getScrollY()));
-                break;
-            default:
-                break;
-        }
-        return false;
+    private void resetTextColor(){
+        time_sort_text.setTextColor(getResources().getColor(R.color.login_input_text_color));
+        like_sort_text.setTextColor(getResources().getColor(R.color.login_input_text_color));
+        calorie_sort_text.setTextColor(getResources().getColor(R.color.login_input_text_color));
+        time_sort_icon.setImageResource(R.drawable.icon_arrow_up);
+        like_sort_icon.setImageResource(R.drawable.icon_arrow_up);
+        calorie_sort_icon.setImageResource(R.drawable.icon_arrow_up);
     }
 }

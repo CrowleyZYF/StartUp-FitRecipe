@@ -16,6 +16,16 @@ public class LocalDemo {
             R.drawable.ztest007,
             R.drawable.ztest008,
             R.drawable.ztest009};
+    public static final int[] themeBG = {
+            R.drawable.ttest001,
+            R.drawable.ttest002,
+            R.drawable.ttest003};
+    public static final int[] recommendBG = {
+            R.drawable.rtest001,
+            R.drawable.rtest002,
+            R.drawable.rtest003,
+            R.drawable.rtest004,
+            R.drawable.rtest005};
     public static final String[] recipeName = {
             "鲍菇烤肉三明治",
             "菠菜金枪鱼芝麻酱卷饼",

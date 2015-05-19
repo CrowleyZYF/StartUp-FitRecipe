@@ -78,9 +78,9 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <include layout="@layout/plan_recipe_list" />
+            <include layout="@layout/fragment_plan_recipe_list" />
 
-            <include layout="@layout/plan_recipe_nutrition" />
+            <include layout="@layout/fragment_plan_nutrition_list" />
 
         </LinearLayout>
 

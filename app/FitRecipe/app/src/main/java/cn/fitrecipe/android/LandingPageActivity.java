@@ -1,18 +1,22 @@
 package cn.fitrecipe.android;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
+import me.relex.circleindicator.CircleIndicator;
 
 public class LandingPageActivity extends Activity implements ViewPager.OnPageChangeListener, View.OnClickListener{
     private ViewPager frViewPager;
@@ -21,18 +25,18 @@ public class LandingPageActivity extends Activity implements ViewPager.OnPageCha
     boolean misScrolled = false;
     private Button frLoginButton;
     private Button frRegisterButton;
-    private Button frIndexButton;
+    private TextView frIndexButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.landing_page);
+        setContentView(R.layout.activity_landingpage);
 
         frViewPager = (ViewPager) findViewById(R.id.landing_page);
         frLoginButton = (Button) findViewById(R.id.login_button);
         frRegisterButton = (Button) findViewById(R.id.register_button);
-        frIndexButton = (Button) findViewById(R.id.index_button);
+        frIndexButton = (TextView) findViewById(R.id.index_button);
         frViewPager.setAdapter(new PagerAdapter() {
             @Override
             public Object instantiateItem(ViewGroup container, int position) {
@@ -59,7 +63,11 @@ public class LandingPageActivity extends Activity implements ViewPager.OnPageCha
                 return view == o;
             }
         });
-        frViewPager.setOnPageChangeListener(this);
+
+        CircleIndicator defaultIndicator = (CircleIndicator) findViewById(R.id.indicator_default);
+        defaultIndicator.setViewPager(frViewPager);
+
+        defaultIndicator.setOnPageChangeListener(this);
         frLoginButton.setOnClickListener(this);
         frRegisterButton.setOnClickListener(this);
         frIndexButton.setOnClickListener(this);
@@ -67,22 +75,11 @@ public class LandingPageActivity extends Activity implements ViewPager.OnPageCha
 
     @Override
     public void onPageScrolled(int i, float v, int i2) {
-        /*if(i==frImgIds.length-1){
-            Intent mainIntent = new Intent(LandingPageActivity.this, MainActivity.class);
-            LandingPageActivity.this.startActivity(mainIntent);
-            LandingPageActivity.this.finish();
-        }*/
     }
 
     @Override
     public void onPageSelected(int i) {
-
     }
-
-    /*@Override
-    public void onPageScrollStateChanged(int i) {
-
-    }*/
 
     public void onPageScrollStateChanged(int state) {
         switch (state) {

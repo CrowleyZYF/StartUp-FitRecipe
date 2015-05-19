@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/top" />
+    <include layout="@layout/framework_common_headers" />
 
     <FrameLayout
         android:id="@+id/content"
@@ -13,6 +13,6 @@
         android:layout_weight="1"
         ></FrameLayout>
 
-    <include layout="@layout/bottom" />
+    <include layout="@layout/framework_common_tabs" />
 
 </LinearLayout>

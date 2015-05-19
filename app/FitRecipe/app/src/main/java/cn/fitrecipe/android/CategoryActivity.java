@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.SimpleAdapter;
 
 import java.util.ArrayList;
@@ -28,12 +27,13 @@ public class CategoryActivity extends Activity implements View.OnClickListener, 
 
     private ImageView back_btn;
     private ImageView filter_btn;
+    private ImageView filter_btn_2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.category_list);
+        setContentView(R.layout.activity_category_gridview_container);
 
         initView();
         initData();
@@ -42,29 +42,33 @@ public class CategoryActivity extends Activity implements View.OnClickListener, 
     }
 
     private void initView() {
-        back_btn = (ImageView) findViewById(R.id.back_btn);
-        filter_btn = (ImageView) findViewById(R.id.filter_btn);
+        back_btn = (ImageView) findViewById(R.id.left_btn);
+        back_btn.setImageResource(R.drawable.icon_back_white);
 
-        gridView = (GridView) findViewById(R.id.gridView);
+        filter_btn = (ImageView) findViewById(R.id.right_btn);
+        filter_btn.setImageResource(R.drawable.icon_filter);
 
-        mRightMenu = (SlidingMenu) findViewById(R.id.filter_menu);
+        filter_btn_2 = (ImageView) findViewById(R.id.close_menu_btn);
 
+        gridView = (GridView) findViewById(R.id.category_gridview);
+
+        mRightMenu = (SlidingMenu) findViewById(R.id.container_layout);
     }
 
     private void initData() {
         dataList=new ArrayList<Map<String,Object>>();
-        adapter=new SimpleAdapter(this, getData(), R.layout.category_item, new String[]{"pic","name"}, new int[]{R.id.pic,R.id.name});
+        adapter=new SimpleAdapter(this, getData(), R.layout.activity_category_gridview_list_item, new String[]{"pic","name"}, new int[]{R.id.pic,R.id.name});
         gridView.setAdapter(adapter);
     }
 
     private void initEvent() {
         back_btn.setOnClickListener(this);
         filter_btn.setOnClickListener(this);
+        filter_btn_2.setOnClickListener(this);
         gridView.setOnItemClickListener(this);
     }
 
     private List<Map<String, Object>> getData() {
-
         int[] drawable = { R.drawable.category_chicken, R.drawable.category_beef,
                 R.drawable.category_fish, R.drawable.category_egg, R.drawable.category_seafood,
                 R.drawable.category_rice, R.drawable.category_fruit,
@@ -84,32 +88,14 @@ public class CategoryActivity extends Activity implements View.OnClickListener, 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.back_btn:
+            case R.id.left_btn:
                 finish();
                 break;
-            case R.id.filter_btn:
+            case R.id.right_btn:
                 mRightMenu.toggle();
-               /* View popupWindow_view = getLayoutInflater().inflate(R.layout.filter, null,false);
-                // 创建PopupWindow实例,200,LayoutParams.MATCH_PARENT分别是宽度和高度
-                popupWindow = new PopupWindow(popupWindow_view, 600, LinearLayout.LayoutParams.MATCH_PARENT, true);
-                // 设置动画效果
-                popupWindow.setAnimationStyle(R.style.AnimationFade);
-                // 这里是位置显示方式,在屏幕的左侧
-                int[] location = new int[2];
-                v.getLocationOnScreen(location);
-                popupWindow.showAtLocation(CategoryActivity.this.findViewById(R.id.category_layout), Gravity.RIGHT, 0, 0);
-                // 点击其他地方消失
-                popupWindow_view.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        // TODO Auto-generated method stub
-                        if (popupWindow != null && popupWindow.isShowing()) {
-                            popupWindow.dismiss();
-                            popupWindow = null;
-                        }
-                        return false;
-                    }
-                });*/
+                break;
+            case R.id.close_menu_btn:
+                mRightMenu.toggle();
                 break;
             default:
                 break;
@@ -120,7 +106,7 @@ public class CategoryActivity extends Activity implements View.OnClickListener, 
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         int test = view.getId();
         switch (parent.getId()){
-            case R.id.gridView:
+            case R.id.category_gridview:
                 startActivity(new Intent(this, CategoryResultActivity.class));
                 break;
             default:

@@ -177,9 +177,9 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <include layout="@layout/recipe_detail_ingredient" />
+                <include layout="@layout/activity_recipe_info_ingredient" />
 
-                <include layout="@layout/recipe_detail_nutrition" />
+                <include layout="@layout/activity_recipe_info_nutrition" />
 
             </LinearLayout>
 

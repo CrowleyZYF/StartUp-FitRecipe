@@ -12,9 +12,11 @@
         android:background="@color/base_color">
 
         <ImageView
+            android:id="@+id/close_menu_btn"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:src="@drawable/icon_filter_arrow"
+            android:background="@drawable/icon_selector"
             android:padding="10dp"/>
 
         <TextView
@@ -57,6 +59,7 @@
                 android:layout_marginBottom="5dp"/>
 
             <com.rey.material.widget.CheckBox
+                android:id="@+id/muscle_check"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/muscle"
@@ -74,6 +77,7 @@
                 android:checked="true" />
 
             <com.rey.material.widget.CheckBox
+                android:id="@+id/fat_check"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/fat"
@@ -107,6 +111,7 @@
                 android:layout_marginBottom="5dp"/>
 
             <com.rey.material.widget.CheckBox
+                android:id="@+id/breakfast_check"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/breakfast"
@@ -124,6 +129,7 @@
                 android:checked="true" />
 
             <com.rey.material.widget.CheckBox
+                android:id="@+id/add_meal_check"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/addmeal"
@@ -141,6 +147,7 @@
                 android:checked="true" />
 
             <com.rey.material.widget.CheckBox
+                android:id="@+id/dinner_check"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/dinner"

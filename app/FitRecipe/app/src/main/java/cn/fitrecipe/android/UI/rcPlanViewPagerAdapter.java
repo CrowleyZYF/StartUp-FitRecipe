@@ -53,7 +53,7 @@ public class rcPlanViewPagerAdapter extends PagerAdapter {
 
         BlurLayout mSampleLayout4;
         mSampleLayout4 = (BlurLayout) v.findViewById(R.id.sample);
-        View hover4 = LayoutInflater.from(context).inflate(R.layout.plan_recipe_card_hover,null);
+        View hover4 = LayoutInflater.from(context).inflate(R.layout.fragment_plan_recipe_list_card_click,null);
         mSampleLayout4.setHoverView(hover4);
         mSampleLayout4.addChildAppearAnimator(hover4, R.id.cat, Techniques.SlideInLeft);
         mSampleLayout4.addChildAppearAnimator(hover4, R.id.mail, Techniques.FadeInDown);

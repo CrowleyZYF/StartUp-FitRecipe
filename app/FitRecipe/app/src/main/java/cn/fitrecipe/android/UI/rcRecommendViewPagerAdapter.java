@@ -35,8 +35,9 @@ public class rcRecommendViewPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         ImageView imageView = new ImageView(context);
-        ImageLoader imgLoader = new ImageLoader(context,width,height);
-        imgLoader.DisplayImage((dataList.get(position)).get("imgUrl").toString(), imageView);
+        //ImageLoader imgLoader = new ImageLoader(context,width,height);
+        //imgLoader.DisplayImage((dataList.get(position)).get("imgUrl").toString(), imageView);
+        imageView.setImageResource(Integer.parseInt((dataList.get(position)).get("imgUrl").toString()));
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         container.addView(imageView);
         frRecommendImages.add(imageView);

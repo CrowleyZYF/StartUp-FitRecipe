@@ -3,8 +3,8 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/recipe_detail_header"/>
+    <include layout="@layout/activity_recipe_info_header"/>
 
-    <include layout="@layout/recipe_detail_base"/>
+    <include layout="@layout/activity_recipe_info"/>
 
 </LinearLayout>

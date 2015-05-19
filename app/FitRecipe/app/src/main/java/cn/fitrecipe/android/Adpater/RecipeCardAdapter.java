@@ -13,7 +13,6 @@ import java.util.List;
 
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.RecipeActivity;
-import cn.fitrecipe.android.ThemeActivity;
 import cn.fitrecipe.android.model.RecipeCard;
 
 /**
@@ -33,7 +32,7 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Re
     public RecipeCardAdapter.RecipeCardViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
-                inflate(R.layout.recipe_card, viewGroup, false);
+                inflate(R.layout.framework_common_recipe_card, viewGroup, false);
 
         itemView.setOnClickListener(this);
 

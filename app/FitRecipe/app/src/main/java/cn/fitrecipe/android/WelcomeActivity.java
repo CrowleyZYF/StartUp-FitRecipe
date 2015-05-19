@@ -12,7 +12,7 @@ public class WelcomeActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.splash);
+        setContentView(R.layout.activity_splash);
         new Handler().postDelayed(new Runnable(){
             @Override
             public void run() {

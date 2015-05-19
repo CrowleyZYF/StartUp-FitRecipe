@@ -1,15 +1,9 @@
 package cn.fitrecipe.android;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.SimpleAdapter;
 
 import java.util.ArrayList;
@@ -39,7 +33,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.recipe_index);
+        setContentView(R.layout.activity_recipe_container);
 
         initView();
         initData();
@@ -60,10 +54,10 @@ public class RecipeActivity extends Activity implements View.OnClickListener {
         dataList2=new ArrayList<Map<String,Object>>();
 
         getData();
-        list_adapter=new SimpleAdapter(this, dataList, R.layout.recipe_detail_ingredient_item, new String[]{"item_name","item_weight"}, new int[]{R.id.ingredient_name,R.id.ingredient_weight});
+        list_adapter=new SimpleAdapter(this, dataList, R.layout.activity_recipe_info_ingredient_item, new String[]{"item_name","item_weight"}, new int[]{R.id.ingredient_name,R.id.ingredient_weight});
         listView.setAdapter(list_adapter);
 
-        list_adapter2=new SimpleAdapter(this, dataList2, R.layout.recipe_detail_ingredient_item, new String[]{"item_name","item_weight"}, new int[]{R.id.ingredient_name,R.id.ingredient_weight});
+        list_adapter2=new SimpleAdapter(this, dataList2, R.layout.activity_recipe_info_ingredient_item, new String[]{"item_name","item_weight"}, new int[]{R.id.ingredient_name,R.id.ingredient_weight});
         listView2.setAdapter(list_adapter2);
 
     }
