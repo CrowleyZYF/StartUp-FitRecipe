@@ -3,12 +3,13 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 14:30:44
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-20 16:18:07
+# @Last Modified time: 2015-05-20 16:44:10
 from django.conf import settings
 from django.db import models
 
 from accounts.models import Account
 from base.models import BaseModel
+from fitrecipe.utils import split_labels_into_list, str_to_int
 
 
 class Recipe(BaseModel):
@@ -57,6 +58,42 @@ class Recipe(BaseModel):
                 self.save()
                 break
         return True
+
+    @classmethod
+    def get_recipe_list(cls, meat_labels, effect_labels, time_labels, order, desc, start, num):
+        '''
+        根据条件获取菜谱列表
+
+        meat_labels: 4,5 (string) - label ID 使用逗号连接
+        effect_labels: 1,2 (string) - 同上
+        time_labels: 3 (string) - 同上
+        order: calories (string) - 排序方式，默认是 calories，其他可选值：duration（烹饪时间），收藏数（暂不支持）
+        desc: false (string) - 是否倒序，默认是字符串 false，还可以是字符串 true
+        start: 0 (string) - 偏移，默认是0。都是字符串，函数里会做转换，转成数字
+        num: 10 (string) - 返回数量，默认是10。字符串
+        '''
+        recipes = cls.objects.all()
+        if meat_labels is not None:
+            # 对 食材 进行筛选
+            recipes = recipes.filter(meat_labels__id__in=split_labels_into_list(meat_labels))
+        if effect_labels is not None:
+            recipes = recipes.filter(effect_labels__id__in=split_labels_into_list(effect_labels))
+        if time_labels is not None:
+            recipes = recipes.filter(time_labels__id__in=split_labels_into_list(time_labels))
+        if order == 'duration':
+            recipes = recipes.order_by('duration')
+        else:
+            # 还有按照收藏数的排序，不过现在还没做
+            # 默认按照卡路里
+            recipes = recipes.order_by('calories')
+        if desc == 'true':
+            recipes = recipes.reverse()
+        start = str_to_int(start, 0)
+        num = str_to_int(num, 10)
+        if num < 1:
+            # 如果请求num数量小于 0 是不对的，改成 10
+            num = 10
+        return recipes[start:num + start]
 
 
 class Component(BaseModel):

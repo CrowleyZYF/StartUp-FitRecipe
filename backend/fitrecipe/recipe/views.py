@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 15:44:45
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-20 12:03:42
+# @Last Modified time: 2015-05-20 17:17:26
 
 from base.views import BaseView
 from .models import Recipe, Component, Ingredient, Label, Nutrition, Procedure
@@ -12,14 +12,6 @@ from .serializers import RecipeSerializer, ComponentSerializer, LabelSerializer,
 
 
 class RecipeList(BaseView):
-    def _split_labels_into_list(self, labels):
-        tmp = list()
-        for v in labels.split(','):
-            try:
-                tmp.append(int(v))  # 转数字
-            except (TypeError, ValueError):
-                continue
-        return tmp
 
     def get(self, request, format=None):
         '''
@@ -30,18 +22,12 @@ class RecipeList(BaseView):
         meat_labels = request.GET.get('meat', None)  # meat_labels
         effect_labels = request.GET.get('effect', None)  # effect_labels
         time_labels = request.GET.get('time', None)
-        start = request.GET.get('start', 0)
-        num = request.GET.get('num', 10)
-        order = request.GET.get('order', 'cal')
+        start = request.GET.get('start', '0')
+        num = request.GET.get('num', '10')
+        order = request.GET.get('order', 'calories')
+        desc = request.GET.get('desc', 'false')
         # https://docs.djangoproject.com/en/1.8/ref/models/querysets/#when-querysets-are-evaluated
-        recipes = Recipe.objects.all()
-        if meat_labels is not None:
-            # 对 食材 进行筛选
-            recipes = recipes.filter(meat_labels__id__in=self._split_labels_into_list(meat_labels))
-        if effect_labels is not None:
-            recipes = recipes.filter(effect_labels__id__in=self._split_labels_into_list(effect_labels))
-        if time_labels is not None:
-            recipes = recipes.filter(time_labels__id__in=self._split_labels_into_list(time_labels))
+        recipes = Recipe.get_recipe_list(meat_labels, effect_labels, time_labels, order, desc, start, num)
         serializer = RecipeSerializer(recipes, many=True)
         return self.success_response(serializer.data)
 
@@ -52,7 +38,7 @@ class RecipeDetail(BaseView):
         return a specific recipe.
         '''
         recipe = self.get_object(Recipe, pk)
-        serializer = RecipeSerializer(recipe)
+        serializer = RecipeSerializer(recipe, context={'simple': False})
         return self.success_response(serializer.data)
 
 

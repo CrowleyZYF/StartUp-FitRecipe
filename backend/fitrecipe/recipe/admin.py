@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 14:30:44
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-15 20:27:21
+# @Last Modified time: 2015-05-20 16:54:02
 from django.contrib import admin
 
 from .models import Recipe, Component, Ingredient, Label, Nutrition, Procedure
@@ -23,7 +23,7 @@ class NutritionInline(admin.TabularInline):
 
 
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title',)
+    list_display = ('id', 'title', 'calories', 'duration')
     list_display_links = ('title',)
     search_fields = ('title',)
     filter_horizontal = ('effect_labels', 'time_labels', 'meat_labels', 'other_labels')

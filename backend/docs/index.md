@@ -5,12 +5,13 @@
 + 菜谱名称
 + 菜谱图片
 + 烹饪时间 
-+ 作者（还没加上，需要头像，名称）
++ 作者（头像，名称，ID）
 + 菜谱简介
 + 功效标签： 增肌 减脂
 + 用餐时间标签： 早餐 加餐 正餐
 + 食材标签： 鸡肉 鱼肉 牛肉 海鲜 蛋奶 果蔬 米面 点心
 + 其他标签： 酸甜 等等
++ 卡路里数
 
 + 配料表
     + 食材名 大米
@@ -33,17 +34,113 @@
 + Response 200 (application/json)
 
         {
-            "id": 1, 
-            "created_time": "2015-04-26 07:32:29", 
-            "updated_time": "2015-04-26 16:17:07", 
-            "img_height": 2309, 
-            "img_width": 3464, 
-            "img": "static/images/DSC05069.jpg", 
-            "thumbnail": "", 
-            "title": "test123", 
-            "type": 0, 
-            "duration": "", 
-            "calorie": ""
+            "status": 200,
+            "error_message": null,
+            "data": {
+                "id": 3,
+                "meat_labels": [
+                    {
+                        "id": 7,
+                        "name": "猪肉",
+                        "type": "食材"
+                    },
+                    {
+                        "id": 8,
+                        "name": "面条",
+                        "type": "食材"
+                    }
+                ],
+                "time_labels": [
+                    {
+                        "id": 3,
+                        "name": "早餐",
+                        "type": "用餐时间"
+                    }
+                ],
+                "effect_labels": [
+                    {
+                        "id": 5,
+                        "name": "减脂",
+                        "type": "功效"
+                    }
+                ],
+                "other_labels": [],
+                "component_set": [
+                    {
+                        "amount": 5,
+                        "remark": "一个",
+                        "ingredient": {
+                            "id": 2,
+                            "name": "鸡蛋"
+                        }
+                    }
+                ],
+                "procedure_set": [
+                    {
+                        "content": "随便煮一煮",
+                        "num": 1,
+                        "img": "http://b.36krcnd.com/nil_class/df446fa6-ef37-4b34-a435-885d2ccc543f/ch.jpg!slider"
+                    }
+                ],
+                "nutrition_set": {
+                    "钠": {
+                        "amount": 8.3,
+                        "unit": "mg"
+                    },
+                    "热量（卡路里）": {
+                        "amount": 2.6,
+                        "unit": "kcal"
+                    },
+                    "不饱和脂肪酸": {
+                        "amount": 0.0,
+                        "unit": "g"
+                    },
+                    "纤维素": {
+                        "amount": 0.0,
+                        "unit": "g"
+                    },
+                    "碳水化合物": {
+                        "amount": 0.04,
+                        "unit": "g"
+                    },
+                    "水": {
+                        "amount": 4.38,
+                        "unit": "g"
+                    },
+                    "维他命 D": {
+                        "amount": 0.0,
+                        "unit": "µg"
+                    },
+                    "脂类": {
+                        "amount": 0.01,
+                        "unit": "g"
+                    },
+                    "胆固醇": {
+                        "amount": 0.0,
+                        "unit": "mg"
+                    },
+                    "维他命 C": {
+                        "amount": 0.0,
+                        "unit": "mg"
+                    },
+                    "蛋白质": {
+                        "amount": 0.55,
+                        "unit": "g"
+                    }
+                },
+                "author": {
+                    "nick_name": "OxeNuNAefMxqQDMiyirejJhiUzfEsPeOdlOalmmKIFHkXzTvQSc509207812",
+                    "id": 4,
+                    "avatar": "http://tp2.sinaimg.cn/1937464505/180/5708528601/1"
+                },
+                "created_time": "2015-05-20 16:55:50",
+                "updated_time": "2015-05-20 16:58:49",
+                "img": "http://b.36krcnd.com/nil_class/df446fa6-ef37-4b34-a435-885d2ccc543f/ch.jpg!slider",
+                "thumbnail": "http://b.36krcnd.com/nil_class/df446fa6-ef37-4b34-a435-885d2ccc543f/ch.jpg!slider",
+                "title": "阳春面",
+                "duration": 10,
+                "calories": 2.6
+            }
         }
 
 + Response 404 (application/json)
@@ -52,32 +149,73 @@
             "detail": "Not found"
         }
 
-## Recipe List [/api/recipe/list/]
+## Recipe List [/api/recipe/list/?meat={meat}&effect={effect}&time={time}&start={start}&num={num}&order={order}&desc={desc}]
+
++ Parameters
+    + meat: 1,2 (string, optional) - 食材 Label，多选使用逗号将 id 连接起来。如果不传则为全部。
+    + effect: 3,4 (string, optional) - 功效 Label，多选也是一样，用逗号连接。不传为全部
+    + time: 5,6 (string, optional) - 用餐时间 Label，不传为全部。
+    + order: calories (string, optional) - 排序规则，默认按照卡路里。其他可选值：duration（烹饪时间），收藏数（暂不支持）
+        + Default: calories
+    + desc: false (string, optional) - 是否倒序，默认升序。若要倒序可以传字符串 true。
+        + Default: false
+    + start: 0 (string, optional) - 分页偏移。默认是 0。
+        + Default: 0
+    + num: 10 (string, optional) - 返回数量。默认 10 个。
+        + Default: 10
 
 ### Retrieve all Recipes [GET]
-获取所有的菜谱
+获取所有的菜谱。列表中的菜谱不会包含营养表和步骤表。
 
 + Response 200 (application/json)
 
-        [
-            {
-                "id": 1, 
-                "created_time": "2015-04-26 07:32:29", 
-                "updated_time": "2015-04-26 16:17:07", 
-                "img_height": 2309, 
-                "img_width": 3464, 
-                "img": "static/images/DSC05069.jpg", 
-                "thumbnail": "", 
-                "title": "test123", 
-                "type": 0, 
-                "duration": "", 
-                "calorie": ""
-            },
-            {
-                "id": 2,
-                "...":"..."
-            }
-        ]
+        {
+            "status": 200,
+            "error_message": null,
+            "data": [
+                {
+                    "id": 2,
+                    "meat_labels": [
+                        {
+                            "id": 7,
+                            "name": "猪肉",
+                            "type": "食材"
+                        }
+                    ],
+                    "time_labels": [
+                        {
+                            "id": 6,
+                            "name": "正餐",
+                            "type": "用餐时间"
+                        }
+                    ],
+                    "effect_labels": [
+                        {
+                            "id": 1,
+                            "name": "增肌",
+                            "type": "功效"
+                        }
+                    ],
+                    "other_labels": [],
+                    "author": {
+                        "nick_name": "OxeNuNAefMxqQDMiyirejJhiUzfEsPeOdlOalmmKIFHkXzTvQSc509207812",
+                        "id": 4,
+                        "avatar": "http://tp2.sinaimg.cn/1937464505/180/5708528601/1"
+                    },
+                    "created_time": "2015-05-20 16:53:31",
+                    "updated_time": "2015-05-20 16:53:31",
+                    "img": "http://b.36krcnd.com/nil_class/df446fa6-ef37-4b34-a435-885d2ccc543f/ch.jpg!slider",
+                    "thumbnail": "http://b.36krcnd.com/nil_class/df446fa6-ef37-4b34-a435-885d2ccc543f/ch.jpg!slider",
+                    "title": "红烧肉",
+                    "duration": 60,
+                    "calories": 26.5
+                },
+                {
+                    "id": 2,
+                    "...":"..."
+                }
+            ]
+        }
 
 # Group Knowledge
 知识体系中的数据结构是这样的：
