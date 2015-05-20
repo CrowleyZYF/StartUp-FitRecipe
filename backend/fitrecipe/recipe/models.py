@@ -3,8 +3,10 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 14:30:44
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-18 19:40:35
+# @Last Modified time: 2015-05-20 16:18:07
+from django.conf import settings
 from django.db import models
+
 from accounts.models import Account
 from base.models import BaseModel
 
@@ -18,11 +20,12 @@ class Recipe(BaseModel):
     img = models.URLField(max_length=200, verbose_name=u'大图 URL')  # 图片全部使用 CDN
     thumbnail = models.URLField(max_length=200, verbose_name=u'缩略图 URL')
     title = models.CharField(max_length=100, verbose_name=u'菜谱名称')
-    duration = models.IntegerField(help_text='分钟', verbose_name=u'烹饪时间')  # 烹饪时间
+    duration = models.IntegerField(help_text=u'分钟', verbose_name=u'烹饪时间')  # 烹饪时间
     effect_labels = models.ManyToManyField('Label', limit_choices_to={'type': u'功效'}, related_name='effect_set', null=True, blank=True, verbose_name=u'功效标签')
     time_labels = models.ManyToManyField('Label', limit_choices_to={'type': u'用餐时间'}, related_name='time_set', null=True, blank=True, verbose_name=u'用餐时间标签')
     meat_labels = models.ManyToManyField('Label', limit_choices_to={'type': u'食材'}, related_name='meat_set', null=True, blank=True, verbose_name=u'食材标签')
     other_labels = models.ManyToManyField('Label', limit_choices_to={'type': u'其他'}, related_name='other_set', null=True, blank=True, verbose_name=u'其他标签')
+    calories = models.FloatField(default=0, help_text=u'自动计算，不用填', verbose_name=u'卡路里')
 
     class Meta:
         verbose_name = '菜谱'
@@ -36,11 +39,24 @@ class Recipe(BaseModel):
         for item in self.component_set.all():
             c_amount = item.amount
             for n in item.ingredient.nutrition_set.all():
-                if n.id in r.keys():
-                    r[n.id]['amount'] += round(n.amount/100*c_amount, 2)
+                if n.name in r.keys():
+                    r[n.name]['amount'] += round(n.amount/100*c_amount, 2)
                 else:
-                    r[n.id] = {'amount': round(n.amount/100*c_amount, 2), 'unit': n.unit, 'name': n.name}
+                    r[n.name] = {'amount': round(n.amount/100*c_amount, 2), 'unit': n.unit}
         return r
+
+    def update_calories(self):
+        # 对于删除所有配料的情况需要有特殊处理，因为最后一个删除的时候，不会进入循环，因此会留下最后一个配料的卡路里
+        if self.component_set.count() == 0:
+            self.calories = 0
+            self.save()
+            return True
+        for k, v in self.get_nutrition().iteritems():
+            if k == settings.CALORIES_CN_NAME:
+                self.calories = v['amount']
+                self.save()
+                break
+        return True
 
 
 class Component(BaseModel):
@@ -58,6 +74,17 @@ class Component(BaseModel):
 
     def __unicode__(self):
         return u'%s 的食材【%s】' % (self.recipe.title, self.ingredient.name)
+
+    def save(self, *args, **kwargs):
+        # 捕捉 save 事件，计算卡路里，并写入字段 calories 中用于以后排序
+        # 先保存一次，不然计算卡路里的时候会使用以前的配料表
+        super(Component, self).save(*args, **kwargs)
+        self.recipe.update_calories()
+
+    def delete(self, *args, **kwargs):
+        # 删除事件也要捕捉，删除的时候不会调用 save
+        super(Component, self).delete(*args, **kwargs)
+        self.recipe.update_calories()
 
 
 class Procedure(BaseModel):
@@ -113,7 +140,6 @@ class Ingredient(BaseModel):
         '''
         import requests
         import json
-        from django.conf import settings
         # 先保存，不然后面外键指不到吧
         url = u'http://api.nal.usda.gov/usda/ndb/reports/?ndbno=%s&type=f&format=json&api_key=%s' % (self.ndbno, settings.NDB_API_KEY)
         resp = requests.get(url)
