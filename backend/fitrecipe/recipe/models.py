@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 14:30:44
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-20 16:44:10
+# @Last Modified time: 2015-05-20 17:39:31
 from django.conf import settings
 from django.db import models
 
@@ -195,14 +195,19 @@ class Ingredient(BaseModel):
             for item in settings.NDB_NUTRITION_ID_LIST:
                 total = 0.0
                 unit = ''
-                if isinstance(item[0], tuple):
-                    # 不饱和脂肪酸要求和
-                    for sid in item[0]:
-                        total += nutri_dict[sid][0]
-                        unit = nutri_dict[sid][1]
-                else:
-                    total = nutri_dict[item[0]][0]
-                    unit = nutri_dict[item[0]][1]
+                try:
+                    if isinstance(item[0], tuple):
+                        # 不饱和脂肪酸要求和
+                        for sid in item[0]:
+                            total += nutri_dict[sid][0]
+                            unit = nutri_dict[sid][1]
+                    else:
+                        total = nutri_dict[item[0]][0]
+                        unit = nutri_dict[item[0]][1]
+                except KeyError:
+                    # key 不存在
+                    total = 0.0
+                    unit = u'mg'
                 Nutrition.objects.create(name=item[2], eng_name=item[1], amount=total, unit=unit, ingredient=self)
             return r
         elif resp.status_code == 400:
