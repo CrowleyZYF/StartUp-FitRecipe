@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 15:44:45
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-18 23:41:39
+# @Last Modified time: 2015-05-20 17:17:26
 
 from base.views import BaseView
 from .models import Recipe, Component, Ingredient, Label, Nutrition, Procedure
@@ -12,11 +12,22 @@ from .serializers import RecipeSerializer, ComponentSerializer, LabelSerializer,
 
 
 class RecipeList(BaseView):
+
     def get(self, request, format=None):
         '''
         List all recipes
+
+        category=1,2&funtion=3,4&time=5,6&start=10&num=10&order
         '''
-        recipes = Recipe.objects.all()
+        meat_labels = request.GET.get('meat', None)  # meat_labels
+        effect_labels = request.GET.get('effect', None)  # effect_labels
+        time_labels = request.GET.get('time', None)
+        start = request.GET.get('start', '0')
+        num = request.GET.get('num', '10')
+        order = request.GET.get('order', 'calories')
+        desc = request.GET.get('desc', 'false')
+        # https://docs.djangoproject.com/en/1.8/ref/models/querysets/#when-querysets-are-evaluated
+        recipes = Recipe.get_recipe_list(meat_labels, effect_labels, time_labels, order, desc, start, num)
         serializer = RecipeSerializer(recipes, many=True)
         return self.success_response(serializer.data)
 
@@ -27,7 +38,7 @@ class RecipeDetail(BaseView):
         return a specific recipe.
         '''
         recipe = self.get_object(Recipe, pk)
-        serializer = RecipeSerializer(recipe)
+        serializer = RecipeSerializer(recipe, context={'simple': False})
         return self.success_response(serializer.data)
 
 

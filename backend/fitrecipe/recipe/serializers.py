@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 15:52:14
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-19 00:18:56
+# @Last Modified time: 2015-05-19 00:26:42
 from rest_framework import serializers
 from .models import Recipe, Component, Procedure, Label, Ingredient, Nutrition
 from accounts.serializers import AccountSerializer

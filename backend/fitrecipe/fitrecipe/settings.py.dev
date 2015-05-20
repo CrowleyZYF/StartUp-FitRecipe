@@ -100,16 +100,18 @@ IMAGE_UPLOAD_ROOT = 'static/images'
 # http://ndb.nal.usda.gov/ndb/doc/index#
 NDB_API_KEY = 'sign-up-your-own-key'
 
+CALORIES_CN_NAME = u'热量（卡路里）'
+
 NDB_NUTRITION_ID_LIST = (
-    (255, 'Water', '水'),
-    (208, 'Energy', '热量（卡路里）'),
-    (203, 'Protein', '蛋白质'),
-    (204, 'Total lipid (fat)', '脂类'),
-    (205, 'Carbohydrate, by difference', '碳水化合物'),
-    (291, 'Fiber, total dietary', '纤维素'),
-    (307, 'Sodium, Na', '钠'),
-    (401, 'Vitamin C, total ascorbic acid', '维他命 C'),
-    (328, 'Vitamin D', '维他命 D'),
-    ((645, 646), 'Fatty acids', '不饱和脂肪酸'),
-    (601, 'Cholesterol', '胆固醇'),
+    (255, u'Water', u'水'),
+    (208, u'Energy', CALORIES_CN_NAME),
+    (203, u'Protein', u'蛋白质'),
+    (204, u'Total lipid (fat)', u'脂类'),
+    (205, u'Carbohydrate, by difference', u'碳水化合物'),
+    (291, u'Fiber, total dietary', u'纤维素'),
+    (307, u'Sodium, Na', u'钠'),
+    (401, u'Vitamin C, total ascorbic acid', u'维他命 C'),
+    (328, u'Vitamin D', u'维他命 D'),
+    ((645, 646), u'Fatty acids', u'不饱和脂肪酸'),
+    (601, u'Cholesterol', u'胆固醇'),
 )
