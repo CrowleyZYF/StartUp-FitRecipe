@@ -13,4 +13,6 @@ urlpatterns = patterns('',
     url(r'^api/recipe/', include('recipe.urls')),
     # Accounts
     url(r'^api/accounts/', include('accounts.urls')),
+    # Label
+    url(r'^api/label/', include('label.urls')),
 )

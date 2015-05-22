@@ -3,10 +3,10 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 14:30:44
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-20 16:54:02
+# @Last Modified time: 2015-05-20 18:16:31
 from django.contrib import admin
 
-from .models import Recipe, Component, Ingredient, Label, Nutrition, Procedure
+from .models import Recipe, Component, Ingredient, Nutrition, Procedure
 # Register your models here.
 
 
@@ -38,14 +38,6 @@ class IngredientAdmin(admin.ModelAdmin):
     inlines = (NutritionInline,)
 
 
-class LabelAdmin(admin.ModelAdmin):
-    # http://stackoverflow.com/questions/16235201/list-display-how-to-display-value-from-choices
-    list_display = ('id', 'name', 'get_type_display')
-    list_filter = ('type',)
-    search_fields = ('name',)
-    list_display_links = ('name',)
-
 
 admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(Ingredient, IngredientAdmin)
-admin.site.register(Label, LabelAdmin)

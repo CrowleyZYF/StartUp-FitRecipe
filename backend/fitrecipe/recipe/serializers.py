@@ -3,22 +3,17 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 15:52:14
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-19 00:26:42
+# @Last Modified time: 2015-05-20 18:13:04
 from rest_framework import serializers
-from .models import Recipe, Component, Procedure, Label, Ingredient, Nutrition
+from .models import Recipe, Component, Procedure, Ingredient, Nutrition
 from accounts.serializers import AccountSerializer
 from base.serializers import BaseSerializer
+from label.serializers import LabelSerializer
 
 
 class NutritionSerializer(BaseSerializer):
     class Meta:
         model = Nutrition
-
-
-class LabelSerializer(BaseSerializer):
-    class Meta:
-        model = Label
-        fields = ('id', 'name', 'type')
 
 
 class IngredientSerializer(BaseSerializer):

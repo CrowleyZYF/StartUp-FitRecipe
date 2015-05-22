@@ -3,11 +3,11 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 15:44:45
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-20 17:17:26
+# @Last Modified time: 2015-05-20 18:15:26
 
 from base.views import BaseView
-from .models import Recipe, Component, Ingredient, Label, Nutrition, Procedure
-from .serializers import RecipeSerializer, ComponentSerializer, LabelSerializer, IngredientSerializer, NutritionSerializer, ProcedureSerializer
+from .models import Recipe
+from .serializers import RecipeSerializer
 # Create your views here.
 
 
