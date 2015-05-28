@@ -3,11 +3,12 @@
 # @Author: chaihaotian
 # @Date:   2015-05-28 13:16:10
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-28 15:08:25
+# @Last Modified time: 2015-05-28 17:38:09
 from django.db import models
 
 from base.models import BaseModel
 from recipe.models import Recipe
+from fitrecipe.utils import str_to_int
 # Create your models here.
 
 
@@ -27,3 +28,10 @@ class Theme(BaseModel):
 
     def __unicode__(self):
         return self.title
+
+    def get_recipes(self, start, num):
+        start = str_to_int(start, 0)
+        num = str_to_int(num, 5)
+        num = num < 1 and 5 or num
+        start = start < 0 and 0 or start
+        return self.recipes.all()[start:num+start]

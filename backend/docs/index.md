@@ -278,7 +278,7 @@
     + id: 1 (number) - 主题的id
 
 ### Retrieve Theme Detail [GET]
-获取详细的主题内容，其中包含了所有的菜谱列表。对于菜谱列表的排序和筛选还没做。
+获取详细的主题内容，这里不会返回其中的菜谱，菜谱调用 Theme Recipes List 接口。
 
 + Response 200 (application/json)
 
@@ -287,49 +287,7 @@
             "error_message": null,
             "data": {
                 "id": 1,
-                "recipes": [
-                    {
-                        "other_labels": [],
-                        "img": "http://d.36krcnd.com/nil_class/c9d8fd96-0159-4f3c-bcea-3f33203f46c9/__.jpg",
-                        "author": {
-                            "nick_name": "逗逼3",
-                            "id": 4,
-                            "avatar": "https://tower.im/assets/default_avatars/nightfall.jpg"
-                        },
-                        "meat_labels": [],
-                        "title": "炒鸡蛋",
-                        "calories": 156.0,
-                        "thumbnail": "http://d.36krcnd.com/nil_class/c9d8fd96-0159-4f3c-bcea-3f33203f46c9/__.jpg",
-                        "time_labels": [
-                            {
-                                "id": 8,
-                                "name": "早餐",
-                                "type": "用餐时间"
-                            },
-                            {
-                                "id": 9,
-                                "name": "正餐",
-                                "type": "用餐时间"
-                            }
-                        ],
-                        "duration": 10,
-                        "id": 4,
-                        "effect_labels": [
-                            {
-                                "id": 12,
-                                "name": "增加",
-                                "type": "功效"
-                            },
-                            {
-                                "id": 13,
-                                "name": "减脂",
-                                "type": "功效"
-                            }
-                        ]
-                    },{
-                        "...":"..."
-                    }
-                ],
+                "recipe_count": 1,
                 "created_time": "2015-05-28 15:40:04",
                 "updated_time": "2015-05-28 15:40:04",
                 "title": "只有庄奕峰会做的菜",
@@ -337,6 +295,70 @@
                 "img": "http://d.36krcnd.com/nil_class/c9d8fd96-0159-4f3c-bcea-3f33203f46c9/__.jpg",
                 "thumbnail": "http://d.36krcnd.com/nil_class/c9d8fd96-0159-4f3c-bcea-3f33203f46c9/__.jpg"
             }
+        }
+
+## Theme Recipes List [/api/theme/{theme_id}/recipes/?start={start}&num={num}]
+
++ Parameters
+    + id: 1 (number) - 主题的id
+    + start: 0 (number, optional) - 分页的偏移
+        + Default: 0
+    + num: 5 (number, optional) - 返回结果数量
+        + Default: 5
+
+### Retrieve Recipes of specific Theme [GET]
+获取某个专题下的菜谱列表。带分页
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "error_message": null,
+            "data": [
+                {
+                    "id": 4,
+                    "meat_labels": [],
+                    "time_labels": [
+                        {
+                            "id": 8,
+                            "name": "早餐",
+                            "type": "用餐时间"
+                        },
+                        {
+                            "id": 9,
+                            "name": "正餐",
+                            "type": "用餐时间"
+                        }
+                    ],
+                    "effect_labels": [
+                        {
+                            "id": 12,
+                            "name": "增加",
+                            "type": "功效"
+                        },
+                        {
+                            "id": 13,
+                            "name": "减脂",
+                            "type": "功效"
+                        }
+                    ],
+                    "other_labels": [],
+                    "author": {
+                        "nick_name": "逗逼3",
+                        "id": 4,
+                        "avatar": "https://tower.im/assets/default_avatars/nightfall.jpg"
+                    },
+                    "created_time": "2015-05-28 15:40:04",
+                    "updated_time": "2015-05-28 15:40:04",
+                    "img": "http://d.36krcnd.com/nil_class/c9d8fd96-0159-4f3c-bcea-3f33203f46c9/__.jpg",
+                    "thumbnail": "http://d.36krcnd.com/nil_class/c9d8fd96-0159-4f3c-bcea-3f33203f46c9/__.jpg",
+                    "title": "炒鸡蛋",
+                    "duration": 10,
+                    "calories": 156.0
+                },{
+                "...":"..."
+                }
+            ]
         }
 
 # Group Authorization
