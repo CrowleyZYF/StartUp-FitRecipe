@@ -3,12 +3,13 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 14:30:44
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-20 17:39:31
+# @Last Modified time: 2015-05-28 13:46:40
 from django.conf import settings
 from django.db import models
 
 from accounts.models import Account
 from base.models import BaseModel
+from label.models import Label
 from fitrecipe.utils import split_labels_into_list, str_to_int
 
 
@@ -22,15 +23,15 @@ class Recipe(BaseModel):
     thumbnail = models.URLField(max_length=200, verbose_name=u'缩略图 URL')
     title = models.CharField(max_length=100, verbose_name=u'菜谱名称')
     duration = models.IntegerField(help_text=u'分钟', verbose_name=u'烹饪时间')  # 烹饪时间
-    effect_labels = models.ManyToManyField('Label', limit_choices_to={'type': u'功效'}, related_name='effect_set', null=True, blank=True, verbose_name=u'功效标签')
-    time_labels = models.ManyToManyField('Label', limit_choices_to={'type': u'用餐时间'}, related_name='time_set', null=True, blank=True, verbose_name=u'用餐时间标签')
-    meat_labels = models.ManyToManyField('Label', limit_choices_to={'type': u'食材'}, related_name='meat_set', null=True, blank=True, verbose_name=u'食材标签')
-    other_labels = models.ManyToManyField('Label', limit_choices_to={'type': u'其他'}, related_name='other_set', null=True, blank=True, verbose_name=u'其他标签')
+    effect_labels = models.ManyToManyField(Label, limit_choices_to={u'type': u'功效'}, related_name='effect_set', verbose_name=u'功效标签')
+    time_labels = models.ManyToManyField(Label, limit_choices_to={u'type': u'用餐时间'}, related_name='time_set', verbose_name=u'用餐时间标签')
+    meat_labels = models.ManyToManyField(Label, limit_choices_to={u'type': u'食材'}, related_name='meat_set', verbose_name=u'食材标签')
+    other_labels = models.ManyToManyField(Label, limit_choices_to={u'type': u'其他'}, related_name='other_set', verbose_name=u'其他标签')
     calories = models.FloatField(default=0, help_text=u'自动计算，不用填', verbose_name=u'卡路里')
 
     class Meta:
-        verbose_name = '菜谱'
-        verbose_name_plural = verbose_name + '表'
+        verbose_name = u'菜谱'
+        verbose_name_plural = u'%s表' % verbose_name
 
     def __unicode__(self):
         return self.title
@@ -141,21 +142,6 @@ class Procedure(BaseModel):
 
     def __unicode__(self):
         return u'%s的步骤 第%s步 ' % (self.recipe.title, self.num)
-
-
-class Label(BaseModel):
-    '''
-    标签 (功效) 增肌 减脂 (用餐时间) 早餐 加餐 正餐 (食材) 鸡肉 鱼肉 牛肉 海鲜 蛋奶 果蔬 米面 点心 (其他标签) 酸甜 等等
-    '''
-    name = models.CharField(max_length=25, verbose_name=u'标签名称')
-    type = models.CharField(max_length=25, choices=((u'功效', u'功效'), (u'用餐时间', u'用餐时间'), (u'食材', u'食材'), (u'其他', u'其他'),), verbose_name=u'标签类型')
-
-    class Meta:
-        verbose_name = '标签'
-        verbose_name_plural = verbose_name + '表'
-
-    def __unicode__(self):
-        return self.name
 
 
 class Ingredient(BaseModel):

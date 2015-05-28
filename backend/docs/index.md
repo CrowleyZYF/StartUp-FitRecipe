@@ -245,6 +245,99 @@
 - 发布时间
 - 内容
 
+# Group Theme
+## Theme List [/api/theme/list/]
+### Retrieve Theme List [GET]
+获取主题列表。目前返回所有列表。列表的筛选逻辑在下一次 pull request 里做掉。
+主题列表里面不显示具体菜谱，只包含了菜谱数量。
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "error_message": null,
+            "data": [
+                {
+                    "id": 1,
+                    "created_time": "2015-05-28 15:40:04",
+                    "updated_time": "2015-05-28 15:40:04",
+                    "title": "只有庄奕峰会做的菜",
+                    "content": "如果由黑暗料理大赛或者最难吃的菜大赛，庄奕峰一定能进决赛",
+                    "img": "http://d.36krcnd.com/nil_class/c9d8fd96-0159-4f3c-bcea-3f33203f46c9/__.jpg",
+                    "thumbnail": "http://d.36krcnd.com/nil_class/c9d8fd96-0159-4f3c-bcea-3f33203f46c9/__.jpg",
+                    "recipe_count": 1
+                },{
+                    "...":"..."
+                }
+            ]
+        }
+
+## Theme Detail [/api/theme/{id}/]
+
++ Parameters
+    + id: 1 (number) - 主题的id
+
+### Retrieve Theme Detail [GET]
+获取详细的主题内容，其中包含了所有的菜谱列表。对于菜谱列表的排序和筛选还没做。
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "error_message": null,
+            "data": {
+                "id": 1,
+                "recipes": [
+                    {
+                        "other_labels": [],
+                        "img": "http://d.36krcnd.com/nil_class/c9d8fd96-0159-4f3c-bcea-3f33203f46c9/__.jpg",
+                        "author": {
+                            "nick_name": "逗逼3",
+                            "id": 4,
+                            "avatar": "https://tower.im/assets/default_avatars/nightfall.jpg"
+                        },
+                        "meat_labels": [],
+                        "title": "炒鸡蛋",
+                        "calories": 156.0,
+                        "thumbnail": "http://d.36krcnd.com/nil_class/c9d8fd96-0159-4f3c-bcea-3f33203f46c9/__.jpg",
+                        "time_labels": [
+                            {
+                                "id": 8,
+                                "name": "早餐",
+                                "type": "用餐时间"
+                            },
+                            {
+                                "id": 9,
+                                "name": "正餐",
+                                "type": "用餐时间"
+                            }
+                        ],
+                        "duration": 10,
+                        "id": 4,
+                        "effect_labels": [
+                            {
+                                "id": 12,
+                                "name": "增加",
+                                "type": "功效"
+                            },
+                            {
+                                "id": 13,
+                                "name": "减脂",
+                                "type": "功效"
+                            }
+                        ]
+                    },{
+                        "...":"..."
+                    }
+                ],
+                "created_time": "2015-05-28 15:40:04",
+                "updated_time": "2015-05-28 15:40:04",
+                "title": "只有庄奕峰会做的菜",
+                "content": "如果由黑暗料理大赛或者最难吃的菜大赛，庄奕峰一定能进决赛",
+                "img": "http://d.36krcnd.com/nil_class/c9d8fd96-0159-4f3c-bcea-3f33203f46c9/__.jpg",
+                "thumbnail": "http://d.36krcnd.com/nil_class/c9d8fd96-0159-4f3c-bcea-3f33203f46c9/__.jpg"
+            }
+        }
 
 # Group Authorization
 我们使用 Token 的验证方式，保证 `https` 访问所有接口。
