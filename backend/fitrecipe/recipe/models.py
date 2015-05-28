@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 14:30:44
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-22 23:18:41
+# @Last Modified time: 2015-05-28 13:46:40
 from django.conf import settings
 from django.db import models
 
@@ -30,8 +30,8 @@ class Recipe(BaseModel):
     calories = models.FloatField(default=0, help_text=u'自动计算，不用填', verbose_name=u'卡路里')
 
     class Meta:
-        verbose_name = '菜谱'
-        verbose_name_plural = verbose_name + '表'
+        verbose_name = u'菜谱'
+        verbose_name_plural = u'%s表' % verbose_name
 
     def __unicode__(self):
         return self.title

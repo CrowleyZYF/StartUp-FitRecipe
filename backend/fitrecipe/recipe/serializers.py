@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 15:52:14
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-20 18:13:04
+# @Last Modified time: 2015-05-28 16:03:17
 from rest_framework import serializers
 from .models import Recipe, Component, Procedure, Ingredient, Nutrition
 from accounts.serializers import AccountSerializer
@@ -60,5 +60,5 @@ class RecipeSerializer(BaseSerializer):
             # 去掉 component_set, procedure_set, nutrition_set
             pop_keys = ('component_set', 'procedure_set', 'nutrition_set')
             for k in pop_keys:
-                r.pop(k)
+                r.pop(k, None)
         return r

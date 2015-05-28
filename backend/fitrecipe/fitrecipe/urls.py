@@ -15,4 +15,6 @@ urlpatterns = patterns('',
     url(r'^api/accounts/', include('accounts.urls')),
     # Label
     url(r'^api/label/', include('label.urls')),
+    # Theme
+    url(r'^api/theme/', include('theme.urls')),
 )
