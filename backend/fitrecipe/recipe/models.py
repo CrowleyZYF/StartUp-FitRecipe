@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 14:30:44
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-28 13:46:40
+# @Last Modified time: 2015-05-28 17:59:16
 from django.conf import settings
 from django.db import models
 
@@ -94,6 +94,9 @@ class Recipe(BaseModel):
         if num < 1:
             # 如果请求num数量小于 0 是不对的，改成 10
             num = 10
+        if start < 0:
+            # 如果 start 是负数，改成 0
+            start = 0
         return recipes[start:num + start]
 
 
