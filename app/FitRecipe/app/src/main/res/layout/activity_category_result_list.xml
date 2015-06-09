@@ -37,7 +37,7 @@
                     android:id="@+id/time_sort_icon"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
-                    android:src="@drawable/icon_arrow_up"
+                    android:src="@drawable/icon_arrow_up_active"
                     android:layout_marginLeft="3dp"/>
 
             </LinearLayout>

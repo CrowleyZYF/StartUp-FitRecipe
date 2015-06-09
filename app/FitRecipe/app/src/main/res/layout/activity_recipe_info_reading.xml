@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/ingredient_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="相关阅读"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="@color/active_color"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"/>
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/theme_line"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:orientation="horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="54dp"
+            android:src="@drawable/atest001"
+            android:layout_margin="8dp"
+            android:scaleType="fitXY"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
+            android:text="30g蛋白质、50g碳水、20g脂肪章什么样？"
+            android:textSize="16sp"
+            android:lineSpacingExtra="4dp"
+            android:textColor="@color/login_input_text_color"/>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/theme_line"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:orientation="horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="54dp"
+            android:src="@drawable/atest003"
+            android:layout_margin="8dp"
+            android:scaleType="fitXY"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_marginTop="8dp"
+            android:text="蛋白质的究极奥义"
+            android:textSize="16sp"
+            android:lineSpacingExtra="4dp"
+            android:textColor="@color/login_input_text_color"/>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/theme_line"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:orientation="horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="54dp"
+            android:src="@drawable/atest002"
+            android:layout_margin="8dp"
+            android:scaleType="fitXY"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_marginTop="8dp"
+            android:text="牛奶和鸡蛋的营养学"
+            android:textSize="16sp"
+            android:lineSpacingExtra="4dp"
+            android:textColor="@color/login_input_text_color"/>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/theme_line"/>
+
+</LinearLayout>

@@ -4,10 +4,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/knowledge_card_container"
     android:layout_width="match_parent"
-    android:layout_height="310dp"
+    android:layout_height="320dp"
     android:layout_margin="10dp"
     card_view:cardPreventCornerOverlap="false"
-
     >
 
     <LinearLayout
@@ -16,6 +15,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/series_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="陈柏龄的自留地"
@@ -24,6 +24,7 @@
             android:padding="10dp"/>
 
         <ImageView
+            android:id="@+id/series_background"
             android:layout_width="match_parent"
             android:layout_height="220dp"
             android:scaleType="centerCrop"
@@ -37,7 +38,7 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/profile_image"
+                android:id="@+id/series_author_background"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginLeft="10dp"
@@ -53,6 +54,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/series_author_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -62,6 +64,7 @@
                     android:paddingLeft="8dp"/>
 
                 <TextView
+                    android:id="@+id/series_author_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -80,7 +83,7 @@
                 android:layout_weight="1">
 
                 <TextView
-                    android:id="@+id/read_number"
+                    android:id="@+id/series_read_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
@@ -94,10 +97,10 @@
                     android:id="@+id/icon_read_number"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
-                    android:src="@drawable/icon_delete"
+                    android:src="@drawable/icon_read"
                     android:layout_marginRight="5dp"
                     android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@id/read_number"/>
+                    android:layout_toLeftOf="@id/series_read_number"/>
 
                 <TextView
                     android:id="@+id/follow_number"
@@ -114,7 +117,7 @@
                     android:id="@+id/icon_follow_number"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
-                    android:src="@drawable/icon_delete"
+                    android:src="@drawable/icon_follow_gray"
                     android:layout_marginRight="5dp"
                     android:layout_centerVertical="true"
                     android:layout_toLeftOf="@id/follow_number"/>

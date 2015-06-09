@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <ImageView
+        android:id="@+id/recipe_procedure_pic"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:src="@drawable/ztest001"
+        android:scaleType="centerCrop"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/recipe_procedure_number"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="1"
+                android:textSize="50sp"
+                android:textColor="@color/active_color"
+                android:paddingLeft="10dp"
+                android:paddingTop="0dp"
+                android:gravity="top"/>
+
+            <TextView
+                android:id="@+id/recipe_procedure_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="/8"
+                android:textSize="50sp"
+                android:paddingTop="0dp"
+                android:gravity="top"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/recipe_procedure_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="10dp"
+            android:text="用一个大碗，将紫甘蓝，鸡蛋，洋葱少许，金枪鱼肉，淋上番茄酱，芝麻酱，橄榄油, 混合搅拌"
+            android:textSize="15sp"
+            android:lineSpacingExtra="3dp"
+            android:layout_gravity="top"
+            android:gravity="top"/>
+
+    </LinearLayout>
+
+</LinearLayout>

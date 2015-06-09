@@ -14,6 +14,9 @@ import com.daimajia.androidviewhover.BlurLayout;
 import java.util.List;
 
 import cn.fitrecipe.android.R;
+import cn.fitrecipe.android.RecipeActivity;
+import cn.fitrecipe.android.SearchActivity;
+import cn.fitrecipe.android.function.Common;
 
 /**
  * Created by 奕峰 on 2015/5/6.
@@ -70,22 +73,21 @@ public class rcPlanViewPagerAdapter extends PagerAdapter {
         hover4.findViewById(R.id.cat).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent getWebPage = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/daimajia"));
-                context.startActivity(getWebPage);
+                context.startActivity(new Intent(context, RecipeActivity.class));
             }
         });
 
         hover4.findViewById(R.id.mail).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+                Common.toBeContinuedDialog(context);
+            }
+        });
 
-                emailIntent.setType("plain/text");
-                emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"daimajia@gmail.com"});
-                emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "About AndroidViewHover");
-                emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "I have a good idea about this project..");
-
-                context.startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+        hover4.findViewById(R.id.last).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Common.toBeContinuedDialog(context);
             }
         });
 

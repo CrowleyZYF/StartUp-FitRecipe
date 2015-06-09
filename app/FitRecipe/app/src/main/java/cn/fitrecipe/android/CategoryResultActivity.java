@@ -100,6 +100,7 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
     private void initEvent() {
         back_btn.setOnClickListener(this);
         filter_btn.setOnClickListener(this);
+        filter_btn_2.setOnClickListener(this);
         time_sort_btn.setOnClickListener(this);
         like_sort_btn.setOnClickListener(this);
         calorie_sort_btn.setOnClickListener(this);
@@ -163,9 +164,9 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
                 time_sort_text.setTextColor(getResources().getColor(R.color.base_color));
                 sort_type = 0;
                 if(sort_des){
-                    time_sort_icon.setImageResource(R.drawable.icon_arrow_up);
+                    time_sort_icon.setImageResource(R.drawable.icon_arrow_up_active);
                 }else{
-                    time_sort_icon.setImageResource(R.drawable.icon_arrow_down);
+                    time_sort_icon.setImageResource(R.drawable.icon_arrow_down_active);
                 }
                 sort_des = !sort_des;
                 getThemeRecipe(sort_type,sort_des);
@@ -176,9 +177,9 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
                 like_sort_text.setTextColor(getResources().getColor(R.color.base_color));
                 sort_type = 1;
                 if(sort_des){
-                    like_sort_icon.setImageResource(R.drawable.icon_arrow_up);
+                    like_sort_icon.setImageResource(R.drawable.icon_arrow_up_active);
                 }else{
-                    like_sort_icon.setImageResource(R.drawable.icon_arrow_down);
+                    like_sort_icon.setImageResource(R.drawable.icon_arrow_down_active);
                 }
                 sort_des = !sort_des;
                 getThemeRecipe(sort_type,sort_des);
@@ -189,13 +190,16 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
                 calorie_sort_text.setTextColor(getResources().getColor(R.color.base_color));
                 sort_type = 2;
                 if(sort_des){
-                    calorie_sort_icon.setImageResource(R.drawable.icon_arrow_up);
+                    calorie_sort_icon.setImageResource(R.drawable.icon_arrow_up_active);
                 }else{
-                    calorie_sort_icon.setImageResource(R.drawable.icon_arrow_down);
+                    calorie_sort_icon.setImageResource(R.drawable.icon_arrow_down_active);
                 }
                 sort_des = !sort_des;
                 getThemeRecipe(sort_type,sort_des);
                 recipeCardAdapter.notifyDataSetChanged();
+                break;
+            case R.id.close_menu_btn:
+                mRightMenu.toggle();
                 break;
             default:
                 break;

@@ -62,6 +62,9 @@
             android:name=".CategoryResultActivity">
         </activity>
         <activity
+            android:name=".KnowledgeSeriesActivity">
+        </activity>
+        <activity
             android:name=".IngredientActivity">
         </activity>
         <activity
@@ -75,6 +78,15 @@
         </activity>
         <activity
             android:name=".RecipeActivity">
+        </activity>
+        <activity
+            android:name=".KnowledgeArticleActivity">
+        </activity>
+        <activity
+            android:name=".RecipeProcedureActivity">
+        </activity>
+        <activity
+            android:name=".ArticleActivity">
         </activity>
         <activity
             android:name="com.umeng.fb.ConversationActivity"/>

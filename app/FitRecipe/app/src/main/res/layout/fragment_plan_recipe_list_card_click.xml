@@ -18,7 +18,7 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:src="@drawable/icon_like_noshadow"
+                android:src="@drawable/icon_time"
                 android:layout_width="12dp"
                 android:layout_height="12dp"/>
 
@@ -31,7 +31,7 @@
                 android:paddingLeft="5dp"/>
 
             <ImageView
-                android:src="@drawable/icon_like_noshadow"
+                android:src="@drawable/icon_calorie"
                 android:layout_width="12dp"
                 android:layout_height="12dp"
                 android:layout_marginLeft="20dp"/>
@@ -64,21 +64,21 @@
         android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/cat"
-            android:src="@drawable/icon_like_noshadow"
+            android:src="@drawable/icon_recipe"
             android:layout_width="39dp"
             android:layout_height="39dp"
             android:padding="12dp"/>
         <ImageView
             android:id="@+id/mail"
             android:layout_toRightOf="@+id/cat"
-            android:src="@drawable/icon_category"
+            android:src="@drawable/icon_choice"
             android:layout_width="39dp"
             android:layout_height="39dp"
             android:padding="12dp" />
         <ImageView
             android:id="@+id/last"
             android:layout_toRightOf="@+id/mail"
-            android:src="@drawable/icon_filter"
+            android:src="@drawable/icon_modify"
             android:layout_width="39dp"
             android:layout_height="39dp"
             android:padding="12dp" />

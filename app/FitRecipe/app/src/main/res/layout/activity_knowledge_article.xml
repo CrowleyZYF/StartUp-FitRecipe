@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/framework_common_headers" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:fadingEdge="vertical"
+        >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/knowledge_border">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:background="@drawable/atest003">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#88000000"
+                        android:layout_alignParentBottom="true"
+                        android:text="为蛋白粉正名"
+                        android:textColor="@color/white"
+                        android:padding="10dp"
+                        />
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="       蛋白粉的作用只是为了补充蛋白质，方便，快捷，有效，地补充优质蛋白质。"
+                    android:textColor="@color/login_input_text_color"
+                    android:lineSpacingExtra="3dp"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="       蛋白质广泛存在于天然食物中，蛋白粉只是将食物中的优质蛋白提取出来，同时去除一定的脂肪和碳水化合物，加工而成。蛋白粉，一般是采用提纯的大豆蛋白、或酪蛋白、或乳清蛋白、或上述几种蛋白的组合体，构成的粉剂，其用途是为缺乏蛋白质的人补充蛋白质。相对于鸡蛋，牛奶而言，蛋白粉具有较高的蛋白质，较少的脂肪和碳水化合物。酪蛋白和乳清蛋白均为牛奶中提取。牛奶含有3%的蛋白质，其中包括20%的乳清蛋白和80%的酪蛋白。所以，喝乳清蛋白粉或酪蛋白可以简单理解为脱脂再脱糖再处理的高浓度牛奶。"
+                    android:textColor="@color/login_input_text_color"
+                    android:lineSpacingExtra="3dp"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="       乳清蛋白是采用先进工艺从牛奶分离提取出来的蛋白质，以其纯度高、吸收率高、氨基酸组成最合理等诸多优势被推为“蛋白之王”。不仅用于运动补充剂，还广泛用于婴幼儿补充食品，以及临床助病人康复的补品。"
+                    android:textColor="@color/login_input_text_color"
+                    android:lineSpacingExtra="3dp"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="       假设一个70kg体重的男士，一天吃掉500g米饭，50g大豆制品，50g坚果，300ml牛奶以及200g肉类，那么他一共从天然食物中摄取了15+17.5+10+9+40=91.5g蛋白质，满足轻体力劳动强度的蛋白质需求，但是如果这位男士有增肌的目标，同时有实行合理的高强度力量训练，他的蛋白质需求量就达到140g/天，于是就有了近乎50g的蛋白质缺口。如果从鸡蛋清中补充蛋白质，一个鸡蛋清含的蛋白质约为5g，他每天需要额外吃掉十个鸡蛋清才能满足需求。如果使用蛋白质含量70%的蛋白粉，则需要喝掉70g的蛋白粉。当然，这样的高强度运动者一般会有加餐，不过相比于鸡胸肉，鸡蛋清，蛋白粉因为其食用方便，高蛋白，低脂肪的特性不失为一个不错的选择。"
+                    android:textColor="@color/login_input_text_color"
+                    android:lineSpacingExtra="3dp"
+                    />
+
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>
+
+

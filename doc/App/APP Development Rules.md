@@ -3,6 +3,7 @@
 ## 目录 ##
 
 1. XML命名规范
+2. 文件目录结构
 
 
 
@@ -21,3 +22,15 @@
 - 规范：命名主要由两部分组成，全小写，首先是，在该界面下，功能和作用描述；最后是控件名称
 - 正则：`[SomeFunction|SomePart]*_[layout|btn|menu|check|gridview|text]?`
 - 例子：`back_btn`
+
+## 文件目录结构 ##
+
+**1. 根目录**
+
+- WelcomeActivity：欢迎页。
+	- 加载首页json数据，并进行图片资源缓存，最长停留时间为2000毫秒
+	- 检测是否用户已登录。如果登陆，跳转至首页MainActivity；如果未登陆，跳转至介绍页LandingPageActivity
+- LandingPageActivity：介绍页
+	- 提供登陆、注册、直接进入主页的入口
+- MainActivity：主界面
+	- 四个Tab页，每个tab页为一个fragment

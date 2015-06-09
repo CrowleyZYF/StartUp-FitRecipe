@@ -11,6 +11,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.umeng.fb.FeedbackAgent;
 
@@ -35,8 +38,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     private Fragment frPlanFragment;
     private Fragment frKnowledgeFragment;
 
-    private ImageView category_btn;
-    private ImageView search_btn;
+    private ImageView left_btn;
+    private ImageView right_btn;
 
     private int tab_index = 0;
 
@@ -67,8 +70,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         frTabPlan.setOnClickListener(this);
         frTabKnowledge.setOnClickListener(this);
 
-        category_btn.setOnClickListener(this);
-        search_btn.setOnClickListener(this);
+        left_btn.setOnClickListener(this);
+        right_btn.setOnClickListener(this);
     }
 
     private void initView()
@@ -82,8 +85,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         frTabs.add(frTabKnowledge);
         frTabs.add(frTabMe);
 
-        category_btn = (ImageView) findViewById(R.id.left_btn);
-        search_btn = (ImageView) findViewById(R.id.right_btn);
+        left_btn = (ImageView) findViewById(R.id.left_btn);
+        right_btn = (ImageView) findViewById(R.id.right_btn);
     }
 
     private void setSelect(int i)
@@ -101,6 +104,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                 } else{
                     transaction.show(frIndexFragment);
                 }
+                left_btn.setImageResource(R.drawable.icon_category);
+                right_btn.setImageResource(R.drawable.icon_search);
                 tab_index = 0;
                 break;
             case 1:
@@ -110,6 +115,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                 } else{
                     transaction.show(frPlanFragment);
                 }
+                left_btn.setImageResource(R.drawable.icon_nutrition);
+                right_btn.setImageResource(R.drawable.icon_shopping);
                 tab_index = 1;
                 break;
             case 2:
@@ -119,6 +126,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                 } else{
                     transaction.show(frKnowledgeFragment);
                 }
+                left_btn.setImageResource(R.drawable.icon_knowledge);
+                right_btn.setImageResource(R.drawable.icon_search);
                 tab_index = 2;
                 break;
             case 3:
@@ -128,6 +137,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                 } else{
                     transaction.show(frMeFragment);
                 }
+                left_btn.setImageResource(R.drawable.icon_letter);
+                right_btn.setImageResource(R.drawable.icon_set);
                 tab_index = 3;
                 break;
             default:
@@ -180,6 +191,13 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                         SlidingPage mRightMenu;
                         mRightMenu = (SlidingPage) findViewById(R.id.filter_menu);
                         mRightMenu.toggle();
+                        TextView name = (TextView) findViewById(R.id.meal_name);
+                        TextView nutrition = (TextView) findViewById(R.id.ingredient_title);
+                        nutrition.setText(name.getText()+"营养表");
+                        TextView nutrition_weight = (TextView) findViewById(R.id.ingredient_title_weight);
+                        nutrition_weight.setVisibility(View.GONE);
+                        ScrollView nutrition_sv = (ScrollView) findViewById(R.id.plan_nutrition);
+                        nutrition_sv.smoothScrollTo(0,0);
                         break;
                     case 2:
                         startActivity(new Intent(this, FollowActivity.class));

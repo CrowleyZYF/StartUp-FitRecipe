@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:layout_marginBottom="25dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -36,26 +38,19 @@
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:background="@drawable/recipe_button_border"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp">
-
-            <ImageView
-                android:layout_width="10dp"
-                android:layout_height="10dp"
-                android:src="@drawable/icon_like_green"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="5dp"/>
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp">
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="查看营养表"
+                android:layout_height="16dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="+ 丢进菜篮子"
                 android:textSize="10sp"
                 android:textColor="@color/active_color"/>
-
 
         </LinearLayout>
     </RelativeLayout>
@@ -73,26 +68,6 @@
         android:paddingRight="10dp">
 
     </cn.fitrecipe.android.UI.LinearLayoutForListView>
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@drawable/theme_line"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="+ 丢进菜篮子"
-        android:textSize="16sp"
-        android:textColor="@color/active_color"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:paddingLeft="50dp"
-        android:paddingRight="50dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/recipe_button_border"/>
 
     <ImageView
         android:layout_width="match_parent"

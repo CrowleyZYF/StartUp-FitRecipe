@@ -5,7 +5,8 @@
     android:layout_height="fill_parent"
     android:background="@color/background_color"
     android:scrollbars="none"
-    android:fadingEdge="vertical">
+    android:fadingEdge="vertical"
+    android:id="@+id/recipe_scrollview">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,9 +16,38 @@
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="220dp"
-            android:src="@drawable/ztest001"
-            android:scaleType="centerCrop"/>
+            android:layout_height="260dp"
+            android:src="@drawable/ztest002"
+            android:scaleType="fitXY"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="-40dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="14dp"
+                android:src="@drawable/icon_tags"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="-15dp"
+                android:text="西式、美味、酸辣、好吃"
+                android:textSize="12sp"
+                android:shadowColor="@color/login_input_text_color"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="4"
+                android:textColor="@color/white"
+                android:padding="10dp"
+                />
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -157,6 +187,7 @@
             android:textColor="@color/login_input_text_color"/>
 
         <TextView
+            android:id="@+id/check_procedure"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_margin="15dp"
@@ -166,34 +197,11 @@
             android:textSize="16sp"
             android:background="@drawable/icon_selector"/>
 
-        <cn.fitrecipe.android.UI.SlidingPage
-            android:id="@+id/nutrition_ingredient"
-            android:layout_width="match_parent"
-            android:background="@color/white"
-            android:layout_height="wrap_content">
+        <include layout="@layout/activity_recipe_info_ingredient" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+        <include layout="@layout/activity_recipe_info_nutrition" />
 
-                <include layout="@layout/activity_recipe_info_ingredient" />
-
-                <include layout="@layout/activity_recipe_info_nutrition" />
-
-            </LinearLayout>
-
-        </cn.fitrecipe.android.UI.SlidingPage>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="15dp"
-            android:text="查看步骤"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:background="@drawable/icon_selector"/>
+        <include layout="@layout/activity_recipe_info_reading" />
 
     </LinearLayout>
 </ScrollView>

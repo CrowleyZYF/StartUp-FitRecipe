@@ -87,7 +87,7 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:padding="15dp"
-            android:src="@drawable/icon_back"
+            android:src="@drawable/icon_mywork"
             android:layout_gravity="center_vertical"/>
 
         <TextView
@@ -112,7 +112,7 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:padding="15dp"
-            android:src="@drawable/icon_back"
+            android:src="@drawable/icon_collection"
             android:layout_gravity="center_vertical"/>
 
         <TextView
@@ -137,7 +137,7 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:padding="15dp"
-            android:src="@drawable/icon_back"
+            android:src="@drawable/icon_follow_black"
             android:layout_gravity="center_vertical"/>
 
         <TextView
@@ -162,7 +162,7 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:padding="15dp"
-            android:src="@drawable/icon_back"
+            android:src="@drawable/icon_report"
             android:layout_gravity="center_vertical"/>
 
         <TextView
@@ -188,7 +188,7 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:padding="15dp"
-            android:src="@drawable/icon_back"
+            android:src="@drawable/icon_shopping_black"
             android:layout_gravity="center_vertical"/>
 
         <TextView
