@@ -218,7 +218,12 @@
         }
 
 # Group Label
-分类标签
+分类标签，会分成这几类
+
+- 用餐时间
+- 功效
+- 其他
+- 食材
 
 ## Label List [/api/label/list]
 ### Retrieve all labels [GET]
