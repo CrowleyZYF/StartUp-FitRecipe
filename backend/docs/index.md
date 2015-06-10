@@ -217,6 +217,64 @@
             ]
         }
 
+# Group Label
+分类标签
+
+## Label List [/api/label/list]
+### Retrieve all labels [GET]
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "error_message": null,
+            "data": {
+                "用餐时间": [
+                    {
+                        "id": 8,
+                        "name": "早餐",
+                        "type": "用餐时间"
+                    },
+                    {
+                        "id": 9,
+                        "name": "正餐",
+                        "type": "用餐时间"
+                    }
+                ],
+                "功效": [
+                    {
+                        "id": 12,
+                        "name": "增加",
+                        "type": "功效"
+                    },
+                    {
+                        "id": 13,
+                        "name": "减脂",
+                        "type": "功效"
+                    }
+                ],
+                "其他": [
+                    {
+                        "id": 14,
+                        "name": "酸",
+                        "type": "其他"
+                    }
+                ],
+                "食材": [
+                    {
+                        "id": 10,
+                        "name": "鸡肉",
+                        "type": "食材"
+                    },
+                    {
+                        "id": 11,
+                        "name": "猪肉",
+                        "type": "食材"
+                    }
+                ]
+            }
+        }
+
 # Group Knowledge
 知识体系中的数据结构是这样的：
 
