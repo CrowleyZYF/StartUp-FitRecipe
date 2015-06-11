@@ -17,4 +17,6 @@ urlpatterns = patterns('',
     url(r'^api/label/', include('label.urls')),
     # Theme
     url(r'^api/theme/', include('theme.urls')),
+    # Recommend
+    url(r'^api/recommend/', include('recommend.urls')),
 )

@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-05-20 18:10:00
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-20 18:11:01
+# @Last Modified time: 2015-06-10 23:18:43
 from django.db import models
 from base.models import BaseModel
 
@@ -17,8 +17,8 @@ class Label(BaseModel):
     type = models.CharField(max_length=25, choices=((u'功效', u'功效'), (u'用餐时间', u'用餐时间'), (u'食材', u'食材'), (u'其他', u'其他'),), verbose_name=u'标签类型')
 
     class Meta:
-        verbose_name = '标签'
-        verbose_name_plural = verbose_name + '表'
+        verbose_name = u'标签'
+        verbose_name_plural = verbose_name + u'表'
 
     def __unicode__(self):
         return self.name

@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'theme',
     'rest_framework.authtoken',
     'article',
+    'recommend',
 )
 
 MIDDLEWARE_CLASSES = (
