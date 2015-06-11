@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-05-28 13:16:10
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-28 17:38:09
+# @Last Modified time: 2015-05-28 18:04:38
 from django.db import models
 
 from base.models import BaseModel
@@ -32,6 +32,8 @@ class Theme(BaseModel):
     def get_recipes(self, start, num):
         start = str_to_int(start, 0)
         num = str_to_int(num, 5)
-        num = num < 1 and 5 or num
-        start = start < 0 and 0 or start
+        if num < 1:
+            num = 5
+        if start < 0:
+            start = 0
         return self.recipes.all()[start:num+start]
