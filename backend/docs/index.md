@@ -280,6 +280,105 @@
             }
         }
 
+# Group Recommend
+首页的推荐逻辑。
+
+- 按照后台设定的时间区间。用当前的时间（小时）去匹配。如果匹配多个则取第一个
+- 如果这个时间段内没有推荐项目，则去所有推荐项目第一个。
+- 如果一个推荐都没有，则返回空。所以请保证至少有一个推荐项目
+
+## Retrieve Recommend Recipes [/api/recommend/recipe/]
+### Retrieve Recommend Recipes By Time [GET]
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "error_message": null,
+            "data": [
+                {
+                    "id": 2,
+                    "meat_labels": [
+                        {
+                            "id": 11,
+                            "name": "猪肉",
+                            "type": "食材"
+                        }
+                    ],
+                    "time_labels": [
+                        {
+                            "id": 9,
+                            "name": "正餐",
+                            "type": "用餐时间"
+                        }
+                    ],
+                    "effect_labels": [
+                        {
+                            "id": 13,
+                            "name": "减脂",
+                            "type": "功效"
+                        }
+                    ],
+                    "other_labels": [],
+                    "author": {
+                        "nick_name": "逗逼3",
+                        "id": 4,
+                        "avatar": "https://tower.im/assets/default_avatars/nightfall.jpg"
+                    },
+                    "created_time": "2015-05-28 15:40:04",
+                    "updated_time": "2015-05-28 15:40:04",
+                    "img": "http://d.36krcnd.com/nil_class/c9d8fd96-0159-4f3c-bcea-3f33203f46c9/__.jpg",
+                    "thumbnail": "http://d.36krcnd.com/nil_class/c9d8fd96-0159-4f3c-bcea-3f33203f46c9/__.jpg",
+                    "title": "红烧鸡块",
+                    "duration": 20,
+                    "calories": 140.4
+                },
+                {
+                    "id": 3,
+                    "meat_labels": [
+                        {
+                            "id": 11,
+                            "name": "猪肉",
+                            "type": "食材"
+                        }
+                    ],
+                    "time_labels": [
+                        {
+                            "id": 9,
+                            "name": "正餐",
+                            "type": "用餐时间"
+                        }
+                    ],
+                    "effect_labels": [
+                        {
+                            "id": 13,
+                            "name": "减脂",
+                            "type": "功效"
+                        }
+                    ],
+                    "other_labels": [
+                        {
+                            "id": 14,
+                            "name": "酸",
+                            "type": "其他"
+                        }
+                    ],
+                    "author": {
+                        "nick_name": "逗逼3",
+                        "id": 4,
+                        "avatar": "https://tower.im/assets/default_avatars/nightfall.jpg"
+                    },
+                    "created_time": "2015-05-28 15:40:04",
+                    "updated_time": "2015-05-28 15:40:04",
+                    "img": "http://d.36krcnd.com/nil_class/c9d8fd96-0159-4f3c-bcea-3f33203f46c9/__.jpg",
+                    "thumbnail": "http://d.36krcnd.com/nil_class/c9d8fd96-0159-4f3c-bcea-3f33203f46c9/__.jpg",
+                    "title": "猪肉干",
+                    "duration": 160,
+                    "calories": 1043.4
+                }
+            ]
+        }
+
 # Group Knowledge
 知识体系中的数据结构是这样的：
 
