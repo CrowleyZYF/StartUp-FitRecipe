@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 14:30:44
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-07-10 23:37:51
+# @Last Modified time: 2015-07-11 00:35:40
 from django.contrib import admin
 from django.utils.html import format_html_join
 from django.utils.safestring import mark_safe
@@ -45,37 +45,8 @@ class RecipeAdmin(admin.ModelAdmin):
             row += 1
         return html + u'</tbody></table>'
 
-    def get_nutrition_amount(self, data, name):
-        '''
-        g,mg,ug 的转换为g
-        '''
-        if data[name]['unit'] == u'mg':
-            return data[name]['amount'] / 1000
-        elif data[name]['unit'] == u'g':
-            return data[name]['amount']
-        elif data[name]['unit'] == u'μg':
-            return data[name]['amount'] / 1000000
-        else:
-            return data[name]['amount']
-
-    def gcd(self, a, b):
-        if a < b:
-            a, b = b, a
-        while b != 0:
-            temp = a % b
-            a = b
-            b = temp
-        return a
-
     def macro_element_ratio(self, instance):
-        data = instance.get_nutrition()
-        transfer_100_int = lambda x: int(self.get_nutrition_amount(data, x) * 100)
-        ratio = (transfer_100_int(u'碳水化合物'), transfer_100_int(u'蛋白质'), transfer_100_int(u'脂类'))
-        first_gcd = self.gcd(ratio[0], ratio[1])
-        second_gcd = self.gcd(ratio[1], ratio[2])
-        third_gcd = self.gcd(first_gcd, second_gcd)
-        return '%s:%s:%s' % tuple([num/third_gcd for num in ratio])
-
+        return instance.macro_element_ratio()
 
     recipe_nutrition_list.short_description = u'菜谱营养表'
     recipe_nutrition_list.allow_tags = True

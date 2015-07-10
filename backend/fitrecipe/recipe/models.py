@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 14:30:44
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-07-11 00:21:35
+# @Last Modified time: 2015-07-11 00:38:10
 from django.conf import settings
 from django.db import models
 
@@ -73,14 +73,17 @@ class Recipe(BaseModel):
 
     def macro_element_ratio(self):
         data = self.get_nutrition()
-        transfer_100_int = lambda x: int(self.get_nutrition_amount(data, x) * 100)
-        ratio = (self.get_nutrition_amount(data, u'碳水化合物'), self.get_nutrition_amount(data, u'蛋白质'), self.get_nutrition_amount(data, u'脂类'))
-        ratio = [int(v / sum(ratio) * 100) for v in ratio]
-        first_gcd = self.gcd(ratio[0], ratio[1])
-        second_gcd = self.gcd(ratio[1], ratio[2])
-        third_gcd = self.gcd(first_gcd, second_gcd)
-        ratio = [num/third_gcd for num in ratio]
-        return u'%s:%s:%s' % tuple(ratio)
+        if data:
+            transfer_100_int = lambda x: int(self.get_nutrition_amount(data, x) * 100)
+            ratio = (self.get_nutrition_amount(data, u'碳水化合物'), self.get_nutrition_amount(data, u'蛋白质'), self.get_nutrition_amount(data, u'脂类'))
+            ratio = [int(v / sum(ratio) * 100) for v in ratio]
+            first_gcd = self.gcd(ratio[0], ratio[1])
+            second_gcd = self.gcd(ratio[1], ratio[2])
+            third_gcd = self.gcd(first_gcd, second_gcd)
+            ratio = [num/third_gcd for num in ratio]
+            return u'%s:%s:%s' % tuple(ratio)
+        else:
+            return u'no data';
 
     def update_calories(self):
         # 对于删除所有配料的情况需要有特殊处理，因为最后一个删除的时候，不会进入循环，因此会留下最后一个配料的卡路里
