@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-05-04 14:50:49
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-18 19:50:57
+# @Last Modified time: 2015-07-10 22:50:07
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -42,3 +42,19 @@ class External(BaseModel):
 
     def __unicode__(self):
         return u'%s_%s' % (self.external_source, self.external_id)
+
+
+class OtherAuthor(BaseModel):
+    '''
+    非注册用户，用于菜谱的作者等
+    '''
+    avatar = models.URLField(max_length=200, default='http://tp2.sinaimg.cn/1937464505/180/5708528601/1')
+    nick_name = models.CharField(max_length=100)
+    sex = models.CharField(max_length=10)
+
+    class Meta:
+        verbose_name = u'非注册用户'
+        verbose_name_plural = u'%s表' % verbose_name
+
+    def __unicode__(self):
+        return u'Other_%s' % self.nick_name

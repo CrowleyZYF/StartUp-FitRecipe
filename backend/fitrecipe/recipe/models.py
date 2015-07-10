@@ -3,11 +3,11 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 14:30:44
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-28 17:59:16
+# @Last Modified time: 2015-07-10 22:49:40
 from django.conf import settings
 from django.db import models
 
-from accounts.models import Account
+from accounts.models import OtherAuthor
 from base.models import BaseModel
 from label.models import Label
 from fitrecipe.utils import split_labels_into_list, str_to_int
@@ -18,10 +18,12 @@ class Recipe(BaseModel):
     recipe models
     '''
     # 菜谱id号(auto)，菜谱封面url，菜谱名称，功效，烹饪时间，卡路里，收藏数(redis)
-    author = models.ForeignKey(Account)
+    author = models.ForeignKey(OtherAuthor, null=True, blank=True) # 加上可空是为了迁移
     img = models.URLField(max_length=200, verbose_name=u'大图 URL')  # 图片全部使用 CDN
     thumbnail = models.URLField(max_length=200, verbose_name=u'缩略图 URL')
     title = models.CharField(max_length=100, verbose_name=u'菜谱名称')
+    introduce = models.TextField(null=True, blank=True, verbose_name=u'菜谱简介')
+    tips = models.TextField(null=True, blank=True, verbose_name=u'菜谱小贴士')
     duration = models.IntegerField(help_text=u'分钟', verbose_name=u'烹饪时间')  # 烹饪时间
     effect_labels = models.ManyToManyField(Label, limit_choices_to={u'type': u'功效'}, related_name='effect_set', verbose_name=u'功效标签')
     time_labels = models.ManyToManyField(Label, limit_choices_to={u'type': u'用餐时间'}, related_name='time_set', verbose_name=u'用餐时间标签')
