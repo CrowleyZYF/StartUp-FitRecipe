@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 14:30:44
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-07-11 00:15:47
+# @Last Modified time: 2015-07-11 00:21:35
 from django.conf import settings
 from django.db import models
 
@@ -173,7 +173,7 @@ class Procedure(BaseModel):
     img = models.URLField(null=True, blank=True)
 
     class Meta:
-        unique_together = (('recipe', 'num'),)  # 有必要嘛？是不是太强制了一点？
+        # unique_together = (('recipe', 'num'),)  # 有必要嘛？是不是太强制了一点？
         verbose_name = '步骤'
         verbose_name_plural = verbose_name + '表'
         # ordering = ['-recipe', 'num']
