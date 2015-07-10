@@ -3,8 +3,10 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 14:30:44
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-20 18:16:31
+# @Last Modified time: 2015-07-10 22:42:18
 from django.contrib import admin
+from django.utils.html import format_html_join
+from django.utils.safestring import mark_safe
 
 from .models import Recipe, Component, Ingredient, Nutrition, Procedure
 # Register your models here.
@@ -29,7 +31,22 @@ class RecipeAdmin(admin.ModelAdmin):
     filter_horizontal = ('effect_labels', 'time_labels', 'meat_labels', 'other_labels')
     list_filter = ('effect_labels', 'time_labels', 'meat_labels', 'other_labels')
     inlines = (ComponentInline, ProcedureInline)
+    readonly_fields = ('recipe_nutrition_list',)
 
+    def recipe_nutrition_list(self, instance):
+        html = u'''
+        <table>
+        <thead><tr><th>营养物质</th><th>含量</th><th>单位</th></tr></thead>
+        <tbody>
+        '''
+        row = 1
+        for k, v in instance.get_nutrition().iteritems():
+            html += u'<tr class="form-row row%s"><td>%s</td><td>%s</td><td>%s</td></tr>' % (row % 2, k, str(v['amount']), v['unit'])
+            row += 1
+        return html + u'</tbody></table>'
+
+    recipe_nutrition_list.short_description = u'菜谱营养表'
+    recipe_nutrition_list.allow_tags = True
 
 class IngredientAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'eng_name', 'ndbno')
