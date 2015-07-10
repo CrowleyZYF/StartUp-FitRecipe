@@ -3,10 +3,10 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 15:52:14
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-28 16:03:17
+# @Last Modified time: 2015-07-11 00:11:26
 from rest_framework import serializers
 from .models import Recipe, Component, Procedure, Ingredient, Nutrition
-from accounts.serializers import AccountSerializer
+from accounts.serializers import OtherAuthorSerializer
 from base.serializers import BaseSerializer
 from label.serializers import LabelSerializer
 
@@ -45,7 +45,8 @@ class RecipeSerializer(BaseSerializer):
     component_set = ComponentSerializer(value=('amount', 'ingredient', 'remark'), many=True, read_only=True)
     procedure_set = ProcedureSerializer(value=('content', 'num', 'img'), many=True, read_only=True)
     nutrition_set = serializers.DictField(source='get_nutrition')
-    author = AccountSerializer(value=('id', 'nick_name', 'avatar'), read_only=True)
+    marcro_ratio = serializers.CharField(source='macro_element_ratio')
+    author = OtherAuthorSerializer(value=('id', 'nick_name', 'avatar'), read_only=True)
 
     class Meta:
         model = Recipe
