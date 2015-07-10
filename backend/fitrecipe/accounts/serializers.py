@@ -3,8 +3,8 @@
 # @Author: chaihaotian
 # @Date:   2015-05-04 15:38:57
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-05-18 23:46:54
-from .models import Account, External
+# @Last Modified time: 2015-07-11 00:11:18
+from .models import Account, External, OtherAuthor
 from base.serializers import BaseSerializer
 
 
@@ -20,3 +20,9 @@ class AccountSerializer(BaseSerializer):
     class Meta:
         model = Account
         fields = ('id', 'nick_name', 'externals', 'avatar', 'is_changed_nick', 'phone')
+
+
+class OtherAuthorSerializer(BaseSerializer):
+    class Meta:
+        model = OtherAuthor
+        fields = ('id', 'nick_name', 'sex', 'avatar')
