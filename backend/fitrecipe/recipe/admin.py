@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 14:30:44
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-07-11 00:35:40
+# @Last Modified time: 2015-07-12 12:33:07
 from django.contrib import admin
 from django.utils.html import format_html_join
 from django.utils.safestring import mark_safe
@@ -31,7 +31,7 @@ class RecipeAdmin(admin.ModelAdmin):
     filter_horizontal = ('effect_labels', 'time_labels', 'meat_labels', 'other_labels')
     list_filter = ('effect_labels', 'time_labels', 'meat_labels', 'other_labels')
     inlines = (ComponentInline, ProcedureInline)
-    readonly_fields = ('recipe_nutrition_list', 'macro_element_ratio')
+    readonly_fields = ('recipe_nutrition_list', 'macro_element_ratio', 'protein_ratio', 'fat_ratio', 'calories_per_kilo')
 
     def recipe_nutrition_list(self, instance):
         html = u'''
@@ -44,13 +44,9 @@ class RecipeAdmin(admin.ModelAdmin):
             html += u'<tr class="form-row row%s"><td>%s</td><td>%s</td><td>%s</td></tr>' % (row % 2, k, str(v['amount']), v['unit'])
             row += 1
         return html + u'</tbody></table>'
-
-    def macro_element_ratio(self, instance):
-        return instance.macro_element_ratio()
-
+ 
     recipe_nutrition_list.short_description = u'菜谱营养表'
     recipe_nutrition_list.allow_tags = True
-    macro_element_ratio.short_description = u'宏量元素比'
 
 
 class IngredientAdmin(admin.ModelAdmin):

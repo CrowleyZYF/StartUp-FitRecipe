@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 14:30:44
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-07-11 00:38:10
+# @Last Modified time: 2015-07-12 12:34:18
 from django.conf import settings
 from django.db import models
 
@@ -38,15 +38,28 @@ class Recipe(BaseModel):
     def __unicode__(self):
         return self.title
 
+    def get_total_amount(self, float_format=False):
+        total_amount = 0.0
+        for item in self.component_set.all():
+            total_amount += item.amount
+        if float_format:
+            return total_amount
+        else:
+            return '%dg' % round(total_amount, 2)
+
     def get_nutrition(self):
         r = dict()
+        total_amount = 0.0
         for item in self.component_set.all():
             c_amount = item.amount
+            total_amount += c_amount
             for n in item.ingredient.nutrition_set.all():
                 if n.name in r.keys():
-                    r[n.name]['amount'] += round(n.amount/100*c_amount, 2)
+                    r[n.name]['amount'] += n.amount * c_amount
                 else:
-                    r[n.name] = {'amount': round(n.amount/100*c_amount, 2), 'unit': n.unit}
+                    r[n.name] = {'amount': n.amount * c_amount, 'unit': n.unit}
+        for k, v in r.iteritems():
+            v['amount'] = round(v['amount'] / total_amount, 2)  # 一百克含量
         return r
 
     def get_nutrition_amount(self, data, name):
@@ -71,7 +84,7 @@ class Recipe(BaseModel):
             b = temp
         return a
 
-    def macro_element_ratio(self):
+    def macro_element_ratio(self, list_format=False):
         data = self.get_nutrition()
         if data:
             transfer_100_int = lambda x: int(self.get_nutrition_amount(data, x) * 100)
@@ -81,9 +94,42 @@ class Recipe(BaseModel):
             second_gcd = self.gcd(ratio[1], ratio[2])
             third_gcd = self.gcd(first_gcd, second_gcd)
             ratio = [num/third_gcd for num in ratio]
-            return u'%s:%s:%s' % tuple(ratio)
+            if list_format:
+                return ratio
+            else:
+                return u'%d:%d:%d' % tuple(ratio)
         else:
-            return u'no data';
+            if list_format:
+                return None
+            else:
+                return u'no data';
+
+    def protein_ratio(self):
+        '''
+        蛋白质在宏量元素比中占比
+        '''
+        ratio = self.macro_element_ratio(list_format=True)
+        try:
+            return '%.2f%%' % (float(ratio[1])/ sum(ratio) * 100)
+        except ZeroDivisionError:
+            return '0%'
+
+    def fat_ratio(self):
+        '''
+        脂类在宏量元素比中占比
+        '''
+        ratio = self.macro_element_ratio(list_format=True)
+        try:
+            return '%.2f%%' % (float(ratio[2])/ sum(ratio) * 100)
+        except ZeroDivisionError:
+            return '0%'
+
+    def calories_per_kilo(self):
+        '''
+        每百克热量
+        '''
+        total_amount = self.get_total_amount(float_format=True)
+        return '%.2fkcal/100g' % (float(self.calories) / total_amount * 100)
 
     def update_calories(self):
         # 对于删除所有配料的情况需要有特殊处理，因为最后一个删除的时候，不会进入循环，因此会留下最后一个配料的卡路里
@@ -97,6 +143,13 @@ class Recipe(BaseModel):
                 self.save()
                 break
         return True
+
+    # django admin uses these attribute
+    macro_element_ratio.short_description = u'宏量元素比'
+    protein_ratio.short_description = u'蛋白质占比'
+    fat_ratio.short_description = u'脂类占比'
+    calories_per_kilo.short_description = u'每百克热量'
+    get_total_amount.short_description = u'总重量'
 
     @classmethod
     def get_recipe_list(cls, meat_labels, effect_labels, time_labels, order, desc, start, num):
