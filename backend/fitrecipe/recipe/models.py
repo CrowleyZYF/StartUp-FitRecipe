@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 14:30:44
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-07-12 12:34:18
+# @Last Modified time: 2015-07-12 23:19:57
 from django.conf import settings
 from django.db import models
 
@@ -258,7 +258,7 @@ class Ingredient(BaseModel):
         import requests
         import json
         # 先保存，不然后面外键指不到吧
-        url = u'http://api.nal.usda.gov/usda/ndb/reports/?ndbno=%s&type=f&format=json&api_key=%s' % (self.ndbno, settings.NDB_API_KEY)
+        url = u'http://52.6.174.103/usda/ndb/reports/?ndbno=%s&type=f&format=json&api_key=%s' % (self.ndbno, settings.NDB_API_KEY)
         resp = requests.get(url)
         if resp.status_code == 200:
             content = json.loads(resp.content)['report']['food']
