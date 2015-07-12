@@ -3,17 +3,21 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 14:30:44
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-07-12 12:33:07
+# @Last Modified time: 2015-07-12 23:52:06
 from django.contrib import admin
 from django.utils.html import format_html_join
 from django.utils.safestring import mark_safe
+from ajax_select import make_ajax_form
+from ajax_select.admin import AjaxSelectAdminTabularInline
 
 from .models import Recipe, Component, Ingredient, Nutrition, Procedure
 # Register your models here.
 
 
-class ComponentInline(admin.TabularInline):
+class ComponentInline(AjaxSelectAdminTabularInline):
     model = Component
+
+    form = make_ajax_form(Component, {'ingredient': 'ingredient'})
 
 
 class ProcedureInline(admin.TabularInline):
@@ -31,7 +35,7 @@ class RecipeAdmin(admin.ModelAdmin):
     filter_horizontal = ('effect_labels', 'time_labels', 'meat_labels', 'other_labels')
     list_filter = ('effect_labels', 'time_labels', 'meat_labels', 'other_labels')
     inlines = (ComponentInline, ProcedureInline)
-    readonly_fields = ('recipe_nutrition_list', 'macro_element_ratio', 'protein_ratio', 'fat_ratio', 'calories_per_kilo')
+    readonly_fields = ('recipe_nutrition_list', 'macro_element_ratio', 'protein_ratio', 'fat_ratio', 'calories_per_kilo', 'get_total_amount')
 
     def recipe_nutrition_list(self, instance):
         html = u'''
@@ -54,7 +58,6 @@ class IngredientAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     list_display_links = ('name',)
     inlines = (NutritionInline,)
-
 
 
 admin.site.register(Recipe, RecipeAdmin)
