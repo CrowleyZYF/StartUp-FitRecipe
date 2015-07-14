@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 14:30:44
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-07-14 20:28:54
+# @Last Modified time: 2015-07-14 20:31:31
 from django.conf import settings
 from django.db import models
 
@@ -141,7 +141,6 @@ class Recipe(BaseModel):
     macro_element_ratio.short_description = u'宏量元素比'
     protein_ratio.short_description = u'蛋白质占比'
     fat_ratio.short_description = u'脂类占比'
-    calories_per_kilo.short_description = u'每百克热量'
     get_total_amount.short_description = u'总重量'
 
     @classmethod
