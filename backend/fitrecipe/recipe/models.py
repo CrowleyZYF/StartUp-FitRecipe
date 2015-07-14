@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 14:30:44
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-07-13 00:00:14
+# @Last Modified time: 2015-07-14 19:38:48
 from django.conf import settings
 from django.db import models
 
@@ -263,11 +263,11 @@ class Ingredient(BaseModel):
         # 先保存，不然后面外键指不到吧
         url = u'http://52.6.174.103/usda/ndb/reports/?ndbno=%s&type=f&format=json&api_key=%s' % (self.ndbno, settings.NDB_API_KEY)
         resp = requests.get(url)
+        r = super(Ingredient, self).save(*args, **kwargs)
         if resp.status_code == 200:
             content = json.loads(resp.content)['report']['food']
             self.eng_name = content['name']
             # 在这里执行保存操作，不然后面外键指不到了。
-            r = super(Ingredient, self).save(*args, **kwargs)
             # 保存完之后开始处理 nutritions
             nutri_dict = dict()
             for nu in content['nutrients']:
@@ -292,11 +292,9 @@ class Ingredient(BaseModel):
                     total = 0.0
                     unit = u'mg'
                 Nutrition.objects.create(name=item[2], eng_name=item[1], amount=total, unit=unit, ingredient=self)
-            return r
-        elif resp.status_code == 400:
-            raise AssertionError('400, check ndbno, dont forget the 0 before it')
-        else:
-            raise AssertionError('remote website said: %s' % resp.status_code)
+        # 不管获取成不成功都过，大不了没有营养元素
+        return r
+
 
 
 class Nutrition(BaseModel):
