@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 14:30:44
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-07-14 20:27:36
+# @Last Modified time: 2015-07-14 20:28:54
 from django.conf import settings
 from django.db import models
 
@@ -29,7 +29,7 @@ class Recipe(BaseModel):
     time_labels = models.ManyToManyField(Label, limit_choices_to={u'type': u'用餐时间'}, related_name='time_set', verbose_name=u'用餐时间标签')
     meat_labels = models.ManyToManyField(Label, limit_choices_to={u'type': u'食材'}, related_name='meat_set', verbose_name=u'食材标签')
     other_labels = models.ManyToManyField(Label, limit_choices_to={u'type': u'其他'}, related_name='other_set', verbose_name=u'其他标签')
-    calories = models.FloatField(default=0, help_text=u'自动计算，不用填', verbose_name=u'卡路里')
+    calories = models.FloatField(default=0, help_text=u'自动计算，不用填', verbose_name=u'每百克卡路里')
 
     class Meta:
         verbose_name = u'菜谱'
