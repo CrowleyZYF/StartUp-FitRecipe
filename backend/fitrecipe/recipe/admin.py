@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 14:30:44
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-07-12 23:52:06
+# @Last Modified time: 2015-07-14 20:27:43
 from django.contrib import admin
 from django.utils.html import format_html_join
 from django.utils.safestring import mark_safe
@@ -35,7 +35,7 @@ class RecipeAdmin(admin.ModelAdmin):
     filter_horizontal = ('effect_labels', 'time_labels', 'meat_labels', 'other_labels')
     list_filter = ('effect_labels', 'time_labels', 'meat_labels', 'other_labels')
     inlines = (ComponentInline, ProcedureInline)
-    readonly_fields = ('recipe_nutrition_list', 'macro_element_ratio', 'protein_ratio', 'fat_ratio', 'calories_per_kilo', 'get_total_amount')
+    readonly_fields = ('recipe_nutrition_list', 'macro_element_ratio', 'protein_ratio', 'fat_ratio', 'get_total_amount')
 
     def recipe_nutrition_list(self, instance):
         html = u'''

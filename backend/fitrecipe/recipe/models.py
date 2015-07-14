@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 14:30:44
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-07-13 00:00:14
+# @Last Modified time: 2015-07-14 20:27:36
 from django.conf import settings
 from django.db import models
 
@@ -123,16 +123,6 @@ class Recipe(BaseModel):
             return u'%.2f%%' % (float(ratio[2])/ sum(ratio) * 100)
         except (ZeroDivisionError, TypeError):
             return u'0%'
-
-    def calories_per_kilo(self):
-        '''
-        每百克热量
-        '''
-        total_amount = self.get_total_amount(float_format=True)
-        try:
-            return u'%.2fkcal/100g' % (float(self.calories) / total_amount * 100)
-        except (TypeError, ZeroDivisionError):
-            return u'0kcal/100g'
 
     def update_calories(self):
         # 对于删除所有配料的情况需要有特殊处理，因为最后一个删除的时候，不会进入循环，因此会留下最后一个配料的卡路里

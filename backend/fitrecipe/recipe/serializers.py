@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 15:52:14
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-07-12 12:10:59
+# @Last Modified time: 2015-07-14 20:27:49
 from rest_framework import serializers
 from .models import Recipe, Component, Procedure, Ingredient, Nutrition
 from accounts.serializers import OtherAuthorSerializer
@@ -49,7 +49,6 @@ class RecipeSerializer(BaseSerializer):
     total_amount = serializers.CharField(source='get_total_amount')
     protein_ratio = serializers.CharField()
     fat_ratio = serializers.CharField()
-    calories_per_kilo = serializers.CharField()
     author = OtherAuthorSerializer(value=('id', 'nick_name', 'avatar'), read_only=True)
 
     class Meta:
