@@ -12,7 +12,7 @@ import java.util.List;
 
 import cn.fitrecipe.android.Adpater.RecipeCardAdapter;
 import cn.fitrecipe.android.Config.LocalDemo;
-import cn.fitrecipe.android.UI.rcListLinearLayoutManager;
+import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.model.RecipeCard;
 
 public class ThemeActivity extends Activity implements View.OnClickListener {
@@ -20,7 +20,7 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
     private ImageView back_btn;
 
     private RecyclerView frThemeRecipeRecyclerView;
-    private rcListLinearLayoutManager frThemeRecipeLayoutManager;
+    private RecyclerViewLayoutManager frThemeRecipeLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +42,7 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
         back_btn = (ImageView) findViewById(R.id.back_btn);
 
         frThemeRecipeRecyclerView = (RecyclerView) findViewById(R.id.theme_recipe_recycler_view);
-        frThemeRecipeLayoutManager = new rcListLinearLayoutManager(this);
+        frThemeRecipeLayoutManager = new RecyclerViewLayoutManager(this);
         frThemeRecipeLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         frThemeRecipeRecyclerView.setLayoutManager(frThemeRecipeLayoutManager);
 

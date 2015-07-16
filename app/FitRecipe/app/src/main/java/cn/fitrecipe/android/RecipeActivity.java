@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -21,16 +22,20 @@ import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.yalantis.contextmenu.lib.ContextMenuDialogFragment;
 import com.yalantis.contextmenu.lib.MenuObject;
 import com.yalantis.contextmenu.lib.MenuParams;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import cn.fitrecipe.android.Config.HttpUrl;
 import cn.fitrecipe.android.Config.LocalDemo;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.UI.SlidingPage;
@@ -61,9 +66,13 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_container);
-
+        //获取ID
+        Intent intent =getIntent();
+        Map<String,Object> params=new HashMap<String, Object>();
+        params.put("id",intent.getStringExtra("id"));
+        //初始化
         initView();
-        initData();
+        initData(HttpUrl.generateURLString(HttpUrl.RECIPE_INFO_TYPE,params));
         initEvent();
 
         recipe_scrollView.smoothScrollTo(0, 0);
@@ -92,7 +101,8 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         popupWindow.update();
     }
 
-    private void initData() {
+    private void initData(String url) {
+        Toast.makeText(this, "URL: "+ url, Toast.LENGTH_LONG).show();
         ingredient_dataList=new ArrayList<Map<String,Object>>();
         nutrition_dataList=new ArrayList<Map<String,Object>>();
 

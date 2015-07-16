@@ -4,12 +4,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -18,7 +15,7 @@ import java.util.List;
 import cn.fitrecipe.android.Adpater.RecipeCardAdapter;
 import cn.fitrecipe.android.Config.LocalDemo;
 import cn.fitrecipe.android.UI.SlidingMenu;
-import cn.fitrecipe.android.UI.rcListLinearLayoutManager;
+import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.model.RecipeCard;
 
 public class CategoryResultActivity extends Activity implements View.OnClickListener {
@@ -30,7 +27,7 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
     private ImageView filter_btn_2;
 
     private RecyclerView frThemeRecipeRecyclerView;
-    private rcListLinearLayoutManager frThemeRecipeLayoutManager;
+    private RecyclerViewLayoutManager frThemeRecipeLayoutManager;
     private RecipeCardAdapter recipeCardAdapter;
     private List<RecipeCard> dataList;
 
@@ -73,7 +70,7 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
         mRightMenu = (SlidingMenu) findViewById(R.id.container_layout);
 
         frThemeRecipeRecyclerView = (RecyclerView) findViewById(R.id.theme_recipe_recycler_view);
-        frThemeRecipeLayoutManager = new rcListLinearLayoutManager(this);
+        frThemeRecipeLayoutManager = new RecyclerViewLayoutManager(this);
         frThemeRecipeLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         frThemeRecipeRecyclerView.setLayoutManager(frThemeRecipeLayoutManager);
 

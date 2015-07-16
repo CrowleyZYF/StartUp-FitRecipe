@@ -3,16 +3,13 @@ package cn.fitrecipe.android.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.umeng.fb.FeedbackAgent;
@@ -20,7 +17,6 @@ import com.umeng.fb.FeedbackAgent;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,12 +28,9 @@ import cn.fitrecipe.android.Adpater.ThemeCardAdapter;
 import cn.fitrecipe.android.CategoryActivity;
 import cn.fitrecipe.android.Config.HttpUrl;
 import cn.fitrecipe.android.Config.LocalDemo;
-import cn.fitrecipe.android.LandingPageActivity;
-import cn.fitrecipe.android.MainActivity;
 import cn.fitrecipe.android.R;
-import cn.fitrecipe.android.ThemeActivity;
-import cn.fitrecipe.android.UI.rcListLinearLayoutManager;
-import cn.fitrecipe.android.UI.rcRecommendViewPagerAdapter;
+import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
+import cn.fitrecipe.android.Adpater.RecommendViewPagerAdapter;
 import cn.fitrecipe.android.model.RecipeCard;
 import cn.fitrecipe.android.model.ThemeCard;
 import me.relex.circleindicator.CircleIndicator;
@@ -47,20 +40,21 @@ import me.relex.circleindicator.CircleIndicator;
  */
 public class IndexFragment extends Fragment implements ViewPager.OnPageChangeListener, View.OnClickListener {
     //推荐
-    private ViewPager frRecommendViewPager;
-    private rcRecommendViewPagerAdapter rcViewPagerAdapter;
-    private CircleIndicator defaultIndicator;
+    private ViewPager recommendViewPager;
+    private RecommendViewPagerAdapter recommendViewPagerAdapter;
+    private CircleIndicator recommendIndicator;
     //更新
-    private RecyclerView frUpdateRecipeRecyclerView;
-    private rcListLinearLayoutManager frUpdateRecipeLayoutManager;
+    private RecyclerView updateRecipeRecyclerView;
+    private RecipeCardAdapter recipeCardAdapter;
+    private RecyclerViewLayoutManager updateRecipeLayoutManager;
     //主题
-    private RecyclerView frThemeRecipeRecyclerView;
-    private rcListLinearLayoutManager frThemeRecipeLayoutManager;
+    private RecyclerView themeRecipeRecyclerView;
+    private ThemeCardAdapter themeCardAdapter;
+    private RecyclerViewLayoutManager themeRecipeLayoutManager;
     //意见反馈
     private TextView feedback_btn;
     //分类
     private Button category_btn;
-    boolean misScrolled = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,46 +69,44 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
         return view;
     }
 
-    private void initEvent() {
-        defaultIndicator.setOnPageChangeListener(this);
-
-        feedback_btn.setOnClickListener(this);
-        category_btn.setOnClickListener(this);
-    }
-
-    private void initData() {
-        List<Map<String, Object>> dataList = getRecommendRecipe();
-        rcViewPagerAdapter = new rcRecommendViewPagerAdapter(getActivity(), dataList, frRecommendViewPager.getLayoutParams().width, frRecommendViewPager.getLayoutParams().height);
-        frRecommendViewPager.setAdapter(rcViewPagerAdapter);
-        defaultIndicator.setViewPager(frRecommendViewPager);
-
-        RecipeCardAdapter recipeCardAdapter = new RecipeCardAdapter(getActivity(), getUpdateRecipe());
-        frUpdateRecipeRecyclerView.setAdapter(recipeCardAdapter);
-
-        ThemeCardAdapter themeCardAdapter = new ThemeCardAdapter(getActivity(), getThemeRecipe());
-        frThemeRecipeRecyclerView.setAdapter(themeCardAdapter);
-    }
-
-
-
     private void initView(View view) {
-        frRecommendViewPager = (ViewPager) view.findViewById(R.id.recommend);
-        defaultIndicator = (CircleIndicator) view.findViewById(R.id.indicator_default);
-
-        frUpdateRecipeRecyclerView = (RecyclerView) view.findViewById(R.id.update_recipe_recycler_view);
-        frUpdateRecipeLayoutManager = new rcListLinearLayoutManager(this.getActivity());
-        frUpdateRecipeLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        frUpdateRecipeRecyclerView.setLayoutManager(frUpdateRecipeLayoutManager);
-
-        frThemeRecipeRecyclerView = (RecyclerView) view.findViewById(R.id.theme_recipe_recycler_view);
-        frThemeRecipeLayoutManager = new rcListLinearLayoutManager(this.getActivity());
-        frThemeRecipeLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        frThemeRecipeRecyclerView.setLayoutManager(frThemeRecipeLayoutManager);
-
+        //初始化推荐组件视图
+        recommendViewPager = (ViewPager) view.findViewById(R.id.recommend);
+        recommendIndicator = (CircleIndicator) view.findViewById(R.id.indicator_default);
+        //初始化更新组件视图
+        updateRecipeRecyclerView = (RecyclerView) view.findViewById(R.id.update_recipe_recycler_view);
+        updateRecipeLayoutManager = new RecyclerViewLayoutManager(this.getActivity());
+        updateRecipeLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        updateRecipeRecyclerView.setLayoutManager(updateRecipeLayoutManager);
+        //初始化主题组件视图
+        themeRecipeRecyclerView = (RecyclerView) view.findViewById(R.id.theme_recipe_recycler_view);
+        themeRecipeLayoutManager = new RecyclerViewLayoutManager(this.getActivity());
+        themeRecipeLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        themeRecipeRecyclerView.setLayoutManager(themeRecipeLayoutManager);
+        //初始化反馈、分类按钮
         feedback_btn = (TextView) view.findViewById(R.id.feedback_btn);
         category_btn = (Button) view.findViewById(R.id.category_btn_2);
     }
 
+    private void initData() {
+        //获得推荐数据，并初始化适配器
+        recommendViewPagerAdapter = new RecommendViewPagerAdapter(getActivity(), getRecommendRecipe(), recommendViewPager.getLayoutParams().width, recommendViewPager.getLayoutParams().height);
+        recommendViewPager.setAdapter(recommendViewPagerAdapter);
+        //初始化推荐的indicator
+        recommendIndicator.setViewPager(recommendViewPager);
+        //获得更新数据，并初始化适配器
+        recipeCardAdapter = new RecipeCardAdapter(getActivity(), getUpdateRecipe());
+        updateRecipeRecyclerView.setAdapter(recipeCardAdapter);
+        //获得主题数据，并初始化适配器
+        themeCardAdapter = new ThemeCardAdapter(getActivity(), getThemeRecipe());
+        themeRecipeRecyclerView.setAdapter(themeCardAdapter);
+    }
+
+    private void initEvent() {
+        recommendIndicator.setOnPageChangeListener(this);
+        feedback_btn.setOnClickListener(this);
+        category_btn.setOnClickListener(this);
+    }
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -165,27 +157,14 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
     }
 
     private List<Map<String, Object>> getRecommendRecipe(){
-        List<Map<String, Object>> dataList=new ArrayList<Map<String,Object>>();
+        List<Map<String, Object>> result=new ArrayList<Map<String,Object>>();
         for(int i=0;i<5;i++){
             Map<String, Object> map=new HashMap<String, Object>();
             map.put("id", i);
+            map.put("type", LocalDemo.recommendType[i]);
             map.put("imgUrl", LocalDemo.recommendBG[i]);
-            dataList.add(map);
+            result.add(map);
         }
-        /*String teString = HttpUrl.RECOMMEND_RECIPE_VIEWPAGER_JSON;
-        try {
-            JSONArray jsonArray=new JSONArray(teString);
-            for(int i=0;i<jsonArray.length();i++){
-                Map<String, Object> map=new HashMap<String, Object>();
-                JSONObject ob = new JSONObject();
-                ob = (JSONObject) jsonArray.get(i);
-                map.put("id", ob.get("id"));
-                map.put("imgUrl", ob.get("imgUrl"));
-                dataList.add(map);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }*/
-        return dataList;
+        return result;
     }
 }

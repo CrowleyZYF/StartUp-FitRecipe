@@ -1,11 +1,13 @@
 package cn.fitrecipe.android.Config;
 
+import java.util.Map;
+
 /**
  * Created by 奕峰 on 2015/4/24.
  */
 public class HttpUrl {
     //URL
-    public static final String API_HOST = "http://42.121.108.228/";
+    public static final String API_HOST = "https://42.121.108.228/api/";
     //登陆 POST
     public static final String LOGIN_URL = API_HOST+"activity_login";
     public static final String OTHER_LOGIN_URL = API_HOST+"activity_login";
@@ -22,6 +24,28 @@ public class HttpUrl {
     public static final String THEME_RECIPE_VIEWPAGER = API_HOST+"indexThemeRecipe";
     //首页更新内容 GET
     public static final String UPDATE_RECIPE_VIEWPAGER = API_HOST+"indexUpdateRecipe";
+    //食谱信息内容 GET
+    public static final int RECIPE_INFO_TYPE = 0;
+    public static final String RECIPE_INFO_URL_PREFIX = API_HOST+"recipe/";
+    //指南信息内容 GET
+    public static final int ARTICLE_INFO_TYPE = 1;
+    public static final String ARTICLE_INFO_URL_PREFIX = API_HOST+"article/";
+
+
+    public static String generateURLString(int type, Map<String, Object> params) {
+        String url = "";
+        switch (type){
+            //食谱信息
+            case RECIPE_INFO_TYPE:
+                url = RECIPE_INFO_URL_PREFIX + params.get("id").toString();
+                break;
+            //文章信息
+            case 1:
+                url = RECIPE_INFO_URL_PREFIX + params.get("id").toString();
+                break;
+        }
+        return url;
+    }
 
 
 

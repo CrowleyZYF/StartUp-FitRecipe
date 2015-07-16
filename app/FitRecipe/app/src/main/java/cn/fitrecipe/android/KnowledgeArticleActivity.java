@@ -2,9 +2,7 @@ package cn.fitrecipe.android;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -15,13 +13,13 @@ import java.util.List;
 
 import cn.fitrecipe.android.Adpater.ArticleCardAdapter;
 import cn.fitrecipe.android.Config.LocalDemo;
-import cn.fitrecipe.android.UI.rcListLinearLayoutManager;
+import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.model.ArticleCard;
 
 public class KnowledgeArticleActivity extends Activity implements View.OnClickListener {
 
     private RecyclerView frKnowledgeArticleRecyclerView;
-    private rcListLinearLayoutManager frKnowledgeArticleLayoutManager;
+    private RecyclerViewLayoutManager frKnowledgeArticleLayoutManager;
     private ArticleCardAdapter ArticleCardAdapter;
     private List<ArticleCard> dataList;
 
@@ -54,7 +52,7 @@ public class KnowledgeArticleActivity extends Activity implements View.OnClickLi
 
     private void initView() {
         frKnowledgeArticleRecyclerView = (RecyclerView) findViewById(R.id.knowledge_article_recycler_view);
-        frKnowledgeArticleLayoutManager = new rcListLinearLayoutManager(this);
+        frKnowledgeArticleLayoutManager = new RecyclerViewLayoutManager(this);
         frKnowledgeArticleLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         frKnowledgeArticleRecyclerView.setLayoutManager(frKnowledgeArticleLayoutManager);
 

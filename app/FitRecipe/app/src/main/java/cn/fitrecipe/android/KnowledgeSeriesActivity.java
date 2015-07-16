@@ -2,9 +2,7 @@ package cn.fitrecipe.android;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -13,17 +11,15 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.fitrecipe.android.Adpater.RecipeCardAdapter;
 import cn.fitrecipe.android.Adpater.SeriesCardAdapter;
 import cn.fitrecipe.android.Config.LocalDemo;
-import cn.fitrecipe.android.UI.rcListLinearLayoutManager;
-import cn.fitrecipe.android.model.RecipeCard;
+import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.model.SeriesCard;
 
 public class KnowledgeSeriesActivity extends Activity implements View.OnClickListener {
 
     private RecyclerView frKnowledgeSeriesRecyclerView;
-    private rcListLinearLayoutManager frKnowledgeSeriesLayoutManager;
+    private RecyclerViewLayoutManager frKnowledgeSeriesLayoutManager;
     private SeriesCardAdapter seriesCardAdapter;
     private List<SeriesCard> dataList;
 
@@ -56,7 +52,7 @@ public class KnowledgeSeriesActivity extends Activity implements View.OnClickLis
 
     private void initView() {
         frKnowledgeSeriesRecyclerView = (RecyclerView) findViewById(R.id.knowledge_series_recycler_view);
-        frKnowledgeSeriesLayoutManager = new rcListLinearLayoutManager(this);
+        frKnowledgeSeriesLayoutManager = new RecyclerViewLayoutManager(this);
         frKnowledgeSeriesLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         frKnowledgeSeriesRecyclerView.setLayoutManager(frKnowledgeSeriesLayoutManager);
 

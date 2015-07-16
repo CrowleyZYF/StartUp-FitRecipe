@@ -32,6 +32,12 @@ public class LocalDemo {
             R.drawable.rtest003,
             R.drawable.rtest004,
             R.drawable.rtest005};
+    public static final int[] recommendType = {
+            0,
+            0,
+            0,
+            0,
+            1};
     public static final String[] recipeName = {
             "鲍菇烤肉三明治",
             "菠菜金枪鱼芝麻酱卷饼",

@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 /**
  * Created by 奕峰 on 2015/4/24.
  */
-public class rcListLinearLayoutManager extends LinearLayoutManager {
-    public rcListLinearLayoutManager(Context context) {
+public class RecyclerViewLayoutManager extends LinearLayoutManager {
+    public RecyclerViewLayoutManager(Context context) {
         super(context);
     }
 

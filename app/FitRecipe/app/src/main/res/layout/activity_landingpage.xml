@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/text_color">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -18,7 +19,8 @@
             android:id="@+id/indicator_default"
             android:layout_width="fill_parent"
             android:layout_height="40dp"
-            android:layout_alignParentBottom="true"/>
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="120dp"/>
 
     </RelativeLayout>
 
@@ -32,23 +34,44 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp">
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:id="@+id/index_button"
+                android:textColor="@color/landing_intro_black"
+                android:layout_height="40dp"
+                android:text="我先逛逛"
+                android:background="@drawable/landingpage_in_button"
+                android:textSize="18sp"
+                android:layout_gravity="center"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
 
             <Button
                 android:id="@+id/login_button"
-                android:background="@drawable/landingpage_button"
+                android:background="@drawable/landingpage_login_button"
                 android:textColor="@color/white"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:text="登陆"
                 android:textSize="16sp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="30dp"
                 android:layout_marginRight="10dp"/>
 
             <Button
                 android:id="@+id/register_button"
-                android:background="@drawable/landingpage_button"
+                android:background="@drawable/landingpage_login_button"
                 android:textColor="@color/white"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -56,44 +79,10 @@
                 android:text="注册"
                 android:textSize="16sp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"/>
+                android:layout_marginRight="30dp"/>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp">
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="1dp"
-                android:background="@drawable/line_white"
-                android:layout_gravity="center_vertical"/>
-
-            <TextView
-                android:id="@+id/index_button"
-                android:textColor="@color/white"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="我先逛逛"
-                android:textSize="16sp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"/>
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="1dp"
-                android:background="@drawable/line_white"
-                android:layout_gravity="center_vertical"/>
-
-
-        </LinearLayout>
 
 
     </LinearLayout>

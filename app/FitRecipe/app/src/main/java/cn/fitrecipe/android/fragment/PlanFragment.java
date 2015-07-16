@@ -22,7 +22,7 @@ import cn.fitrecipe.android.Config.LocalDemo;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.UI.SlidingPage;
-import cn.fitrecipe.android.UI.rcPlanViewPagerAdapter;
+import cn.fitrecipe.android.Adpater.PlanViewPagerAdapter;
 
 /**
  * Created by 奕峰 on 2015/4/11.
@@ -32,13 +32,13 @@ public class PlanFragment extends Fragment implements View.OnClickListener {
     private SlidingPage mRightMenu;
 
     private ViewPager frFirstViewPager;
-    private rcPlanViewPagerAdapter rcFirstViewPagerAdapter;
+    private PlanViewPagerAdapter rcFirstViewPagerAdapter;
 
     private ViewPager frSecondViewPager;
-    private rcPlanViewPagerAdapter rcSecondViewPagerAdapter;
+    private PlanViewPagerAdapter rcSecondViewPagerAdapter;
 
     private ViewPager frThirdViewPager;
-    private rcPlanViewPagerAdapter rcThirdViewPagerAdapter;
+    private PlanViewPagerAdapter rcThirdViewPagerAdapter;
 
     private List<View> listViews1 = null;
     private List<View> listViews2 = null;
@@ -110,11 +110,11 @@ public class PlanFragment extends Fragment implements View.OnClickListener {
         listViews3 = new ArrayList<View>();
 
         initMeal();
-        rcFirstViewPagerAdapter = new rcPlanViewPagerAdapter(listViews1,this.getActivity());
+        rcFirstViewPagerAdapter = new PlanViewPagerAdapter(listViews1,this.getActivity());
         frFirstViewPager.setAdapter(rcFirstViewPagerAdapter);
-        rcSecondViewPagerAdapter = new rcPlanViewPagerAdapter(listViews2,this.getActivity());
+        rcSecondViewPagerAdapter = new PlanViewPagerAdapter(listViews2,this.getActivity());
         frSecondViewPager.setAdapter(rcSecondViewPagerAdapter);
-        rcThirdViewPagerAdapter = new rcPlanViewPagerAdapter(listViews3,this.getActivity());
+        rcThirdViewPagerAdapter = new PlanViewPagerAdapter(listViews3,this.getActivity());
         frThirdViewPager.setAdapter(rcThirdViewPagerAdapter);
 
         nutrition_dataList=new ArrayList<Map<String,Object>>();

@@ -1,4 +1,4 @@
-package cn.fitrecipe.android.UI;
+package cn.fitrecipe.android.Adpater;
 
 import android.content.Context;
 import android.content.Intent;
@@ -21,12 +21,12 @@ import cn.fitrecipe.android.function.Common;
 /**
  * Created by 奕峰 on 2015/5/6.
  */
-public class rcPlanViewPagerAdapter extends PagerAdapter {
+public class PlanViewPagerAdapter extends PagerAdapter {
 
     private List<View> list;
     private Context context;
 
-    public rcPlanViewPagerAdapter(List<View> list, Context context) {
+    public PlanViewPagerAdapter(List<View> list, Context context) {
         this.context = context;
         this.list = list;
     }
