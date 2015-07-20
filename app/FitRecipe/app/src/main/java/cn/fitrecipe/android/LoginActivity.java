@@ -40,8 +40,8 @@ import java.util.Map;
 
 
 public class LoginActivity extends Activity implements View.OnClickListener {
-
     UMSocialService mController;
+
     private LinearLayout sina_login;
     private LinearLayout wechat_login;
     private LinearLayout qq_login;

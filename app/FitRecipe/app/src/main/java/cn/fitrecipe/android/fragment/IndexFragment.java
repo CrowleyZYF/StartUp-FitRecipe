@@ -157,6 +157,9 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
     }
 
     private List<Map<String, Object>> getRecommendRecipe(){
+        //http
+        //time
+
         List<Map<String, Object>> result=new ArrayList<Map<String,Object>>();
         for(int i=0;i<5;i++){
             Map<String, Object> map=new HashMap<String, Object>();
