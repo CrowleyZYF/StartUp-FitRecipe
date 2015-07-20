@@ -34,8 +34,8 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
     }
 
     private void initData() {
-        RecipeCardAdapter recipeCardAdapter = new RecipeCardAdapter(this, getThemeRecipe());
-        frThemeRecipeRecyclerView.setAdapter(recipeCardAdapter);
+//        RecipeCardAdapter recipeCardAdapter = new RecipeCardAdapter(this, getThemeRecipe());
+//        frThemeRecipeRecyclerView.setAdapter(recipeCardAdapter);
     }
 
     private void initView() {

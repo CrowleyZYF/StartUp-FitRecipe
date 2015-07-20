@@ -24,8 +24,8 @@ public class Common {
                 .setConfirmText("确定");
     }
 
-    public static boolean isOpenNetwork(Activity activity) {
-        ConnectivityManager connManager = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+    public static boolean isOpenNetwork(Context context) {
+        ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if(connManager.getActiveNetworkInfo() != null) {
             return connManager.getActiveNetworkInfo().isAvailable();
         }

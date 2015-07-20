@@ -90,7 +90,7 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
     private void initData() {
         dataList = new ArrayList<RecipeCard>();
         getThemeRecipe(sort_type,sort_des);
-        recipeCardAdapter = new RecipeCardAdapter(this, dataList);
+//        recipeCardAdapter = new RecipeCardAdapter(this, dataList);
         frThemeRecipeRecyclerView.setAdapter(recipeCardAdapter);
     }
 

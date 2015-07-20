@@ -134,7 +134,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener {
             View view1 = LayoutInflater.from(this.getActivity()).inflate(
                     R.layout.fragment_plan_recipe_list_card, null);
             BlurLayout iv1 = (BlurLayout) view1.findViewById(R.id.sample);
-            iv1.setBackgroundResource(LocalDemo.recipeBG[i]);
+//            iv1.setBackgroundResource(LocalDemo.recipeBG[i]);
             TextView tv1 = (TextView) view1.findViewById(R.id.recipe_name);
             tv1.setText(LocalDemo.recipeName[i]);
             listViews1.add(view1);
@@ -143,7 +143,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener {
             View view2 = LayoutInflater.from(this.getActivity()).inflate(
                     R.layout.fragment_plan_recipe_list_card, null);
             BlurLayout iv2 = (BlurLayout) view2.findViewById(R.id.sample);
-            iv2.setBackgroundResource(LocalDemo.recipeBG[i]);
+//            iv2.setBackgroundResource(LocalDemo.recipeBG[i]);
             TextView tv2 = (TextView) view2.findViewById(R.id.recipe_name);
             tv2.setText(LocalDemo.recipeName[i]);
             listViews2.add(view2);
@@ -152,7 +152,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener {
             View view3 = LayoutInflater.from(this.getActivity()).inflate(
                     R.layout.fragment_plan_recipe_list_card, null);
             BlurLayout iv3 = (BlurLayout) view3.findViewById(R.id.sample);
-            iv3.setBackgroundResource(LocalDemo.recipeBG[i]);
+//            iv3.setBackgroundResource(LocalDemo.recipeBG[i]);
             TextView tv3 = (TextView) view3.findViewById(R.id.recipe_name);
             tv3.setText(LocalDemo.recipeName[i]);
             listViews3.add(view3);

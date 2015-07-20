@@ -28,7 +28,7 @@ public class ArticleActivity extends Activity{
         params.put("id",intent.getStringExtra("id"));
         //初始化
         initView();
-        initData(HttpUrl.generateURLString(HttpUrl.RECIPE_INFO_TYPE, params));
+//        initData(HttpUrl.generateURLString(HttpUrl.RECIPE_INFO_TYPE, params));
         initEvent();
     }
 

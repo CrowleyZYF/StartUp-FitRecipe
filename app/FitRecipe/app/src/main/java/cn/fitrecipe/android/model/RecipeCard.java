@@ -11,7 +11,7 @@ public class RecipeCard {
     protected int recipe_time;
     protected int recipe_calorie;
     protected int recipe_like;
-    protected int recipe_background;
+    protected String recipe_background;
     protected static final String RECIPE_TIME_PREFIX = "烹饪时间：";
     protected static final String RECIPE_TIME_SUFFIX = "min";
     protected static final String RECIPE_CALORIE_PREFIX = "热量：";
@@ -24,10 +24,10 @@ public class RecipeCard {
         this.recipe_time=0;
         this.recipe_calorie=0;
         this.recipe_like=0;
-        this.recipe_background= R.drawable.update_init;
+//        this.recipe_background= R.drawable.update_init;
     }
 
-    public RecipeCard(String name, int function, int time, int calorie, int like, int background){
+    public RecipeCard(String name, int function, int time, int calorie, int like, String background){
         this.recipe_name=name;
         this.recipe_function=function;
         this.recipe_time=time;
@@ -62,7 +62,7 @@ public class RecipeCard {
         return RECIPE_LIKE_PREFIX+this.recipe_like;
     }
 
-    public int getRecipe_background() {return this.recipe_background; }
+    public String getRecipe_background() {return this.recipe_background; }
 }
 
 
