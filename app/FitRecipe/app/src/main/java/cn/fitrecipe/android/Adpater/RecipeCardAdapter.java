@@ -9,8 +9,11 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 import java.util.List;
 
+import cn.fitrecipe.android.ImageLoader.MyImageLoader;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.RecipeActivity;
 import cn.fitrecipe.android.model.RecipeCard;
@@ -22,10 +25,13 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Re
 
     private List<RecipeCard> recipeCardsList;
     private Context context;
+    private MyImageLoader mImageLoader;
 
-    public RecipeCardAdapter(Context context, List<RecipeCard> recipeCardsList) {
+
+    public RecipeCardAdapter(Context context, MyImageLoader mImageLoader, List<RecipeCard> recipeCardsList) {
         this.context = context;
         this.recipeCardsList = recipeCardsList;
+        this.mImageLoader = mImageLoader;
     }
 
     @Override
@@ -47,7 +53,8 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Re
         contactViewHolder.recipe_calorie.setText(rc.getRecipe_calorie());
         contactViewHolder.recipe_time.setText(rc.getRecipe_time());
         contactViewHolder.recipe_like.setText(rc.getRecipe_like());
-        contactViewHolder.recipe_background.setBackground (this.context.getResources().getDrawable(rc.getRecipe_background()));
+//        contactViewHolder.recipe_background.setBackground (this.context.getResources().getDrawable(rc.getRecipe_background()));
+        mImageLoader.load(contactViewHolder.recipe_background, rc.getRecipe_background());
     }
 
     @Override

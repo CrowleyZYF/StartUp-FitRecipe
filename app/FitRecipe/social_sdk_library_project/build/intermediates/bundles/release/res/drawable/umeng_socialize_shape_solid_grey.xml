@@ -2,4 +2,4 @@
 	<solid android:color="#84898F"/>
 	<corners android:radius="15dp"/>
 	<padding android:bottom="5dp"  android:top="5dp"/>
-</shape><!-- From: file:/E:/fitRecipe/app/FitRecipe/social_sdk_library_project/src/main/res/drawable/umeng_socialize_shape_solid_grey.xml -->
+</shape><!-- From: file:/D:/Github/fitRecipe/app/FitRecipe/social_sdk_library_project/src/main/res/drawable/umeng_socialize_shape_solid_grey.xml -->

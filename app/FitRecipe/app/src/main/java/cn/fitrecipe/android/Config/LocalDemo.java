@@ -12,26 +12,24 @@ public class LocalDemo {
             R.drawable.icon_lunch,
             R.drawable.icon_add_meal2,
             R.drawable.icon_dinner};
-    public static final int[] recipeBG = {
-            R.drawable.ztest001,
-            R.drawable.ztest002,
-            R.drawable.ztest003,
-            R.drawable.ztest004,
-            R.drawable.ztest005,
-            R.drawable.ztest006,
-            R.drawable.ztest007,
-            R.drawable.ztest008,
-            R.drawable.ztest009};
-    public static final int[] themeBG = {
-            R.drawable.ttest001,
-            R.drawable.ttest002,
-            R.drawable.ttest003};
-    public static final int[] recommendBG = {
-            R.drawable.rtest001,
-            R.drawable.rtest002,
-            R.drawable.rtest003,
-            R.drawable.rtest004,
-            R.drawable.rtest005};
+    public static final String[] recipeBG = {
+            "http://ww2.sinaimg.cn/bmiddle/81f8b0e2gw1eu717azky7j20px0hagr3.jpg",
+            "http://ww3.sinaimg.cn/bmiddle/81f8b0e2gw1eu717cba55j20q70g9gqu.jpg",
+            "http://ww2.sinaimg.cn/bmiddle/81f8b0e2gw1eu717djpk8j20st0j8gqh.jpg",
+            "http://ww2.sinaimg.cn/bmiddle/81f8b0e2gw1eu717el13xj20px0h942u.jpg",
+            "http://ww2.sinaimg.cn/bmiddle/81f8b0e2gw1eu717gai3lj20px0haahp.jpg"
+    };
+    public static final String[] themeBG = {
+            "http://ww2.sinaimg.cn/bmiddle/81f8b0e2gw1eu716w0xvsj20jg050q46.jpg",
+            "http://ww2.sinaimg.cn/bmiddle/81f8b0e2gw1eu716xa4zzj20jg050dh9.jpg",
+            "http://ww3.sinaimg.cn/bmiddle/81f8b0e2gw1eu716yctu3j20jg050dh1.jpg"};
+    public static final String[] recommendBG = {
+            "http://ww1.sinaimg.cn/bmiddle/81f8b0e2jw1eu70xq9qzcj20ku0b1780.jpg",
+            "http://ww2.sinaimg.cn/bmiddle/81f8b0e2jw1eu70y4bqt2j20ku0b10w3.jpg",
+            "http://ww4.sinaimg.cn/bmiddle/81f8b0e2jw1eu70y50c18j20ku0b10ui.jpg",
+            "http://ww1.sinaimg.cn/bmiddle/81f8b0e2jw1eu70z9byljj20ku0b10wd.jpg",
+            "http://ww3.sinaimg.cn/bmiddle/81f8b0e2jw1eu70z9ta7mj20ku0b1wi5.jpg"
+            };
     public static final int[] recommendType = {
             0,
             0,

@@ -1,5 +1,6 @@
 package cn.fitrecipe.android.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.ImageLoader;
 import com.umeng.fb.FeedbackAgent;
 
 import org.json.JSONArray;
@@ -28,6 +30,8 @@ import cn.fitrecipe.android.Adpater.ThemeCardAdapter;
 import cn.fitrecipe.android.CategoryActivity;
 import cn.fitrecipe.android.Config.HttpUrl;
 import cn.fitrecipe.android.Config.LocalDemo;
+import cn.fitrecipe.android.ImageLoader.IImageLoad;
+import cn.fitrecipe.android.ImageLoader.MyImageLoader;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.Adpater.RecommendViewPagerAdapter;
@@ -56,6 +60,13 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
     //分类
     private Button category_btn;
 
+    private MyImageLoader mImageLoader;
+
+    private List<String> urls;
+    List<Map<String, Object>>  recommendRecipe;
+    List<ThemeCard> themeCards;
+    List<RecipeCard> recipeCards;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -63,9 +74,7 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
         View view = inflater.inflate(R.layout.fragment_index, container, false);
 
         initView(view);
-        initData();
-        initEvent();
-
+        getData();
         return view;
     }
 
@@ -90,16 +99,41 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
 
     private void initData() {
         //获得推荐数据，并初始化适配器
-        recommendViewPagerAdapter = new RecommendViewPagerAdapter(getActivity(), getRecommendRecipe(), recommendViewPager.getLayoutParams().width, recommendViewPager.getLayoutParams().height);
+        recommendViewPagerAdapter = new RecommendViewPagerAdapter(getActivity(), mImageLoader, recommendRecipe, recommendViewPager.getLayoutParams().width, recommendViewPager.getLayoutParams().height);
         recommendViewPager.setAdapter(recommendViewPagerAdapter);
         //初始化推荐的indicator
         recommendIndicator.setViewPager(recommendViewPager);
         //获得更新数据，并初始化适配器
-        recipeCardAdapter = new RecipeCardAdapter(getActivity(), getUpdateRecipe());
+        recipeCardAdapter = new RecipeCardAdapter(getActivity(), mImageLoader, recipeCards);
         updateRecipeRecyclerView.setAdapter(recipeCardAdapter);
         //获得主题数据，并初始化适配器
-        themeCardAdapter = new ThemeCardAdapter(getActivity(), getThemeRecipe());
+        themeCardAdapter = new ThemeCardAdapter(getActivity(), mImageLoader, themeCards);
         themeRecipeRecyclerView.setAdapter(themeCardAdapter);
+    }
+
+    private void getData() {
+        //提前获取网络图片
+        urls = new ArrayList<String>();
+
+        final ProgressDialog pd = ProgressDialog.show(this.getActivity(), "", "请稍后....");
+        pd.show();
+        recommendRecipe = getRecommendRecipe();
+        themeCards = getThemeRecipe();
+        recipeCards = getUpdateRecipe();
+        mImageLoader = new MyImageLoader(new IImageLoad(){
+            @Override
+            public void onSuccess() {
+                initData();
+                initEvent();
+                pd.dismiss();
+            }
+
+            @Override
+            public void onFailed() {
+
+            }
+        }, 13);
+        mImageLoader.loadingBackend(urls);
     }
 
     private void initEvent() {
@@ -143,6 +177,7 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
         for (int i=0;i<3;i++){
             ThemeCard tc = new ThemeCard(LocalDemo.themeBG[i]);
             result.add(tc);
+            urls.add(LocalDemo.themeBG[i]);
         }
         return result;
     }
@@ -152,6 +187,7 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
         for (int i=0;i<5;i++){
             RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],0,(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
             result.add(rc);
+            urls.add(LocalDemo.recipeBG[i]);
         }
         return result;
     }
@@ -164,7 +200,15 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
             map.put("type", LocalDemo.recommendType[i]);
             map.put("imgUrl", LocalDemo.recommendBG[i]);
             result.add(map);
+            urls.add(LocalDemo.recommendBG[i]);
         }
+
         return result;
+    }
+
+    @Override
+    public void onDestroy() {
+        mImageLoader.clearDiskCache();
+        super.onDestroy();
     }
 }

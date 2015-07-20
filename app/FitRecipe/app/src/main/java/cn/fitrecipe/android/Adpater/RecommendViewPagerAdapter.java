@@ -2,13 +2,12 @@ package cn.fitrecipe.android.Adpater;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.support.v4.view.PagerAdapter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -16,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.fitrecipe.android.ArticleActivity;
-import cn.fitrecipe.android.ImageLoader.ImageLoader;
+import cn.fitrecipe.android.ImageLoader.MyImageLoader;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.RecipeActivity;
 
@@ -29,12 +28,14 @@ public class RecommendViewPagerAdapter extends PagerAdapter implements View.OnCl
     private List<View> recommendLinearLayout = new ArrayList<View>();
     private int width;
     private int height;
+    private MyImageLoader mImageLoader;
 
-    public RecommendViewPagerAdapter(Context context, List<Map<String, Object>> dataList, int width, int height){
+    public RecommendViewPagerAdapter(Context context, MyImageLoader mImageLoader, List<Map<String, Object>> dataList, int width, int height){
         this.context = context;
         this.dataList = dataList;
         this.width = width;
         this.height = height;
+        this.mImageLoader = mImageLoader;
     }
 
     @Override
@@ -42,8 +43,10 @@ public class RecommendViewPagerAdapter extends PagerAdapter implements View.OnCl
         View recommendContainer = LayoutInflater.from(context).inflate(R.layout.fragment_index_recommend_item, null);
         //背景图片
         ImageView imageView = (ImageView) recommendContainer.findViewById(R.id.recommend_image);
-        imageView.setImageResource(Integer.parseInt((dataList.get(position)).get("imgUrl").toString()));
+//        imageView.setImageResource();
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        mImageLoader.load(imageView, (String) dataList.get(position).get("imgUrl"));
+
         //ID
         TextView idTextView = (TextView) recommendContainer.findViewById(R.id.recommend_id);
         idTextView.setText(dataList.get(position).get("id").toString());
