@@ -1,9 +1,11 @@
 package cn.fitrecipe.android.ImageLoader;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -40,7 +42,6 @@ public class MyImageLoader {
 
     private DisplayImageOptions options = null;
     private Context mContext;
-    private int loadingTimeout;
     private ILoadingListener iLoadingListener;
 
 
@@ -54,14 +55,9 @@ public class MyImageLoader {
     Timer timer = null;
 
     public MyImageLoader() {
-        this.loadingTimeout = 3000;
         init();
     }
 
-    public MyImageLoader(int loadingTimeout) {
-        this.loadingTimeout = loadingTimeout;
-        init();
-    }
 
     private void init() {
         options = new DisplayImageOptions.Builder()
@@ -89,12 +85,12 @@ public class MyImageLoader {
                 .writeDebugLogs()
                 .build();
 
-        //��ʼ��ImageLoader
+        //init Universal ImageLoader
         ImageLoader.getInstance().init(configuration);
     }
 
-
-    public void loadImages(List<String> urls) {
+    //this is method is load image backend, it only load images in the urls
+    public void loadImages(List<String> urls, int loadingTimeout) {
         if(urls != null) {
             count.set(urls.size());
             timer.schedule(new TimerTask() {
@@ -116,6 +112,7 @@ public class MyImageLoader {
 
     public void displayImage(View view, String imageUrl) {
         ImageLoader.getInstance().displayImage(imageUrl, new ViewAware(view, false) {
+            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             @Override
             protected void setImageDrawableInto(Drawable drawable, View view) {
                 if (view instanceof ImageView)
@@ -124,6 +121,7 @@ public class MyImageLoader {
                     view.setBackground(drawable);
             }
 
+            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             @Override
             protected void setImageBitmapInto(Bitmap bitmap, View view) {
                 if (view instanceof ImageView)
