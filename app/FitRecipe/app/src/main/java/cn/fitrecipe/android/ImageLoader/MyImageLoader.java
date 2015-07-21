@@ -81,8 +81,8 @@ public class MyImageLoader {
         ImageLoaderConfiguration configuration = new ImageLoaderConfiguration.Builder(context)
                 .diskCacheSize(50 * 1024 * 1024)
                 .denyCacheImageMultipleSizesInMemory()
-                .memoryCacheSize(2 * 1024 * 1024)  //设置最大内存缓存大小为2M
-                .threadPoolSize(5)                 //设置线程池的大小
+                .memoryCacheSize(2 * 1024 * 1024)
+                .threadPoolSize(5)
 //                .memoryCacheSize(2 * 1024 * 1024)
                 .threadPoolSize(5)
 //                .threadPriority(Thread.MAX_PRIORITY)

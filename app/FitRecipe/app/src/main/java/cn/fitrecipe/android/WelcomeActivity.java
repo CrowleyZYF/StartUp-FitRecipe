@@ -25,7 +25,7 @@ public class WelcomeActivity extends Activity{
         list = getUrls();
 
         // TODO @WangKun
-        // 加载首页数据，加载完成之后调用goToMainActivity进行跳转，或者加载时间超�?3秒之后调用goToMainActivity进行跳转
+        // 加载首页数据，加载完成之后调用goToMainActivity进行跳转，或者加载时间超过3秒之后调用goToMainActivity进行跳转
         new Handler().postDelayed(new Runnable(){
             @Override
             public void run() {

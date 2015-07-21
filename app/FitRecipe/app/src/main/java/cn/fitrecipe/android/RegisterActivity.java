@@ -225,23 +225,8 @@ public class RegisterActivity extends Activity implements OnClickListener {
             final Map<String, String> params = new HashMap<String, String>();
             params.put("account", accountString);
             params.put("password", passwordString);
-            new Thread(){
-                public void run(){
-                    String teString = HttpUtils.submitPostData(HttpUrl.REGISTER_URL, params, "utf-8");
-                    //test
-                    if(teString.equals("")){
-                        teString = HttpUrl.LOGIN_URL_JSON;
-                    }
-                    try {
-                        result=new JSONObject(teString);
-                        Message msg = new Message();
-                        msg.what = 2;
-                        handler2.sendMessage(msg);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }.start();
+            // TODO @WangKun
+            // 注册，注册成功后调用registerSuccess，账号已存在调用accountError
         }
     }
 
@@ -255,7 +240,7 @@ public class RegisterActivity extends Activity implements OnClickListener {
                     Thread.sleep(1000);
                     Message msg = new Message();
                     msg.what = 1;
-                    handler2.sendMessage(msg);
+                    countdownHandler.sendMessage(msg);
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -264,7 +249,7 @@ public class RegisterActivity extends Activity implements OnClickListener {
         }
     }
 
-    private Handler handler2 = new Handler(){
+    private Handler countdownHandler = new Handler(){
         @Override
         public void handleMessage(Message msg){
             if(msg.what==1){
@@ -276,33 +261,6 @@ public class RegisterActivity extends Activity implements OnClickListener {
                         get_disable.setVisibility(View.GONE);
                         countdown=61;
                     }
-                }
-            }else if(msg.what==2){
-                try {
-                    switch (Integer.parseInt((String) result.get("result"))) {
-                        case HttpUrl.REGISTER_SUCCESS:{
-                            SharedPreferences preferences=getSharedPreferences("user", MODE_PRIVATE);
-                            SharedPreferences.Editor editor = preferences.edit();
-                            editor.putBoolean("isLogined", true);
-                            editor.putString("platform", (String) result.get("platform"));
-                            editor.putString("account", (String) result.get("account"));
-                            editor.putString("username", (String) result.get("username"));
-                            editor.commit();
-                            Toast.makeText(getApplicationContext(), "欢迎："+ ((String) result.get("username")), Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(nowContext, MainActivity.class);
-                            startActivity(intent);
-                            RegisterActivity.this.finish();
-                            break;
-                        }
-                        case HttpUrl.ACCOUNT_EXIST:{
-                            Common.errorDialog(nowContext, "注册失败", "账户已存在").show();
-                            break;
-                        }
-                        default:
-                            break;
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
             }
         }
@@ -321,5 +279,23 @@ public class RegisterActivity extends Activity implements OnClickListener {
         }else {
             return super.onKeyDown(keyCode, event);
         }
+    }
+
+    private void registerSuccess(String platform, String account, String username){
+        SharedPreferences preferences=getSharedPreferences("user", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("isLogined", true);
+        editor.putString("platform", platform);
+        editor.putString("account", account);
+        editor.putString("username", username);
+        editor.commit();
+        Toast.makeText(getApplicationContext(), "欢迎："+ username, Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(nowContext, MainActivity.class);
+        startActivity(intent);
+        RegisterActivity.this.finish();
+    }
+
+    private void accountError(){
+        Common.errorDialog(nowContext, "注册失败", "账户已存在").show();
     }
 }

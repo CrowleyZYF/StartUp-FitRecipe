@@ -22,4 +22,5 @@ app/FitRecipe/.idea
 app/FitRecipe/build
 app/FitRecipe/gradle
 app/FitRecipe/social_sdk_library_project
+app/FitRecipe/social_sdk_library_project/build
 backend/fitrecipe/static
