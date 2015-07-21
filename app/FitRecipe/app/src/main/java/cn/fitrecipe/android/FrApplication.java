@@ -14,6 +14,10 @@ import cn.fitrecipe.android.function.Common;
  * Created by 奕峰 on 2015/5/5.
  */
 public class FrApplication extends Application {
+
+    private static FrApplication instance;
+    private MyImageLoader myImageLoader;
+
     @Override
     public void onCreate() {
         // TODO Auto-generated method stub
@@ -24,8 +28,22 @@ public class FrApplication extends Application {
 
         MyImageLoader.init(this);
 
-        //初始化网络
+        //init network
         if(Common.isOpenNetwork(this))
            FRRequest.getInstance().init(this);
+
+        myImageLoader = new MyImageLoader();
+        instance = this;
     }
+
+
+
+    public static FrApplication getInstance() {
+        return instance;
+    }
+
+    public MyImageLoader getMyImageLoader() {
+        return myImageLoader;
+    }
+
 }

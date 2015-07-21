@@ -40,28 +40,15 @@ public class MyImageLoader {
 
     private DisplayImageOptions options = null;
     private Context mContext;
-<<<<<<< HEAD
     private int loadingTimeout;
     private ILoadingListener iLoadingListener;
-=======
-    private Map<String, List<View>> loadingFailed = null;
-    private boolean completed;
-    private AtomicInteger imageCount;
-    private IImageLoad iImageLoad;
->>>>>>> 6767d1a8c254e463d539cd38ebca93cc5c712ab1
+
 
     //count images that have not been loaded
     private AtomicInteger count;
     //mark the iloadingListener if invoked
     private AtomicBoolean isCompleted;
 
-<<<<<<< HEAD
-=======
-    public MyImageLoader(IImageLoad iImageLoad, int count) {
-        this.iImageLoad = iImageLoad;
-        init2(count);
-    }
->>>>>>> 6767d1a8c254e463d539cd38ebca93cc5c712ab1
 
     //open a time out task
     Timer timer = null;
@@ -76,34 +63,17 @@ public class MyImageLoader {
         init();
     }
 
-<<<<<<< HEAD
     private void init() {
         options = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .cacheOnDisk(true)          //permit cache image in memory and disk
                 .displayer(new FadeInBitmapDisplayer(500)) // set image fade in
-=======
-    //锟斤拷始锟斤拷MyImageLoader
-    private void init2(int count){
-        options = new DisplayImageOptions.Builder()
-                .cacheInMemory(false)
-                .cacheOnDisk(true)
-                .displayer(new FadeInBitmapDisplayer(500))
->>>>>>> 6767d1a8c254e463d539cd38ebca93cc5c712ab1
                 .build();
 
         //init
         count = new AtomicInteger(0);
         isCompleted = new AtomicBoolean(true);
         timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if(isCompleted.compareAndSet(false, true)) {
-                    iLoadingListener.loadComplete();
-                }
-            }
-        }, loadingTimeout);
     }
 
     public static void init(Context context) {
@@ -111,14 +81,11 @@ public class MyImageLoader {
         ImageLoaderConfiguration configuration = new ImageLoaderConfiguration.Builder(context)
                 .diskCacheSize(50 * 1024 * 1024)
                 .denyCacheImageMultipleSizesInMemory()
-<<<<<<< HEAD
                 .memoryCacheSize(2 * 1024 * 1024)  //设置最大内存缓存大小为2M
                 .threadPoolSize(5)                 //设置线程池的大小
-=======
 //                .memoryCacheSize(2 * 1024 * 1024)
                 .threadPoolSize(5)
->>>>>>> 6767d1a8c254e463d539cd38ebca93cc5c712ab1
-                .threadPriority(Thread.MAX_PRIORITY)
+//                .threadPriority(Thread.MAX_PRIORITY)
                 .writeDebugLogs()
                 .build();
 
@@ -130,6 +97,14 @@ public class MyImageLoader {
     public void loadImages(List<String> urls) {
         if(urls != null) {
             count.set(urls.size());
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    if (isCompleted.compareAndSet(false, true)) {
+                        iLoadingListener.loadComplete();
+                    }
+                }
+            }, loadingTimeout);
             isCompleted.set(false);
             Iterator<String> iterator = urls.iterator();
             while (iterator.hasNext()) {

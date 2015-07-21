@@ -14,6 +14,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
+import cn.fitrecipe.android.FrApplication;
 import cn.fitrecipe.android.ImageLoader.MyImageLoader;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.RecipeActivity;
@@ -28,12 +29,10 @@ public class ThemeCardAdapter extends RecyclerView.Adapter<ThemeCardAdapter.Them
 
     private List<ThemeCard> themeCardsList;
     private Context context;
-    private MyImageLoader mImageLoader;
 
-    public ThemeCardAdapter(Context context, MyImageLoader mImageLoader, List<ThemeCard> recipeCardsList) {
+    public ThemeCardAdapter(Context context, List<ThemeCard> recipeCardsList) {
         this.context = context;
         this.themeCardsList = recipeCardsList;
-        this.mImageLoader = mImageLoader;
     }
 
     @Override
@@ -51,7 +50,7 @@ public class ThemeCardAdapter extends RecyclerView.Adapter<ThemeCardAdapter.Them
     public void onBindViewHolder(ThemeCardAdapter.ThemeCardViewHolder contactViewHolder, int i) {
         ThemeCard tc = themeCardsList.get(i);
 //        contactViewHolder.theme_background.setImageResource(tc.getRecipe_background());
-        mImageLoader.load(contactViewHolder.theme_background, tc.getRecipe_background());
+        FrApplication.getInstance().getMyImageLoader().displayImage(contactViewHolder.theme_background, tc.getRecipe_background());
     }
 
     @Override

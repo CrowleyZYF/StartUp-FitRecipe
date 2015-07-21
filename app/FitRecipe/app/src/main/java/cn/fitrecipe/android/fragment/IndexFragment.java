@@ -26,6 +26,7 @@ import cn.fitrecipe.android.Adpater.ThemeCardAdapter;
 import cn.fitrecipe.android.CategoryActivity;
 import cn.fitrecipe.android.Config.LocalDemo;
 import cn.fitrecipe.android.ImageLoader.MyImageLoader;
+import cn.fitrecipe.android.MainActivity;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.model.RecipeCard;
@@ -65,7 +66,7 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
         View view = inflater.inflate(R.layout.fragment_index, container, false);
 
         initView(view);
-        getData();
+        initData();
         return view;
     }
 
@@ -89,28 +90,22 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
     }
 
     private void initData() {
+        //get data
+        recommendRecipe = ((MainActivity)getActivity()).getRecommendRecipe();
+        themeCards = ((MainActivity)getActivity()).getThemeRecipe();
+        recipeCards = ((MainActivity)getActivity()).getUpdateRecipe();
+
         //获得推荐数据，并初始化适配器
-        recommendViewPagerAdapter = new RecommendViewPagerAdapter(getActivity(), mImageLoader, recommendRecipe, recommendViewPager.getLayoutParams().width, recommendViewPager.getLayoutParams().height);
+        recommendViewPagerAdapter = new RecommendViewPagerAdapter(getActivity(), recommendRecipe, recommendViewPager.getLayoutParams().width, recommendViewPager.getLayoutParams().height);
         recommendViewPager.setAdapter(recommendViewPagerAdapter);
         //初始化推荐的indicator
         recommendIndicator.setViewPager(recommendViewPager);
         //获得更新数据，并初始化适配器
-        recipeCardAdapter = new RecipeCardAdapter(getActivity(), mImageLoader, recipeCards);
+        recipeCardAdapter = new RecipeCardAdapter(getActivity(),  recipeCards);
         updateRecipeRecyclerView.setAdapter(recipeCardAdapter);
         //获得主题数据，并初始化适配器
-        themeCardAdapter = new ThemeCardAdapter(getActivity(), mImageLoader, themeCards);
+        themeCardAdapter = new ThemeCardAdapter(getActivity(), themeCards);
         themeRecipeRecyclerView.setAdapter(themeCardAdapter);
-    }
-
-    private void getData() {
-        //提前获取网络图片
-        urls = new ArrayList<String>();
-
-        final ProgressDialog pd = ProgressDialog.show(this.getActivity(), "", "请稍后....");
-        pd.show();
-        recommendRecipe = getRecommendRecipe();
-        themeCards = getThemeRecipe();
-        recipeCards = getUpdateRecipe();
     }
 
     private void initEvent() {
@@ -148,42 +143,42 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
                 break;
         }
     }
-
-    public List<ThemeCard> getThemeRecipe() {
-        List<ThemeCard> result = new ArrayList<ThemeCard>();
-        for (int i=0;i<3;i++){
-            ThemeCard tc = new ThemeCard(LocalDemo.themeBG[i]);
-            result.add(tc);
-            urls.add(LocalDemo.themeBG[i]);
-        }
-        return result;
-    }
-
-    private List<RecipeCard> getUpdateRecipe() {
-        List<RecipeCard> result = new ArrayList<RecipeCard>();
-        for (int i=0;i<5;i++){
-            RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],0,(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
-            result.add(rc);
-            urls.add(LocalDemo.recipeBG[i]);
-        }
-        return result;
-    }
-
-    private List<Map<String, Object>> getRecommendRecipe(){
-        //http
-        //time
-
-        List<Map<String, Object>> result=new ArrayList<Map<String,Object>>();
-        for(int i=0;i<5;i++){
-            Map<String, Object> map=new HashMap<String, Object>();
-            map.put("id", i);
-            map.put("type", LocalDemo.recommendType[i]);
-            map.put("imgUrl", LocalDemo.recommendBG[i]);
-            result.add(map);
-            urls.add(LocalDemo.recommendBG[i]);
-        }
-
-        return result;
-    }
+//
+//    public List<ThemeCard> getThemeRecipe() {
+//        List<ThemeCard> result = new ArrayList<ThemeCard>();
+//        for (int i=0;i<3;i++){
+//            ThemeCard tc = new ThemeCard(LocalDemo.themeBG[i]);
+//            result.add(tc);
+//            urls.add(LocalDemo.themeBG[i]);
+//        }
+//        return result;
+//    }
+//
+//    private List<RecipeCard> getUpdateRecipe() {
+//        List<RecipeCard> result = new ArrayList<RecipeCard>();
+//        for (int i=0;i<5;i++){
+//            RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],0,(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
+//            result.add(rc);
+//            urls.add(LocalDemo.recipeBG[i]);
+//        }
+//        return result;
+//    }
+//
+//    private List<Map<String, Object>> getRecommendRecipe(){
+//        //http
+//        //time
+//
+//        List<Map<String, Object>> result=new ArrayList<Map<String,Object>>();
+//        for(int i=0;i<5;i++){
+//            Map<String, Object> map=new HashMap<String, Object>();
+//            map.put("id", i);
+//            map.put("type", LocalDemo.recommendType[i]);
+//            map.put("imgUrl", LocalDemo.recommendBG[i]);
+//            result.add(map);
+//            urls.add(LocalDemo.recommendBG[i]);
+//        }
+//
+//        return result;
+//    }
 
 }

@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.fitrecipe.android.ArticleActivity;
+import cn.fitrecipe.android.FrApplication;
 import cn.fitrecipe.android.ImageLoader.MyImageLoader;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.RecipeActivity;
@@ -28,14 +29,12 @@ public class RecommendViewPagerAdapter extends PagerAdapter implements View.OnCl
     private List<View> recommendLinearLayout = new ArrayList<View>();
     private int width;
     private int height;
-    private MyImageLoader mImageLoader;
 
-    public RecommendViewPagerAdapter(Context context, MyImageLoader mImageLoader, List<Map<String, Object>> dataList, int width, int height){
+    public RecommendViewPagerAdapter(Context context, List<Map<String, Object>> dataList, int width, int height){
         this.context = context;
         this.dataList = dataList;
         this.width = width;
         this.height = height;
-        this.mImageLoader = mImageLoader;
     }
 
     @Override
@@ -45,7 +44,7 @@ public class RecommendViewPagerAdapter extends PagerAdapter implements View.OnCl
         ImageView imageView = (ImageView) recommendContainer.findViewById(R.id.recommend_image);
 //        imageView.setImageResource();
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        mImageLoader.load(imageView, (String) dataList.get(position).get("imgUrl"));
+        FrApplication.getInstance().getMyImageLoader().displayImage(imageView, (String) dataList.get(position).get("imgUrl"));
 
         //ID
         TextView idTextView = (TextView) recommendContainer.findViewById(R.id.recommend_id);
