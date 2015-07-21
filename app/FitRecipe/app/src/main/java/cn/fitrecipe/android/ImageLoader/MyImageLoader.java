@@ -26,7 +26,10 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -37,31 +40,47 @@ public class MyImageLoader {
 
     private DisplayImageOptions options = null;
     private Context mContext;
-    private Map<String, List<View>> loadingFailed = null;   //在相同URI中，只用一次获取
-    private boolean completed;
-    private AtomicInteger imageCount;
-    private IImageLoad iImageLoad;
+    private int loadingTimeout;
+    private ILoadingListener iLoadingListener;
 
-    public MyImageLoader(){
-        init2(Integer.MAX_VALUE);
+    //count images that have not been loaded
+    private AtomicInteger count;
+    //mark the iloadingListener if invoked
+    private AtomicBoolean isCompleted;
+
+
+    //open a time out task
+    Timer timer = null;
+
+    public MyImageLoader() {
+        this.loadingTimeout = 3000;
+        init();
     }
 
-    public MyImageLoader(IImageLoad iImageLoad, int count) {        //count要加载几张图片
-        this.iImageLoad = iImageLoad;
-        init2(count);
+    public MyImageLoader(int loadingTimeout) {
+        this.loadingTimeout = loadingTimeout;
+        init();
     }
 
-
-
-    //初始化MyImageLoader
-    private void init2(int count){
+    private void init() {
         options = new DisplayImageOptions.Builder()
-                .cacheInMemory(false)
-                .cacheOnDisk(true)          //允许图片缓存在内存和sd卡中
-                .displayer(new FadeInBitmapDisplayer(500)) // 渐变显示图片
+                .cacheInMemory(true)
+                .cacheOnDisk(true)          //permit cache image in memory and disk
+                .displayer(new FadeInBitmapDisplayer(500)) // set image fade in
                 .build();
-        loadingFailed = new ConcurrentHashMap<String, List<View>>();
-        imageCount = new AtomicInteger(count);
+
+        //init
+        count = new AtomicInteger(0);
+        isCompleted = new AtomicBoolean(true);
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if(isCompleted.compareAndSet(false, true)) {
+                    iLoadingListener.loadComplete();
+                }
+            }
+        }, loadingTimeout);
     }
 
     public static void init(Context context) {
@@ -69,7 +88,7 @@ public class MyImageLoader {
         ImageLoaderConfiguration configuration = new ImageLoaderConfiguration.Builder(context)
                 .diskCacheSize(50 * 1024 * 1024)   //设置最大sd缓存大小为50M
                 .denyCacheImageMultipleSizesInMemory()
-//                .memoryCacheSize(2 * 1024 * 1024)  //设置最大内存缓存大小为2M
+                .memoryCacheSize(2 * 1024 * 1024)  //设置最大内存缓存大小为2M
                 .threadPoolSize(5)                 //设置线程池的大小
                 .threadPriority(Thread.MAX_PRIORITY)
                 .writeDebugLogs()
@@ -79,43 +98,24 @@ public class MyImageLoader {
         ImageLoader.getInstance().init(configuration);
     }
 
-    public void setImageCount(int count) {
-        stop();
-        imageCount.set(count);
-    }
 
-    public void loadingBackend(List<String> urls) {
-        if(urls != null)
-            imageCount.set(urls.size());
-        Iterator<String> iterator = urls.iterator();
-        while (iterator.hasNext()) {
-            String url = iterator.next();
-//            try {
-//                ImageLoader.getInstance().getDiskCache().save(url, new BaseImageDownloader(mContext, 5000, 5000).getStream(url, null), null);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-            ImageLoader.getInstance().loadImage(url, options, new MyImageLoadingListener());
+    public void loadImages(List<String> urls) {
+        if(urls != null) {
+            count.set(urls.size());
+            isCompleted.set(false);
+            Iterator<String> iterator = urls.iterator();
+            while (iterator.hasNext()) {
+                String url = iterator.next();
+                ImageLoader.getInstance().loadImage(url, options, new MyImageLoadingListener());
+            }
         }
-
-//          iImageLoad.onSuccess();
-//        ImageLoader.getInstance().get
     }
-//
-//    public void load(View view, String imageUrl) {
-//        if(view instanceof ImageView)
-//             ImageLoader.getInstance().displayImage(imageUrl, (ImageView)view, options, new MyImageLoadingListener(view));
-//        else
-//            ImageLoader.getInstance().loadImage(imageUrl,  options, new MyImageLoadingListener(view));
-//
-////        ImageLoader.getInstance().displayImage(imageUrl);
-//    }
 
-    public void load(View view, String imageUrl) {
+    public void displayImage(View view, String imageUrl) {
         ImageLoader.getInstance().displayImage(imageUrl, new ViewAware(view, false) {
             @Override
             protected void setImageDrawableInto(Drawable drawable, View view) {
-                if(view instanceof  ImageView)
+                if (view instanceof ImageView)
                     ((ImageView) view).setImageDrawable(drawable);
                 else
                     view.setBackground(drawable);
@@ -123,17 +123,16 @@ public class MyImageLoader {
 
             @Override
             protected void setImageBitmapInto(Bitmap bitmap, View view) {
-                if(view instanceof  ImageView)
+                if (view instanceof ImageView)
                     ((ImageView) view).setImageBitmap(bitmap);
                 else
                     view.setBackground(new BitmapDrawable(null, bitmap));
             }
-        });
+        }, new MyImageLoadingListener());
     }
 
     public void stop() {
         ImageLoader.getInstance().stop();
-        loadingFailed.clear();
     }
 
     public void clearMemoryCache() {
@@ -149,20 +148,29 @@ public class MyImageLoader {
 
         @Override
         public void onLoadingStarted(String s, View view) {
-
+            //TODO
+            //set image before
         }
 
         @Override
         public void onLoadingFailed(String s, View view, FailReason failReason) {
-
+            if(view == null)
+                iLoadingListener.loadFailed();
         }
 
         @Override
         public void onLoadingComplete(String s, View view, Bitmap bitmap) {
-            int res = imageCount.getAndDecrement();
-            System.out.println("completed: " + res);
-            if(res == 1)
-                iImageLoad.onSuccess();
+            // it is load not display
+            synchronized (this) {
+                if (view == null) {
+                    int res = count.decrementAndGet();
+                    System.out.println("completed: " + res);
+                    if (count.compareAndSet(0, 0) && isCompleted.compareAndSet(false,true)) {
+                        iLoadingListener.loadComplete();
+                        timer.cancel();
+                    }
+                }
+            }
         }
 
         @Override
@@ -170,73 +178,12 @@ public class MyImageLoader {
 
         }
     }
-//    class MyImageLoadingListener implements ImageLoadingListener {
-//
-//        View mView = null;
-//        public MyImageLoadingListener(View view) {
-//            this.mView = view;
-//        }
-//
-//        @Override
-//        public void onLoadingStarted(String s, View view) {
-//
-//        }
-//
-//        @Override
-//        public void onLoadingFailed(String s, View view, FailReason failReason) {
-//            iImageLoad.onFailed();
-//            stop();
-//            imageCount.set(0);
-//        }
-//
-//        @Override
-//        public void onLoadingComplete(String s, View view, Bitmap bitmap) {
-//            if(!(mView instanceof ImageView)) {
-//                mView.setBackground(new BitmapDrawable(null, bitmap));
-//            }
-////            restoreFailedLoading(s, bitmap);
-//            int res = imageCount.decrementAndGet();
-//            System.out.println("complete s:" + s +"  "+ imageCount.get());
-//            if(res == 0)
-//                iImageLoad.onSuccess();
-//        }
-//
-//        @Override
-//        public void onLoadingCancelled(String s, View view) {
-////            if(mView instanceof ImageView)
-////                saveFailedLoading(s, view);
-////            else
-////                saveFailedLoading(s, mView);
-//            int res = imageCount.decrementAndGet();
-//            System.out.println("canceled s:" + s +"  "+ imageCount.get());
-//            if(res == 0)
-//                iImageLoad.onSuccess();
-//        }
-//
-////        private void saveFailedLoading(String url, View view) {
-////            List<View> list;
-////            if(loadingFailed.containsKey(url))
-////                list = loadingFailed.get(url);
-////            else
-////                list = Collections.synchronizedList(new ArrayList<View>());
-////            list.add(view);
-////            loadingFailed.put(url, list);
-////        }
-////
-////        private void restoreFailedLoading(String url, Bitmap bitmap) {
-////            if(loadingFailed.containsKey(url)) {
-////                List<View> list = loadingFailed.get(url);
-////                Iterator<View> iterator = list.iterator();
-////                synchronized (list) {
-////                    while (iterator.hasNext()) {
-////                        View view = iterator.next();
-////                        if (view instanceof ImageView)
-////                            ((ImageView) view).setImageBitmap(bitmap);
-////                        else
-////                            view.setBackground(new BitmapDrawable(null, bitmap));
-////                    }
-////                }
-////            }
-////        }
-//    }
+
+    public ILoadingListener getiLoadingListener() {
+        return iLoadingListener;
+    }
+
+    public void setiLoadingListener(ILoadingListener iLoadingListener) {
+        this.iLoadingListener = iLoadingListener;
+    }
 }

@@ -13,12 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.ImageLoader;
 import com.umeng.fb.FeedbackAgent;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,15 +21,13 @@ import java.util.List;
 import java.util.Map;
 
 import cn.fitrecipe.android.Adpater.RecipeCardAdapter;
+import cn.fitrecipe.android.Adpater.RecommendViewPagerAdapter;
 import cn.fitrecipe.android.Adpater.ThemeCardAdapter;
 import cn.fitrecipe.android.CategoryActivity;
-import cn.fitrecipe.android.Config.HttpUrl;
 import cn.fitrecipe.android.Config.LocalDemo;
-import cn.fitrecipe.android.ImageLoader.IImageLoad;
 import cn.fitrecipe.android.ImageLoader.MyImageLoader;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
-import cn.fitrecipe.android.Adpater.RecommendViewPagerAdapter;
 import cn.fitrecipe.android.model.RecipeCard;
 import cn.fitrecipe.android.model.ThemeCard;
 import me.relex.circleindicator.CircleIndicator;
@@ -59,8 +52,6 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
     private TextView feedback_btn;
     //分类
     private Button category_btn;
-
-    private MyImageLoader mImageLoader;
 
     private List<String> urls;
     List<Map<String, Object>>  recommendRecipe;
@@ -120,20 +111,6 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
         recommendRecipe = getRecommendRecipe();
         themeCards = getThemeRecipe();
         recipeCards = getUpdateRecipe();
-        mImageLoader = new MyImageLoader(new IImageLoad(){
-            @Override
-            public void onSuccess() {
-                initData();
-                initEvent();
-                pd.dismiss();
-            }
-
-            @Override
-            public void onFailed() {
-
-            }
-        }, 13);
-        mImageLoader.loadingBackend(urls);
     }
 
     private void initEvent() {
@@ -206,9 +183,4 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
         return result;
     }
 
-    @Override
-    public void onDestroy() {
-        mImageLoader.clearDiskCache();
-        super.onDestroy();
-    }
 }
