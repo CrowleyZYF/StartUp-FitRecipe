@@ -29,7 +29,14 @@ public class WelcomeActivity extends Activity{
 
         //get image data
         list = getUrls();
+<<<<<<< HEAD
         FrApplication.getInstance().getMyImageLoader().setiLoadingListener(new ILoadingListener() {
+=======
+
+        // TODO @WangKun
+        // 加载首页数据，加载完成之后调用goToMainActivity进行跳转，或者加载时间超过3秒之后调用goToMainActivity进行跳转
+        new Handler().postDelayed(new Runnable(){
+>>>>>>> 02f9c9a141c28c8103d62767a3160baa25094d62
             @Override
             public void loadComplete() {
                 goToMainActivity();
