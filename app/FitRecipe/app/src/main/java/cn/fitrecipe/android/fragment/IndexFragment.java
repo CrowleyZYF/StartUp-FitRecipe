@@ -143,42 +143,6 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
                 break;
         }
     }
-//
-//    public List<ThemeCard> getThemeRecipe() {
-//        List<ThemeCard> result = new ArrayList<ThemeCard>();
-//        for (int i=0;i<3;i++){
-//            ThemeCard tc = new ThemeCard(LocalDemo.themeBG[i]);
-//            result.add(tc);
-//            urls.add(LocalDemo.themeBG[i]);
-//        }
-//        return result;
-//    }
-//
-//    private List<RecipeCard> getUpdateRecipe() {
-//        List<RecipeCard> result = new ArrayList<RecipeCard>();
-//        for (int i=0;i<5;i++){
-//            RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],0,(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
-//            result.add(rc);
-//            urls.add(LocalDemo.recipeBG[i]);
-//        }
-//        return result;
-//    }
-//
-//    private List<Map<String, Object>> getRecommendRecipe(){
-//        //http
-//        //time
-//
-//        List<Map<String, Object>> result=new ArrayList<Map<String,Object>>();
-//        for(int i=0;i<5;i++){
-//            Map<String, Object> map=new HashMap<String, Object>();
-//            map.put("id", i);
-//            map.put("type", LocalDemo.recommendType[i]);
-//            map.put("imgUrl", LocalDemo.recommendBG[i]);
-//            result.add(map);
-//            urls.add(LocalDemo.recommendBG[i]);
-//        }
-//
-//        return result;
-//    }
+
 
 }

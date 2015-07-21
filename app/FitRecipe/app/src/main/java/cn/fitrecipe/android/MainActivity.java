@@ -19,12 +19,15 @@ import com.umeng.fb.FeedbackAgent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import cn.fitrecipe.android.UI.SlidingPage;
 import cn.fitrecipe.android.fragment.MeFragment;
 import cn.fitrecipe.android.fragment.IndexFragment;
 import cn.fitrecipe.android.fragment.KnowledgeFragment;
 import cn.fitrecipe.android.fragment.PlanFragment;
+import cn.fitrecipe.android.model.RecipeCard;
+import cn.fitrecipe.android.model.ThemeCard;
 
 public class MainActivity extends FragmentActivity implements OnClickListener
 {
@@ -237,4 +240,16 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         }
     }
 
+    public List<Map<String, Object>> getRecommendRecipe() {
+        //TODO
+    }
+
+    public List<ThemeCard> getThemeRecipe() {
+        //TODO
+        return null;
+    }
+
+    public List<RecipeCard> getUpdateRecipe() {
+        //TODO
+    }
 }
