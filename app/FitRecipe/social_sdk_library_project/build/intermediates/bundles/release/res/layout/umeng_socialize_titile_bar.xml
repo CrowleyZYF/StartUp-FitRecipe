@@ -81,4 +81,4 @@
 	<TextView 
 	    style="@style/umeng_socialize_divider"
 	    android:layout_alignParentBottom="true"/>
-</RelativeLayout><!-- From: file:/D:/Github/fitRecipe/app/FitRecipe/social_sdk_library_project/src/main/res/layout/umeng_socialize_titile_bar.xml -->
+</RelativeLayout><!-- From: file:/E:/fitRecipe/app/FitRecipe/social_sdk_library_project/src/main/res/layout/umeng_socialize_titile_bar.xml -->

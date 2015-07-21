@@ -18,4 +18,4 @@
         android:layout_toRightOf="@id/umeng_socialize_spinner_img"
         android:gravity="center_vertical" />
 
-</RelativeLayout><!-- From: file:/D:/Github/fitRecipe/app/FitRecipe/social_sdk_library_project/src/main/res/layout/umeng_socialize_simple_spinner_item.xml -->
+</RelativeLayout><!-- From: file:/E:/fitRecipe/app/FitRecipe/social_sdk_library_project/src/main/res/layout/umeng_socialize_simple_spinner_item.xml -->

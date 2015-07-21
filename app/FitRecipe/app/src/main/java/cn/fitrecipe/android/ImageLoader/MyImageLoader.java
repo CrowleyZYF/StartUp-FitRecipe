@@ -37,7 +37,7 @@ public class MyImageLoader {
 
     private DisplayImageOptions options = null;
     private Context mContext;
-    private Map<String, List<View>> loadingFailed = null;   //在相同URI中，只用一次获取
+    private Map<String, List<View>> loadingFailed = null;
     private boolean completed;
     private AtomicInteger imageCount;
     private IImageLoad iImageLoad;
@@ -46,36 +46,36 @@ public class MyImageLoader {
         init2(Integer.MAX_VALUE);
     }
 
-    public MyImageLoader(IImageLoad iImageLoad, int count) {        //count要加载几张图片
+    public MyImageLoader(IImageLoad iImageLoad, int count) {
         this.iImageLoad = iImageLoad;
         init2(count);
     }
 
 
 
-    //初始化MyImageLoader
+    //锟斤拷始锟斤拷MyImageLoader
     private void init2(int count){
         options = new DisplayImageOptions.Builder()
                 .cacheInMemory(false)
-                .cacheOnDisk(true)          //允许图片缓存在内存和sd卡中
-                .displayer(new FadeInBitmapDisplayer(500)) // 渐变显示图片
+                .cacheOnDisk(true)
+                .displayer(new FadeInBitmapDisplayer(500))
                 .build();
         loadingFailed = new ConcurrentHashMap<String, List<View>>();
         imageCount = new AtomicInteger(count);
     }
 
     public static void init(Context context) {
-        //Universal Image Loader初始化
+        //Universal Image Loader
         ImageLoaderConfiguration configuration = new ImageLoaderConfiguration.Builder(context)
-                .diskCacheSize(50 * 1024 * 1024)   //设置最大sd缓存大小为50M
+                .diskCacheSize(50 * 1024 * 1024)
                 .denyCacheImageMultipleSizesInMemory()
-//                .memoryCacheSize(2 * 1024 * 1024)  //设置最大内存缓存大小为2M
-                .threadPoolSize(5)                 //设置线程池的大小
+//                .memoryCacheSize(2 * 1024 * 1024)
+                .threadPoolSize(5)
                 .threadPriority(Thread.MAX_PRIORITY)
                 .writeDebugLogs()
                 .build();
 
-        //初始化ImageLoader
+        //锟斤拷始锟斤拷ImageLoader
         ImageLoader.getInstance().init(configuration);
     }
 

@@ -5,4 +5,4 @@
     <item android:state_pressed="true" android:drawable="@android:drawable/list_selector_background" />
     <item android:state_selected="true" android:drawable="@android:drawable/list_selector_background" />
     <item android:drawable="@android:color/black" />
-</selector>      <!-- From: file:/D:/Github/fitRecipe/app/FitRecipe/social_sdk_library_project/src/main/res/drawable/umeng_socialize_commnet_header_bg.xml -->
+</selector>      <!-- From: file:/E:/fitRecipe/app/FitRecipe/social_sdk_library_project/src/main/res/drawable/umeng_socialize_commnet_header_bg.xml -->
