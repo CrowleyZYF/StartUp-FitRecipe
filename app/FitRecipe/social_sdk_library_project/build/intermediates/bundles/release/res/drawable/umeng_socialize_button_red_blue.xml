@@ -5,4 +5,4 @@
     <item android:drawable="@drawable/umeng_socialize_button_blue" android:state_pressed="true" android:state_window_focused="true"/>
     <item android:drawable="@drawable/umeng_socialize_button_blue" android:state_focused="true"/>
 
-</selector><!-- From: file:/D:/Github/fitRecipe/app/FitRecipe/social_sdk_library_project/src/main/res/drawable/umeng_socialize_button_red_blue.xml -->
+</selector><!-- From: file:/E:/fitRecipe/app/FitRecipe/social_sdk_library_project/src/main/res/drawable/umeng_socialize_button_red_blue.xml -->

@@ -91,7 +91,7 @@
         <activity
             android:name="com.umeng.fb.ConversationActivity"/>
         <meta-data
-            android:value="552d1b9ffd98c532ad001857"
+            android:value="55acde25e0f55ad433002de4"
             android:name="UMENG_APPKEY"/>
         <meta-data
             android:value="Test"
@@ -126,7 +126,7 @@
         <!-- ###################添加UmengAppkey###################### -->
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="552d1b9ffd98c532ad001857" >
+            android:value="55acde25e0f55ad433002de4" >
         </meta-data>
     </application>
 

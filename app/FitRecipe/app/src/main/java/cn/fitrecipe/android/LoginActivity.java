@@ -40,8 +40,8 @@ import java.util.Map;
 
 
 public class LoginActivity extends Activity implements View.OnClickListener {
-
     UMSocialService mController;
+
     private LinearLayout sina_login;
     private LinearLayout wechat_login;
     private LinearLayout qq_login;
@@ -59,44 +59,27 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private Context nowContext;
     private String backActivity;
 
-    //登陆handler处理
-    private Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg){
-            if(msg.what==0x123){
-                try {
-                    switch (Integer.parseInt((String) result.get("result"))) {
-                        case HttpUrl.LOGIN_SUCCESS:{
-                            SharedPreferences preferences=getSharedPreferences("user", MODE_PRIVATE);
-                            SharedPreferences.Editor editor = preferences.edit();
-                            editor.putBoolean("isLogined", true);
-                            editor.putString("platform", (String) result.get("platform"));
-                            editor.putString("account", (String) result.get("account"));
-                            editor.putString("username", (String) result.get("username"));
-                            editor.commit();
-                            Toast.makeText(getApplicationContext(), "欢迎："+ ((String) result.get("username")), Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(nowContext, MainActivity.class);
-                            startActivity(intent);
-                            LoginActivity.this.finish();
-                            break;
-                        }
-                        case HttpUrl.NOT_EXIST:{
-                            Common.errorDialog(nowContext, "登陆失败", "账户不存在").show();
-                            break;
-                        }
-                        case HttpUrl.PASS_ERROR:{
-                            Common.errorDialog(nowContext, "登陆失败", "密码错误").show();
-                            break;
-                        }
-                        default:
-                            break;
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    };
+    private void loginSuccess(String platform, String account, String username){
+        SharedPreferences preferences=getSharedPreferences("user", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("isLogined", true);
+        editor.putString("platform", platform);
+        editor.putString("account", account);
+        editor.putString("username", username);
+        editor.commit();
+        Toast.makeText(getApplicationContext(), "欢迎："+ username, Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(nowContext, MainActivity.class);
+        startActivity(intent);
+        LoginActivity.this.finish();
+    }
+
+    private void accountError(){
+        Common.errorDialog(nowContext, "登陆失败", "账户不存在").show();
+    }
+
+    private void passError(){
+        Common.errorDialog(nowContext, "登陆失败", "密码错误").show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,47 +153,23 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             Common.errorDialog(this, "登陆失败", "密码不得为空").show();
         }else {
             final Map<String, String> params = new HashMap<String, String>();
-            params.put("account", accountString);
+            params.put("phone", accountString);
             params.put("password", passwordString);
-            new Thread(){
-                public void run(){
-                    String teString = HttpUtils.submitPostData(HttpUrl.LOGIN_URL, params, "utf-8");
-                    //test
-                    if(teString.equals("")){
-                        teString = HttpUrl.LOGIN_URL_JSON;
-                    }
-                    try {
-                        result=new JSONObject(teString);
-                        handler.sendEmptyMessage(0x123);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }.start();
+            Toast.makeText(LoginActivity.this, "phone:" + accountString + " password:" + passwordString, Toast.LENGTH_SHORT).show();
+            // TODO @WangKun
+            // 正常登陆，登陆成功后调用loginSuccess，账号不存在调用accountError，密码错误调用passError
         }
     }
 
     //第三方登录
     private void doOtherLogin(final String userId, final String userName, final String platform) {
         final Map<String, String> params = new HashMap<String, String>();
-        params.put("userId", userId);
-        params.put("userName", userName);
-        params.put("platform", platform);
-        new Thread(){
-            public void run(){
-                String teString = HttpUtils.submitPostData(HttpUrl.OTHER_LOGIN_URL, params, "utf-8");
-                //test
-                if(teString.equals("")){
-                    teString = "{'result':'0','platform':'"+platform+"','account':'"+userId+"','username':'"+userName+"'}";
-                }
-                try {
-                    result=new JSONObject(teString);
-                    handler.sendEmptyMessage(0x123);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }.start();
+        params.put("external_id", userId);
+        params.put("nick_name", userName);
+        params.put("external_source", platform);
+        Toast.makeText(LoginActivity.this, "ID:" + userId + " Name:" + userName + " Source:" + platform, Toast.LENGTH_SHORT).show();
+        // TODO @WangKun
+        // 第三方登陆，登陆成功后调用loginSuccess，账号不存在调用accountError，密码错误调用passError
     }
 
     //第三方登录，qq

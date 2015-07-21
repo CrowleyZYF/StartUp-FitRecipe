@@ -12,7 +12,7 @@
         android:id="@+id/recipe_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/ztest001"
+        android:background="@drawable/loading_pic1"
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
 

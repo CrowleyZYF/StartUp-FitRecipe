@@ -17,4 +17,5 @@ plugins
 *.log
 *.DS_Store
 app/scripts/config.js
+app/FitRecipe/.idea/gradle.xml
 backend/fitrecipe/static
