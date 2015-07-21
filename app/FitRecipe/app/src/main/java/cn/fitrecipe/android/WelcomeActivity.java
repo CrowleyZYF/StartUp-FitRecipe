@@ -21,22 +21,25 @@ public class WelcomeActivity extends Activity{
     private final int SPLASH_DISPLAY_LENGHT = 3000;
 
     private List<String> list;
+    private List<ThemeCard> themeCards;
+    private List<RecipeCard> recipeCards;
+    private List<Map<String, Object>> recommendRecipes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        //get new data from network
+        getDataFromNetwork();
+
+        //get old data from local
+        //TODO
+
         //get image data
         list = getUrls();
-<<<<<<< HEAD
         FrApplication.getInstance().getMyImageLoader().setiLoadingListener(new ILoadingListener() {
-=======
-
-        // TODO @WangKun
         // 加载首页数据，加载完成之后调用goToMainActivity进行跳转，或者加载时间超过3秒之后调用goToMainActivity进行跳转
-        new Handler().postDelayed(new Runnable(){
->>>>>>> 02f9c9a141c28c8103d62767a3160baa25094d62
             @Override
             public void loadComplete() {
                 goToMainActivity();
@@ -48,6 +51,29 @@ public class WelcomeActivity extends Activity{
             }
         });
         FrApplication.getInstance().getMyImageLoader().loadImages(list, SPLASH_DISPLAY_LENGHT);
+    }
+
+    private void getDataFromNetwork() {
+        themeCards = new ArrayList<ThemeCard>();
+        for (int i=0;i<3;i++){
+            ThemeCard tc = new ThemeCard(LocalDemo.themeBG[i]);
+            themeCards.add(tc);
+        }
+
+        recipeCards= new ArrayList<RecipeCard>();
+        for (int i=0;i<5;i++){
+            RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],0,(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
+            recipeCards.add(rc);
+        }
+
+        recommendRecipes =new ArrayList<Map<String,Object>>();
+        for(int i=0;i<5;i++){
+            Map<String, Object> map=new HashMap<String, Object>();
+            map.put("id", i);
+            map.put("type", LocalDemo.recommendType[i]);
+            map.put("imgUrl", LocalDemo.recommendBG[i]);
+            recommendRecipes.add(map);
+        }
     }
 
     private void goToMainActivity(){
@@ -79,33 +105,16 @@ public class WelcomeActivity extends Activity{
         return urls;
     }
 
-    public List<ThemeCard> getThemeRecipe() {
-        List<ThemeCard> result = new ArrayList<ThemeCard>();
-        for (int i=0;i<3;i++){
-            ThemeCard tc = new ThemeCard(LocalDemo.themeBG[i]);
-            result.add(tc);
-        }
-        return result;
+
+    public List<ThemeCard> getThemeCards() {
+        return themeCards;
     }
 
-    private List<RecipeCard> getUpdateRecipe() {
-        List<RecipeCard> result = new ArrayList<RecipeCard>();
-        for (int i=0;i<5;i++){
-            RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],0,(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
-            result.add(rc);
-        }
-        return result;
+    public List<RecipeCard> getRecipeCards() {
+        return recipeCards;
     }
 
-    private List<Map<String, Object>> getRecommendRecipe(){
-        List<Map<String, Object>> result=new ArrayList<Map<String,Object>>();
-        for(int i=0;i<5;i++){
-            Map<String, Object> map=new HashMap<String, Object>();
-            map.put("id", i);
-            map.put("type", LocalDemo.recommendType[i]);
-            map.put("imgUrl", LocalDemo.recommendBG[i]);
-            result.add(map);
-        }
-        return result;
+    public List<Map<String, Object>> getRecommendRecipes() {
+        return recommendRecipes;
     }
 }
