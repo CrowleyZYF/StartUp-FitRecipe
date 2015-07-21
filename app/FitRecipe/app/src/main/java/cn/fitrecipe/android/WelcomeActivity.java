@@ -117,4 +117,6 @@ public class WelcomeActivity extends Activity{
     public List<Map<String, Object>> getRecommendRecipes() {
         return recommendRecipes;
     }
+
+    //test
 }
