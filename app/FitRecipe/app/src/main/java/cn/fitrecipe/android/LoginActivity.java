@@ -158,6 +158,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             Toast.makeText(LoginActivity.this, "phone:" + accountString + " password:" + passwordString, Toast.LENGTH_SHORT).show();
             // TODO @WangKun
             // 正常登陆，登陆成功后调用loginSuccess，账号不存在调用accountError，密码错误调用passError
+            loginSuccess("self", params.get("phone"), "self");
         }
     }
 
