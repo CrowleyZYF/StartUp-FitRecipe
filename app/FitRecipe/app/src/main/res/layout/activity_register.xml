@@ -63,8 +63,8 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_weight="3"
-                android:src="@drawable/logo"/>
+                android:layout_weight="6"
+                android:src="@drawable/logo_green"/>
 
             </LinearLayout>
 
@@ -249,7 +249,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/register_intro"
+            android:text="@string/login_intro"
             android:textColor="#ffffff"
             android:textSize="16sp"
             />

@@ -170,6 +170,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         Toast.makeText(LoginActivity.this, "ID:" + userId + " Name:" + userName + " Source:" + platform, Toast.LENGTH_SHORT).show();
         // TODO @WangKun
         // 第三方登陆，登陆成功后调用loginSuccess，账号不存在调用accountError，密码错误调用passError
+        loginSuccess(params.get("external_source"), "account", params.get("nick_name"));
     }
 
     //第三方登录，qq
