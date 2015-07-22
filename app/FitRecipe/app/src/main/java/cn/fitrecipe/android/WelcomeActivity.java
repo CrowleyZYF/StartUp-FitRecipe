@@ -36,6 +36,8 @@ public class WelcomeActivity extends Activity{
         //get old data from local
         //TODO
 
+        //pass data to MainActivity
+
         //get image data
         list = getUrls();
         FrApplication.getInstance().getMyImageLoader().setiLoadingListener(new ILoadingListener() {
