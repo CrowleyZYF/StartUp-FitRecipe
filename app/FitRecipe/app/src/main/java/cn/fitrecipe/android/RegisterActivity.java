@@ -122,7 +122,6 @@ public class RegisterActivity extends Activity implements OnClickListener {
 
     @Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		switch (v.getId()) {
         case R.id.back_btn:
             if(backActivity.equals("landingPage")){
@@ -209,7 +208,6 @@ public class RegisterActivity extends Activity implements OnClickListener {
 	};
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
 		super.onDestroy();
 		SMSSDK.unregisterAllEventHandler();
 	}
@@ -227,6 +225,9 @@ public class RegisterActivity extends Activity implements OnClickListener {
             params.put("password", passwordString);
             // TODO @WangKun
             // 注册，注册成功后调用registerSuccess，账号已存在调用accountError
+//            JSONObject params = new JSONObject();
+//            params.put("account", accountString);
+//            params.put("password", passwordString);
         }
     }
 
@@ -234,7 +235,6 @@ public class RegisterActivity extends Activity implements OnClickListener {
     private class ThreadShow implements Runnable {
         @Override
         public void run() {
-            // TODO Auto-generated method stub
             while (get_enable.getVisibility()==View.GONE) {
                 try {
                     Thread.sleep(1000);

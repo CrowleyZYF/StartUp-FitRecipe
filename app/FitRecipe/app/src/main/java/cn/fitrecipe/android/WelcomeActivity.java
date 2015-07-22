@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.widget.Toast;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -19,17 +20,22 @@ import cn.fitrecipe.android.model.RecipeCard;
 import cn.fitrecipe.android.model.ThemeCard;
 
 public class WelcomeActivity extends Activity{
-    private final int SPLASH_DISPLAY_LENGHT = 3000;
+    private final int SPLASH_DISPLAY_LENGTH = 3000;
+    private final int SPLASH_DISPLAY_MIN_LENGTH = 1000;
 
     private List<String> list;
     private List<ThemeCard> themeCards;
     private List<RecipeCard> recipeCards;
     private List<Map<String, Object>> recommendRecipes;
+    private long last;
+    private long now;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        //get some current time
+        last = System.currentTimeMillis();
 
         //get new data from network
         getDataFromNetwork();
@@ -48,16 +54,28 @@ public class WelcomeActivity extends Activity{
         // 加载首页数据，加载完成之后调用goToMainActivity进行跳转，或者加载时间超过3秒之后调用goToMainActivity进行跳转
             @Override
             public void loadComplete() {
+                now = System.currentTimeMillis();
+                if(now - last < SPLASH_DISPLAY_MIN_LENGTH) {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            goToMainActivity();
+                        }
+                    }, SPLASH_DISPLAY_MIN_LENGTH + last - now);
+                }
+                else
+                    goToMainActivity();
                 System.out.println(Calendar.getInstance().get(Calendar.MINUTE)+" "+Calendar.getInstance().get(Calendar.SECOND));
-                goToMainActivity();
+
             }
 
             @Override
             public void loadFailed() {
-
+                System.out.println("网络未连接");
+                goToMainActivity();
             }
         });
-        FrApplication.getInstance().getMyImageLoader().loadImages(list, SPLASH_DISPLAY_LENGHT);
+        FrApplication.getInstance().getMyImageLoader().loadImages(list, SPLASH_DISPLAY_LENGTH);
     }
 
     private void getDataFromNetwork() {
@@ -112,18 +130,6 @@ public class WelcomeActivity extends Activity{
         return urls;
     }
 
-
-    public List<ThemeCard> getThemeCards() {
-        return themeCards;
-    }
-
-    public List<RecipeCard> getRecipeCards() {
-        return recipeCards;
-    }
-
-    public List<Map<String, Object>> getRecommendRecipes() {
-        return recommendRecipes;
-    }
 
     //test
 }
