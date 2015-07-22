@@ -3,7 +3,9 @@ package cn.fitrecipe.android;
 import static cn.smssdk.framework.utils.R.getStringRes;
 
 import cn.fitrecipe.android.Config.HttpUrl;
+import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.HttpUtils;
+import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.function.Common;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
@@ -26,6 +28,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -220,14 +225,32 @@ public class RegisterActivity extends Activity implements OnClickListener {
         }else if(passwordString.equals("")){
             Common.errorDialog(this, "注册失败", "密码不得为空").show();
         }else {
-            final Map<String, String> params = new HashMap<String, String>();
-            params.put("account", accountString);
-            params.put("password", passwordString);
-            // TODO @WangKun
-            // 注册，注册成功后调用registerSuccess，账号已存在调用accountError
-//            JSONObject params = new JSONObject();
+//            final Map<String, String> params = new HashMap<String, String>();
 //            params.put("account", accountString);
 //            params.put("password", passwordString);
+            // TODO @Test
+            // 注册，注册成功后调用registerSuccess，账号已存在调用accountError
+            JSONObject params = new JSONObject();
+            try {
+                params.put("phone", accountString);
+                params.put("password", passwordString);
+            }catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+            PostRequest request = new PostRequest(HttpUrl.REGISTER_URL, params, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject jsonObject) {
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    System.out.println(volleyError.getMessage());
+//                    int statusCode = volleyError.networkResponse.statusCode;
+//                    System.out.println("volley :  register : error : status code : " );
+                }
+            });
+            FrRequest.getInstance().request(request);
         }
     }
 
@@ -255,7 +278,7 @@ public class RegisterActivity extends Activity implements OnClickListener {
             if(msg.what==1){
                 if (countdown>0){
                     countdown--;
-                    get_disable.setText("("+countdown+")重新获取");
+                    get_disable.setText("(" + countdown + ")重新获取");
                     if(countdown==0){
                         get_enable.setVisibility(View.VISIBLE);
                         get_disable.setVisibility(View.GONE);

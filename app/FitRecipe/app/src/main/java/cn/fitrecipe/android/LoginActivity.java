@@ -159,6 +159,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             // TODO @WangKun
             // 正常登陆，登陆成功后调用loginSuccess，账号不存在调用accountError，密码错误调用passError
 
+
         }
     }
 
