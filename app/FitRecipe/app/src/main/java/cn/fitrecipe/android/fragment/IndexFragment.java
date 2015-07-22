@@ -25,6 +25,7 @@ import cn.fitrecipe.android.Adpater.RecommendViewPagerAdapter;
 import cn.fitrecipe.android.Adpater.ThemeCardAdapter;
 import cn.fitrecipe.android.CategoryActivity;
 import cn.fitrecipe.android.Config.LocalDemo;
+import cn.fitrecipe.android.FrApplication;
 import cn.fitrecipe.android.ImageLoader.MyImageLoader;
 import cn.fitrecipe.android.MainActivity;
 import cn.fitrecipe.android.R;
@@ -91,9 +92,9 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
 
     private void initData() {
         //get data
-        recommendRecipe = ((MainActivity)getActivity()).getRecommendRecipe();
-        themeCards = ((MainActivity)getActivity()).getThemeRecipe();
-        recipeCards = ((MainActivity)getActivity()).getUpdateRecipe();
+        recommendRecipe = FrApplication.getInstance().getRecommendRecipes();
+        themeCards = FrApplication.getInstance().getThemeCards();
+        recipeCards = FrApplication.getInstance().getRecipeCards();
 
         //获得推荐数据，并初始化适配器
         recommendViewPagerAdapter = new RecommendViewPagerAdapter(getActivity(), recommendRecipe, recommendViewPager.getLayoutParams().width, recommendViewPager.getLayoutParams().height);
@@ -143,6 +144,4 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
                 break;
         }
     }
-
-
 }

@@ -8,7 +8,7 @@
     <com.daimajia.androidviewhover.BlurLayout
         android:id="@+id/sample"
         android:layout_width="match_parent"
-        android:background="@drawable/ztest001"
+        android:background="@drawable/loading_pic2"
         android:layout_height="180dp">
 
         <RelativeLayout

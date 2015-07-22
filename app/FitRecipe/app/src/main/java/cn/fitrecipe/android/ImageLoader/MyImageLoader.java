@@ -24,6 +24,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListe
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -33,6 +34,8 @@ import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import cn.fitrecipe.android.R;
 
 
 /**
@@ -91,8 +94,10 @@ public class MyImageLoader {
 
     //this is method is load image backend, it only load images in the urls
     public void loadImages(List<String> urls, int loadingTimeout) {
+        System.out.println(Calendar.getInstance().get(Calendar.MINUTE)+" "+Calendar.getInstance().get(Calendar.SECOND));
         if(urls != null) {
             count.set(urls.size());
+            isCompleted.set(false);
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
@@ -101,7 +106,7 @@ public class MyImageLoader {
                     }
                 }
             }, loadingTimeout);
-            isCompleted.set(false);
+
             Iterator<String> iterator = urls.iterator();
             while (iterator.hasNext()) {
                 String url = iterator.next();
@@ -149,8 +154,9 @@ public class MyImageLoader {
 
         @Override
         public void onLoadingStarted(String s, View view) {
-            //TODO
-            //set image before
+            if(view != null) {
+                System.out.println(view.getClass() + " width: " + view.getMeasuredWidth() + " height: " + view.getMeasuredHeight());
+            }
         }
 
         @Override

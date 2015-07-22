@@ -8,6 +8,7 @@ import android.os.Handler;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +37,10 @@ public class WelcomeActivity extends Activity{
         //get old data from local
         //TODO
 
-        //pass data to MainActivity
+        //save data to Application
+        FrApplication.getInstance().saveRecipeCards(recipeCards);
+        FrApplication.getInstance().saveRecommendRecipes(recommendRecipes);
+        FrApplication.getInstance().saveThemeCards(themeCards);
 
         //get image data
         list = getUrls();
@@ -44,6 +48,7 @@ public class WelcomeActivity extends Activity{
         // 加载首页数据，加载完成之后调用goToMainActivity进行跳转，或者加载时间超过3秒之后调用goToMainActivity进行跳转
             @Override
             public void loadComplete() {
+                System.out.println(Calendar.getInstance().get(Calendar.MINUTE)+" "+Calendar.getInstance().get(Calendar.SECOND));
                 goToMainActivity();
             }
 

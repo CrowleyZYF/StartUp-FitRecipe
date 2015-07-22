@@ -240,18 +240,4 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         }
     }
 
-    public List<Map<String, Object>> getRecommendRecipe() {
-        //TODO
-        return null;
-    }
-
-    public List<ThemeCard> getThemeRecipe() {
-        //TODO
-        return null;
-    }
-
-    public List<RecipeCard> getUpdateRecipe() {
-        //TODO
-        return null;
-    }
 }
