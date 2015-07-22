@@ -2,14 +2,12 @@ package cn.fitrecipe.android;
 
 import android.app.Application;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.pgyersdk.crash.PgyCrashManager;
 
 import java.util.List;
 import java.util.Map;
 
-import cn.fitrecipe.android.Http.FRRequest;
+import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.ImageLoader.MyImageLoader;
 import cn.fitrecipe.android.function.Common;
 import cn.fitrecipe.android.model.RecipeCard;
@@ -39,7 +37,7 @@ public class FrApplication extends Application {
 
         //init network
         if(Common.isOpenNetwork(this))
-           FRRequest.getInstance().init(this);
+           FrRequest.getInstance().init(this);
 
         myImageLoader = new MyImageLoader();
         instance = this;

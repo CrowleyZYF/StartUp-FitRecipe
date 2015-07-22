@@ -9,18 +9,18 @@ import com.android.volley.toolbox.Volley;
 /**
  * Created by wk on 2015/7/18.
  */
-public class FRRequest {
+public class FrRequest {
 
-    private static FRRequest instance = null;
+    private static FrRequest instance = null;
     private RequestQueue rq = null;
 
-    private FRRequest() {
+    private FrRequest() {
     }
 
-    public static FRRequest getInstance() {
-        synchronized (FRRequest.class) {
+    public static FrRequest getInstance() {
+        synchronized (FrRequest.class) {
             if(instance == null)
-                instance = new FRRequest();
+                instance = new FrRequest();
         }
         return instance;
     }

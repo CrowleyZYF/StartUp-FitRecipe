@@ -50,6 +50,7 @@ public class MyImageLoader {
 
     //count images that have not been loaded
     private AtomicInteger count;
+    private int total;
     //mark the iloadingListener if invoked
     private AtomicBoolean isCompleted;
 
@@ -96,13 +97,16 @@ public class MyImageLoader {
     public void loadImages(List<String> urls, int loadingTimeout) {
         System.out.println(Calendar.getInstance().get(Calendar.MINUTE)+" "+Calendar.getInstance().get(Calendar.SECOND));
         if(urls != null) {
-            count.set(urls.size());
+            total = urls.size();
             isCompleted.set(false);
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
                     if (isCompleted.compareAndSet(false, true)) {
-                        iLoadingListener.loadComplete();
+                        if(count.compareAndSet(0, 0))
+                            iLoadingListener.loadFailed();
+                        else
+                            iLoadingListener.loadComplete();
                     }
                 }
             }, loadingTimeout);
@@ -154,15 +158,13 @@ public class MyImageLoader {
 
         @Override
         public void onLoadingStarted(String s, View view) {
-            if(view != null) {
-                System.out.println(view.getClass() + " width: " + view.getMeasuredWidth() + " height: " + view.getMeasuredHeight());
-            }
         }
 
         @Override
         public void onLoadingFailed(String s, View view, FailReason failReason) {
-            if(view == null)
+            if(view == null) {
                 iLoadingListener.loadFailed();
+            }
         }
 
         @Override
@@ -170,9 +172,9 @@ public class MyImageLoader {
             // it is load not display
             synchronized (this) {
                 if (view == null) {
-                    int res = count.decrementAndGet();
+                    int res = count.incrementAndGet();
                     System.out.println("completed: " + res);
-                    if (count.compareAndSet(0, 0) && isCompleted.compareAndSet(false,true)) {
+                    if (count.compareAndSet(total, total) && isCompleted.compareAndSet(false,true)) {
                         iLoadingListener.loadComplete();
                         timer.cancel();
                     }
