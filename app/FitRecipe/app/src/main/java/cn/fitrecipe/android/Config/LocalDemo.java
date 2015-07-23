@@ -17,6 +17,10 @@ public class LocalDemo {
             "http://ww3.sinaimg.cn/bmiddle/81f8b0e2gw1eu717cba55j20q70g9gqu.jpg",
             "http://ww2.sinaimg.cn/bmiddle/81f8b0e2gw1eu717djpk8j20st0j8gqh.jpg",
             "http://ww2.sinaimg.cn/bmiddle/81f8b0e2gw1eu717el13xj20px0h942u.jpg",
+            "http://ww2.sinaimg.cn/bmiddle/81f8b0e2gw1eu717gai3lj20px0haahp.jpg",
+            "http://ww2.sinaimg.cn/bmiddle/81f8b0e2gw1eu717djpk8j20st0j8gqh.jpg",
+            "http://ww2.sinaimg.cn/bmiddle/81f8b0e2gw1eu717el13xj20px0h942u.jpg",
+            "http://ww2.sinaimg.cn/bmiddle/81f8b0e2gw1eu717gai3lj20px0haahp.jpg",
             "http://ww2.sinaimg.cn/bmiddle/81f8b0e2gw1eu717gai3lj20px0haahp.jpg"
     };
     public static final String[] themeBG = {

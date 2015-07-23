@@ -3,11 +3,16 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/theme_id"
+        android:layout_width="0dp"
+        android:layout_height="0dp" />
+
     <ImageView
         android:id="@+id/theme_image"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:src="@drawable/theme_student"
+        android:src="@drawable/loading_pic3"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:paddingLeft="5dp"
