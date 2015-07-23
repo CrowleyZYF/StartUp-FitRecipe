@@ -1,7 +1,10 @@
 package cn.fitrecipe.android;
 
+import android.app.Activity;
 import android.app.Application;
+import android.os.Bundle;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.pgyersdk.crash.PgyCrashManager;
 
 import java.util.List;
@@ -27,13 +30,13 @@ public class FrApplication extends Application {
 
     @Override
     public void onCreate() {
-        // TODO Auto-generated method stub
         super.onCreate();
 
         String appId = "9f7d5e16543dfae53e38d616f3df0818";  //蒲公英注册或上传应用获取的AppId
         PgyCrashManager.register(this, appId);
 
         MyImageLoader.init(this);
+        this.registerActivityLifecycleCallbacks(new MyActivityCallbacks());
 
         //init network
         if(Common.isOpenNetwork(this))
@@ -42,8 +45,6 @@ public class FrApplication extends Application {
         myImageLoader = new MyImageLoader();
         instance = this;
     }
-
-
 
     public static FrApplication getInstance() {
         return instance;
@@ -77,5 +78,48 @@ public class FrApplication extends Application {
         this.recipeCards = recipeCards;
     }
 
+    class MyActivityCallbacks implements ActivityLifecycleCallbacks {
 
+        @Override
+        public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+
+        }
+
+        @Override
+        public void onActivityStarted(Activity activity) {
+
+        }
+
+        @Override
+        public void onActivityResumed(Activity activity) {
+
+            myImageLoader.resume();
+        }
+
+        @Override
+        public void onActivityPaused(Activity activity) {
+            myImageLoader.pause();
+        }
+
+        @Override
+        public void onActivityStopped(Activity activity) {
+
+        }
+
+        @Override
+        public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+        }
+
+        @Override
+        public void onActivityDestroyed(Activity activity) {
+
+        }
+    }
+
+    @Override
+    public void onTerminate() {
+        myImageLoader.stop();
+        super.onTerminate();
+    }
 }

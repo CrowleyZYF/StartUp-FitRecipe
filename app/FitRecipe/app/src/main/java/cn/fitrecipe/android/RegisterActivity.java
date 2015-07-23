@@ -4,6 +4,7 @@ import static cn.smssdk.framework.utils.R.getStringRes;
 
 import cn.fitrecipe.android.Config.HttpUrl;
 import cn.fitrecipe.android.Http.FrRequest;
+import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.HttpUtils;
 import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.function.Common;
@@ -237,7 +238,7 @@ public class RegisterActivity extends Activity implements OnClickListener {
             }catch (JSONException e) {
                 throw new RuntimeException(e);
             }
-            PostRequest request = new PostRequest(HttpUrl.REGISTER_URL, params, new Response.Listener<JSONObject>() {
+            PostRequest request = new PostRequest(FrServerConfig.getRegisterUrl(), params, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject jsonObject) {
 
@@ -245,9 +246,12 @@ public class RegisterActivity extends Activity implements OnClickListener {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
-                    System.out.println(volleyError.getMessage());
-//                    int statusCode = volleyError.networkResponse.statusCode;
-//                    System.out.println("volley :  register : error : status code : " );
+                    if(volleyError != null && volleyError.networkResponse != null) {
+                        int statusCode = volleyError.networkResponse.statusCode;
+                        System.out.println("volley :  register : error : status code : " + statusCode);
+                    }
+                    else
+                        System.out.println("volley : register : response : error");
                 }
             });
             FrRequest.getInstance().request(request);
@@ -274,8 +278,8 @@ public class RegisterActivity extends Activity implements OnClickListener {
 
     private Handler countdownHandler = new Handler(){
         @Override
-        public void handleMessage(Message msg){
-            if(msg.what==1){
+        public void handleMessage(Message msg) {
+            if (msg.what==1){
                 if (countdown>0){
                     countdown--;
                     get_disable.setText("(" + countdown + ")重新获取");
