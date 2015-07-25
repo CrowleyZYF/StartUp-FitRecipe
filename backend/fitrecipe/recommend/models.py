@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-06-10 22:41:16
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-07-25 17:12:59
+# @Last Modified time: 2015-07-25 20:32:37
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from base.models import BaseModel
@@ -30,6 +30,9 @@ class Recommend(BaseModel):
         r = cls.objects.filter(start_time__lte=hour, end_time__gte=hour)
         if r.count() < 1:
             r = cls.objects.all()
+        if r.count() < 1:
+            # empty
+            return []
         return r[0].recipes
 
 class RecommendTheme(BaseModel):
