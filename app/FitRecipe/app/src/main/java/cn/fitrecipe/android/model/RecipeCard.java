@@ -7,6 +7,7 @@ import cn.fitrecipe.android.R;
  */
 public class RecipeCard {
     protected String recipe_name;
+    protected int recipe_id;
     protected int recipe_function;
     protected int recipe_time;
     protected int recipe_calorie;
@@ -20,6 +21,7 @@ public class RecipeCard {
 
     public RecipeCard(){
         this.recipe_name="";
+        this.recipe_id=0;
         this.recipe_function=0;
         this.recipe_time=0;
         this.recipe_calorie=0;
@@ -27,8 +29,9 @@ public class RecipeCard {
 //        this.recipe_background= R.drawable.update_init;
     }
 
-    public RecipeCard(String name, int function, int time, int calorie, int like, String background){
+    public RecipeCard(String name, int id, int function, int time, int calorie, int like, String background){
         this.recipe_name=name;
+        this.recipe_id=id;
         this.recipe_function=function;
         this.recipe_time=time;
         this.recipe_calorie=calorie;
@@ -38,6 +41,10 @@ public class RecipeCard {
 
     public String getRecipe_name(){
         return this.recipe_name;
+    }
+
+    public String getRecipe_id(){
+        return this.recipe_id+"";
     }
 
     public String getRecipe_function(){

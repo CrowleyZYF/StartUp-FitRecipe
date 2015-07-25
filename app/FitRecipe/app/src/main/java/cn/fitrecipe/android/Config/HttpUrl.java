@@ -30,6 +30,9 @@ public class HttpUrl {
     //指南信息内容 GET
     public static final int ARTICLE_INFO_TYPE = 1;
     public static final String ARTICLE_INFO_URL_PREFIX = API_HOST+"article/";
+    //主题信息内容 GET
+    public static final int THEME_INFO_TYPE = 2;
+    public static final String THEME_INFO_URL_PREFIX = API_HOST+"theme/";
 
 
     public static String generateURLString(int type, Map<String, Object> params) {
@@ -42,6 +45,10 @@ public class HttpUrl {
             //文章信息
             case 1:
                 url = RECIPE_INFO_URL_PREFIX + params.get("id").toString();
+                break;
+            //主题信息
+            case 2:
+                url = THEME_INFO_URL_PREFIX + params.get("id").toString() + "/?start=" + params.get("start").toString() + "&num=" + params.get("num").toString();
                 break;
         }
         return url;

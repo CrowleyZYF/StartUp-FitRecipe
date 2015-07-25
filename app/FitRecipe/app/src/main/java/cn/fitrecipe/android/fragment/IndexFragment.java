@@ -68,6 +68,7 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
 
         initView(view);
         initData();
+        initEvent();
         return view;
     }
 

@@ -47,6 +47,7 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Re
     @Override
     public void onBindViewHolder(RecipeCardAdapter.RecipeCardViewHolder contactViewHolder, int i) {
         RecipeCard rc = recipeCardsList.get(i);
+        contactViewHolder.recipe_id.setText(rc.getRecipe_id());
         contactViewHolder.recipe_name.setText(rc.getRecipe_name());
         contactViewHolder.recipe_function.setText(rc.getRecipe_function());
         contactViewHolder.recipe_calorie.setText(rc.getRecipe_calorie());
@@ -63,11 +64,15 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Re
 
     @Override
     public void onClick(View v) {
-        this.context.startActivity(new Intent(this.context, RecipeActivity.class));
+        String id = ((TextView) v.findViewById(R.id.recipe_id)).getText().toString();
+        Intent intent=new Intent(context,RecipeActivity.class);
+        intent.putExtra("id", id);
+        context.startActivity(intent);
     }
 
     public static class RecipeCardViewHolder extends RecyclerView.ViewHolder {
         protected TextView recipe_name;
+        protected TextView recipe_id;
         protected TextView recipe_function;
         protected TextView recipe_time;
         protected TextView recipe_calorie;
@@ -77,6 +82,7 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Re
         public RecipeCardViewHolder(View itemView) {
             super(itemView);
             recipe_name =  (TextView) itemView.findViewById(R.id.recipe_name);
+            recipe_id = (TextView) itemView.findViewById(R.id.recipe_id);
             recipe_function = (TextView)  itemView.findViewById(R.id.recipe_function);
             recipe_time = (TextView)  itemView.findViewById(R.id.recipe_time);
             recipe_calorie = (TextView) itemView.findViewById(R.id.recipe_calorie);
