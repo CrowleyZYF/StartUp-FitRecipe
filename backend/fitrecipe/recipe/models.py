@@ -3,7 +3,7 @@
 # @Author: chaihaotian
 # @Date:   2015-04-26 14:30:44
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-07-14 20:31:31
+# @Last Modified time: 2015-07-25 17:22:57
 from django.conf import settings
 from django.db import models
 
@@ -21,6 +21,8 @@ class Recipe(BaseModel):
     author = models.ForeignKey(OtherAuthor, null=True, blank=True) # 加上可空是为了迁移
     img = models.URLField(max_length=200, verbose_name=u'大图 URL')  # 图片全部使用 CDN
     thumbnail = models.URLField(max_length=200, verbose_name=u'缩略图 URL')
+    recommend_img = models.URLField(max_length=200, null=True, blank=True, verbose_name=u'推荐大图 URL')
+    recommend_thumbnail = models.URLField(max_length=200, null=True, blank=True, verbose_name=u'推荐缩略图 URL')
     title = models.CharField(max_length=100, verbose_name=u'菜谱名称')
     introduce = models.TextField(null=True, blank=True, verbose_name=u'菜谱简介')
     tips = models.TextField(null=True, blank=True, verbose_name=u'菜谱小贴士')
@@ -181,6 +183,10 @@ class Recipe(BaseModel):
             # 如果 start 是负数，改成 0
             start = 0
         return recipes[start:num + start]
+
+    @classmethod
+    def get_latest_recipe(cls):
+        return cls.objects.order_by('-updated_time')[0:10]
 
 
 class Component(BaseModel):
