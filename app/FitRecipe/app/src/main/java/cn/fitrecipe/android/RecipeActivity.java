@@ -24,6 +24,14 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.umeng.socialize.controller.UMServiceFactory;
+import com.umeng.socialize.controller.UMSocialService;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.sso.QZoneSsoHandler;
+import com.umeng.socialize.sso.SinaSsoHandler;
+import com.umeng.socialize.sso.TencentWBSsoHandler;
+import com.umeng.socialize.sso.UMQQSsoHandler;
+import com.umeng.socialize.sso.UMSsoHandler;
 import com.yalantis.contextmenu.lib.ContextMenuDialogFragment;
 import com.yalantis.contextmenu.lib.MenuObject;
 import com.yalantis.contextmenu.lib.MenuParams;
@@ -90,10 +98,24 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
     private ImageView set_btn;
     //返回按钮
     private ImageView back_btn;
+    //添加按钮
+    private ImageView add_btn;
+    //减少按钮
+    private ImageView minus_btn;
     //菜单按钮
     private PopupWindow popupWindow;
+    //收藏按钮
+    private ImageView collect_btn;
+    //评论按钮
+    private ImageView comment_btn;
+    //分享按钮
+    private ImageView share_btn;
     //菜单是否打开
     private boolean open = false;
+    //食谱是否已经收藏
+    private boolean isCollected = false;
+    // 首先在您的Activity中添加如下成员变量
+    final UMSocialService mController = UMServiceFactory.getUMSocialService("com.umeng.share");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +160,9 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         check_procedure_btn = (TextView) findViewById(R.id.check_procedure);
         set_btn = (ImageView) findViewById(R.id.set_btn);
         back_btn = (ImageView) findViewById(R.id.back_btn);
+        add_btn = (ImageView) findViewById(R.id.add_btn);
+        minus_btn = (ImageView) findViewById(R.id.minus_btn);
+
 
         View view = LayoutInflater.from(this).inflate(R.layout.activity_recipe_info_set, null);
         popupWindow = new PopupWindow(view, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics()), (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 152, getResources().getDisplayMetrics()));
@@ -147,20 +172,57 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         popupWindow.setOnDismissListener(this);
         //刷新状态
         popupWindow.update();
+
+        collect_btn = (ImageView) view.findViewById(R.id.collect_btn);
+        comment_btn = (ImageView) view.findViewById(R.id.comment_btn);
+        share_btn = (ImageView) view.findViewById(R.id.share_btn);
     }
 
     private void initData(String url) {
         Toast.makeText(this, "URL: "+ url, Toast.LENGTH_LONG).show();
-        ingredient_dataList=new ArrayList<Map<String,Object>>();
-        nutrition_dataList=new ArrayList<Map<String,Object>>();
-
         getData();
-
         ingredient_adapter=new SimpleAdapter(this, ingredient_dataList, R.layout.activity_recipe_info_ingredient_item, new String[]{"item_name","item_weight","item_remark"}, new int[]{R.id.ingredient_name,R.id.ingredient_weight,R.id.ingredient_remark});
         ingredient_listView.setAdapter(ingredient_adapter);
-
         nutrition_adapter=new SimpleAdapter(this, nutrition_dataList, R.layout.activity_recipe_info_ingredient_item, new String[]{"item_name","item_weight","item_remark"}, new int[]{R.id.ingredient_name,R.id.ingredient_weight,R.id.ingredient_remark});
         nutrition_listView.setAdapter(nutrition_adapter);
+        collect_recipe();
+
+        //Sina
+        mController.getConfig().setSsoHandler(new SinaSsoHandler());
+        //QQ weibo
+        mController.getConfig().setSsoHandler(new TencentWBSsoHandler());
+        //QQ空间
+        QZoneSsoHandler qZoneSsoHandler = new QZoneSsoHandler(this, "100424468", "c7394704798a158208a74ab60104f0ba");
+        qZoneSsoHandler.addToSocialSDK();
+        //QQ好友
+        UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(this, "100424468","c7394704798a158208a74ab60104f0ba");
+        qqSsoHandler.addToSocialSDK();
+
+        // 设置分享内容
+        mController.setShareContent("友盟社会化组件（SDK）让移动应用快速整合社交分享功能，http://www.umeng.com/social");
+        // 设置分享图片, 参数2为图片的url地址
+        mController.setShareMedia(new UMImage(this, R.drawable.welcome));
+        // 设置分享图片，参数2为本地图片的资源引用
+        //mController.setShareMedia(new UMImage(getActivity(), R.drawable.icon));
+        // 设置分享图片，参数2为本地图片的路径(绝对路径)
+        //mController.setShareMedia(new UMImage(getActivity(),
+        //                                BitmapFactory.decodeFile("/mnt/sdcard/icon.png")));
+
+        // 设置分享音乐
+        //UMusic uMusic = new UMusic("http://sns.whalecloud.com/test_music.mp3");
+        //uMusic.setAuthor("GuGu");
+        //uMusic.setTitle("天籁之音");
+        // 设置音乐缩略图
+        //uMusic.setThumb("http://www.umeng.com/images/pic/banner_module_social.png");
+        //mController.setShareMedia(uMusic);
+
+        // 设置分享视频
+        //UMVideo umVideo = new UMVideo(
+        //          "http://v.youku.com/v_show/id_XNTE5ODAwMDM2.html?f=19001023");
+        // 设置视频缩略图
+        //umVideo.setThumb("http://www.umeng.com/images/pic/banner_module_social.png");
+        //umVideo.setTitle("友盟社会化分享!");
+        //mController.setShareMedia(umVideo);
     }
 
     private void getData() {
@@ -182,6 +244,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         user_need_calorie.setText("（"+"1730"+"kcal）");
         calorie_radio.setText("16"+"%");
 
+        ingredient_dataList=new ArrayList<Map<String,Object>>();
         for(int i=0;i< LocalDemo.ingredientName.length;i++){
             Map<String, Object> map=new HashMap<String, Object>();
             map.put("item_name", LocalDemo.ingredientName[i]);//食材名称
@@ -190,6 +253,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
             ingredient_dataList.add(map);
         }
 
+        nutrition_dataList=new ArrayList<Map<String,Object>>();
         for(int i=0;i< LocalDemo.nutritionName.length;i++){
             Map<String, Object> map=new HashMap<String, Object>();
             map.put("item_name", LocalDemo.nutritionName[i]);//营养元素名称，按照固定的顺序输入
@@ -197,12 +261,19 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
             map.put("item_remark", "12%");//百分比，如果用户没有经过评测，则显示“--”
             nutrition_dataList.add(map);
         }
+
+        isCollected = false;
     }
 
     private void initEvent() {
         check_procedure_btn.setOnClickListener(this);
         set_btn.setOnClickListener(this);
         back_btn.setOnClickListener(this);
+        add_btn.setOnClickListener(this);
+        minus_btn.setOnClickListener(this);
+        collect_btn.setOnClickListener(this);
+        comment_btn.setOnClickListener(this);
+        share_btn.setOnClickListener(this);
     }
 
 
@@ -214,21 +285,67 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                 break;
             }
             case R.id.set_btn:{
-                if(open){
-                    popupWindow.dismiss();
-                }else{
-                    set_btn.setImageResource(R.drawable.icon_close);
-                    popupWindow.setBackgroundDrawable(new BitmapDrawable());
-                    popupWindow.showAsDropDown(set_btn,(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, getResources().getDisplayMetrics()), 0);
-                }
-                open=!open;
+                openSet();
                 break;
             }
             case R.id.back_btn:{
                 finish();
                 break;
             }
+            case R.id.add_btn:{
+                adjustWeight(true);
+                break;
+            }
+            case R.id.minus_btn:{
+                adjustWeight(false);
+                break;
+            }
+            case R.id.collect_btn:{
+                collect_recipe();
+                openSet();
+                break;
+            }
+            case R.id.comment_btn:{
+                startActivity(new Intent(this, CommentActivity.class));
+                openSet();
+                break;
+            }
+            case R.id.share_btn:{
+                mController.openShare(this, false);
+                openSet();
+                break;
+            }
+        }
+    }
 
+    public void openSet(){
+        if(open){
+            popupWindow.dismiss();
+            open=false;
+        }else{
+            set_btn.setImageResource(R.drawable.icon_close);
+            popupWindow.setBackgroundDrawable(new BitmapDrawable());
+            popupWindow.showAsDropDown(set_btn,(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, getResources().getDisplayMetrics()), 0);
+            open=true;
+        }
+    }
+
+    public void collect_recipe(){
+        isCollected=!isCollected;
+        //TODO
+        //save the value
+        if(isCollected){
+            collect_btn.setImageResource(R.drawable.icon_like_noshadow);
+        }else{
+            collect_btn.setImageResource(R.drawable.icon_like_green);
+        }
+    }
+
+    public void adjustWeight(boolean isAdd){
+        if(isAdd){
+            Toast.makeText(this, "加50克，并调整相应食材表和营养表", Toast.LENGTH_LONG).show();
+        }else{
+            Toast.makeText(this, "减50克，并调整相应食材表和营养表", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -236,5 +353,15 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
     public void onDismiss() {
         open=!open;
         set_btn.setImageResource(R.drawable.icon_more);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        /**使用SSO授权必须添加如下代码 */
+        UMSsoHandler ssoHandler = mController.getConfig().getSsoHandler(requestCode) ;
+        if(ssoHandler != null){
+            ssoHandler.authorizeCallBack(requestCode, resultCode, data);
+        }
     }
 }

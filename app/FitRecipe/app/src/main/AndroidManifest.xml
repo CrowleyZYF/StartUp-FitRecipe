@@ -89,6 +89,9 @@
             android:name=".ArticleActivity">
         </activity>
         <activity
+            android:name=".CommentActivity">
+        </activity>
+        <activity
             android:name="com.umeng.fb.ConversationActivity"/>
         <meta-data
             android:value="55acde25e0f55ad433002de4"

@@ -30,7 +30,7 @@
             android:layout_marginRight="-7dp">
 
             <ImageView
-                android:id="@+id/icon_minus"
+                android:id="@+id/minus_btn"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@drawable/icon_minus"
@@ -49,7 +49,7 @@
                 />
 
             <ImageView
-                android:id="@+id/icon_add"
+                android:id="@+id/add_btn"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@drawable/icon_add"
