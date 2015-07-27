@@ -1,16 +1,10 @@
 package cn.fitrecipe.android;
 
-import cn.fitrecipe.android.Config.HttpUrl;
-import cn.fitrecipe.android.Http.HttpUtils;
-import cn.fitrecipe.android.function.Common;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -21,7 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
@@ -35,8 +30,12 @@ import com.umeng.socialize.utils.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
 import java.util.Map;
+
+import cn.fitrecipe.android.Http.FrRequest;
+import cn.fitrecipe.android.Http.FrServerConfig;
+import cn.fitrecipe.android.Http.PostRequest;
+import cn.fitrecipe.android.function.Common;
 
 
 public class LoginActivity extends Activity implements View.OnClickListener {
@@ -59,13 +58,21 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private Context nowContext;
     private String backActivity;
 
-    private void loginSuccess(String platform, String account, String username){
+    private void loginSuccess(String platform, JSONObject data) throws JSONException {
+
+        String username = data.getString("nick_name");
+        String avatar = data.getString("avatar");
+        String account = data.getString("phone");
+        String token = data.getString("token");
+
         SharedPreferences preferences=getSharedPreferences("user", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("isLogined", true);
         editor.putString("platform", platform);
         editor.putString("account", account);
         editor.putString("username", username);
+        editor.putString("token", token);
+        editor.putString("avatar", avatar);
         editor.commit();
         Toast.makeText(getApplicationContext(), "欢迎："+ username, Toast.LENGTH_LONG).show();
         Intent intent = new Intent(nowContext, MainActivity.class);
@@ -152,27 +159,78 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         }else if(passwordString.equals("")){
             Common.errorDialog(this, "登陆失败", "密码不得为空").show();
         }else {
-            final Map<String, String> params = new HashMap<String, String>();
-            params.put("phone", accountString);
-            params.put("password", passwordString);
             Toast.makeText(LoginActivity.this, "phone:" + accountString + " password:" + passwordString, Toast.LENGTH_SHORT).show();
             // TODO @WangKun
             // 正常登陆，登陆成功后调用loginSuccess，账号不存在调用accountError，密码错误调用passError
-
-
+            JSONObject params = new JSONObject();
+            try {
+                params.put("phone", accountString);
+                params.put("password", passwordString);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            PostRequest request = new PostRequest(FrServerConfig.getLoginUrl(), params, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject res) {
+                    if(res.has("data")) {
+                        try {
+                            JSONObject data = res.getJSONObject("data");
+                            loginSuccess("original", data);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    if(volleyError != null && volleyError.networkResponse != null) {
+                        int statusCode = volleyError.networkResponse.statusCode;
+                        if(statusCode == 401) {
+                            passError();
+                        }
+                        if(statusCode == 402) {
+                            accountError();
+                        }
+                    }
+                }
+            });
+            FrRequest.getInstance().request(request);
         }
     }
 
     //第三方登录
     private void doOtherLogin(final String userId, final String userName, final String platform) {
-        final Map<String, String> params = new HashMap<String, String>();
-        params.put("external_id", userId);
-        params.put("nick_name", userName);
-        params.put("external_source", platform);
         Toast.makeText(LoginActivity.this, "ID:" + userId + " Name:" + userName + " Source:" + platform, Toast.LENGTH_SHORT).show();
         // TODO @WangKun
         // 第三方登陆，登陆成功后调用loginSuccess，账号不存在调用accountError，密码错误调用passError
-        loginSuccess(params.get("external_source"), "account", params.get("nick_name"));
+        JSONObject params = new JSONObject();
+        try {
+            params.put("external_id", userId);
+            params.put("nick_name", userName);
+            params.put("external_source", platform);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        PostRequest request = new PostRequest(FrServerConfig.getThirtyPartyLoginUrl(), params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject res) {
+                if(res.has("data")) {
+                    try {
+                        JSONObject data = res.getJSONObject("data");
+                        loginSuccess(platform, data);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        });
+        FrRequest.getInstance().request(request);
     }
 
     //第三方登录，qq
