@@ -1,3 +1,12 @@
-*
-!.gitignore
-!app
+/.gradle
+FitRecipe.iml
+build.gradle
+/build
+gradle.properties
+/gradle
+gradlew
+gradlew.bat
+import-summary.txt
+local.properties
+settings.gradle
+/social_sdk_library_project
