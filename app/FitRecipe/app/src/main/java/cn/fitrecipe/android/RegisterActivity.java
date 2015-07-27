@@ -1,20 +1,12 @@
 package cn.fitrecipe.android;
 
-import static cn.smssdk.framework.utils.R.getStringRes;
-
-import cn.fitrecipe.android.Config.HttpUrl;
-import cn.fitrecipe.android.Http.HttpUtils;
-import cn.fitrecipe.android.function.Common;
-import cn.smssdk.EventHandler;
-import cn.smssdk.SMSSDK;
-
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.app.Activity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -27,11 +19,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
+import cn.fitrecipe.android.Http.FrRequest;
+import cn.fitrecipe.android.Http.FrServerConfig;
+import cn.fitrecipe.android.Http.PostRequest;
+import cn.fitrecipe.android.function.Common;
+import cn.smssdk.EventHandler;
+import cn.smssdk.SMSSDK;
+
+import static cn.smssdk.framework.utils.R.getStringRes;
 
 public class RegisterActivity extends Activity implements OnClickListener {
 
@@ -220,14 +221,42 @@ public class RegisterActivity extends Activity implements OnClickListener {
         }else if(passwordString.equals("")){
             Common.errorDialog(this, "注册失败", "密码不得为空").show();
         }else {
-            final Map<String, String> params = new HashMap<String, String>();
-            params.put("account", accountString);
-            params.put("password", passwordString);
-            // TODO @WangKun
-            // 注册，注册成功后调用registerSuccess，账号已存在调用accountError
-//            JSONObject params = new JSONObject();
+//            final Map<String, String> params = new HashMap<String, String>();
 //            params.put("account", accountString);
 //            params.put("password", passwordString);
+            // TODO @Test
+            // 注册，注册成功后调用registerSuccess，账号已存在调用accountError
+            JSONObject params = new JSONObject();
+            try {
+                params.put("phone", accountString);
+                params.put("password", passwordString);
+            }catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+            PostRequest request = new PostRequest(FrServerConfig.getRegisterUrl(), params, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject res) {
+                    if (res.has("data")) {
+                        try {
+                            JSONObject data = res.getJSONObject("data");
+                            registerSuccess("original", data);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    if(volleyError != null && volleyError.networkResponse != null) {
+                        int statusCode = volleyError.networkResponse.statusCode;
+                        if(statusCode == 400) {
+                            accountError();
+                        }
+                    }
+                }
+            });
+            FrRequest.getInstance().request(request);
         }
     }
 
@@ -251,11 +280,11 @@ public class RegisterActivity extends Activity implements OnClickListener {
 
     private Handler countdownHandler = new Handler(){
         @Override
-        public void handleMessage(Message msg){
-            if(msg.what==1){
+        public void handleMessage(Message msg) {
+            if (msg.what==1){
                 if (countdown>0){
                     countdown--;
-                    get_disable.setText("("+countdown+")重新获取");
+                    get_disable.setText("(" + countdown + ")重新获取");
                     if(countdown==0){
                         get_enable.setVisibility(View.VISIBLE);
                         get_disable.setVisibility(View.GONE);
@@ -281,13 +310,20 @@ public class RegisterActivity extends Activity implements OnClickListener {
         }
     }
 
-    private void registerSuccess(String platform, String account, String username){
+    private void registerSuccess(String platform, JSONObject data) throws JSONException {
+        String username = data.getString("nick_name");
+        String avatar = data.getString("avatar");
+        String account = data.getString("phone");
+        String token = data.getString("token");
+
         SharedPreferences preferences=getSharedPreferences("user", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("isLogined", true);
         editor.putString("platform", platform);
         editor.putString("account", account);
         editor.putString("username", username);
+        editor.putString("token", token);
+        editor.putString("avatar", avatar);
         editor.commit();
         Toast.makeText(getApplicationContext(), "欢迎："+ username, Toast.LENGTH_LONG).show();
         Intent intent = new Intent(nowContext, MainActivity.class);

@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -143,6 +144,7 @@ public class MyImageLoader {
 
     public void stop() {
         ImageLoader.getInstance().stop();
+        Log.i("ImageLoader", "stop");
     }
 
     public void clearMemoryCache() {
@@ -194,5 +196,15 @@ public class MyImageLoader {
 
     public void setiLoadingListener(ILoadingListener iLoadingListener) {
         this.iLoadingListener = iLoadingListener;
+    }
+
+    public void pause() {
+        ImageLoader.getInstance().pause();
+        Log.i("ImageLoader", "pause");
+    }
+
+    public void resume() {
+        ImageLoader.getInstance().resume();
+        Log.i("ImageLoader", "resume");
     }
 }
