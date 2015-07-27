@@ -1,669 +1,702 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><title>Fit Recipe API</title><link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"><link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,700|Inconsolata|Raleway:200"><style>/* Highlight.js Theme Tomorrow */
-.hljs-comment,.hljs-title{color:#8e908c}.hljs-variable,.hljs-attribute,.hljs-tag,.hljs-regexp,.ruby .hljs-constant,.xml .hljs-tag .hljs-title,.xml .hljs-pi,.xml .hljs-doctype,.html .hljs-doctype,.css .hljs-id,.css .hljs-class,.css .hljs-pseudo{color:#c82829}.hljs-number,.hljs-preprocessor,.hljs-pragma,.hljs-built_in,.hljs-literal,.hljs-params,.hljs-constant{color:#f5871f}.ruby .hljs-class .hljs-title,.css .hljs-rules .hljs-attribute{color:#eab700}.hljs-string,.hljs-value,.hljs-inheritance,.hljs-header,.ruby .hljs-symbol,.xml .hljs-cdata{color:#718c00}.css .hljs-hexcolor{color:#3e999f}.hljs-function,.python .hljs-decorator,.python .hljs-title,.ruby .hljs-function .hljs-title,.ruby .hljs-title .hljs-keyword,.perl .hljs-sub,.javascript .hljs-title,.coffeescript .hljs-title{color:#4271ae}.hljs-keyword,.javascript .hljs-function{color:#8959a8}.hljs{display:block;background:white;color:#4d4d4c;padding:.5em}.coffeescript .javascript,.javascript .xml,.tex .hljs-formula,.xml .javascript,.xml .vbscript,.xml .css,.xml .hljs-cdata{opacity:.5}</style><style>body,
-h4,
-h5 {
-  font-family: 'Roboto' sans-serif !important;
-}
-h1,
-h2,
-h3,
-.aglio {
-  font-family: 'Raleway' sans-serif !important;
-}
-h1 a,
-h2 a,
-h3 a,
-h4 a,
-h5 a {
-  display: none;
-}
-h1:hover a,
-h2:hover a,
-h3:hover a,
-h4:hover a,
-h5:hover a {
-  display: inline;
-}
-code {
-  color: #444;
-  background-color: #ddd;
-  font-family: 'Inconsolata' monospace !important;
-}
-a[data-target] {
-  cursor: pointer;
-}
-h4 {
-  font-size: 100%;
-  font-weight: bold;
-  text-transform: uppercase;
-}
-.back-to-top {
-  position: fixed;
-  z-index: 1;
-  bottom: 0px;
-  right: 24px;
-  padding: 4px 8px;
-  background-color: #eee;
-  text-decoration: none !important;
-  border-top: 1px solid rgba(0,0,0,0.1);
-  border-left: 1px solid rgba(0,0,0,0.1);
-  border-right: 1px solid rgba(0,0,0,0.1);
-  border-top-left-radius: 3px;
-  border-top-right-radius: 3px;
-}
-.panel {
-  overflow: hidden;
-}
-.panel-heading code {
-  margin-left: 3px;
-  color: #c7254e;
-  background-color: rgba(255,255,255,0.7);
-  white-space: pre-wrap;
-  white-space: -moz-pre-wrap;
-  white-space: -pre-wrap;
-  white-space: -o-pre-wrap;
-  word-wrap: break-word;
-}
-.panel-heading h3 {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-a.list-group-item:hover {
-  background-color: #f8f8f8;
-  border-left: 2px solid #555;
-  padding-left: 15px;
-}
-.indent {
-  display: block;
-  text-indent: 16px;
-}
-.list-group-item {
-  padding-left: 16px;
-}
-.list-group-item .toggle .open {
-  display: block;
-}
-.list-group-item .toggle .closed {
-  display: none;
-}
-.list-group-item.collapsed .toggle .open {
-  display: none;
-}
-.list-group-item.collapsed .toggle .closed {
-  display: block;
-}
-a.list-group-item {
-  font-size: 13px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-a.list-group-item.heading {
-  font-size: 15px;
-  background-color: #f5f5f5;
-}
-a.list-group-item.heading:hover {
-  background-color: #f8f8f8;
-}
-.list-group-item.collapse {
-  display: none;
-}
-.list-group-item.collapse.in {
-  display: block;
-}
-.list-group-item a span.closed {
-  display: none;
-}
-.list-group-item a span.open {
-  display: block;
-}
-.list-group-item a.collapsed span.closed {
-  display: block;
-}
-.list-group-item a.collapsed span.open {
-  display: none;
-}
-#nav {
-  width: inherit;
-  margin-top: 38px;
-  max-width: 255px;
-  top: 0;
-  bottom: 0;
-  padding-right: 12px;
-  padding-bottom: 12px;
-  overflow-y: auto;
-}
-@media (max-width: 1199px) {
-  #nav {
-    max-width: 212px;
-  }
-}
-</style></head><body><a href="#top" class="text-muted back-to-top"><i class="fa fa-toggle-up"></i>&nbsp;Back to top</a><div class="container"><div class="row"><div class="col-md-3"><nav id="nav" class="hidden-sm hidden-xs affix nav"><div class="list-group"><a data-toggle="" data-target="#recipe-menu" href="#recipe" class="list-group-item heading collapsed">Recipe</a><div id="recipe-menu"><a href="#recipe-recipe-detail" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-info"><i class="fa fa-arrow-down"></i></span>Recipe Detail</a><a href="#recipe-recipe-list" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-info"><i class="fa fa-arrow-down"></i></span>Recipe List</a></div></div><div class="list-group"><a data-toggle="" data-target="#label-menu" href="#label" class="list-group-item heading collapsed">Label</a><div id="label-menu"><a href="#label-label-list" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-info"><i class="fa fa-arrow-down"></i></span>Label List</a></div></div><div class="list-group"><a data-toggle="" data-target="#recommend-menu" href="#recommend" class="list-group-item heading collapsed">Recommend</a><div id="recommend-menu"><a href="#recommend-retrieve-recommend-recipes" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-info"><i class="fa fa-arrow-down"></i></span>Retrieve Recommend Recipes</a></div></div><div class="list-group"><a data-toggle="" data-target="#knowledge-menu" href="#knowledge" class="list-group-item heading collapsed">Knowledge</a><div id="knowledge-menu"></div></div><div class="list-group"><a data-toggle="" data-target="#theme-menu" href="#theme" class="list-group-item heading collapsed">Theme</a><div id="theme-menu"><a href="#theme-theme-list" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-info"><i class="fa fa-arrow-down"></i></span>Theme List</a><a href="#theme-theme-detail" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-info"><i class="fa fa-arrow-down"></i></span>Theme Detail</a><a href="#theme-theme-recipes-list" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-info"><i class="fa fa-arrow-down"></i></span>Theme Recipes List</a></div></div><div class="list-group"><a data-toggle="" data-target="#authorization-menu" href="#authorization" class="list-group-item heading collapsed">Authorization</a><div id="authorization-menu"><a href="#authorization-register" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-success"><i class="fa fa-plus"></i></span>Register</a><a href="#authorization-login" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-success"><i class="fa fa-plus"></i></span>Login</a><a href="#authorization-third-party-login" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-success"><i class="fa fa-plus"></i></span>Third-Party Login</a></div></div></nav></div><div class="col-md-8"><div><header><div class="page-header"><h1 id="top">Fit Recipe API</h1></div></header><div class="description"></div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="recipe">Recipe&nbsp;<a href="#recipe"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><ul>
-<li><p>菜谱名称</p></li>
-<li><p>菜谱图片</p></li>
-<li><p>烹饪时间</p></li>
-<li><p>作者（头像，名称，ID）</p></li>
-<li><p>菜谱简介</p></li>
-<li><p>功效标签： 增肌 减脂</p></li>
-<li><p>用餐时间标签： 早餐 加餐 正餐</p></li>
-<li><p>食材标签： 鸡肉 鱼肉 牛肉 海鲜 蛋奶 果蔬 米面 点心</p></li>
-<li><p>其他标签： 酸甜 等等</p></li>
-<li><p>卡路里数</p></li>
-<li><p>配料表</p>
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Fit Recipe API</title><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"><style>@import url(http://fonts.googleapis.com/css?family=Roboto:400,700|Inconsolata|Raleway:200);.hljs-comment,.hljs-title{color:#8e908c}.hljs-variable,.hljs-attribute,.hljs-tag,.hljs-regexp,.ruby .hljs-constant,.xml .hljs-tag .hljs-title,.xml .hljs-pi,.xml .hljs-doctype,.html .hljs-doctype,.css .hljs-id,.css .hljs-class,.css .hljs-pseudo{color:#c82829}.hljs-number,.hljs-preprocessor,.hljs-pragma,.hljs-built_in,.hljs-literal,.hljs-params,.hljs-constant{color:#f5871f}.ruby .hljs-class .hljs-title,.css .hljs-rules .hljs-attribute{color:#eab700}.hljs-string,.hljs-value,.hljs-inheritance,.hljs-header,.ruby .hljs-symbol,.xml .hljs-cdata{color:#718c00}.css .hljs-hexcolor{color:#3e999f}.hljs-function,.python .hljs-decorator,.python .hljs-title,.ruby .hljs-function .hljs-title,.ruby .hljs-title .hljs-keyword,.perl .hljs-sub,.javascript .hljs-title,.coffeescript .hljs-title{color:#4271ae}.hljs-keyword,.javascript .hljs-function{color:#8959a8}.hljs{display:block;background:white;color:#4d4d4c;padding:.5em}.coffeescript .javascript,.javascript .xml,.tex .hljs-formula,.xml .javascript,.xml .vbscript,.xml .css,.xml .hljs-cdata{opacity:.5}body{color:black;background:white;font-family:'Roboto',Helvetica,sans-serif;font-size:14px;line-height:1.42}header{border-bottom:1px solid #f2f2f2;margin-bottom:12px}h1,h2,h3,h4,h5{color:black;margin:12px 0}h1 .permalink,h2 .permalink,h3 .permalink,h4 .permalink,h5 .permalink{margin-left:6px;opacity:0;transition:opacity .25s ease}h1:hover .permalink,h2:hover .permalink,h3:hover .permalink,h4:hover .permalink,h5:hover .permalink{opacity:1}h1{font-family:'Raleway',Helvetica,sans-serif;font-size:36px;font-weight:500}h2{font-family:'Raleway',Helvetica,sans-serif;font-size:30px;font-weight:500}h3{font-size:100%;text-transform:uppercase}h5{font-size:100%;font-weight:normal}p{margin:0 0 10px}p.choices{line-height:1.6}a{color:#428bca;text-decoration:none}li p{margin:0}dl dt{float:left;width:160px;clear:left;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}dl dd{margin-left:180px}blockquote{color:rgba(0,0,0,0.5);font-size:15.5px;padding:10px 20px;margin:12px 0;border-left:5px solid #e8e8e8}blockquote p:last-child{margin-bottom:0}pre{background-color:#f5f5f5;padding:12px;border:1px solid #cfcfcf;border-radius:6px}pre code{background-color:transparent;padding:0;border:none}code{color:#444;background-color:#f5f5f5;font-family:'Inconsolata',monospace;padding:1px 4px;border:1px solid #cfcfcf;border-radius:3px}ul,ol{padding-left:2em}table{border-collapse:collapse;border-spacing:0}table tr:nth-child(2n){background-color:#fafafa}table th,table td{padding:6px 12px;border:1px solid #d9d9d9}nav{position:fixed;top:24px;bottom:0;overflow-y:auto}nav .resource-group{padding:0}nav .resource-group .heading{position:relative}nav .resource-group .heading .chevron{position:absolute;top:12px;right:12px;opacity:.5}nav .resource-group .heading a{display:block;color:black;opacity:.7;border-left:2px solid transparent;margin:0}nav .resource-group .heading a:hover{border-left:2px solid black}nav ul{list-style-type:none;padding-left:0}nav ul a{display:block;font-size:13px;color:rgba(0,0,0,0.7);padding:8px 12px;border-top:1px solid #d9d9d9;border-left:2px solid transparent;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}nav ul a:hover{border-left:2px solid black}nav ul>li{margin:0}nav ul>li:first-child{margin-top:-12px}nav ul>li:last-child{margin-bottom:-12px}nav ul ul a{padding-left:24px}nav ul ul li{margin:0}nav ul ul li:first-child{margin-top:0}nav ul ul li:last-child{margin-bottom:0}nav>div>div>ul>li:first-child>a{border-top:none}.preload *{transition:none !important}.pull-left{float:left}.pull-right{float:right}.badge{display:inline-block;float:right;min-width:10px;min-height:14px;padding:3px 7px;font-size:12px;color:#000;background-color:#f2f2f2;border-radius:10px;margin-top:-2px;margin-bottom:-2px}.badge.get{color:#70bbe1;background-color:#d9edf7}.badge.head{color:#70bbe1;background-color:#d9edf7}.badge.options{color:#70bbe1;background-color:#d9edf7}.badge.put{color:#f0db70;background-color:#fcf8e3}.badge.patch{color:#f0db70;background-color:#fcf8e3}.badge.post{color:#93cd7c;background-color:#dff0d8}.badge.delete{color:#ce8383;background-color:#f2dede}.collapse-button{float:right}.collapse-button .close{display:none;color:#428bca;cursor:pointer}.collapse-button .open{color:#428bca;cursor:pointer}.collapse-button.show .close{display:inline}.collapse-button.show .open{display:none}.collapse-content{max-height:0;overflow:hidden;transition:max-height .3s ease-in-out}nav{width:220px}.container{max-width:940px;margin-left:auto;margin-right:auto}.container .row .content{margin-left:244px;width:696px}.container .row:after{content:'';display:block;clear:both}.container-fluid nav{width:22%}.container-fluid .row .content{margin-left:24%;width:76%}@media (max-width:1200px){nav{width:200px}.container{max-width:840px}.container .row .content{margin-left:224px;width:606px}}@media (max-width:992px){nav{width:170px}.container{max-width:720px}.container .row .content{margin-left:194px;width:526px}}@media (max-width:768px){nav{display:none}.container{width:95%;max-width:none}.container .row .content,.container-fluid .row .content{margin-left:auto;margin-right:auto;width:95%}}.back-to-top{position:fixed;z-index:1;bottom:0;right:24px;padding:4px 8px;color:rgba(0,0,0,0.5);background-color:#f2f2f2;text-decoration:none !important;border-top:1px solid #d9d9d9;border-left:1px solid #d9d9d9;border-right:1px solid #d9d9d9;border-top-left-radius:3px;border-top-right-radius:3px}.resource-group{padding:12px;margin-bottom:12px;background-color:white;border:1px solid #d9d9d9;border-radius:6px}.resource-group h2.group-heading,.resource-group .heading a{padding:12px;margin:-12px -12px 12px -12px;background-color:#f2f2f2;border-bottom:1px solid #d9d9d9;border-top-left-radius:6px;border-top-right-radius:6px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}nav .resource-group .heading a{margin-bottom:0}nav .resource-group .collapse-content{padding:0}.action{margin-bottom:12px;padding:12px 12px 0 12px;overflow:hidden;border:1px solid transparent;border-radius:6px}.action h4{padding:12px;margin:-12px -12px 12px -12px;border-bottom:1px solid transparent;border-top-left-radius:6px;border-top-right-radius:6px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}.action h4 .name{float:right;font-weight:normal}.action h4 .method{padding:6px 12px;margin-right:12px;border-radius:3px}.action h4 .method.get{color:#fff;background-color:#337ab7}.action h4 .method.head{color:#fff;background-color:#337ab7}.action h4 .method.options{color:#fff;background-color:#337ab7}.action h4 .method.put{color:#000;background-color:#f0ad4e}.action h4 .method.patch{color:#000;background-color:#f0ad4e}.action h4 .method.post{color:#fff;background-color:#5cb85c}.action h4 .method.delete{color:#fff;background-color:#d9534f}.action h4 code{color:#444;background-color:#f5f5f5;border-color:#cfcfcf}.action dl.inner{padding-bottom:2px}.action .title{border-bottom:1px solid white;margin:0 -12px -1px -12px;padding:12px}.action.get{border-color:#bce8f1}.action.get h4{color:#337ab7;background:#d9edf7;border-bottom-color:#bce8f1}.action.head{border-color:#bce8f1}.action.head h4{color:#337ab7;background:#d9edf7;border-bottom-color:#bce8f1}.action.options{border-color:#bce8f1}.action.options h4{color:#337ab7;background:#d9edf7;border-bottom-color:#bce8f1}.action.post{border-color:#d6e9c6}.action.post h4{color:#5cb85c;background:#dff0d8;border-bottom-color:#d6e9c6}.action.put{border-color:#faebcc}.action.put h4{color:#f0ad4e;background:#fcf8e3;border-bottom-color:#faebcc}.action.patch{border-color:#faebcc}.action.patch h4{color:#f0ad4e;background:#fcf8e3;border-bottom-color:#faebcc}.action.delete{border-color:#ebccd1}.action.delete h4{color:#d9534f;background:#f2dede;border-bottom-color:#ebccd1}</style></head><body class="preload"><a href="#top" class="text-muted back-to-top"><i class="fa fa-toggle-up"></i>&nbsp;Back to top</a><div class="container"><div class="row"><nav><div class="resource-group"><div class="heading"><div class="chevron"><i class="open fa fa-angle-down"></i></div><a href="#recipe">Recipe</a></div><div class="collapse-content"><ul><li><a href="#recipe-recipe-detail-get"><span class="badge get"><i class="fa fa-arrow-down"></i></span>Retrieve Recipe</a></li><li><a href="#recipe-recipe-list-get"><span class="badge get"><i class="fa fa-arrow-down"></i></span>Retrieve all Recipes</a></li></ul></div></div><div class="resource-group"><div class="heading"><div class="chevron"><i class="open fa fa-angle-down"></i></div><a href="#label">Label</a></div><div class="collapse-content"><ul><li><a href="#label-label-list-get"><span class="badge get"><i class="fa fa-arrow-down"></i></span>Retrieve all labels</a></li></ul></div></div><div class="resource-group"><div class="heading"><div class="chevron"><i class="open fa fa-angle-down"></i></div><a href="#recommend">Recommend</a></div><div class="collapse-content"><ul><li><a href="#recommend-retrieve-homepage-recommends-get"><span class="badge get"><i class="fa fa-arrow-down"></i></span>Retrieve Homepage Recommends By Time</a></li></ul></div></div><div class="resource-group"><div class="heading"><div class="chevron"><i class="open fa fa-angle-down"></i></div><a href="#knowledge">Knowledge</a></div><div class="collapse-content"><ul><li><a href="#header-类别的数据结构">类别的数据结构</a></li><li><a href="#header-系列的数据结构">系列的数据结构</a></li><li><a href="#header-文章的数据结构">文章的数据结构</a></li></ul></div></div><div class="resource-group"><div class="heading"><div class="chevron"><i class="open fa fa-angle-down"></i></div><a href="#theme">Theme</a></div><div class="collapse-content"><ul><li><a href="#theme-theme-list-get"><span class="badge get"><i class="fa fa-arrow-down"></i></span>Retrieve Theme List</a></li><li><a href="#theme-theme-detail-get"><span class="badge get"><i class="fa fa-arrow-down"></i></span>Retrieve Theme Detail</a></li><li><a href="#theme-theme-recipes-list-get"><span class="badge get"><i class="fa fa-arrow-down"></i></span>Retrieve Recipes of specific Theme</a></li></ul></div></div><div class="resource-group"><div class="heading"><div class="chevron"><i class="open fa fa-angle-down"></i></div><a href="#authorization">Authorization</a></div><div class="collapse-content"><ul><li><a href="#authorization-register-post"><span class="badge post"><i class="fa fa-plus"></i></span>Normal Account Register</a></li><li><a href="#authorization-login-post"><span class="badge post"><i class="fa fa-plus"></i></span>Normal Account Login</a></li><li><a href="#authorization-third-party-login-post"><span class="badge post"><i class="fa fa-plus"></i></span>Third-Party Login &amp; Register</a></li></ul></div></div></nav><div class="content"><header><h1 id="top">Fit Recipe API</h1></header><section id="recipe" class="resource-group"><h2 class="group-heading">Recipe<a href="#recipe" class="permalink">&para;</a></h2><ul>
+<li>
+<p>菜谱名称</p>
+</li>
+<li>
+<p>菜谱图片</p>
+</li>
+<li>
+<p>烹饪时间</p>
+</li>
+<li>
+<p>作者（头像，名称，ID）</p>
+</li>
+<li>
+<p>菜谱简介</p>
+</li>
+<li>
+<p>功效标签： 增肌 减脂</p>
+</li>
+<li>
+<p>用餐时间标签： 早餐 加餐 正餐</p>
+</li>
+<li>
+<p>食材标签： 鸡肉 鱼肉 牛肉 海鲜 蛋奶 果蔬 米面 点心</p>
+</li>
+<li>
+<p>其他标签： 酸甜 等等</p>
+</li>
+<li>
+<p>卡路里数</p>
+</li>
+<li>
+<p>配料表</p>
 <ul>
 <li>食材名 大米</li>
 <li>重量 200克</li>
 <li>备注 约一小碗</li>
-</ul></li>
-<li><p>营养表</p></li>
-<li><p>菜谱步骤表</p>
+</ul>
+</li>
+<li>
+<p>营养表</p>
+</li>
+<li>
+<p>菜谱步骤表</p>
 <ul>
 <li>步骤简述</li>
 <li>步骤配图</li>
-</ul></li>
 </ul>
-<h4 id="recipe-recipe-detail">Recipe Detail&nbsp;<a href="#recipe-recipe-detail"><i class="fa fa-link"></i></a></h4><section id="recipe-recipe-detail-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Retrieve Recipe</span></div><div style="float:left"><a href="#recipe-recipe-detail-get" class="btn btn-xs btn-primary">GET</a></div><div style="overflow:hidden"><code>/api/recipe/{id}/</code></div></div><div class="panel-body"><p>获取指定 ID 的菜谱详细信息</p>
-</div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>id</dt><dd><code>number</code>&nbsp;<span class="required">(required)</span>&nbsp;<p>菜谱的 ID</p>
-</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#3b07bbf7509774104a220ad3b7ad4948" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="3b07bbf7509774104a220ad3b7ad4948" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
-    "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">200</span></span>,
-    "<span class="hljs-attribute">error_message</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-    "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
+</li>
+</ul>
+<div id="recipe-recipe-detail" class="resource"><h3>Recipe Detail<a href="#recipe-recipe-detail" class="permalink">&para;</a></h3><div id="recipe-recipe-detail-get" class="action get"><h4><div class="name">Retrieve Recipe</div><a href="#recipe-recipe-detail-get" class="method get">GET</a><code class="uri">/api/recipe/{id}/</code></h4><p>获取指定 ID 的菜谱详细信息</p>
+<div class="title"><strong>Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>id</dt><dd><code>number</code>&nbsp;<span class="required">(required)</span>&nbsp;<p>菜谱的 ID</p>
+</dd></dl></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">200</span></span>,
+  "<span class="hljs-attribute">error_message</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+  "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">3</span></span>,
+    "<span class="hljs-attribute">meat_labels</span>": <span class="hljs-value">[
+      {
+        "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">7</span></span>,
+        "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"猪肉"</span></span>,
+        "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"食材"</span>
+      </span>},
+      {
+        "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">8</span></span>,
+        "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"面条"</span></span>,
+        "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"食材"</span>
+      </span>}
+    ]</span>,
+    "<span class="hljs-attribute">time_labels</span>": <span class="hljs-value">[
+      {
         "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">3</span></span>,
-        "<span class="hljs-attribute">meat_labels</span>": <span class="hljs-value">[
-            {
-                "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">7</span></span>,
-                "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"猪肉"</span></span>,
-                "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"食材"</span>
-            </span>},
-            {
-                "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">8</span></span>,
-                "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"面条"</span></span>,
-                "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"食材"</span>
-            </span>}
-        ]</span>,
-        "<span class="hljs-attribute">time_labels</span>": <span class="hljs-value">[
-            {
-                "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">3</span></span>,
-                "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"早餐"</span></span>,
-                "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"用餐时间"</span>
-            </span>}
-        ]</span>,
-        "<span class="hljs-attribute">effect_labels</span>": <span class="hljs-value">[
-            {
-                "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">5</span></span>,
-                "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"减脂"</span></span>,
-                "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"功效"</span>
-            </span>}
-        ]</span>,
-        "<span class="hljs-attribute">other_labels</span>": <span class="hljs-value">[]</span>,
-        "<span class="hljs-attribute">component_set</span>": <span class="hljs-value">[
-            {
-                "<span class="hljs-attribute">amount</span>": <span class="hljs-value"><span class="hljs-number">5</span></span>,
-                "<span class="hljs-attribute">remark</span>": <span class="hljs-value"><span class="hljs-string">"一个"</span></span>,
-                "<span class="hljs-attribute">ingredient</span>": <span class="hljs-value">{
-                    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">2</span></span>,
-                    "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"鸡蛋"</span>
-                </span>}
-            </span>}
-        ]</span>,
-        "<span class="hljs-attribute">procedure_set</span>": <span class="hljs-value">[
-            {
-                "<span class="hljs-attribute">content</span>": <span class="hljs-value"><span class="hljs-string">"随便煮一煮"</span></span>,
-                "<span class="hljs-attribute">num</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>,
-                "<span class="hljs-attribute">img</span>": <span class="hljs-value"><span class="hljs-string">"http://b.36krcnd.com/nil_class/df446fa6-ef37-4b34-a435-885d2ccc543f/ch.jpg!slider"</span>
-            </span>}
-        ]</span>,
-        "<span class="hljs-attribute">nutrition_set</span>": <span class="hljs-value">{
-            "<span class="hljs-attribute">钠</span>": <span class="hljs-value">{
-                "<span class="hljs-attribute">amount</span>": <span class="hljs-value"><span class="hljs-number">8.3</span></span>,
-                "<span class="hljs-attribute">unit</span>": <span class="hljs-value"><span class="hljs-string">"mg"</span>
-            </span>}</span>,
-            "<span class="hljs-attribute">热量（卡路里）</span>": <span class="hljs-value">{
-                "<span class="hljs-attribute">amount</span>": <span class="hljs-value"><span class="hljs-number">2.6</span></span>,
-                "<span class="hljs-attribute">unit</span>": <span class="hljs-value"><span class="hljs-string">"kcal"</span>
-            </span>}</span>,
-            "<span class="hljs-attribute">不饱和脂肪酸</span>": <span class="hljs-value">{
-                "<span class="hljs-attribute">amount</span>": <span class="hljs-value"><span class="hljs-number">0.0</span></span>,
-                "<span class="hljs-attribute">unit</span>": <span class="hljs-value"><span class="hljs-string">"g"</span>
-            </span>}</span>,
-            "<span class="hljs-attribute">纤维素</span>": <span class="hljs-value">{
-                "<span class="hljs-attribute">amount</span>": <span class="hljs-value"><span class="hljs-number">0.0</span></span>,
-                "<span class="hljs-attribute">unit</span>": <span class="hljs-value"><span class="hljs-string">"g"</span>
-            </span>}</span>,
-            "<span class="hljs-attribute">碳水化合物</span>": <span class="hljs-value">{
-                "<span class="hljs-attribute">amount</span>": <span class="hljs-value"><span class="hljs-number">0.04</span></span>,
-                "<span class="hljs-attribute">unit</span>": <span class="hljs-value"><span class="hljs-string">"g"</span>
-            </span>}</span>,
-            "<span class="hljs-attribute">水</span>": <span class="hljs-value">{
-                "<span class="hljs-attribute">amount</span>": <span class="hljs-value"><span class="hljs-number">4.38</span></span>,
-                "<span class="hljs-attribute">unit</span>": <span class="hljs-value"><span class="hljs-string">"g"</span>
-            </span>}</span>,
-            "<span class="hljs-attribute">维他命 D</span>": <span class="hljs-value">{
-                "<span class="hljs-attribute">amount</span>": <span class="hljs-value"><span class="hljs-number">0.0</span></span>,
-                "<span class="hljs-attribute">unit</span>": <span class="hljs-value"><span class="hljs-string">"µg"</span>
-            </span>}</span>,
-            "<span class="hljs-attribute">脂类</span>": <span class="hljs-value">{
-                "<span class="hljs-attribute">amount</span>": <span class="hljs-value"><span class="hljs-number">0.01</span></span>,
-                "<span class="hljs-attribute">unit</span>": <span class="hljs-value"><span class="hljs-string">"g"</span>
-            </span>}</span>,
-            "<span class="hljs-attribute">胆固醇</span>": <span class="hljs-value">{
-                "<span class="hljs-attribute">amount</span>": <span class="hljs-value"><span class="hljs-number">0.0</span></span>,
-                "<span class="hljs-attribute">unit</span>": <span class="hljs-value"><span class="hljs-string">"mg"</span>
-            </span>}</span>,
-            "<span class="hljs-attribute">维他命 C</span>": <span class="hljs-value">{
-                "<span class="hljs-attribute">amount</span>": <span class="hljs-value"><span class="hljs-number">0.0</span></span>,
-                "<span class="hljs-attribute">unit</span>": <span class="hljs-value"><span class="hljs-string">"mg"</span>
-            </span>}</span>,
-            "<span class="hljs-attribute">蛋白质</span>": <span class="hljs-value">{
-                "<span class="hljs-attribute">amount</span>": <span class="hljs-value"><span class="hljs-number">0.55</span></span>,
-                "<span class="hljs-attribute">unit</span>": <span class="hljs-value"><span class="hljs-string">"g"</span>
-            </span>}
-        </span>}</span>,
-        "<span class="hljs-attribute">author</span>": <span class="hljs-value">{
-            "<span class="hljs-attribute">nick_name</span>": <span class="hljs-value"><span class="hljs-string">"OxeNuNAefMxqQDMiyirejJhiUzfEsPeOdlOalmmKIFHkXzTvQSc509207812"</span></span>,
-            "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">4</span></span>,
-            "<span class="hljs-attribute">avatar</span>": <span class="hljs-value"><span class="hljs-string">"http://tp2.sinaimg.cn/1937464505/180/5708528601/1"</span>
-        </span>}</span>,
-        "<span class="hljs-attribute">created_time</span>": <span class="hljs-value"><span class="hljs-string">"2015-05-20 16:55:50"</span></span>,
-        "<span class="hljs-attribute">updated_time</span>": <span class="hljs-value"><span class="hljs-string">"2015-05-20 16:58:49"</span></span>,
-        "<span class="hljs-attribute">img</span>": <span class="hljs-value"><span class="hljs-string">"http://b.36krcnd.com/nil_class/df446fa6-ef37-4b34-a435-885d2ccc543f/ch.jpg!slider"</span></span>,
-        "<span class="hljs-attribute">thumbnail</span>": <span class="hljs-value"><span class="hljs-string">"http://b.36krcnd.com/nil_class/df446fa6-ef37-4b34-a435-885d2ccc543f/ch.jpg!slider"</span></span>,
-        "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"阳春面"</span></span>,
-        "<span class="hljs-attribute">duration</span>": <span class="hljs-value"><span class="hljs-number">10</span></span>,
-        "<span class="hljs-attribute">calories</span>": <span class="hljs-value"><span class="hljs-number">2.6</span>
-    </span>}
-</span>}
-</code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>404</code></strong><a data-toggle="collapse" data-target="#10b5dfacdb1943abf05749a6d99f101a" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="10b5dfacdb1943abf05749a6d99f101a" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
-    "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"Not found"</span>
-</span>}
-</code></pre></li></ul></section><h4 id="recipe-recipe-list">Recipe List&nbsp;<a href="#recipe-recipe-list"><i class="fa fa-link"></i></a></h4><section id="recipe-recipe-list-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Retrieve all Recipes</span></div><div style="float:left"><a href="#recipe-recipe-list-get" class="btn btn-xs btn-primary">GET</a></div><div style="overflow:hidden"><code>/api/recipe/list/?meat={meat}&amp;effect={effect}&amp;time={time}&amp;start={start}&amp;num={num}&amp;order={order}&amp;desc={desc}</code></div></div><div class="panel-body"><p>获取所有的菜谱。列表中的菜谱不会包含营养表和步骤表。</p>
-</div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>meat</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1,2</span></span><p>食材 Label，多选使用逗号将 id 连接起来。如果不传则为全部。</p>
+        "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"早餐"</span></span>,
+        "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"用餐时间"</span>
+      </span>}
+    ]</span>,
+    "<span class="hljs-attribute">effect_labels</span>": <span class="hljs-value">[
+      {
+        "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">5</span></span>,
+        "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"减脂"</span></span>,
+        "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"功效"</span>
+      </span>}
+    ]</span>,
+    "<span class="hljs-attribute">other_labels</span>": <span class="hljs-value">[]</span>,
+    "<span class="hljs-attribute">component_set</span>": <span class="hljs-value">[
+      {
+        "<span class="hljs-attribute">amount</span>": <span class="hljs-value"><span class="hljs-number">5</span></span>,
+        "<span class="hljs-attribute">remark</span>": <span class="hljs-value"><span class="hljs-string">"一个"</span></span>,
+        "<span class="hljs-attribute">ingredient</span>": <span class="hljs-value">{
+          "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">2</span></span>,
+          "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"鸡蛋"</span>
+        </span>}
+      </span>}
+    ]</span>,
+    "<span class="hljs-attribute">procedure_set</span>": <span class="hljs-value">[
+      {
+        "<span class="hljs-attribute">content</span>": <span class="hljs-value"><span class="hljs-string">"随便煮一煮"</span></span>,
+        "<span class="hljs-attribute">num</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>,
+        "<span class="hljs-attribute">img</span>": <span class="hljs-value"><span class="hljs-string">"http://b.36krcnd.com/nil_class/df446fa6-ef37-4b34-a435-885d2ccc543f/ch.jpg!slider"</span>
+      </span>}
+    ]</span>,
+    "<span class="hljs-attribute">nutrition_set</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">钠</span>": <span class="hljs-value">{
+        "<span class="hljs-attribute">amount</span>": <span class="hljs-value"><span class="hljs-number">8.3</span></span>,
+        "<span class="hljs-attribute">unit</span>": <span class="hljs-value"><span class="hljs-string">"mg"</span>
+      </span>}</span>,
+      "<span class="hljs-attribute">热量（卡路里）</span>": <span class="hljs-value">{
+        "<span class="hljs-attribute">amount</span>": <span class="hljs-value"><span class="hljs-number">2.6</span></span>,
+        "<span class="hljs-attribute">unit</span>": <span class="hljs-value"><span class="hljs-string">"kcal"</span>
+      </span>}</span>,
+      "<span class="hljs-attribute">不饱和脂肪酸</span>": <span class="hljs-value">{
+        "<span class="hljs-attribute">amount</span>": <span class="hljs-value"><span class="hljs-number">0</span></span>,
+        "<span class="hljs-attribute">unit</span>": <span class="hljs-value"><span class="hljs-string">"g"</span>
+      </span>}</span>,
+      "<span class="hljs-attribute">纤维素</span>": <span class="hljs-value">{
+        "<span class="hljs-attribute">amount</span>": <span class="hljs-value"><span class="hljs-number">0</span></span>,
+        "<span class="hljs-attribute">unit</span>": <span class="hljs-value"><span class="hljs-string">"g"</span>
+      </span>}</span>,
+      "<span class="hljs-attribute">碳水化合物</span>": <span class="hljs-value">{
+        "<span class="hljs-attribute">amount</span>": <span class="hljs-value"><span class="hljs-number">0.04</span></span>,
+        "<span class="hljs-attribute">unit</span>": <span class="hljs-value"><span class="hljs-string">"g"</span>
+      </span>}</span>,
+      "<span class="hljs-attribute">水</span>": <span class="hljs-value">{
+        "<span class="hljs-attribute">amount</span>": <span class="hljs-value"><span class="hljs-number">4.38</span></span>,
+        "<span class="hljs-attribute">unit</span>": <span class="hljs-value"><span class="hljs-string">"g"</span>
+      </span>}</span>,
+      "<span class="hljs-attribute">维他命 D</span>": <span class="hljs-value">{
+        "<span class="hljs-attribute">amount</span>": <span class="hljs-value"><span class="hljs-number">0</span></span>,
+        "<span class="hljs-attribute">unit</span>": <span class="hljs-value"><span class="hljs-string">"µg"</span>
+      </span>}</span>,
+      "<span class="hljs-attribute">脂类</span>": <span class="hljs-value">{
+        "<span class="hljs-attribute">amount</span>": <span class="hljs-value"><span class="hljs-number">0.01</span></span>,
+        "<span class="hljs-attribute">unit</span>": <span class="hljs-value"><span class="hljs-string">"g"</span>
+      </span>}</span>,
+      "<span class="hljs-attribute">胆固醇</span>": <span class="hljs-value">{
+        "<span class="hljs-attribute">amount</span>": <span class="hljs-value"><span class="hljs-number">0</span></span>,
+        "<span class="hljs-attribute">unit</span>": <span class="hljs-value"><span class="hljs-string">"mg"</span>
+      </span>}</span>,
+      "<span class="hljs-attribute">维他命 C</span>": <span class="hljs-value">{
+        "<span class="hljs-attribute">amount</span>": <span class="hljs-value"><span class="hljs-number">0</span></span>,
+        "<span class="hljs-attribute">unit</span>": <span class="hljs-value"><span class="hljs-string">"mg"</span>
+      </span>}</span>,
+      "<span class="hljs-attribute">蛋白质</span>": <span class="hljs-value">{
+        "<span class="hljs-attribute">amount</span>": <span class="hljs-value"><span class="hljs-number">0.55</span></span>,
+        "<span class="hljs-attribute">unit</span>": <span class="hljs-value"><span class="hljs-string">"g"</span>
+      </span>}
+    </span>}</span>,
+    "<span class="hljs-attribute">author</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">nick_name</span>": <span class="hljs-value"><span class="hljs-string">"OxeNuNAefMxqQDMiyirejJhiUzfEsPeOdlOalmmKIFHkXzTvQSc509207812"</span></span>,
+      "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">4</span></span>,
+      "<span class="hljs-attribute">avatar</span>": <span class="hljs-value"><span class="hljs-string">"http://tp2.sinaimg.cn/1937464505/180/5708528601/1"</span>
+    </span>}</span>,
+    "<span class="hljs-attribute">created_time</span>": <span class="hljs-value"><span class="hljs-string">"2015-05-20 16:55:50"</span></span>,
+    "<span class="hljs-attribute">updated_time</span>": <span class="hljs-value"><span class="hljs-string">"2015-05-20 16:58:49"</span></span>,
+    "<span class="hljs-attribute">img</span>": <span class="hljs-value"><span class="hljs-string">"http://b.36krcnd.com/nil_class/df446fa6-ef37-4b34-a435-885d2ccc543f/ch.jpg!slider"</span></span>,
+    "<span class="hljs-attribute">thumbnail</span>": <span class="hljs-value"><span class="hljs-string">"http://b.36krcnd.com/nil_class/df446fa6-ef37-4b34-a435-885d2ccc543f/ch.jpg!slider"</span></span>,
+    "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"阳春面"</span></span>,
+    "<span class="hljs-attribute">duration</span>": <span class="hljs-value"><span class="hljs-number">10</span></span>,
+    "<span class="hljs-attribute">calories</span>": <span class="hljs-value"><span class="hljs-number">2.6</span>
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>404</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"Not found"</span>
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div><div id="recipe-recipe-list" class="resource"><h3>Recipe List<a href="#recipe-recipe-list" class="permalink">&para;</a></h3><div id="recipe-recipe-list-get" class="action get"><h4><div class="name">Retrieve all Recipes</div><a href="#recipe-recipe-list-get" class="method get">GET</a><code class="uri">/api/recipe/list/?meat={meat}&amp;effect={effect}&amp;time={time}&amp;start={start}&amp;num={num}&amp;order={order}&amp;desc={desc}</code></h4><p>获取所有的菜谱。列表中的菜谱不会包含营养表和步骤表。</p>
+<div class="title"><strong>Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>meat</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1,2</span></span><p>食材 Label，多选使用逗号将 id 连接起来。如果不传则为全部。</p>
 </dd><dt>effect</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>3,4</span></span><p>功效 Label，多选也是一样，用逗号连接。不传为全部</p>
 </dd><dt>time</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>5,6</span></span><p>用餐时间 Label，不传为全部。</p>
 </dd><dt>order</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-info default"><strong>Default:&nbsp;</strong><span>calories</span></span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>calories</span></span><p>排序规则，默认按照卡路里。其他可选值：duration（烹饪时间），收藏数（暂不支持）</p>
 </dd><dt>desc</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-info default"><strong>Default:&nbsp;</strong><span>false</span></span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>false</span></span><p>是否倒序，默认升序。若要倒序可以传字符串 true。</p>
 </dd><dt>start</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-info default"><strong>Default:&nbsp;</strong><span>0</span></span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>0</span></span><p>分页偏移。默认是 0。</p>
 </dd><dt>num</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-info default"><strong>Default:&nbsp;</strong><span>10</span></span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>10</span></span><p>返回数量。默认 10 个。</p>
-</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#928499f0d57aaf95cd6704b5714b01c2" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="928499f0d57aaf95cd6704b5714b01c2" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
-    "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">200</span></span>,
-    "<span class="hljs-attribute">error_message</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-    "<span class="hljs-attribute">data</span>": <span class="hljs-value">[
+</dd></dl></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">200</span></span>,
+  "<span class="hljs-attribute">error_message</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+  "<span class="hljs-attribute">data</span>": <span class="hljs-value">[
+    {
+      "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">2</span></span>,
+      "<span class="hljs-attribute">meat_labels</span>": <span class="hljs-value">[
         {
-            "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">2</span></span>,
-            "<span class="hljs-attribute">meat_labels</span>": <span class="hljs-value">[
-                {
-                    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">7</span></span>,
-                    "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"猪肉"</span></span>,
-                    "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"食材"</span>
-                </span>}
-            ]</span>,
-            "<span class="hljs-attribute">time_labels</span>": <span class="hljs-value">[
-                {
-                    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">6</span></span>,
-                    "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"正餐"</span></span>,
-                    "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"用餐时间"</span>
-                </span>}
-            ]</span>,
-            "<span class="hljs-attribute">effect_labels</span>": <span class="hljs-value">[
-                {
-                    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>,
-                    "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"增肌"</span></span>,
-                    "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"功效"</span>
-                </span>}
-            ]</span>,
-            "<span class="hljs-attribute">other_labels</span>": <span class="hljs-value">[]</span>,
-            "<span class="hljs-attribute">author</span>": <span class="hljs-value">{
-                "<span class="hljs-attribute">nick_name</span>": <span class="hljs-value"><span class="hljs-string">"OxeNuNAefMxqQDMiyirejJhiUzfEsPeOdlOalmmKIFHkXzTvQSc509207812"</span></span>,
-                "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">4</span></span>,
-                "<span class="hljs-attribute">avatar</span>": <span class="hljs-value"><span class="hljs-string">"http://tp2.sinaimg.cn/1937464505/180/5708528601/1"</span>
-            </span>}</span>,
-            "<span class="hljs-attribute">created_time</span>": <span class="hljs-value"><span class="hljs-string">"2015-05-20 16:53:31"</span></span>,
-            "<span class="hljs-attribute">updated_time</span>": <span class="hljs-value"><span class="hljs-string">"2015-05-20 16:53:31"</span></span>,
-            "<span class="hljs-attribute">img</span>": <span class="hljs-value"><span class="hljs-string">"http://b.36krcnd.com/nil_class/df446fa6-ef37-4b34-a435-885d2ccc543f/ch.jpg!slider"</span></span>,
-            "<span class="hljs-attribute">thumbnail</span>": <span class="hljs-value"><span class="hljs-string">"http://b.36krcnd.com/nil_class/df446fa6-ef37-4b34-a435-885d2ccc543f/ch.jpg!slider"</span></span>,
-            "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"红烧肉"</span></span>,
-            "<span class="hljs-attribute">duration</span>": <span class="hljs-value"><span class="hljs-number">60</span></span>,
-            "<span class="hljs-attribute">calories</span>": <span class="hljs-value"><span class="hljs-number">26.5</span>
-        </span>},
-        {
-            "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">2</span></span>,
-            "<span class="hljs-attribute">...</span>":<span class="hljs-value"><span class="hljs-string">"..."</span>
+          "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">7</span></span>,
+          "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"猪肉"</span></span>,
+          "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"食材"</span>
         </span>}
-    ]
-</span>}
-</code></pre></li></ul></section></div></div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="label">Label&nbsp;<a href="#label"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><p>分类标签，会分成这几类</p>
-<ul>
-<li><p>用餐时间</p></li>
-<li><p>功效</p></li>
-<li><p>其他</p></li>
-<li><p>食材</p></li>
-</ul>
-<h4 id="label-label-list">Label List&nbsp;<a href="#label-label-list"><i class="fa fa-link"></i></a></h4><section id="label-label-list-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Retrieve all labels</span></div><div style="float:left"><a href="#label-label-list-get" class="btn btn-xs btn-primary">GET</a></div><div style="overflow:hidden"><code>/api/label/list</code></div></div><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#9be8a5d0a5f6d48e519c634ed2277f1e" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="9be8a5d0a5f6d48e519c634ed2277f1e" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
-    "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">200</span></span>,
-    "<span class="hljs-attribute">error_message</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-    "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
-        "<span class="hljs-attribute">用餐时间</span>": <span class="hljs-value">[
-            {
-                "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">8</span></span>,
-                "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"早餐"</span></span>,
-                "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"用餐时间"</span>
-            </span>},
-            {
-                "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">9</span></span>,
-                "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"正餐"</span></span>,
-                "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"用餐时间"</span>
-            </span>}
-        ]</span>,
-        "<span class="hljs-attribute">功效</span>": <span class="hljs-value">[
-            {
-                "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">12</span></span>,
-                "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"增加"</span></span>,
-                "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"功效"</span>
-            </span>},
-            {
-                "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">13</span></span>,
-                "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"减脂"</span></span>,
-                "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"功效"</span>
-            </span>}
-        ]</span>,
-        "<span class="hljs-attribute">其他</span>": <span class="hljs-value">[
-            {
-                "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">14</span></span>,
-                "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"酸"</span></span>,
-                "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"其他"</span>
-            </span>}
-        ]</span>,
-        "<span class="hljs-attribute">食材</span>": <span class="hljs-value">[
-            {
-                "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">10</span></span>,
-                "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"鸡肉"</span></span>,
-                "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"食材"</span>
-            </span>},
-            {
-                "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">11</span></span>,
-                "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"猪肉"</span></span>,
-                "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"食材"</span>
-            </span>}
-        ]
+      ]</span>,
+      "<span class="hljs-attribute">time_labels</span>": <span class="hljs-value">[
+        {
+          "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">6</span></span>,
+          "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"正餐"</span></span>,
+          "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"用餐时间"</span>
+        </span>}
+      ]</span>,
+      "<span class="hljs-attribute">effect_labels</span>": <span class="hljs-value">[
+        {
+          "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>,
+          "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"增肌"</span></span>,
+          "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"功效"</span>
+        </span>}
+      ]</span>,
+      "<span class="hljs-attribute">other_labels</span>": <span class="hljs-value">[]</span>,
+      "<span class="hljs-attribute">author</span>": <span class="hljs-value">{
+        "<span class="hljs-attribute">nick_name</span>": <span class="hljs-value"><span class="hljs-string">"OxeNuNAefMxqQDMiyirejJhiUzfEsPeOdlOalmmKIFHkXzTvQSc509207812"</span></span>,
+        "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">4</span></span>,
+        "<span class="hljs-attribute">avatar</span>": <span class="hljs-value"><span class="hljs-string">"http://tp2.sinaimg.cn/1937464505/180/5708528601/1"</span>
+      </span>}</span>,
+      "<span class="hljs-attribute">created_time</span>": <span class="hljs-value"><span class="hljs-string">"2015-05-20 16:53:31"</span></span>,
+      "<span class="hljs-attribute">updated_time</span>": <span class="hljs-value"><span class="hljs-string">"2015-05-20 16:53:31"</span></span>,
+      "<span class="hljs-attribute">img</span>": <span class="hljs-value"><span class="hljs-string">"http://b.36krcnd.com/nil_class/df446fa6-ef37-4b34-a435-885d2ccc543f/ch.jpg!slider"</span></span>,
+      "<span class="hljs-attribute">thumbnail</span>": <span class="hljs-value"><span class="hljs-string">"http://b.36krcnd.com/nil_class/df446fa6-ef37-4b34-a435-885d2ccc543f/ch.jpg!slider"</span></span>,
+      "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"红烧肉"</span></span>,
+      "<span class="hljs-attribute">duration</span>": <span class="hljs-value"><span class="hljs-number">60</span></span>,
+      "<span class="hljs-attribute">calories</span>": <span class="hljs-value"><span class="hljs-number">26.5</span>
+    </span>},
+    {
+      "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">2</span></span>,
+      "<span class="hljs-attribute">...</span>": <span class="hljs-value"><span class="hljs-string">"..."</span>
     </span>}
-</span>}
-</code></pre></li></ul></section></div></div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="recommend">Recommend&nbsp;<a href="#recommend"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><p>首页的推荐逻辑。</p>
+  ]
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></section><section id="label" class="resource-group"><h2 class="group-heading">Label<a href="#label" class="permalink">&para;</a></h2><p>分类标签，会分成这几类</p>
 <ul>
-<li><p>按照后台设定的时间区间。用当前的时间（小时）去匹配。如果匹配多个则取第一个</p></li>
-<li><p>如果这个时间段内没有推荐项目，则去所有推荐项目第一个。</p></li>
-<li><p>如果一个推荐都没有，则返回空。所以请保证至少有一个推荐项目</p></li>
+<li>
+<p>用餐时间</p>
+</li>
+<li>
+<p>功效</p>
+</li>
+<li>
+<p>其他</p>
+</li>
+<li>
+<p>食材</p>
+</li>
 </ul>
-<h4 id="recommend-retrieve-recommend-recipes">Retrieve Recommend Recipes&nbsp;<a href="#recommend-retrieve-recommend-recipes"><i class="fa fa-link"></i></a></h4><section id="recommend-retrieve-recommend-recipes-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Retrieve Recommend Recipes By Time</span></div><div style="float:left"><a href="#recommend-retrieve-recommend-recipes-get" class="btn btn-xs btn-primary">GET</a></div><div style="overflow:hidden"><code>/api/recommend/recipe/</code></div></div><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#fdfcb9f13c70ad3fd2ded8d40ff7a586" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="fdfcb9f13c70ad3fd2ded8d40ff7a586" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
-    "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">200</span></span>,
-    "<span class="hljs-attribute">error_message</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-    "<span class="hljs-attribute">data</span>": <span class="hljs-value">[
-        {
-            "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">2</span></span>,
-            "<span class="hljs-attribute">meat_labels</span>": <span class="hljs-value">[
-                {
-                    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">11</span></span>,
-                    "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"猪肉"</span></span>,
-                    "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"食材"</span>
-                </span>}
-            ]</span>,
-            "<span class="hljs-attribute">time_labels</span>": <span class="hljs-value">[
-                {
-                    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">9</span></span>,
-                    "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"正餐"</span></span>,
-                    "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"用餐时间"</span>
-                </span>}
-            ]</span>,
-            "<span class="hljs-attribute">effect_labels</span>": <span class="hljs-value">[
-                {
-                    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">13</span></span>,
-                    "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"减脂"</span></span>,
-                    "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"功效"</span>
-                </span>}
-            ]</span>,
-            "<span class="hljs-attribute">other_labels</span>": <span class="hljs-value">[]</span>,
-            "<span class="hljs-attribute">author</span>": <span class="hljs-value">{
-                "<span class="hljs-attribute">nick_name</span>": <span class="hljs-value"><span class="hljs-string">"逗逼3"</span></span>,
-                "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">4</span></span>,
-                "<span class="hljs-attribute">avatar</span>": <span class="hljs-value"><span class="hljs-string">"https://tower.im/assets/default_avatars/nightfall.jpg"</span>
-            </span>}</span>,
-            "<span class="hljs-attribute">created_time</span>": <span class="hljs-value"><span class="hljs-string">"2015-05-28 15:40:04"</span></span>,
-            "<span class="hljs-attribute">updated_time</span>": <span class="hljs-value"><span class="hljs-string">"2015-05-28 15:40:04"</span></span>,
-            "<span class="hljs-attribute">img</span>": <span class="hljs-value"><span class="hljs-string">"http://d.36krcnd.com/nil_class/c9d8fd96-0159-4f3c-bcea-3f33203f46c9/__.jpg"</span></span>,
-            "<span class="hljs-attribute">thumbnail</span>": <span class="hljs-value"><span class="hljs-string">"http://d.36krcnd.com/nil_class/c9d8fd96-0159-4f3c-bcea-3f33203f46c9/__.jpg"</span></span>,
-            "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"红烧鸡块"</span></span>,
-            "<span class="hljs-attribute">duration</span>": <span class="hljs-value"><span class="hljs-number">20</span></span>,
-            "<span class="hljs-attribute">calories</span>": <span class="hljs-value"><span class="hljs-number">140.4</span>
-        </span>},
-        {
-            "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">3</span></span>,
-            "<span class="hljs-attribute">meat_labels</span>": <span class="hljs-value">[
-                {
-                    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">11</span></span>,
-                    "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"猪肉"</span></span>,
-                    "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"食材"</span>
-                </span>}
-            ]</span>,
-            "<span class="hljs-attribute">time_labels</span>": <span class="hljs-value">[
-                {
-                    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">9</span></span>,
-                    "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"正餐"</span></span>,
-                    "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"用餐时间"</span>
-                </span>}
-            ]</span>,
-            "<span class="hljs-attribute">effect_labels</span>": <span class="hljs-value">[
-                {
-                    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">13</span></span>,
-                    "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"减脂"</span></span>,
-                    "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"功效"</span>
-                </span>}
-            ]</span>,
-            "<span class="hljs-attribute">other_labels</span>": <span class="hljs-value">[
-                {
-                    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">14</span></span>,
-                    "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"酸"</span></span>,
-                    "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"其他"</span>
-                </span>}
-            ]</span>,
-            "<span class="hljs-attribute">author</span>": <span class="hljs-value">{
-                "<span class="hljs-attribute">nick_name</span>": <span class="hljs-value"><span class="hljs-string">"逗逼3"</span></span>,
-                "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">4</span></span>,
-                "<span class="hljs-attribute">avatar</span>": <span class="hljs-value"><span class="hljs-string">"https://tower.im/assets/default_avatars/nightfall.jpg"</span>
-            </span>}</span>,
-            "<span class="hljs-attribute">created_time</span>": <span class="hljs-value"><span class="hljs-string">"2015-05-28 15:40:04"</span></span>,
-            "<span class="hljs-attribute">updated_time</span>": <span class="hljs-value"><span class="hljs-string">"2015-05-28 15:40:04"</span></span>,
-            "<span class="hljs-attribute">img</span>": <span class="hljs-value"><span class="hljs-string">"http://d.36krcnd.com/nil_class/c9d8fd96-0159-4f3c-bcea-3f33203f46c9/__.jpg"</span></span>,
-            "<span class="hljs-attribute">thumbnail</span>": <span class="hljs-value"><span class="hljs-string">"http://d.36krcnd.com/nil_class/c9d8fd96-0159-4f3c-bcea-3f33203f46c9/__.jpg"</span></span>,
-            "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"猪肉干"</span></span>,
-            "<span class="hljs-attribute">duration</span>": <span class="hljs-value"><span class="hljs-number">160</span></span>,
-            "<span class="hljs-attribute">calories</span>": <span class="hljs-value"><span class="hljs-number">1043.4</span>
-        </span>}
+<div id="label-label-list" class="resource"><h3>Label List<a href="#label-label-list" class="permalink">&para;</a></h3><div id="label-label-list-get" class="action get"><h4><div class="name">Retrieve all labels</div><a href="#label-label-list-get" class="method get">GET</a><code class="uri">/api/label/list</code></h4><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">200</span></span>,
+  "<span class="hljs-attribute">error_message</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+  "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">用餐时间</span>": <span class="hljs-value">[
+      {
+        "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">8</span></span>,
+        "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"早餐"</span></span>,
+        "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"用餐时间"</span>
+      </span>},
+      {
+        "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">9</span></span>,
+        "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"正餐"</span></span>,
+        "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"用餐时间"</span>
+      </span>}
+    ]</span>,
+    "<span class="hljs-attribute">功效</span>": <span class="hljs-value">[
+      {
+        "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">12</span></span>,
+        "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"增加"</span></span>,
+        "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"功效"</span>
+      </span>},
+      {
+        "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">13</span></span>,
+        "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"减脂"</span></span>,
+        "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"功效"</span>
+      </span>}
+    ]</span>,
+    "<span class="hljs-attribute">其他</span>": <span class="hljs-value">[
+      {
+        "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">14</span></span>,
+        "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"酸"</span></span>,
+        "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"其他"</span>
+      </span>}
+    ]</span>,
+    "<span class="hljs-attribute">食材</span>": <span class="hljs-value">[
+      {
+        "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">10</span></span>,
+        "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"鸡肉"</span></span>,
+        "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"食材"</span>
+      </span>},
+      {
+        "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">11</span></span>,
+        "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"猪肉"</span></span>,
+        "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"食材"</span>
+      </span>}
     ]
-</span>}
-</code></pre></li></ul></section></div></div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="knowledge">Knowledge&nbsp;<a href="#knowledge"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><p>知识体系中的数据结构是这样的：</p>
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></section><section id="recommend" class="resource-group"><h2 class="group-heading">Recommend<a href="#recommend" class="permalink">&para;</a></h2><p>首页的推荐逻辑。</p>
 <ul>
-<li><p>最大的概念是 <code>类别</code>，例如：减脂类，增肌类，小提示</p></li>
-<li><p><code>类别</code> 中会包含多个 <code>系列</code>，例如： 增肌类下面会有斌卡系列、陈柏霖系列等</p></li>
-<li><p>每个 <code>系列</code> 里会有多个 <code>文章</code></p></li>
+<li>
+<p>按照后台设定的时间区间。用当前的时间（小时）去匹配。如果匹配多个则取第一个</p>
+</li>
+<li>
+<p>如果这个时间段内没有推荐项目，则去所有推荐项目第一个。</p>
+</li>
+<li>
+<p>如果一个推荐都没有，则返回空。所以请保证至少有一个推荐项目</p>
+</li>
 </ul>
-<h2>类别的数据结构</h2>
+<div id="recommend-retrieve-homepage-recommends" class="resource"><h3>Retrieve Homepage Recommends<a href="#recommend-retrieve-homepage-recommends" class="permalink">&para;</a></h3><div id="recommend-retrieve-homepage-recommends-get" class="action get"><h4><div class="name">Retrieve Homepage Recommends By Time</div><a href="#recommend-retrieve-homepage-recommends-get" class="method get">GET</a><code class="uri">/api/recommend/</code></h4><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">200</span></span>,
+  "<span class="hljs-attribute">error_message</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+  "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">theme</span>": <span class="hljs-value">[
+      {
+        "<span class="hljs-attribute">...</span>": <span class="hljs-value"><span class="hljs-string">"..."</span>
+      </span>}
+    ]</span>,
+    "<span class="hljs-attribute">update</span>": <span class="hljs-value">[
+      {
+        "<span class="hljs-attribute">...</span>": <span class="hljs-value"><span class="hljs-string">"..."</span>
+      </span>}
+    ]</span>,
+    "<span class="hljs-attribute">recommend</span>": <span class="hljs-value">[
+      {
+        "<span class="hljs-attribute">...</span>": <span class="hljs-value"><span class="hljs-string">"..."</span>
+      </span>}
+    ]
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></section><section id="knowledge" class="resource-group"><h2 class="group-heading">Knowledge<a href="#knowledge" class="permalink">&para;</a></h2><p>知识体系中的数据结构是这样的：</p>
 <ul>
-<li><p>名字</p></li>
-<li><p>描述</p></li>
+<li>
+<p>最大的概念是 <code>类别</code>，例如：减脂类，增肌类，小提示</p>
+</li>
+<li>
+<p><code>类别</code> 中会包含多个 <code>系列</code>，例如： 增肌类下面会有斌卡系列、陈柏霖系列等</p>
+</li>
+<li>
+<p>每个 <code>系列</code> 里会有多个 <code>文章</code></p>
+</li>
 </ul>
-<h2>系列的数据结构</h2>
+<h2 id="header-类别的数据结构">类别的数据结构 <a class="permalink" href="#header-类别的数据结构" aria-hidden="true">¶</a></h2>
 <ul>
-<li><p>名字</p></li>
-<li><p>作者</p></li>
-<li><p>作者头像</p></li>
-<li><p>作者类型</p></li>
-<li><p>阅读数</p></li>
-<li><p>关注数</p></li>
+<li>
+<p>名字</p>
+</li>
+<li>
+<p>描述</p>
+</li>
 </ul>
-<h2>文章的数据结构</h2>
+<h2 id="header-系列的数据结构">系列的数据结构 <a class="permalink" href="#header-系列的数据结构" aria-hidden="true">¶</a></h2>
 <ul>
-<li><p>标题</p></li>
-<li><p>封面</p></li>
-<li><p>阅读人数</p></li>
-<li><p>评论数</p></li>
-<li><p>转发数</p></li>
-<li><p>发布时间</p></li>
-<li><p>内容</p></li>
+<li>
+<p>名字</p>
+</li>
+<li>
+<p>作者</p>
+</li>
+<li>
+<p>作者头像</p>
+</li>
+<li>
+<p>作者类型</p>
+</li>
+<li>
+<p>阅读数</p>
+</li>
+<li>
+<p>关注数</p>
+</li>
 </ul>
-</div></div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="theme">Theme&nbsp;<a href="#theme"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><h4 id="theme-theme-list">Theme List&nbsp;<a href="#theme-theme-list"><i class="fa fa-link"></i></a></h4><section id="theme-theme-list-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Retrieve Theme List</span></div><div style="float:left"><a href="#theme-theme-list-get" class="btn btn-xs btn-primary">GET</a></div><div style="overflow:hidden"><code>/api/theme/list/</code></div></div><div class="panel-body"><p>获取主题列表。目前返回所有列表。列表的筛选逻辑在下一次 pull request 里做掉。
+<h2 id="header-文章的数据结构">文章的数据结构 <a class="permalink" href="#header-文章的数据结构" aria-hidden="true">¶</a></h2>
+<ul>
+<li>
+<p>标题</p>
+</li>
+<li>
+<p>封面</p>
+</li>
+<li>
+<p>阅读人数</p>
+</li>
+<li>
+<p>评论数</p>
+</li>
+<li>
+<p>转发数</p>
+</li>
+<li>
+<p>发布时间</p>
+</li>
+<li>
+<p>内容</p>
+</li>
+</ul>
+</section><section id="theme" class="resource-group"><h2 class="group-heading">Theme<a href="#theme" class="permalink">&para;</a></h2><div id="theme-theme-list" class="resource"><h3>Theme List<a href="#theme-theme-list" class="permalink">&para;</a></h3><div id="theme-theme-list-get" class="action get"><h4><div class="name">Retrieve Theme List</div><a href="#theme-theme-list-get" class="method get">GET</a><code class="uri">/api/theme/list/</code></h4><p>获取主题列表。目前返回所有列表。列表的筛选逻辑在下一次 pull request 里做掉。
 主题列表里面不显示具体菜谱，只包含了菜谱数量。</p>
-</div><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#068bfa133d50e3b229eee10e16083840" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="068bfa133d50e3b229eee10e16083840" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
-    "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">200</span></span>,
-    "<span class="hljs-attribute">error_message</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-    "<span class="hljs-attribute">data</span>": <span class="hljs-value">[
-        {
-            "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>,
-            "<span class="hljs-attribute">created_time</span>": <span class="hljs-value"><span class="hljs-string">"2015-05-28 15:40:04"</span></span>,
-            "<span class="hljs-attribute">updated_time</span>": <span class="hljs-value"><span class="hljs-string">"2015-05-28 15:40:04"</span></span>,
-            "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"只有庄奕峰会做的菜"</span></span>,
-            "<span class="hljs-attribute">content</span>": <span class="hljs-value"><span class="hljs-string">"如果由黑暗料理大赛或者最难吃的菜大赛，庄奕峰一定能进决赛"</span></span>,
-            "<span class="hljs-attribute">img</span>": <span class="hljs-value"><span class="hljs-string">"http://d.36krcnd.com/nil_class/c9d8fd96-0159-4f3c-bcea-3f33203f46c9/__.jpg"</span></span>,
-            "<span class="hljs-attribute">thumbnail</span>": <span class="hljs-value"><span class="hljs-string">"http://d.36krcnd.com/nil_class/c9d8fd96-0159-4f3c-bcea-3f33203f46c9/__.jpg"</span></span>,
-            "<span class="hljs-attribute">recipe_count</span>": <span class="hljs-value"><span class="hljs-number">1</span>
-        </span>},{
-            "<span class="hljs-attribute">...</span>":<span class="hljs-value"><span class="hljs-string">"..."</span>
-        </span>}
-    ]
-</span>}
-</code></pre></li></ul></section><h4 id="theme-theme-detail">Theme Detail&nbsp;<a href="#theme-theme-detail"><i class="fa fa-link"></i></a></h4><section id="theme-theme-detail-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Retrieve Theme Detail</span></div><div style="float:left"><a href="#theme-theme-detail-get" class="btn btn-xs btn-primary">GET</a></div><div style="overflow:hidden"><code>/api/theme/{id}/</code></div></div><div class="panel-body"><p>获取详细的主题内容，这里不会返回其中的菜谱，菜谱调用 Theme Recipes List 接口。</p>
-</div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>id</dt><dd><code>number</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>主题的id</p>
-</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#081178221fd359a751e6a8ecbe5bcd1d" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="081178221fd359a751e6a8ecbe5bcd1d" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
-    "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">200</span></span>,
-    "<span class="hljs-attribute">error_message</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-    "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
-        "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>,
-        "<span class="hljs-attribute">recipe_count</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>,
-        "<span class="hljs-attribute">created_time</span>": <span class="hljs-value"><span class="hljs-string">"2015-05-28 15:40:04"</span></span>,
-        "<span class="hljs-attribute">updated_time</span>": <span class="hljs-value"><span class="hljs-string">"2015-05-28 15:40:04"</span></span>,
-        "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"只有庄奕峰会做的菜"</span></span>,
-        "<span class="hljs-attribute">content</span>": <span class="hljs-value"><span class="hljs-string">"如果由黑暗料理大赛或者最难吃的菜大赛，庄奕峰一定能进决赛"</span></span>,
-        "<span class="hljs-attribute">img</span>": <span class="hljs-value"><span class="hljs-string">"http://d.36krcnd.com/nil_class/c9d8fd96-0159-4f3c-bcea-3f33203f46c9/__.jpg"</span></span>,
-        "<span class="hljs-attribute">thumbnail</span>": <span class="hljs-value"><span class="hljs-string">"http://d.36krcnd.com/nil_class/c9d8fd96-0159-4f3c-bcea-3f33203f46c9/__.jpg"</span>
+<div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">200</span></span>,
+  "<span class="hljs-attribute">error_message</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+  "<span class="hljs-attribute">data</span>": <span class="hljs-value">[
+    {
+      "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>,
+      "<span class="hljs-attribute">created_time</span>": <span class="hljs-value"><span class="hljs-string">"2015-05-28 15:40:04"</span></span>,
+      "<span class="hljs-attribute">updated_time</span>": <span class="hljs-value"><span class="hljs-string">"2015-05-28 15:40:04"</span></span>,
+      "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"只有庄奕峰会做的菜"</span></span>,
+      "<span class="hljs-attribute">content</span>": <span class="hljs-value"><span class="hljs-string">"如果由黑暗料理大赛或者最难吃的菜大赛，庄奕峰一定能进决赛"</span></span>,
+      "<span class="hljs-attribute">img</span>": <span class="hljs-value"><span class="hljs-string">"http://d.36krcnd.com/nil_class/c9d8fd96-0159-4f3c-bcea-3f33203f46c9/__.jpg"</span></span>,
+      "<span class="hljs-attribute">thumbnail</span>": <span class="hljs-value"><span class="hljs-string">"http://d.36krcnd.com/nil_class/c9d8fd96-0159-4f3c-bcea-3f33203f46c9/__.jpg"</span></span>,
+      "<span class="hljs-attribute">recipe_count</span>": <span class="hljs-value"><span class="hljs-number">1</span>
+    </span>},
+    {
+      "<span class="hljs-attribute">...</span>": <span class="hljs-value"><span class="hljs-string">"..."</span>
     </span>}
-</span>}
-</code></pre></li></ul></section><h4 id="theme-theme-recipes-list">Theme Recipes List&nbsp;<a href="#theme-theme-recipes-list"><i class="fa fa-link"></i></a></h4><section id="theme-theme-recipes-list-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Retrieve Recipes of specific Theme</span></div><div style="float:left"><a href="#theme-theme-recipes-list-get" class="btn btn-xs btn-primary">GET</a></div><div style="overflow:hidden"><code>/api/theme/{theme_id}/recipes/?start={start}&amp;num={num}</code></div></div><div class="panel-body"><p>获取某个专题下的菜谱列表。带分页</p>
-</div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>id</dt><dd><code>number</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>主题的id</p>
+  ]
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div><div id="theme-theme-detail" class="resource"><h3>Theme Detail<a href="#theme-theme-detail" class="permalink">&para;</a></h3><div id="theme-theme-detail-get" class="action get"><h4><div class="name">Retrieve Theme Detail</div><a href="#theme-theme-detail-get" class="method get">GET</a><code class="uri">/api/theme/{id}/</code></h4><p>获取详细的主题内容，这里不会返回其中的菜谱，菜谱调用 Theme Recipes List 接口。</p>
+<div class="title"><strong>Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>id</dt><dd><code>number</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>主题的id</p>
+</dd></dl></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">200</span></span>,
+  "<span class="hljs-attribute">error_message</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+  "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>,
+    "<span class="hljs-attribute">recipe_count</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>,
+    "<span class="hljs-attribute">created_time</span>": <span class="hljs-value"><span class="hljs-string">"2015-05-28 15:40:04"</span></span>,
+    "<span class="hljs-attribute">updated_time</span>": <span class="hljs-value"><span class="hljs-string">"2015-05-28 15:40:04"</span></span>,
+    "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"只有庄奕峰会做的菜"</span></span>,
+    "<span class="hljs-attribute">content</span>": <span class="hljs-value"><span class="hljs-string">"如果由黑暗料理大赛或者最难吃的菜大赛，庄奕峰一定能进决赛"</span></span>,
+    "<span class="hljs-attribute">img</span>": <span class="hljs-value"><span class="hljs-string">"http://d.36krcnd.com/nil_class/c9d8fd96-0159-4f3c-bcea-3f33203f46c9/__.jpg"</span></span>,
+    "<span class="hljs-attribute">thumbnail</span>": <span class="hljs-value"><span class="hljs-string">"http://d.36krcnd.com/nil_class/c9d8fd96-0159-4f3c-bcea-3f33203f46c9/__.jpg"</span>
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div><div id="theme-theme-recipes-list" class="resource"><h3>Theme Recipes List<a href="#theme-theme-recipes-list" class="permalink">&para;</a></h3><div id="theme-theme-recipes-list-get" class="action get"><h4><div class="name">Retrieve Recipes of specific Theme</div><a href="#theme-theme-recipes-list-get" class="method get">GET</a><code class="uri">/api/theme//recipes/?start={start}&amp;num={num}</code></h4><p>获取某个专题下的菜谱列表。带分页</p>
+<div class="title"><strong>Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>id</dt><dd><code>number</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>主题的id</p>
 </dd><dt>start</dt><dd><code>number</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-info default"><strong>Default:&nbsp;</strong><span>0</span></span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>0</span></span><p>分页的偏移</p>
 </dd><dt>num</dt><dd><code>number</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-info default"><strong>Default:&nbsp;</strong><span>5</span></span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>5</span></span><p>返回结果数量</p>
-</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#365f70b1cbc273d2f058b863cdfba15b" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="365f70b1cbc273d2f058b863cdfba15b" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
-    "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">200</span></span>,
-    "<span class="hljs-attribute">error_message</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-    "<span class="hljs-attribute">data</span>": <span class="hljs-value">[
+</dd></dl></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">200</span></span>,
+  "<span class="hljs-attribute">error_message</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+  "<span class="hljs-attribute">data</span>": <span class="hljs-value">[
+    {
+      "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">4</span></span>,
+      "<span class="hljs-attribute">meat_labels</span>": <span class="hljs-value">[]</span>,
+      "<span class="hljs-attribute">time_labels</span>": <span class="hljs-value">[
         {
-            "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">4</span></span>,
-            "<span class="hljs-attribute">meat_labels</span>": <span class="hljs-value">[]</span>,
-            "<span class="hljs-attribute">time_labels</span>": <span class="hljs-value">[
-                {
-                    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">8</span></span>,
-                    "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"早餐"</span></span>,
-                    "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"用餐时间"</span>
-                </span>},
-                {
-                    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">9</span></span>,
-                    "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"正餐"</span></span>,
-                    "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"用餐时间"</span>
-                </span>}
-            ]</span>,
-            "<span class="hljs-attribute">effect_labels</span>": <span class="hljs-value">[
-                {
-                    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">12</span></span>,
-                    "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"增加"</span></span>,
-                    "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"功效"</span>
-                </span>},
-                {
-                    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">13</span></span>,
-                    "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"减脂"</span></span>,
-                    "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"功效"</span>
-                </span>}
-            ]</span>,
-            "<span class="hljs-attribute">other_labels</span>": <span class="hljs-value">[]</span>,
-            "<span class="hljs-attribute">author</span>": <span class="hljs-value">{
-                "<span class="hljs-attribute">nick_name</span>": <span class="hljs-value"><span class="hljs-string">"逗逼3"</span></span>,
-                "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">4</span></span>,
-                "<span class="hljs-attribute">avatar</span>": <span class="hljs-value"><span class="hljs-string">"https://tower.im/assets/default_avatars/nightfall.jpg"</span>
-            </span>}</span>,
-            "<span class="hljs-attribute">created_time</span>": <span class="hljs-value"><span class="hljs-string">"2015-05-28 15:40:04"</span></span>,
-            "<span class="hljs-attribute">updated_time</span>": <span class="hljs-value"><span class="hljs-string">"2015-05-28 15:40:04"</span></span>,
-            "<span class="hljs-attribute">img</span>": <span class="hljs-value"><span class="hljs-string">"http://d.36krcnd.com/nil_class/c9d8fd96-0159-4f3c-bcea-3f33203f46c9/__.jpg"</span></span>,
-            "<span class="hljs-attribute">thumbnail</span>": <span class="hljs-value"><span class="hljs-string">"http://d.36krcnd.com/nil_class/c9d8fd96-0159-4f3c-bcea-3f33203f46c9/__.jpg"</span></span>,
-            "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"炒鸡蛋"</span></span>,
-            "<span class="hljs-attribute">duration</span>": <span class="hljs-value"><span class="hljs-number">10</span></span>,
-            "<span class="hljs-attribute">calories</span>": <span class="hljs-value"><span class="hljs-number">156.0</span>
-        </span>},{
-            "<span class="hljs-attribute">...</span>":<span class="hljs-value"><span class="hljs-string">"..."</span>
+          "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">8</span></span>,
+          "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"早餐"</span></span>,
+          "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"用餐时间"</span>
+        </span>},
+        {
+          "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">9</span></span>,
+          "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"正餐"</span></span>,
+          "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"用餐时间"</span>
         </span>}
-    ]
-</span>}
-</code></pre></li></ul></section></div></div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="authorization">Authorization&nbsp;<a href="#authorization"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><p>我们使用 Token 的验证方式，保证 <code>https</code> 访问所有接口。</p>
+      ]</span>,
+      "<span class="hljs-attribute">effect_labels</span>": <span class="hljs-value">[
+        {
+          "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">12</span></span>,
+          "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"增加"</span></span>,
+          "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"功效"</span>
+        </span>},
+        {
+          "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">13</span></span>,
+          "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"减脂"</span></span>,
+          "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"功效"</span>
+        </span>}
+      ]</span>,
+      "<span class="hljs-attribute">other_labels</span>": <span class="hljs-value">[]</span>,
+      "<span class="hljs-attribute">author</span>": <span class="hljs-value">{
+        "<span class="hljs-attribute">nick_name</span>": <span class="hljs-value"><span class="hljs-string">"逗逼3"</span></span>,
+        "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">4</span></span>,
+        "<span class="hljs-attribute">avatar</span>": <span class="hljs-value"><span class="hljs-string">"https://tower.im/assets/default_avatars/nightfall.jpg"</span>
+      </span>}</span>,
+      "<span class="hljs-attribute">created_time</span>": <span class="hljs-value"><span class="hljs-string">"2015-05-28 15:40:04"</span></span>,
+      "<span class="hljs-attribute">updated_time</span>": <span class="hljs-value"><span class="hljs-string">"2015-05-28 15:40:04"</span></span>,
+      "<span class="hljs-attribute">img</span>": <span class="hljs-value"><span class="hljs-string">"http://d.36krcnd.com/nil_class/c9d8fd96-0159-4f3c-bcea-3f33203f46c9/__.jpg"</span></span>,
+      "<span class="hljs-attribute">thumbnail</span>": <span class="hljs-value"><span class="hljs-string">"http://d.36krcnd.com/nil_class/c9d8fd96-0159-4f3c-bcea-3f33203f46c9/__.jpg"</span></span>,
+      "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"炒鸡蛋"</span></span>,
+      "<span class="hljs-attribute">duration</span>": <span class="hljs-value"><span class="hljs-number">10</span></span>,
+      "<span class="hljs-attribute">calories</span>": <span class="hljs-value"><span class="hljs-number">156</span>
+    </span>},
+    {
+      "<span class="hljs-attribute">...</span>": <span class="hljs-value"><span class="hljs-string">"..."</span>
+    </span>}
+  ]
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></section><section id="authorization" class="resource-group"><h2 class="group-heading">Authorization<a href="#authorization" class="permalink">&para;</a></h2><p>我们使用 Token 的验证方式，保证 <code>https</code> 访问所有接口。</p>
 <p>在需要认证的 Request Headers 中加入 <code>Authorization</code> 头， 它的值是 <code>Token {your-token-here}</code>。注意，是 <code>Token</code> 开头，后面跟着一个 <code>空格</code>，然后再加上登录注册时返回的 <code>Token</code>.</p>
 <p>登录注册和第三方登录不用带着 Token</p>
-<h4 id="authorization-register">Register&nbsp;<a href="#authorization-register"><i class="fa fa-link"></i></a></h4><section id="authorization-register-post" class="panel panel-success"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Normal Account Register</span></div><div style="float:left"><a href="#authorization-register-post" class="btn btn-xs btn-success">POST</a></div><div style="overflow:hidden"><code>/api/accounts/register/</code></div></div><div class="panel-body"><p>注册帐号
+<div id="authorization-register" class="resource"><h3>Register<a href="#authorization-register" class="permalink">&para;</a></h3><div id="authorization-register-post" class="action post"><h4><div class="name">Normal Account Register</div><a href="#authorization-register-post" class="method post">POST</a><code class="uri">/api/accounts/register/</code></h4><p>注册帐号
 正常的注册，需要密码和手机号</p>
-</div><ul class="list-group"><li class="list-group-item"><strong>Request</strong><a data-toggle="collapse" data-target="#71365fddc1e85b18e03c578c6536f4b7" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="71365fddc1e85b18e03c578c6536f4b7" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
-    "<span class="hljs-attribute">password</span>":<span class="hljs-value"><span class="hljs-string">"123"</span></span>,
-    "<span class="hljs-attribute">phone</span>":<span class="hljs-value"><span class="hljs-string">"123"</span>
-</span>}
-</code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#de3665dd4ef5bb2c399ec41d2f478b36" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="de3665dd4ef5bb2c399ec41d2f478b36" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
-    "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">200</span></span>,
-    "<span class="hljs-attribute">error_message</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-    "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
-        "<span class="hljs-attribute">token</span>": <span class="hljs-value"><span class="hljs-string">"156c6c47e4ef408ff494513c755a3c42881428c0"</span>
-    </span>}
-</span>}
-</code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>400</code></strong><a data-toggle="collapse" data-target="#1bae6a71b8df23f3372b2e61e085dd33" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="1bae6a71b8df23f3372b2e61e085dd33" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
-    "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">400</span></span>, 
-    "<span class="hljs-attribute">error_message</span>": <span class="hljs-value"><span class="hljs-string">"Phone registed"</span></span>,
-    "<span class="hljs-attribute">data</span>": <span class="hljs-value"><span class="hljs-literal">null</span>
-</span>}
-</code></pre></li></ul></section><h4 id="authorization-login">Login&nbsp;<a href="#authorization-login"><i class="fa fa-link"></i></a></h4><section id="authorization-login-post" class="panel panel-success"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Normal Account Login</span></div><div style="float:left"><a href="#authorization-login-post" class="btn btn-xs btn-success">POST</a></div><div style="overflow:hidden"><code>/api/accounts/login/</code></div></div><div class="panel-body"><p>正常帐号登录</p>
-</div><ul class="list-group"><li class="list-group-item"><strong>Request</strong><a data-toggle="collapse" data-target="#b3cdc463ce83cbede198e2ea663fe12c" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="b3cdc463ce83cbede198e2ea663fe12c" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
-    "<span class="hljs-attribute">password</span>":<span class="hljs-value"><span class="hljs-string">"123"</span></span>,
-    "<span class="hljs-attribute">phone</span>":<span class="hljs-value"><span class="hljs-string">"123"</span>
-</span>}
-</code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#327218ff466af9ad7cfb94a65ac8803f" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="327218ff466af9ad7cfb94a65ac8803f" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
-    "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">200</span></span>,
-    "<span class="hljs-attribute">error_message</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-    "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
-        "<span class="hljs-attribute">token</span>": <span class="hljs-value"><span class="hljs-string">"156c6c47e4ef408ff494513c755a3c42881428c0"</span>
-    </span>}
-</span>}
-</code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>401</code></strong><a data-toggle="collapse" data-target="#01ab804e50667cacb63e81cfcd37b74d" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="01ab804e50667cacb63e81cfcd37b74d" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
-    "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">401</span></span>, 
-    "<span class="hljs-attribute">error_message</span>": <span class="hljs-value"><span class="hljs-string">"password is not correct"</span></span>,
-    "<span class="hljs-attribute">data</span>": <span class="hljs-value"><span class="hljs-literal">null</span>
-</span>}
-</code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>402</code></strong><a data-toggle="collapse" data-target="#a6f11cc3218e572a9e77bca5aa80a8bd" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="a6f11cc3218e572a9e77bca5aa80a8bd" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
-    "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">402</span></span>, 
-    "<span class="hljs-attribute">error_message</span>": <span class="hljs-value"><span class="hljs-string">"Account not existed"</span></span>,
-    "<span class="hljs-attribute">data</span>": <span class="hljs-value"><span class="hljs-literal">null</span>
-</span>}
-</code></pre></li></ul></section><h4 id="authorization-third-party-login">Third-Party Login&nbsp;<a href="#authorization-third-party-login"><i class="fa fa-link"></i></a></h4><section id="authorization-third-party-login-post" class="panel panel-success"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Third-Party Login &amp; Register</span></div><div style="float:left"><a href="#authorization-third-party-login-post" class="btn btn-xs btn-success">POST</a></div><div style="overflow:hidden"><code>/api/accounts/thirdparty/</code></div></div><div class="panel-body"><p>第三方帐号登录。后面除了 <code>nick_name</code> 可能还需要类似头像之类的。</p>
-</div><ul class="list-group"><li class="list-group-item"><strong>Request</strong><a data-toggle="collapse" data-target="#269a24d54c6193edb9d19d60b0d9b4d6" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="269a24d54c6193edb9d19d60b0d9b4d6" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
-    "<span class="hljs-attribute">nick_name</span>":<span class="hljs-value"><span class="hljs-string">"123"</span></span>,
-    "<span class="hljs-attribute">external_source</span>":<span class="hljs-value"><span class="hljs-string">"test"</span></span>,
-    "<span class="hljs-attribute">external_id</span>":<span class="hljs-value"><span class="hljs-string">"12344"</span>
-</span>}
-</code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#e569f5b793b5b81999fcdda937f5a561" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="e569f5b793b5b81999fcdda937f5a561" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
-    "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">200</span></span>,
-    "<span class="hljs-attribute">error_message</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-    "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
-        "<span class="hljs-attribute">token</span>": <span class="hljs-value"><span class="hljs-string">"156c6c47e4ef408ff494513c755a3c42881428c0"</span>
-    </span>}
-</span>}
-</code></pre></li></ul></section></div></div></div></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 11 Jun 2015</p><div id="localFile" style="display: none; position: absolute; top: 0; left: 0; width: 100%; color: white; background: red; font-size: 150%; text-align: center; padding: 1em;">This page may not display correctly when opened as a local file. Instead, view it from a web server.
+<div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">password</span>": <span class="hljs-value"><span class="hljs-string">"123"</span></span>,
+  "<span class="hljs-attribute">phone</span>": <span class="hljs-value"><span class="hljs-string">"123"</span>
+</span>}</code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">200</span></span>,
+  "<span class="hljs-attribute">error_message</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+  "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">5</span></span>,
+    "<span class="hljs-attribute">nick_name</span>": <span class="hljs-value"><span class="hljs-string">"YERQe91343"</span></span>,
+    "<span class="hljs-attribute">externals</span>": <span class="hljs-value">[]</span>,
+    "<span class="hljs-attribute">avatar</span>": <span class="hljs-value"><span class="hljs-string">"http://tp2.sinaimg.cn/1937464505/180/5708528601/1"</span></span>,
+    "<span class="hljs-attribute">is_changed_nick</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+    "<span class="hljs-attribute">phone</span>": <span class="hljs-value"><span class="hljs-string">"123"</span></span>,
+    "<span class="hljs-attribute">token</span>": <span class="hljs-value"><span class="hljs-string">"cdaf28dfba353a7704e9ebb2debb6f5bb2f93242"</span>
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>400</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">400</span></span>,
+  "<span class="hljs-attribute">error_message</span>": <span class="hljs-value"><span class="hljs-string">"Phone registed"</span></span>,
+  "<span class="hljs-attribute">data</span>": <span class="hljs-value"><span class="hljs-literal">null</span>
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div><div id="authorization-login" class="resource"><h3>Login<a href="#authorization-login" class="permalink">&para;</a></h3><div id="authorization-login-post" class="action post"><h4><div class="name">Normal Account Login</div><a href="#authorization-login-post" class="method post">POST</a><code class="uri">/api/accounts/login/</code></h4><p>正常帐号登录</p>
+<div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">password</span>": <span class="hljs-value"><span class="hljs-string">"123"</span></span>,
+  "<span class="hljs-attribute">phone</span>": <span class="hljs-value"><span class="hljs-string">"123"</span>
+</span>}</code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">200</span></span>,
+  "<span class="hljs-attribute">error_message</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+  "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">5</span></span>,
+    "<span class="hljs-attribute">nick_name</span>": <span class="hljs-value"><span class="hljs-string">"YERQe91343"</span></span>,
+    "<span class="hljs-attribute">externals</span>": <span class="hljs-value">[]</span>,
+    "<span class="hljs-attribute">avatar</span>": <span class="hljs-value"><span class="hljs-string">"http://tp2.sinaimg.cn/1937464505/180/5708528601/1"</span></span>,
+    "<span class="hljs-attribute">is_changed_nick</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+    "<span class="hljs-attribute">phone</span>": <span class="hljs-value"><span class="hljs-string">"123"</span></span>,
+    "<span class="hljs-attribute">token</span>": <span class="hljs-value"><span class="hljs-string">"cdaf28dfba353a7704e9ebb2debb6f5bb2f93242"</span>
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>401</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">401</span></span>,
+  "<span class="hljs-attribute">error_message</span>": <span class="hljs-value"><span class="hljs-string">"password is not correct"</span></span>,
+  "<span class="hljs-attribute">data</span>": <span class="hljs-value"><span class="hljs-literal">null</span>
+</span>}</code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>402</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">402</span></span>,
+  "<span class="hljs-attribute">error_message</span>": <span class="hljs-value"><span class="hljs-string">"Account not existed"</span></span>,
+  "<span class="hljs-attribute">data</span>": <span class="hljs-value"><span class="hljs-literal">null</span>
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div><div id="authorization-third-party-login" class="resource"><h3>Third-Party Login<a href="#authorization-third-party-login" class="permalink">&para;</a></h3><div id="authorization-third-party-login-post" class="action post"><h4><div class="name">Third-Party Login &amp; Register</div><a href="#authorization-third-party-login-post" class="method post">POST</a><code class="uri">/api/accounts/thirdparty/</code></h4><p>第三方帐号登录。后面除了 <code>nick_name</code> 可能还需要类似头像之类的。</p>
+<div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">nick_name</span>": <span class="hljs-value"><span class="hljs-string">"123"</span></span>,
+  "<span class="hljs-attribute">external_source</span>": <span class="hljs-value"><span class="hljs-string">"test"</span></span>,
+  "<span class="hljs-attribute">external_id</span>": <span class="hljs-value"><span class="hljs-string">"12344"</span>
+</span>}</code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">200</span></span>,
+  "<span class="hljs-attribute">error_message</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+  "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">5</span></span>,
+    "<span class="hljs-attribute">nick_name</span>": <span class="hljs-value"><span class="hljs-string">"YERQe91343"</span></span>,
+    "<span class="hljs-attribute">externals</span>": <span class="hljs-value">[
+      {
+        "<span class="hljs-attribute">...</span>": <span class="hljs-value"><span class="hljs-string">"..."</span>
+      </span>}
+    ]</span>,
+    "<span class="hljs-attribute">avatar</span>": <span class="hljs-value"><span class="hljs-string">"http://tp2.sinaimg.cn/1937464505/180/5708528601/1"</span></span>,
+    "<span class="hljs-attribute">is_changed_nick</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+    "<span class="hljs-attribute">phone</span>": <span class="hljs-value"><span class="hljs-string">"123"</span></span>,
+    "<span class="hljs-attribute">token</span>": <span class="hljs-value"><span class="hljs-string">"cdaf28dfba353a7704e9ebb2debb6f5bb2f93242"</span>
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></section></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 25 Jul 2015</p><script>/* eslint-env browser */
+/* eslint quotes: [2, "single"] */
+'use strict';
 
-</div></body><script src="//code.jquery.com/jquery-1.11.0.min.js"></script><script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script><script>(function() {
-  if (location.protocol === 'file:') {
-    document.getElementById('localFile').style.display = 'block';
+/*
+  Determine if a string ends with another string.
+*/
+function endsWith(str, suffix) {
+    return str.indexOf(suffix, str.length - suffix.length) !== -1;
+}
+
+/*
+  Get an array [width, height] of the window.
+*/
+function getWindowDimensions() {
+  var w = window,
+      d = document,
+      e = d.documentElement,
+      g = d.body,
+      x = w.innerWidth || e.clientWidth || g.clientWidth,
+      y = w.innerHeight || e.clientHeight || g.clientHeight;
+
+  return [x, y];
+}
+
+/*
+  Collapse or show a request/response example.
+*/
+function toggleCollapseButton(event) {
+    var button = event.target.parentNode;
+    var content = button.parentNode.nextSibling;
+    var inner = content.children[0];
+
+    if (button.className.indexOf('collapse-button') === -1) {
+      // Clicked without hitting the right element?
+      return;
+    }
+
+    if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+        // Currently showing, so let's hide it
+        button.className = 'collapse-button';
+        content.style.maxHeight = '0px';
+    } else {
+        // Currently hidden, so let's show it
+        button.className = 'collapse-button show';
+        content.style.maxHeight = inner.offsetHeight + 12 + 'px';
+    }
+}
+
+/*
+  Collapse or show a navigation menu. It will not be hidden unless it
+  is currently selected or `force` has been passed.
+*/
+function toggleCollapseNav(event, force) {
+    var heading = event.target.parentNode;
+    var content = heading.nextSibling;
+    var inner = content.children[0];
+
+    if (heading.className.indexOf('heading') === -1) {
+      // Clicked without hitting the right element?
+      return;
+    }
+
+    if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+      // Currently showing, so let's hide it, but only if this nav item
+      // is already selected. This prevents newly selected items from
+      // collapsing in an annoying fashion.
+      if (force || window.location.hash && endsWith(event.target.href, window.location.hash)) {
+        content.style.maxHeight = '0px';
+      }
+    } else {
+      // Currently hidden, so let's show it
+      content.style.maxHeight = inner.offsetHeight + 12 + 'px';
+    }
+}
+
+/*
+  Refresh the page after a live update from the server. This only
+  works in live preview mode (using the `--server` parameter).
+*/
+function refresh(body) {
+    document.querySelector('body').className = 'preload';
+    document.body.innerHTML = body;
+
+    // Re-initialize the page
+    init();
+    autoCollapse();
+
+    document.querySelector('body').className = '';
+}
+
+/*
+  Determine which navigation items should be auto-collapsed to show as many
+  as possible on the screen, based on the current window height. This also
+  collapses them.
+*/
+function autoCollapse() {
+  var windowHeight = getWindowDimensions()[1];
+  var itemsHeight = 64; /* Account for some padding */
+  var itemsArray = Array.prototype.slice.call(
+    document.querySelectorAll('nav .resource-group .heading'));
+
+  // Get the total height of the navigation items
+  itemsArray.forEach(function (item) {
+    itemsHeight += item.parentNode.offsetHeight;
+  });
+
+  // Should we auto-collapse any nav items? Try to find the smallest item
+  // that can be collapsed to show all items on the screen. If not possible,
+  // then collapse the largest item and do it again. First, sort the items
+  // by height from smallest to largest.
+  var sortedItems = itemsArray.sort(function (a, b) {
+    return a.parentNode.offsetHeight - b.parentNode.offsetHeight;
+  });
+
+  while (sortedItems.length && itemsHeight > windowHeight) {
+    for (var i = 0; i < sortedItems.length; i++) {
+      // Will collapsing this item help?
+      var itemHeight = sortedItems[i].nextSibling.offsetHeight;
+      if ((itemsHeight - itemHeight <= windowHeight) || i === sortedItems.length - 1) {
+        // It will, so let's collapse it, remove its content height from
+        // our total and then remove it from our list of candidates
+        // that can be collapsed.
+        itemsHeight -= itemHeight;
+        toggleCollapseNav({target: sortedItems[i].children[0]}, true);
+        sortedItems.splice(i, 1);
+        break;
+      }
+    }
   }
+}
 
-}).call(this);
-</script><script>(function() {
-  $('table').addClass('table');
+/*
+  Initialize the interactive functionality of the page.
+*/
+function init() {
+    var i;
 
-}).call(this);
-</script></html>
+    // Make collapse buttons clickable
+    var buttons = document.querySelectorAll('.collapse-button');
+    for (i = 0; i < buttons.length; i++) {
+        buttons[i].onclick = toggleCollapseButton;
+
+        // Show by default? Then toggle now.
+        if (buttons[i].className.indexOf('show') !== -1) {
+            toggleCollapseButton({target: buttons[i].children[0]});
+        }
+    }
+
+    // Make nav items clickable to collapse/expand their content.
+    var navItems = document.querySelectorAll('nav .resource-group .heading');
+    for (i = 0; i < navItems.length; i++) {
+        navItems[i].onclick = toggleCollapseNav;
+
+        // Show all by default
+        toggleCollapseNav({target: navItems[i].children[0]});
+    }
+}
+
+// Initial call to set up buttons
+init();
+
+window.onload = function () {
+    autoCollapse();
+    // Remove the `preload` class to enable animations
+    document.querySelector('body').className = '';
+};
+</script></body></html>

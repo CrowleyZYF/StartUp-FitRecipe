@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.fitrecipe.android.Config.HttpUrl;
 import cn.fitrecipe.android.Config.LocalDemo;
 import cn.fitrecipe.android.ImageLoader.ILoadingListener;
 import cn.fitrecipe.android.model.RecipeCard;
@@ -81,13 +85,13 @@ public class WelcomeActivity extends Activity{
     private void getDataFromNetwork() {
         themeCards = new ArrayList<ThemeCard>();
         for (int i=0;i<3;i++){
-            ThemeCard tc = new ThemeCard(LocalDemo.themeBG[i]);
+            ThemeCard tc = new ThemeCard(i,LocalDemo.themeBG[i]);
             themeCards.add(tc);
         }
 
         recipeCards= new ArrayList<RecipeCard>();
         for (int i=0;i<5;i++){
-            RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],0,(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
+            RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],i,0,(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
             recipeCards.add(rc);
         }
 

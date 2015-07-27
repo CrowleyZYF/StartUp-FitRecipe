@@ -49,8 +49,9 @@ public class ThemeCardAdapter extends RecyclerView.Adapter<ThemeCardAdapter.Them
     @Override
     public void onBindViewHolder(ThemeCardAdapter.ThemeCardViewHolder contactViewHolder, int i) {
         ThemeCard tc = themeCardsList.get(i);
+        contactViewHolder.theme_id.setText(tc.getTheme_id());
 //        contactViewHolder.theme_background.setImageResource(tc.getRecipe_background());
-        FrApplication.getInstance().getMyImageLoader().displayImage(contactViewHolder.theme_background, tc.getRecipe_background());
+        FrApplication.getInstance().getMyImageLoader().displayImage(contactViewHolder.theme_background, tc.getTheme_background());
     }
 
     @Override
@@ -60,14 +61,19 @@ public class ThemeCardAdapter extends RecyclerView.Adapter<ThemeCardAdapter.Them
 
     @Override
     public void onClick(View v) {
-        this.context.startActivity(new Intent(this.context, ThemeActivity.class));
+        String id = ((TextView) v.findViewById(R.id.theme_id)).getText().toString();
+        Intent intent=new Intent(context,ThemeActivity.class);
+        intent.putExtra("id", id);
+        context.startActivity(intent);
     }
 
     public static class ThemeCardViewHolder extends RecyclerView.ViewHolder {
+        protected TextView theme_id;
         protected ImageView theme_background;
 
         public ThemeCardViewHolder(View itemView) {
             super(itemView);
+            theme_id = (TextView) itemView.findViewById(R.id.theme_id);
             theme_background = (ImageView) itemView.findViewById(R.id.theme_image);
         }
     }

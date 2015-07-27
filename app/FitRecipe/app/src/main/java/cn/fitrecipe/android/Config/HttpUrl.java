@@ -30,6 +30,9 @@ public class HttpUrl {
     //指南信息内容 GET
     public static final int ARTICLE_INFO_TYPE = 1;
     public static final String ARTICLE_INFO_URL_PREFIX = API_HOST+"article/";
+    //主题信息内容 GET
+    public static final int THEME_INFO_TYPE = 2;
+    public static final String THEME_INFO_URL_PREFIX = API_HOST+"theme/";
 
 
     public static String generateURLString(int type, Map<String, Object> params) {
@@ -42,6 +45,10 @@ public class HttpUrl {
             //文章信息
             case 1:
                 url = RECIPE_INFO_URL_PREFIX + params.get("id").toString();
+                break;
+            //主题信息
+            case 2:
+                url = THEME_INFO_URL_PREFIX + params.get("id").toString() + "/?start=" + params.get("start").toString() + "&num=" + params.get("num").toString();
                 break;
         }
         return url;
@@ -59,10 +66,29 @@ public class HttpUrl {
     public static final String THEME_RECIPE_VIEWPAGER_JSON = "[{'id':'1','imgUrl':'http://ww1.sinaimg.cn/mw690/b5c47ffbgw1ergtmqetr5j20jo04yabg.jpg'},{'id':'2','imgUrl':'http://ww1.sinaimg.cn/mw690/b5c47ffbgw1ergtmqetr5j20jo04yabg.jpg'},{'id':'3','imgUrl':'http://ww1.sinaimg.cn/mw690/b5c47ffbgw1ergtmqetr5j20jo04yabg.jpg'},]";
     //首页更新内容，菜谱id号，菜谱封面url，菜谱名称，功效（0代表不限，1代表增肌，2代表减脂），烹饪时间，卡路里，收藏数
     public static final String UPDATE_RECIPE_VIEWPAGER_JSON = "["+
-            "{'id':'1','imgUrl':'http://ww1.sinaimg.cn/mw690/b5c47ffbgw1ergtmulvpij20jq097jts.jpg','name':'牛油果鸡蛋三明治1','function':'1','time':'21','calorie':'210','like':'182'}"+
-            "{'id':'2','imgUrl':'http://ww1.sinaimg.cn/mw690/b5c47ffbgw1ergtmulvpij20jq097jts.jpg','name':'牛油果鸡蛋三明治2','function':'2','time':'22','calorie':'220','like':'183'}"+
-            "{'id':'3','imgUrl':'http://ww1.sinaimg.cn/mw690/b5c47ffbgw1ergtmulvpij20jq097jts.jpg','name':'牛油果鸡蛋三明治3','function':'0','time':'23','calorie':'230','like':'184'}"+
-            "{'id':'4','imgUrl':'http://ww1.sinaimg.cn/mw690/b5c47ffbgw1ergtmulvpij20jq097jts.jpg','name':'牛油果鸡蛋三明治4','function':'1','time':'24','calorie':'240','like':'185'}"+
+            "{'id':'1','imgUrl':'http://ww1.sinaimg.cn/mw690/b5c47ffbgw1ergtmulvpij20jq097jts.jpg','name':'牛油果鸡蛋三明治1','function':'1','time':'21','calorie':'210','like':'182'},"+
+            "{'id':'2','imgUrl':'http://ww1.sinaimg.cn/mw690/b5c47ffbgw1ergtmulvpij20jq097jts.jpg','name':'牛油果鸡蛋三明治2','function':'2','time':'22','calorie':'220','like':'183'},"+
+            "{'id':'3','imgUrl':'http://ww1.sinaimg.cn/mw690/b5c47ffbgw1ergtmulvpij20jq097jts.jpg','name':'牛油果鸡蛋三明治3','function':'0','time':'23','calorie':'230','like':'184'},"+
+            "{'id':'4','imgUrl':'http://ww1.sinaimg.cn/mw690/b5c47ffbgw1ergtmulvpij20jq097jts.jpg','name':'牛油果鸡蛋三明治4','function':'1','time':'24','calorie':'240','like':'185'},"+
             "{'id':'5','imgUrl':'http://ww1.sinaimg.cn/mw690/b5c47ffbgw1ergtmulvpij20jq097jts.jpg','name':'牛油果鸡蛋三明治5','function':'2','time':'25','calorie':'250','like':'186'}"+
             "]";
+
+    public static final String INDEX_INFO_JSON = "{"+
+            "'recommend':["+
+            "{'id':'1','type':'0','imgUrl':'http://ww1.sinaimg.cn/mw690/b5c47ffbgw1ergtmulvpij20jq097jts.jpg'},"+
+            "{'id':'2','type':'0','imgUrl':'http://ww1.sinaimg.cn/mw690/b5c47ffbgw1ergtmulvpij20jq097jts.jpg'},"+
+            "{'id':'3','type':'0','imgUrl':'http://ww1.sinaimg.cn/mw690/b5c47ffbgw1ergtmulvpij20jq097jts.jpg'},"+
+            "{'id':'4','type':'0','imgUrl':'http://ww1.sinaimg.cn/mw690/b5c47ffbgw1ergtmulvpij20jq097jts.jpg'},"+
+            "{'id':'5','type':'1','imgUrl':'http://ww1.sinaimg.cn/mw690/b5c47ffbgw1ergtmulvpij20jq097jts.jpg'}],"+
+            "'theme':["+
+            "{'id':'1','imgUrl':'http://ww1.sinaimg.cn/mw690/b5c47ffbgw1ergtmulvpij20jq097jts.jpg'},"+
+            "{'id':'2','imgUrl':'http://ww1.sinaimg.cn/mw690/b5c47ffbgw1ergtmulvpij20jq097jts.jpg'},"+
+            "{'id':'3','imgUrl':'http://ww1.sinaimg.cn/mw690/b5c47ffbgw1ergtmulvpij20jq097jts.jpg'}],"+
+            "'update':["+
+            "{'id':'1','feature':'高蛋白','thumbnail':'http://ww1.sinaimg.cn/mw690/b5c47ffbgw1ergtmulvpij20jq097jts.jpg','title':'阳春面1','duration':'10','calories':'100','collect':'100'},"+
+            "{'id':'2','feature':'高蛋白','thumbnail':'http://ww1.sinaimg.cn/mw690/b5c47ffbgw1ergtmulvpij20jq097jts.jpg','title':'阳春面2','duration':'11','calories':'100','collect':'100'},"+
+            "{'id':'3','feature':'高蛋白','thumbnail':'http://ww1.sinaimg.cn/mw690/b5c47ffbgw1ergtmulvpij20jq097jts.jpg','title':'阳春面3','duration':'12','calories':'100','collect':'100'},"+
+            "{'id':'4','feature':'高蛋白','thumbnail':'http://ww1.sinaimg.cn/mw690/b5c47ffbgw1ergtmulvpij20jq097jts.jpg','title':'阳春面4','duration':'13','calories':'100','collect':'100'},"+
+            "{'id':'5','feature':'高蛋白','thumbnail':'http://ww1.sinaimg.cn/mw690/b5c47ffbgw1ergtmulvpij20jq097jts.jpg','title':'阳春面5','duration':'14','calories':'100','collect':'100'}]"+
+            "}";
 }

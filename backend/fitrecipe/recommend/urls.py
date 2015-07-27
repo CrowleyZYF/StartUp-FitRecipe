@@ -3,10 +3,10 @@
 # @Author: chaihaotian
 # @Date:   2015-06-11 16:29:36
 # @Last Modified by:   chaihaotian
-# @Last Modified time: 2015-06-11 16:31:13
+# @Last Modified time: 2015-07-25 20:30:16
 from django.conf.urls import patterns, url
-from .views import RecommendRecipes
+from .views import HomepageRecommends
 
 urlpatterns = patterns('',
-    url(r'recipe/$', RecommendRecipes.as_view()),
+    url(r'$', HomepageRecommends.as_view()),
 )

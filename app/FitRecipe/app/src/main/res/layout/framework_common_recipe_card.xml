@@ -22,6 +22,12 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginTop="15dp">
+            
+            <TextView
+                android:id="@+id/recipe_id"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                />
 
             <TextView
                 android:id="@+id/recipe_name"
