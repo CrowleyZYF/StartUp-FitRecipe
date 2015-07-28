@@ -3,6 +3,26 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white">
+    
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="测试测试测试测试"
+            android:textSize="25sp"
+            android:paddingLeft="10dp"
+            android:layout_marginTop="25dp"/>
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="77dp"
+            android:background="@drawable/icon_corner"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/procedure_viewpager"
