@@ -2,6 +2,8 @@ package cn.fitrecipe.android;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -23,10 +25,12 @@ public class FrApplication extends Application {
 
     private static FrApplication instance;
     private MyImageLoader myImageLoader;
-    //save home data
-    private List<ThemeCard> themeCards;
-    private List<Map<String, Object>> recommendRecipes;
-    private List<RecipeCard> recipeCards;
+    //save home data json
+    private String data;
+
+//    private List<ThemeCard> themeCards;
+//    private List<Map<String, Object>> recommendRecipes;
+//    private List<RecipeCard> recipeCards;
 
     @Override
     public void onCreate() {
@@ -54,29 +58,23 @@ public class FrApplication extends Application {
         return myImageLoader;
     }
 
-    public List<ThemeCard> getThemeCards() {
-        return themeCards;
+    public String getData() {
+        SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+        if(data == null || data.length() == 0) {
+            if(preferences.contains("homeData"))
+                data = preferences.getString("homeData", null);
+        }
+        return data;
     }
 
-    public void saveThemeCards(List<ThemeCard> themeCards) {
-        this.themeCards = themeCards;
+    public void saveData(String data) {
+        this.data = data;
+        SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("homeData", data);
+        editor.commit();
     }
 
-    public List<Map<String, Object>> getRecommendRecipes() {
-        return recommendRecipes;
-    }
-
-    public void saveRecommendRecipes(List<Map<String, Object>> recommendRecipes) {
-        this.recommendRecipes = recommendRecipes;
-    }
-
-    public List<RecipeCard> getRecipeCards() {
-        return recipeCards;
-    }
-
-    public void saveRecipeCards(List<RecipeCard> recipeCards) {
-        this.recipeCards = recipeCards;
-    }
 
     class MyActivityCallbacks implements ActivityLifecycleCallbacks {
 

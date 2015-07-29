@@ -27,6 +27,7 @@ import com.umeng.socialize.sso.UMQQSsoHandler;
 import com.umeng.socialize.sso.UMSsoHandler;
 import com.umeng.socialize.utils.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -58,17 +59,20 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private Context nowContext;
     private String backActivity;
 
-    private void loginSuccess(String platform, JSONObject data) throws JSONException {
+    private void loginSuccess(JSONObject data) throws JSONException {
 
         String username = data.getString("nick_name");
         String avatar = data.getString("avatar");
         String account = data.getString("phone");
         String token = data.getString("token");
-
+        JSONArray externals = data.getJSONArray("externals");
+        JSONObject platforms = null;
+        if(externals != null&& externals.length() > 0)
+            platforms = externals.getJSONObject(0);
         SharedPreferences preferences=getSharedPreferences("user", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("isLogined", true);
-        editor.putString("platform", platform);
+        editor.putString("platform", platforms.toString());
         editor.putString("account", account);
         editor.putString("username", username);
         editor.putString("token", token);
@@ -175,7 +179,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                     if(res.has("data")) {
                         try {
                             JSONObject data = res.getJSONObject("data");
-                            loginSuccess("original", data);
+                            loginSuccess(data);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -218,7 +222,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 if(res.has("data")) {
                     try {
                         JSONObject data = res.getJSONObject("data");
-                        loginSuccess(platform, data);
+                        loginSuccess(data);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

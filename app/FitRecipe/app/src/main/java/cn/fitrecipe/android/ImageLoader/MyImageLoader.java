@@ -3,6 +3,7 @@ package cn.fitrecipe.android.ImageLoader;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -15,6 +16,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.nostra13.universalimageloader.core.download.ImageDownloader;
@@ -23,6 +25,8 @@ import com.nostra13.universalimageloader.core.imageaware.ViewAware;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListener;
 
+import java.io.File;
+import java.io.FileDescriptor;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,6 +34,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
@@ -44,7 +49,7 @@ import cn.fitrecipe.android.R;
  */
 public class MyImageLoader {
 
-    private DisplayImageOptions options = null;
+    private DisplayImageOptions options = null, options2;
     private Context mContext;
     private ILoadingListener iLoadingListener;
 
@@ -52,12 +57,7 @@ public class MyImageLoader {
     //count images that have not been loaded
     private AtomicInteger count;
     private int total;
-    //mark the iloadingListener if invoked
-    private AtomicBoolean isCompleted;
 
-
-    //open a time out task
-    Timer timer = null;
 
     public MyImageLoader() {
         init();
@@ -66,6 +66,12 @@ public class MyImageLoader {
 
     private void init() {
         options = new DisplayImageOptions.Builder()
+                .cacheInMemory(false)
+                .cacheOnDisk(true)          //permit cache image in memory and disk
+                .displayer(new FadeInBitmapDisplayer(500)) // set image fade in
+                .build();
+
+        options2 = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .cacheOnDisk(true)          //permit cache image in memory and disk
                 .displayer(new FadeInBitmapDisplayer(500)) // set image fade in
@@ -73,8 +79,6 @@ public class MyImageLoader {
 
         //init
         count = new AtomicInteger(0);
-        isCompleted = new AtomicBoolean(true);
-        timer = new Timer();
     }
 
     public static void init(Context context) {
@@ -82,10 +86,8 @@ public class MyImageLoader {
         ImageLoaderConfiguration configuration = new ImageLoaderConfiguration.Builder(context)
                 .diskCacheSize(50 * 1024 * 1024)
                 .denyCacheImageMultipleSizesInMemory()
-                .memoryCacheSize(2 * 1024 * 1024)
-                .threadPoolSize(5)
+                .threadPoolSize(3)
 //                .memoryCacheSize(2 * 1024 * 1024)
-                .threadPoolSize(5)
 //                .threadPriority(Thread.MAX_PRIORITY)
                 .writeDebugLogs()
                 .build();
@@ -95,23 +97,11 @@ public class MyImageLoader {
     }
 
     //this is method is load image backend, it only load images in the urls
-    public void loadImages(List<String> urls, int loadingTimeout) {
-        System.out.println(Calendar.getInstance().get(Calendar.MINUTE)+" "+Calendar.getInstance().get(Calendar.SECOND));
+    public void loadImages(Set<String> urls, ILoadingListener listener ) {
+        System.out.println(Calendar.getInstance().get(Calendar.MINUTE) + " " + Calendar.getInstance().get(Calendar.SECOND));
+        this.iLoadingListener = listener;
         if(urls != null) {
             total = urls.size();
-            isCompleted.set(false);
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    if (isCompleted.compareAndSet(false, true)) {
-                        if(count.compareAndSet(0, 0))
-                            iLoadingListener.loadFailed();
-                        else
-                            iLoadingListener.loadComplete();
-                    }
-                }
-            }, loadingTimeout);
-
             Iterator<String> iterator = urls.iterator();
             while (iterator.hasNext()) {
                 String url = iterator.next();
@@ -120,7 +110,7 @@ public class MyImageLoader {
         }
     }
 
-    public void displayImage(View view, String imageUrl) {
+    public void displayImage(View view, final String imageUrl) {
         ImageLoader.getInstance().displayImage(imageUrl, new ViewAware(view, false) {
             @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             @Override
@@ -134,12 +124,13 @@ public class MyImageLoader {
             @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             @Override
             protected void setImageBitmapInto(Bitmap bitmap, View view) {
+                System.out.println(imageUrl + "    " + bitmap.getByteCount());
                 if (view instanceof ImageView)
                     ((ImageView) view).setImageBitmap(bitmap);
                 else
                     view.setBackground(new BitmapDrawable(null, bitmap));
             }
-        }, new MyImageLoadingListener());
+        }, options2, new MyImageLoadingListener());
     }
 
     public void stop() {
@@ -176,9 +167,8 @@ public class MyImageLoader {
                 if (view == null) {
                     int res = count.incrementAndGet();
                     System.out.println("completed: " + res);
-                    if (count.compareAndSet(total, total) && isCompleted.compareAndSet(false,true)) {
+                    if (count.compareAndSet(total, total)) {
                         iLoadingListener.loadComplete();
-                        timer.cancel();
                     }
                 }
             }
@@ -188,14 +178,6 @@ public class MyImageLoader {
         public void onLoadingCancelled(String s, View view) {
 
         }
-    }
-
-    public ILoadingListener getiLoadingListener() {
-        return iLoadingListener;
-    }
-
-    public void setiLoadingListener(ILoadingListener iLoadingListener) {
-        this.iLoadingListener = iLoadingListener;
     }
 
     public void pause() {

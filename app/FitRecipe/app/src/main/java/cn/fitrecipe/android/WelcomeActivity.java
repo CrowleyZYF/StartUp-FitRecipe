@@ -5,9 +5,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URL;
@@ -16,94 +24,36 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import cn.fitrecipe.android.Config.HttpUrl;
 import cn.fitrecipe.android.Config.LocalDemo;
+import cn.fitrecipe.android.Http.FrRequest;
+import cn.fitrecipe.android.Http.FrServerConfig;
+import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.ImageLoader.ILoadingListener;
 import cn.fitrecipe.android.model.RecipeCard;
 import cn.fitrecipe.android.model.ThemeCard;
+import cn.fitrecipe.android.service.GetHomeDataService;
 
 public class WelcomeActivity extends Activity{
-    private final int SPLASH_DISPLAY_LENGTH = 3000;
-    private final int SPLASH_DISPLAY_MIN_LENGTH = 1000;
-
-    private List<String> list;
-    private List<ThemeCard> themeCards;
-    private List<RecipeCard> recipeCards;
-    private List<Map<String, Object>> recommendRecipes;
-    private long last;
-    private long now;
+    private final int SPLASH_DISPLAY_LENGTH = 2000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        //get some current time
-        last = System.currentTimeMillis();
 
-        //get new data from network
-        getDataFromNetwork();
+        startService(new Intent(this, GetHomeDataService.class));
 
-        //get old data from local
-        //TODO
-
-        //save data to Application
-        FrApplication.getInstance().saveRecipeCards(recipeCards);
-        FrApplication.getInstance().saveRecommendRecipes(recommendRecipes);
-        FrApplication.getInstance().saveThemeCards(themeCards);
-
-        //get image data
-        list = getUrls();
-        FrApplication.getInstance().getMyImageLoader().setiLoadingListener(new ILoadingListener() {
-        // 加载首页数据，加载完成之后调用goToMainActivity进行跳转，或者加载时间超过3秒之后调用goToMainActivity进行跳转
+        new Handler().postDelayed(new Runnable() {
             @Override
-            public void loadComplete() {
-                now = System.currentTimeMillis();
-                if(now - last < SPLASH_DISPLAY_MIN_LENGTH) {
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            goToMainActivity();
-                        }
-                    }, SPLASH_DISPLAY_MIN_LENGTH + last - now);
-                }
-                else
-                    goToMainActivity();
-                System.out.println(Calendar.getInstance().get(Calendar.MINUTE)+" "+Calendar.getInstance().get(Calendar.SECOND));
-
-            }
-
-            @Override
-            public void loadFailed() {
-                System.out.println("网络未连接");
+            public void run() {
                 goToMainActivity();
             }
-        });
-        FrApplication.getInstance().getMyImageLoader().loadImages(list, SPLASH_DISPLAY_LENGTH);
+        }, SPLASH_DISPLAY_LENGTH);
     }
 
-    private void getDataFromNetwork() {
-        themeCards = new ArrayList<ThemeCard>();
-        for (int i=0;i<3;i++){
-            ThemeCard tc = new ThemeCard(i,LocalDemo.themeBG[i]);
-            themeCards.add(tc);
-        }
-
-        recipeCards= new ArrayList<RecipeCard>();
-        for (int i=0;i<5;i++){
-            RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],i,0,(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
-            recipeCards.add(rc);
-        }
-
-        recommendRecipes =new ArrayList<Map<String,Object>>();
-        for(int i=0;i<5;i++){
-            Map<String, Object> map=new HashMap<String, Object>();
-            map.put("id", i);
-            map.put("type", LocalDemo.recommendType[i]);
-            map.put("imgUrl", LocalDemo.recommendBG[i]);
-            recommendRecipes.add(map);
-        }
-    }
 
     private void goToMainActivity(){
         SharedPreferences preferences=getSharedPreferences("user", MODE_PRIVATE);
@@ -118,22 +68,12 @@ public class WelcomeActivity extends Activity{
             WelcomeActivity.this.finish();
         }
     }
+    //test
 
-
-    private List<String> getUrls() {
-        List<String> urls = new ArrayList<>();
-        for (int i=0;i<3;i++){
-            urls.add(LocalDemo.themeBG[i]);
-        }
-        for (int i=0;i<5;i++){
-            urls.add(LocalDemo.recipeBG[i]);
-        }
-        for(int i=0;i<5;i++){
-            urls.add(LocalDemo.recommendBG[i]);
-        }
-        return urls;
+    @Override
+    protected void onDestroy() {
+        System.out.println("welcome activity destroy !");
+        super.onDestroy();
     }
 
-
-    //test
 }

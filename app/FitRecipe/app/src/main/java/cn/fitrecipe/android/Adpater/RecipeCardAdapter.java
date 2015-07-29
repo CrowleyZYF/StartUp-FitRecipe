@@ -59,7 +59,10 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Re
 
     @Override
     public int getItemCount() {
-        return recipeCardsList.size();
+        if(recipeCardsList == null)
+            return 0;
+        else
+            return recipeCardsList.size();
     }
 
     @Override
@@ -67,6 +70,7 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Re
         String id = ((TextView) v.findViewById(R.id.recipe_id)).getText().toString();
         Intent intent=new Intent(context,RecipeActivity.class);
         intent.putExtra("id", id);
+        //TODO
         context.startActivity(intent);
     }
 

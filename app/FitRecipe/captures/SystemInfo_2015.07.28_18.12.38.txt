@@ -1,0 +1,30 @@
+Activity Resolver Table:
+  Non-Data Actions:
+      android.intent.action.MAIN:
+        535d8860 com.example.wk.canvassave/.MainActivity filter 535d2f6c
+ 
+Packages:
+  Package [com.example.wk.canvassave] (5358d918):
+    userId=10053 gids=[1015, 1028]
+    sharedUser=null
+    pkg=Package{535a3314 com.example.wk.canvassave}
+    codePath=/data/app/com.example.wk.canvassave-2.apk
+    resourcePath=/data/app/com.example.wk.canvassave-2.apk
+    nativeLibraryPath=/data/app-lib/com.example.wk.canvassave-2
+    versionCode=1
+    applicationInfo=ApplicationInfo{535e3f20 com.example.wk.canvassave}
+    flags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]
+    versionName=1.0
+    dataDir=/data/data/com.example.wk.canvassave
+    targetSdk=22
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2015-07-27 01:41:48
+    firstInstallTime=2015-07-23 06:05:09
+    lastUpdateTime=2015-07-27 01:41:48
+    signatures=PackageSignatures{5358d97c [53581f54]}
+    permissionsFixed=true haveGids=true installStatus=1
+    pkgFlags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]
+    User 0:  installed=true stopped=false notLaunched=false enabled=0
+    grantedPermissions:
+      android.permission.READ_EXTERNAL_STORAGE
+      android.permission.WRITE_EXTERNAL_STORAGE

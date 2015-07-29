@@ -3,11 +3,15 @@ package cn.fitrecipe.android;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,12 +30,17 @@ public class LandingPageActivity extends Activity implements ViewPager.OnPageCha
     private Button frLoginButton;
     private Button frRegisterButton;
     private TextView frIndexButton;
+    private View layout;
+    private List<Bitmap> bitmaps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_landingpage);
+        layout = View.inflate(this, R.layout.activity_landingpage, null);
+        setContentView(layout);
+
+        bitmaps = new ArrayList<Bitmap>();
 
         frViewPager = (ViewPager) findViewById(R.id.landing_page);
         frLoginButton = (Button) findViewById(R.id.login_button);
@@ -41,7 +50,9 @@ public class LandingPageActivity extends Activity implements ViewPager.OnPageCha
             @Override
             public Object instantiateItem(ViewGroup container, int position) {
                 ImageView imageView = new ImageView(LandingPageActivity.this);
-                imageView.setImageResource(frImgIds[position]);
+                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), frImgIds[position]);
+                imageView.setImageBitmap(bitmap);
+                bitmaps.add(bitmap);
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 container.addView(imageView);
                 mImages.add(imageView);
@@ -121,5 +132,13 @@ public class LandingPageActivity extends Activity implements ViewPager.OnPageCha
             default:
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        for(int i = 0; i < bitmaps.size(); i++)
+            if(!bitmaps.get(i).isRecycled())
+                bitmaps.get(i).recycle();;
+        super.onDestroy();
     }
 }

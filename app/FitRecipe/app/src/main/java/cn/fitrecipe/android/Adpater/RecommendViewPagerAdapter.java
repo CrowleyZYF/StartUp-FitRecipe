@@ -64,6 +64,7 @@ public class RecommendViewPagerAdapter extends PagerAdapter implements View.OnCl
         container.removeView(recommendLinearLayout.get(position));
     }
 
+
     @Override
     public int getCount() {
         return dataList.size();

@@ -1,0 +1,33 @@
+Applications Memory Usage (kB):
+Uptime: 13598945 Realtime: 13598945
+
+** MEMINFO in pid 3904 [cn.fitrecipe.android] **
+                         Shared  Private     Heap     Heap     Heap
+                   Pss    Dirty    Dirty     Size    Alloc     Free
+                ------   ------   ------   ------   ------   ------
+       Native     2660      756     2620     7820     7719      100
+       Dalvik    77466    11032    76712    82548    81130     1418
+       Cursor        0        0        0                           
+       Ashmem        0        0        0                           
+    Other dev        4       24        0                           
+     .so mmap     1616     1996      236                           
+    .jar mmap        0        0        0                           
+    .apk mmap      161        0        0                           
+    .ttf mmap      819        0        0                           
+    .dex mmap     3134        0        0                           
+   Other mmap      184       24      176                           
+      Unknown      380       12      380                           
+        TOTAL    86424    13844    80124    90368    88849     1518
+ 
+ Objects
+               Views:      258         ViewRootImpl:        3
+         AppContexts:        6           Activities:        4
+              Assets:        2        AssetManagers:        2
+       Local Binders:        8        Proxy Binders:       21
+    Death Recipients:        0
+     OpenSSL Sockets:        1
+ 
+ SQL
+         MEMORY_USED:        0
+  PAGECACHE_OVERFLOW:        0          MALLOC_SIZE:        0
+ 

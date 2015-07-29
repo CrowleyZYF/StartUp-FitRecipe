@@ -7,19 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
 import cn.fitrecipe.android.FrApplication;
-import cn.fitrecipe.android.ImageLoader.MyImageLoader;
 import cn.fitrecipe.android.R;
-import cn.fitrecipe.android.RecipeActivity;
 import cn.fitrecipe.android.ThemeActivity;
-import cn.fitrecipe.android.model.RecipeCard;
 import cn.fitrecipe.android.model.ThemeCard;
 
 /**
@@ -56,7 +50,10 @@ public class ThemeCardAdapter extends RecyclerView.Adapter<ThemeCardAdapter.Them
 
     @Override
     public int getItemCount() {
-        return themeCardsList.size();
+        if(themeCardsList == null)
+            return 0;
+        else
+            return themeCardsList.size();
     }
 
     @Override

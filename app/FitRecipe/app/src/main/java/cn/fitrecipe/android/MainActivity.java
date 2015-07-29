@@ -9,9 +9,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -19,15 +20,12 @@ import com.umeng.fb.FeedbackAgent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import cn.fitrecipe.android.UI.SlidingPage;
-import cn.fitrecipe.android.fragment.MeFragment;
 import cn.fitrecipe.android.fragment.IndexFragment;
 import cn.fitrecipe.android.fragment.KnowledgeFragment;
+import cn.fitrecipe.android.fragment.MeFragment;
 import cn.fitrecipe.android.fragment.PlanFragment;
-import cn.fitrecipe.android.model.RecipeCard;
-import cn.fitrecipe.android.model.ThemeCard;
 
 public class MainActivity extends FragmentActivity implements OnClickListener
 {
@@ -47,12 +45,14 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     private int tab_index = 0;
 
     private List<LinearLayout> frTabs = new ArrayList<LinearLayout>();
+    private View layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.framework_main_container);
+        layout = View.inflate(this, R.layout.framework_main_container, null);
+        setContentView(layout);
         FeedbackAgent agent = new FeedbackAgent(this);
         agent.sync();
         initView();
@@ -240,4 +240,31 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        System.out.println("Main activity destroy !");
+        unbindDrawables(layout);
+        super.onDestroy();
+    }
+
+    public void unbindDrawables(View view) {//pass your parent view here
+        try {
+            if (view.getBackground() != null)
+                view.getBackground().setCallback(null);
+
+            if (view instanceof ImageView) {
+                ImageView imageView = (ImageView) view;
+                imageView.setImageBitmap(null);
+            } else if (view instanceof ViewGroup) {
+                ViewGroup viewGroup = (ViewGroup) view;
+                for (int i = 0; i < viewGroup.getChildCount(); i++)
+                    unbindDrawables(viewGroup.getChildAt(i));
+
+                if (!(view instanceof AdapterView))
+                    viewGroup.removeAllViews();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -1,7 +1,10 @@
 package cn.fitrecipe.android.fragment;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -14,6 +17,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.umeng.fb.FeedbackAgent;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,15 +67,27 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
     List<ThemeCard> themeCards;
     List<RecipeCard> recipeCards;
 
+    private String scale = "?imageMogr2/thumbnail/350000@";
+
+    private IntentFilter intentFilter;
+    private HomeDataReceiver receiver;
+    String dataString = null;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_index, container, false);
-
-        initView(view);
-        initData();
-        initEvent();
+        dataString = FrApplication.getInstance().getData();
+        if(dataString != null) {
+            initView(view);
+            try {
+                initData(dataString);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            initEvent();
+        }
         return view;
     }
 
@@ -91,11 +110,48 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
         category_btn = (Button) view.findViewById(R.id.category_btn_2);
     }
 
-    private void initData() {
+    private void initData(String dataString) throws JSONException {
         //get data
-        recommendRecipe = FrApplication.getInstance().getRecommendRecipes();
-        themeCards = FrApplication.getInstance().getThemeCards();
-        recipeCards = FrApplication.getInstance().getRecipeCards();
+        JSONObject data = null;
+        recipeCards = new ArrayList<RecipeCard>();
+        themeCards = new ArrayList<ThemeCard>();
+        recommendRecipe = new ArrayList<Map<String, Object>>();
+        if(dataString != null) {
+            data = new JSONObject(dataString);
+
+            JSONArray themes = data.getJSONArray("theme");
+            for (int i = 0; i < themes.length(); i++) {
+                JSONObject theme = themes.getJSONObject(i);
+                String img = theme.getString("thumbnail") + scale;
+                ThemeCard tc = new ThemeCard(theme.getInt("id"), img);
+                themeCards.add(tc);
+            }
+
+            JSONArray updates = data.getJSONArray("update");
+            for (int i = 0; i < updates.length(); i++) {
+                JSONObject update = updates.getJSONObject(i);
+                String name = update.getString("title");
+                int id = update.getInt("id");
+                int function = 0;
+                int duration = update.getInt("duration");
+                String total_amount = update.getString("total_amount");
+                double calories = update.getDouble("calories") * Integer.parseInt(total_amount.substring(0, total_amount.indexOf("g"))) / 100;
+                String img = update.getString("img") + scale;
+                RecipeCard rc = new RecipeCard(name, id, function, duration, (int) calories, 0, img);
+                recipeCards.add(rc);
+            }
+
+            JSONArray recommends = data.getJSONArray("recommend");
+            for (int i = 0; i < recommends.length(); i++) {
+                JSONObject recommend = recommends.getJSONObject(i);
+                String img = recommend.getString("img") + scale;
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("id", recommend.getInt("id"));
+                map.put("type", "");
+                map.put("imgUrl", img);
+                recommendRecipe.add(map);
+            }
+        }
 
         //获得推荐数据，并初始化适配器
         recommendViewPagerAdapter = new RecommendViewPagerAdapter(getActivity(), recommendRecipe, recommendViewPager.getLayoutParams().width, recommendViewPager.getLayoutParams().height);
@@ -143,6 +199,15 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
                 break;
             default:
                 break;
+        }
+    }
+
+
+    class HomeDataReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
         }
     }
 }
