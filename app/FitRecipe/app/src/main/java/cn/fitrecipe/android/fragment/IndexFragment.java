@@ -33,6 +33,7 @@ import cn.fitrecipe.android.Adpater.ThemeCardAdapter;
 import cn.fitrecipe.android.CategoryActivity;
 import cn.fitrecipe.android.Config.LocalDemo;
 import cn.fitrecipe.android.FrApplication;
+import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.ImageLoader.MyImageLoader;
 import cn.fitrecipe.android.MainActivity;
 import cn.fitrecipe.android.R;
@@ -67,10 +68,6 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
     List<ThemeCard> themeCards;
     List<RecipeCard> recipeCards;
 
-    private String scale = "?imageMogr2/thumbnail/350000@";
-
-    private IntentFilter intentFilter;
-    private HomeDataReceiver receiver;
     String dataString = null;
 
     @Override
@@ -122,7 +119,7 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
             JSONArray themes = data.getJSONArray("theme");
             for (int i = 0; i < themes.length(); i++) {
                 JSONObject theme = themes.getJSONObject(i);
-                String img = theme.getString("thumbnail") + scale;
+                String img = FrServerConfig.getImageCompressed(theme.getString("thumbnail"));
                 ThemeCard tc = new ThemeCard(theme.getInt("id"), img);
                 themeCards.add(tc);
             }
@@ -136,7 +133,7 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
                 int duration = update.getInt("duration");
                 String total_amount = update.getString("total_amount");
                 double calories = update.getDouble("calories") * Integer.parseInt(total_amount.substring(0, total_amount.indexOf("g"))) / 100;
-                String img = update.getString("img") + scale;
+                String img = FrServerConfig.getImageCompressed(update.getString("img"));
                 RecipeCard rc = new RecipeCard(name, id, function, duration, (int) calories, 0, img);
                 recipeCards.add(rc);
             }
@@ -144,7 +141,7 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
             JSONArray recommends = data.getJSONArray("recommend");
             for (int i = 0; i < recommends.length(); i++) {
                 JSONObject recommend = recommends.getJSONObject(i);
-                String img = recommend.getString("img") + scale;
+                String img = FrServerConfig.getImageCompressed(recommend.getString("img"));
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put("id", recommend.getInt("id"));
                 map.put("type", "");

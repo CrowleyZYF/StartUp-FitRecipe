@@ -1,5 +1,7 @@
 package cn.fitrecipe.android.model;
 
+import android.net.Uri;
+
 import cn.fitrecipe.android.R;
 
 /**
@@ -8,15 +10,15 @@ import cn.fitrecipe.android.R;
 public class ProcedureCard {
     protected int procedure_num;
     protected String procedure_content;
-    protected int procedure_img;
+    protected String procedure_img;
 
     public ProcedureCard(){
         this.procedure_num=0;
         this.procedure_content="健食记";
-        this.procedure_img= R.drawable.loading_pic2;
+        this.procedure_img = Uri.parse("android.resource://cn.fitrecipe.android/loading_pic2").toString();
     }
 
-    public ProcedureCard(int num, String content, int img){
+    public ProcedureCard(int num, String content, String img){
         this.procedure_num=num;
         this.procedure_content=content;
         this.procedure_img= img;
@@ -30,7 +32,7 @@ public class ProcedureCard {
         return this.procedure_num+"";
     }
 
-    public int getProcedure_img() {return this.procedure_img; }
+    public String getProcedure_img() {return this.procedure_img; }
 }
 
 

@@ -46,7 +46,7 @@ public class ProcedureCardAdapter extends RecyclerView.Adapter<ProcedureCardAdap
         ProcedureCard pc = procedureCardsList.get(i);
         contactViewHolder.procedure_num.setText(pc.getProcedure_num());
         contactViewHolder.procedure_content.setText(pc.getProcedure_content());
-        contactViewHolder.procedure_img.setBackground (this.context.getResources().getDrawable(pc.getProcedure_img()));
+        FrApplication.getInstance().getMyImageLoader().displayImage(contactViewHolder.procedure_img, pc.getProcedure_img());
     }
 
     @Override

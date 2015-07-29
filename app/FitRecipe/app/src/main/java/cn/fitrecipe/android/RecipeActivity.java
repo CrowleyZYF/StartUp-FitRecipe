@@ -136,6 +136,8 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
     //records
     List<List<Integer>> weight_records;
 
+    private JSONArray procedure_set;
+
     // 首先在您的Activity中添加如下成员变量
     final UMSocialService mController = UMServiceFactory.getUMSocialService("com.umeng.share");
 
@@ -264,9 +266,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
     private void getData(JSONObject data) throws JSONException {
 
         if(data.has("img"))
-//            ImageLoader.getInstance().displayImage(data.getString("img") + "?imageMogr2/thumbnail/!25p", recipe_pic);
-//            FrApplication.getInstance().getMyImageLoader().displayImage(recipe_pic, data.getString("img") + "?imageMogr2/thumbnail/!25p");
-            FrApplication.getInstance().getMyImageLoader().displayImage(recipe_pic, data.getString("img") + "?imageMogr2/thumbnail/1024x");
+            FrApplication.getInstance().getMyImageLoader().displayImage(recipe_pic, FrServerConfig.getImageCompressed(data.getString("img")));
         StringBuilder tags = new StringBuilder();
         JSONArray time_labels = data.getJSONArray("time_labels");
         for(int i = 0; i < time_labels.length(); i++) {
@@ -354,6 +354,8 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         }
 
         isCollected = false;
+
+        procedure_set = data.getJSONArray("procedure_set");
     }
 
     private void initEvent() {
@@ -372,7 +374,10 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.check_procedure:{
-                startActivity(new Intent(this, RecipeProcedureActivity.class));
+                Intent intent = new Intent(this, RecipeProcedureActivity.class);
+                intent.putExtra("procedure_set", procedure_set.toString());
+                intent.putExtra("recipe_title", recipe_name.getText().toString());
+                startActivity(intent);
                 break;
             }
             case R.id.set_btn:{

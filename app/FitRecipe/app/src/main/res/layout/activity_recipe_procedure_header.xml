@@ -17,6 +17,7 @@
             android:layout_height="50dp"
             android:padding="15dp"
             android:layout_alignParentLeft="true"
+            android:clickable="true"
             android:layout_centerVertical="true"
             android:src="@drawable/icon_back_white"
             android:background="@drawable/icon_selector_trans"/>
@@ -26,6 +27,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:padding="15dp"
+            android:clickable="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:src="@drawable/icon_video"
