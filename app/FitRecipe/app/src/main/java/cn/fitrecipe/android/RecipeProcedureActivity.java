@@ -43,7 +43,7 @@ public class RecipeProcedureActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recipe_procedure_container);
+        setContentView(R.layout.activity_recipe_procedure);
 
         initView();
         initData();
@@ -72,7 +72,7 @@ public class RecipeProcedureActivity extends Activity{
     }
 
     private void initView() {
-        procedureRecyclerView = (RecyclerView) this.findViewById(R.id.update_recipe_recycler_view);
+        procedureRecyclerView = (RecyclerView) this.findViewById(R.id.procedure_recycler_view);
         procedureLayoutManager = new RecyclerViewLayoutManager(this);
         procedureLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         procedureRecyclerView.setLayoutManager(procedureLayoutManager);

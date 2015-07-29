@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="white">#ffffff</color>
+    <color name="trangray">#CCfbf7ed</color>
+    <color name="trangray1">#00fbf7ed</color>
     <color name="gray">#ffb4b4b4</color>
     <color name="landing_intro_black">#0a181b</color>
     <color name="background_color">#fbf7ed</color>
