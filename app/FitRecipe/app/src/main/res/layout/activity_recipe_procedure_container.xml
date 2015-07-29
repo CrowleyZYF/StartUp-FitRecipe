@@ -1,14 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/white">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/background_color"
+    android:scrollbars="none"
+    android:fadingEdge="vertical">
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/procedure_viewpager"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_width="match_parent">
-    </android.support.v4.view.ViewPager>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:orientation="horizontal"
+            android:id="@+id/procedure_info">
 
-</LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="测试测试测试测试"
+                android:textSize="25sp"
+                android:paddingLeft="10dp"
+                android:layout_marginTop="25dp"/>
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="77dp"
+                android:background="@drawable/icon_corner"
+                android:layout_alignParentRight="true"/>
+        </RelativeLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/procedure_recycler_view"
+            android:scrollbars="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            />
+    </LinearLayout>
+</ScrollView>

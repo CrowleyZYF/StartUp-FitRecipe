@@ -40,5 +40,4 @@ public class FrServerConfig {
         String scale = "?imageMogr2/thumbnail/350000@";
         return url + scale;
     }
-
 }

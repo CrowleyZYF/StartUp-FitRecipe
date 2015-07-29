@@ -10,3 +10,4 @@ import-summary.txt
 local.properties
 settings.gradle
 /social_sdk_library_project
+/app/app.iml
