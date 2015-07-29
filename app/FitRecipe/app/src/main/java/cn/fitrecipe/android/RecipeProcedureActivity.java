@@ -3,6 +3,8 @@ package cn.fitrecipe.android;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,13 +13,19 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.fitrecipe.android.Adpater.ProcedureCardAdapter;
 import cn.fitrecipe.android.Adpater.ProcedurePagerAdapter;
+import cn.fitrecipe.android.Adpater.RecipeCardAdapter;
+import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
+import cn.fitrecipe.android.model.ProcedureCard;
+import cn.fitrecipe.android.model.RecipeCard;
 
 public class RecipeProcedureActivity extends Activity{
 
-    private ViewPager procedureViewPager;
-    private ProcedurePagerAdapter procedureViewPagerAdapter;
-    private List<View> listViews1 = null;
+    private RecyclerView procedureRecyclerView;
+    private ProcedureCardAdapter procedureCardAdapter;
+    private RecyclerViewLayoutManager procedureLayoutManager;
+    List<ProcedureCard> procedureCards;
 
     private int[] imgs = { R.drawable.ztest001, R.drawable.ztest002, R.drawable.ztest003,
             R.drawable.ztest004, R.drawable.ztest005, R.drawable.ztest006};
@@ -48,26 +56,26 @@ public class RecipeProcedureActivity extends Activity{
     }
 
     private void initData() {
-        listViews1 = new ArrayList<View>();
-        for (int i = 0; i < imgs.length; i++) {
-            View view1 = LayoutInflater.from(this).inflate(
-                    R.layout.activity_recipe_procedure_item, null);
-            ImageView pic = (ImageView) view1.findViewById(R.id.recipe_procedure_pic);
-            pic.setImageResource(imgs[i]);
-            TextView number = (TextView) view1.findViewById(R.id.recipe_procedure_number);
-            number.setText((i+1)+"");
-            TextView count = (TextView) view1.findViewById(R.id.recipe_procedure_count);
-            count.setText("/"+imgs.length);
-            TextView text = (TextView) view1.findViewById(R.id.recipe_procedure_text);
-            text.setText(texts[i]);
-            listViews1.add(view1);
+        procedureCards = getRecipeCards();
+        procedureCardAdapter = new ProcedureCardAdapter(this,procedureCards);
+        procedureRecyclerView.setAdapter(procedureCardAdapter);
+
+    }
+
+    private List<ProcedureCard> getRecipeCards() {
+        List<ProcedureCard> result = new ArrayList<ProcedureCard>();
+        for (int i=0;i<6;i++){
+            ProcedureCard pc = new ProcedureCard(i,texts[i],imgs[i]);
+            result.add(pc);
         }
-        procedureViewPagerAdapter = new ProcedurePagerAdapter(listViews1,this);
-        procedureViewPager.setAdapter(procedureViewPagerAdapter);
+        return result;
     }
 
     private void initView() {
-        procedureViewPager = (ViewPager) findViewById(R.id.procedure_viewpager);
+        procedureRecyclerView = (RecyclerView) this.findViewById(R.id.update_recipe_recycler_view);
+        procedureLayoutManager = new RecyclerViewLayoutManager(this);
+        procedureLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        procedureRecyclerView.setLayoutManager(procedureLayoutManager);
     }
 
 }

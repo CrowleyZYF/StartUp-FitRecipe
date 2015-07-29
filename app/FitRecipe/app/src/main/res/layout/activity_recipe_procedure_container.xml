@@ -24,11 +24,12 @@
             android:layout_alignParentRight="true"/>
     </RelativeLayout>
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/procedure_viewpager"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_width="match_parent">
-    </android.support.v4.view.ViewPager>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/procedure_recycler_view"
+        android:scrollbars="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        />
 
 </LinearLayout>
