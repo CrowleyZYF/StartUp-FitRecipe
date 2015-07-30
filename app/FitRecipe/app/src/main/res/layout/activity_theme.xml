@@ -1,129 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:dots="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical">
+    android:background="@color/background_color"
+    >
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:background="@color/base_color"
-        android:gravity="center">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/theme"
-            android:textColor="#ffffff"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <ImageView
-            android:id="@+id/back_btn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:padding="15dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/icon_back_white"
-            android:background="@drawable/icon_selector"/>
-
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:padding="15dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/icon_like_noshadow"/>
-    </RelativeLayout>
-
-    <ScrollView
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@color/background_color"
-        android:scrollbars="none"
-        android:fadingEdge="vertical">
+        android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/background_color">
+            android:layout_height="45dp"
+            android:background="@color/base_color"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/theme"
+                android:textColor="#ffffff"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/back_btn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="15dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/icon_back_white"
+                android:background="@drawable/icon_selector"/>
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="15dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/icon_like_noshadow"/>
+        </RelativeLayout>
+
+        <ScrollView
+            android:id="@+id/theme_content"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@color/background_color"
+            android:scrollbars="none"
+            android:fadingEdge="vertical"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:background="@color/background_color">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:background="@color/theme_color">
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:background="@color/theme_color">
+
+                        <ImageView
+                            android:id="@+id/recipe_img"
+                            android:layout_width="match_parent"
+                            android:layout_height="220dp"
+                            android:scaleType="fitXY"
+                            android:background="@drawable/loading_pic2"/>
+
+                        <TextView
+                            android:id="@+id/recipe_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginLeft="35dp"
+                            android:layout_marginRight="35dp"
+                            android:textColor="#333333"
+                            android:textSize="14sp"
+                            android:textStyle="normal"
+                            android:lineSpacingExtra="3dp"
+                            android:text=""/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp"
+                            android:paddingLeft="80dp"
+                            android:paddingRight="80dp"
+                            android:text="@string/follow"
+                            android:textSize="12sp"
+                            android:textColor="#ffffff"
+                            android:background="@color/active_color"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="10dp"/>
+                    </LinearLayout>
 
                     <ImageView
-                        android:id="@+id/recipe_img"
                         android:layout_width="match_parent"
-                        android:layout_height="180dp"
-                        android:scaleType="fitXY"
-                        android:background="@drawable/loading_pic1"/>
+                        android:layout_height="1px"
+                        android:background="@drawable/theme_line"
+                        android:layout_marginBottom="5dp"/>
 
-                    <TextView
-                        android:id="@+id/recipe_content"
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/theme_recipe_recycler_view"
+                        android:scrollbars="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginLeft="35dp"
-                        android:layout_marginRight="35dp"
-                        android:textColor="#333333"
-                        android:textSize="14sp"
-                        android:textStyle="normal"
-                        android:lineSpacingExtra="3dp"
-                        android:text=""/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="80dp"
-                        android:paddingRight="80dp"
-                        android:text="@string/follow"
-                        android:textSize="12sp"
-                        android:textColor="#ffffff"
-                        android:background="@color/active_color"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="10dp"/>
+                        android:layout_marginBottom="20dp"
+                        />
                 </LinearLayout>
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="@drawable/theme_line"
-                    android:layout_marginBottom="5dp"/>
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/theme_recipe_recycler_view"
-                    android:scrollbars="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    />
-
-
-
             </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/loading_interface"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="-20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="拼命加载中"
+            android:textSize="14sp"
+            android:textColor="@color/base_color"
+            android:layout_gravity="bottom"/>
+
+        <pl.tajchert.sample.DotsTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/dots"
+            android:textSize="30sp"
+            android:textColor="@color/base_color"
+            dots:autoplay="true"
+            dots:period="1000"
+            android:layout_gravity="bottom"/>
 
 
+    </LinearLayout>
 
-        </LinearLayout>
+</FrameLayout>
 
-
-
-
-
-    </ScrollView>
-
-
-</LinearLayout>

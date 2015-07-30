@@ -2,6 +2,7 @@ package cn.fitrecipe.android.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,9 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.umeng.fb.FeedbackAgent;
+import pl.tajchert.sample.DotsTextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,6 +43,9 @@ import me.relex.circleindicator.CircleIndicator;
  * Created by 奕峰 on 2015/4/11.
  */
 public class IndexFragment extends Fragment implements ViewPager.OnPageChangeListener, View.OnClickListener {
+    private ScrollView indexContent;
+    private LinearLayout loadingInterface;
+    private DotsTextView dotsTextView;
     //推荐
     private ViewPager recommendViewPager;
     private RecommendViewPagerAdapter recommendViewPagerAdapter;
@@ -98,6 +105,23 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
         //初始化反馈、分类按钮
         feedback_btn = (TextView) view.findViewById(R.id.feedback_btn);
         category_btn = (Button) view.findViewById(R.id.category_btn_2);
+
+        loadingInterface = (LinearLayout) view.findViewById(R.id.loading_interface);
+        indexContent = (ScrollView) view.findViewById(R.id.index_content);
+        dotsTextView = (DotsTextView) view.findViewById(R.id.dots);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                hideLoading();
+            }
+        }, 2000);
+    }
+
+    private void hideLoading(){
+        loadingInterface.setVisibility(View.GONE);
+        dotsTextView.stop();
+        indexContent.setVisibility(View.VISIBLE);
     }
 
     private void initData(String dataString) throws JSONException {

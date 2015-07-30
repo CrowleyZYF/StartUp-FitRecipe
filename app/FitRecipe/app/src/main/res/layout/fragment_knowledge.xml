@@ -14,7 +14,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/muscle"
+            android:text="@string/perfect"
             android:textColor="@color/white"
             android:layout_alignParentBottom="true"
             android:textSize="50sp"
@@ -37,7 +37,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/fat"
+            android:text="@string/hp"
             android:textColor="@color/white"
             android:layout_alignParentBottom="true"
             android:textSize="50sp"

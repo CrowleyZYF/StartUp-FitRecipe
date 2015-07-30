@@ -21,10 +21,12 @@
     <string name="filter">筛选</string>
     <string name="cancel">取消</string>
     <string name="sure">确定</string>
-    <string name="purpose">目的</string>
+    <string name="feature">特色</string>
     <string name="time">用餐时间</string>
-    <string name="muscle">增肌</string>
-    <string name="fat">减脂</string>
+    <string name="perfect">完美</string>
+    <string name="hp">高蛋白</string>
+    <string name="lk">低卡</string>
+    <string name="lf">低脂</string>
     <string name="breakfast">早餐</string>
     <string name="breakfast_intro">早餐很重要，不要错过哦</string>
     <string name="addmeal">加餐</string>
