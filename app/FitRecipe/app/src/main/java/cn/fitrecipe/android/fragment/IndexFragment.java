@@ -1,10 +1,6 @@
 package cn.fitrecipe.android.fragment;
 
-import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -31,11 +27,8 @@ import cn.fitrecipe.android.Adpater.RecipeCardAdapter;
 import cn.fitrecipe.android.Adpater.RecommendViewPagerAdapter;
 import cn.fitrecipe.android.Adpater.ThemeCardAdapter;
 import cn.fitrecipe.android.CategoryActivity;
-import cn.fitrecipe.android.Config.LocalDemo;
 import cn.fitrecipe.android.FrApplication;
 import cn.fitrecipe.android.Http.FrServerConfig;
-import cn.fitrecipe.android.ImageLoader.MyImageLoader;
-import cn.fitrecipe.android.MainActivity;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.model.RecipeCard;
@@ -119,8 +112,8 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
             JSONArray themes = data.getJSONArray("theme");
             for (int i = 0; i < themes.length(); i++) {
                 JSONObject theme = themes.getJSONObject(i);
-                String img = FrServerConfig.getImageCompressed(theme.getString("thumbnail"));
-                ThemeCard tc = new ThemeCard(theme.getInt("id"), img);
+                String bg = FrServerConfig.getImageCompressed(theme.getString("thumbnail"));
+                ThemeCard tc = new ThemeCard(theme.getInt("id"), bg, theme.toString());
                 themeCards.add(tc);
             }
 
@@ -200,11 +193,4 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
     }
 
 
-    class HomeDataReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-        }
-    }
 }

@@ -1,6 +1,7 @@
 package cn.fitrecipe.android;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.PagerTitleStrip;
 import android.support.v4.view.ViewPager;
@@ -98,11 +99,16 @@ public class RecipeProcedureActivity extends Activity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.left_btn:
-
+                this.finish();
                 break;
             case R.id.right_btn:
+                playVideo();
                 break;
             default:
         }
+    }
+
+    private void playVideo() {
+        String url = "http://k.youku.com/player/getFlvPath/sid/54382201310611007bab7_00/st/flv/fileid/030002010055B704FA36B8065462C199AE99A8-4EE9-D1A0-2A6C-E5BF0750DC33?K=4bc547e241195b5d261e7ad7&ctype=10&ev=1&oip=2095617680&token=1383&ep=AlohXZZJv8ZKnxE0E%2FveqsLzDA%2FhU1F3DJaH%2BcpJokHLwno511bEQhHBYS2vTuNK5RuajVSlC8hgfYs7WC%2F821azVM%2B37EHKDjNE0yUg0UASH%2FDZKyIMfYtjuojEumck92Ns0Enehwo%3D&ymovie=1";
     }
 }

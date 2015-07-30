@@ -62,11 +62,14 @@
                     android:background="@color/theme_color">
 
                     <ImageView
+                        android:id="@+id/recipe_img"
                         android:layout_width="match_parent"
                         android:layout_height="180dp"
+                        android:scaleType="fitXY"
                         android:background="@drawable/loading_pic1"/>
 
                     <TextView
+                        android:id="@+id/recipe_content"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -77,7 +80,7 @@
                         android:textSize="14sp"
                         android:textStyle="normal"
                         android:lineSpacingExtra="3dp"
-                        android:text="再也不用抱怨只能吃食堂那油腻的饭菜啦，只要一个电饭煲,变着花样吃得好。"/>
+                        android:text=""/>
 
                     <TextView
                         android:layout_width="wrap_content"

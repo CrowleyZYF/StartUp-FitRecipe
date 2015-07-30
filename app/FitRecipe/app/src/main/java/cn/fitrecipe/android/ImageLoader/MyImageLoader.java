@@ -84,10 +84,10 @@ public class MyImageLoader {
     public static void init(Context context) {
         //Universal Image Loader
         ImageLoaderConfiguration configuration = new ImageLoaderConfiguration.Builder(context)
-                .diskCacheSize(50 * 1024 * 1024)
+                .diskCacheSize(100 * 1024 * 1024)
                 .denyCacheImageMultipleSizesInMemory()
                 .threadPoolSize(3)
-//                .memoryCacheSize(2 * 1024 * 1024)
+                .memoryCacheSize(10 * 1024 * 1024)
 //                .threadPriority(Thread.MAX_PRIORITY)
                 .writeDebugLogs()
                 .build();
@@ -105,7 +105,7 @@ public class MyImageLoader {
             Iterator<String> iterator = urls.iterator();
             while (iterator.hasNext()) {
                 String url = iterator.next();
-                ImageLoader.getInstance().loadImage(url, options, new MyImageLoadingListener());
+                ImageLoader.getInstance().loadImage(url, options2, new MyImageLoadingListener());
             }
         }
     }

@@ -43,8 +43,8 @@ public class PlanFragment extends Fragment implements View.OnClickListener {
     private List<View> listViews1 = null;
     private List<View> listViews2 = null;
     private List<View> listViews3 = null;
-    private int[] imgs = { R.drawable.ztest001, R.drawable.ztest002, R.drawable.ztest003,
-            R.drawable.ztest004, R.drawable.ztest005, R.drawable.ztest006};
+    private int[] imgs = { R.drawable.loading_pic2, R.drawable.loading_pic2, R.drawable.loading_pic2,
+            R.drawable.loading_pic2, R.drawable.loading_pic2, R.drawable.loading_pic2};
 
     private int[][] begin = {
             {0,4,2,6,3},

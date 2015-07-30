@@ -40,4 +40,9 @@ public class FrServerConfig {
         String scale = "?imageMogr2/thumbnail/350000@";
         return url + scale;
     }
+
+    //get Theme Details
+    public static String getThemeDetailsUrl(String id) {
+        return HOST + "/api/theme/" + id + "/recipes/";
+    }
 }
