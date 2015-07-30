@@ -1,19 +1,15 @@
 package cn.fitrecipe.android;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.view.PagerTitleStrip;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,12 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.fitrecipe.android.Adpater.ProcedureCardAdapter;
-import cn.fitrecipe.android.Adpater.ProcedurePagerAdapter;
-import cn.fitrecipe.android.Adpater.RecipeCardAdapter;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.model.ProcedureCard;
-import cn.fitrecipe.android.model.RecipeCard;
 
 public class RecipeProcedureActivity extends Activity implements View.OnClickListener{
 
@@ -109,6 +102,16 @@ public class RecipeProcedureActivity extends Activity implements View.OnClickLis
     }
 
     private void playVideo() {
-        String url = "http://k.youku.com/player/getFlvPath/sid/54382201310611007bab7_00/st/flv/fileid/030002010055B704FA36B8065462C199AE99A8-4EE9-D1A0-2A6C-E5BF0750DC33?K=4bc547e241195b5d261e7ad7&ctype=10&ev=1&oip=2095617680&token=1383&ep=AlohXZZJv8ZKnxE0E%2FveqsLzDA%2FhU1F3DJaH%2BcpJokHLwno511bEQhHBYS2vTuNK5RuajVSlC8hgfYs7WC%2F821azVM%2B37EHKDjNE0yUg0UASH%2FDZKyIMfYtjuojEumck92Ns0Enehwo%3D&ymovie=1";
+        System.out.println("play video!!!");
+        try{
+            Intent mIntent = new Intent();
+            ComponentName comp = new ComponentName("gov.anzong.mediaplayer","ReceiveIntentURLActivity");
+            mIntent.setComponent(comp);
+            Uri uri = Uri.parse("http://v.youku.com/v_show/id_XNDkyNzI5ODA4.html");//http://v.youku.com/v_show/id_XNDkyNzI5ODA4.html
+            mIntent.setData(uri);
+            startActivity(mIntent);
+        }catch(Exception e){
+            //TODO
+        }
     }
 }
