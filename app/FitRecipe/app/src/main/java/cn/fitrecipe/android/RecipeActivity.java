@@ -443,21 +443,38 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
             Toast.makeText(this, "加100克，并调整相应食材表和营养表", Toast.LENGTH_LONG).show();
             last = weight_records.get(count);
             now = new ArrayList<Integer>();
-            double remain = 0;
+            int remain = 0;
             for(int i = 0; i < last.size(); i++) {
                 double tmp = last.get(i) * 100.0 / total_weight;
-                int tmp2 = (int) Math.round(tmp + remain);
-                remain =  tmp - tmp2;
-                now.add(tmp2 + last.get(i));
+                remain += (int) tmp + last.get(i);
+                now.add((int) tmp + last.get(i));
+            }
+            remain = total_weight + 100 - remain;
+            for(int i = 0; i < now.size(); i++) {
+                int cnt = 0;
+                for (int j = 0; j < now.size(); j++) {
+                    if (i != j && now.get(j) < now.get(i)) {
+                        cnt ++;
+                    }
+                }
+                if(cnt == remain) {
+                    for (int j = 0; j < now.size(); j++) {
+                        if (i != j && now.get(j) < now.get(i)) {
+                            now.set(j, now.get(j) + 1);
+                        }
+                    }
+                    break;
+                }
             }
             total_weight += 100;
             weight_records.add(++count, now);
         }else{
-            Toast.makeText(this, "减100克，并调整相应食材表和营养表", Toast.LENGTH_LONG).show();
             if(count > 0) {
+                Toast.makeText(this, "减100克，并调整相应食材表和营养表", Toast.LENGTH_LONG).show();
                 total_weight -= 100;
                 now = weight_records.get(--count);
-            }
+            }else
+                now = weight_records.get(0);
 
         }
         recipe_weight.setText(total_weight + "克");
