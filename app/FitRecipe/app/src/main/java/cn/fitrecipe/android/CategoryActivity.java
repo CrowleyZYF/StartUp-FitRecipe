@@ -9,6 +9,10 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.rey.material.widget.CheckBox;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +32,9 @@ public class CategoryActivity extends Activity implements View.OnClickListener, 
     private ImageView back_btn;
     private ImageView filter_btn;
     private ImageView filter_btn_2;
+    private TextView sure_btn;
+
+    private CheckBox perfect_check;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +57,13 @@ public class CategoryActivity extends Activity implements View.OnClickListener, 
 
         filter_btn_2 = (ImageView) findViewById(R.id.close_menu_btn);
 
+        sure_btn = (TextView) findViewById(R.id.filter_sure_btn);
+
         gridView = (GridView) findViewById(R.id.category_gridview);
 
         mRightMenu = (SlidingMenu) findViewById(R.id.container_layout);
+
+        perfect_check = (CheckBox) findViewById(R.id.perfect_check);
     }
 
     private void initData() {
@@ -65,6 +76,7 @@ public class CategoryActivity extends Activity implements View.OnClickListener, 
         back_btn.setOnClickListener(this);
         filter_btn.setOnClickListener(this);
         filter_btn_2.setOnClickListener(this);
+        sure_btn.setOnClickListener(this);
         gridView.setOnItemClickListener(this);
     }
 
@@ -96,6 +108,10 @@ public class CategoryActivity extends Activity implements View.OnClickListener, 
                 break;
             case R.id.close_menu_btn:
                 mRightMenu.toggle();
+                break;
+            case R.id.filter_sure_btn:
+                boolean test = perfect_check.isChecked();
+                Toast.makeText(this, "Checked: " + test, Toast.LENGTH_LONG).show();
                 break;
             default:
                 break;

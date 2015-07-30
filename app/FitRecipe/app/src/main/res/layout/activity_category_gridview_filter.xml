@@ -46,7 +46,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/purpose"
+                android:text="@string/feature"
                 android:textSize="16sp"
                 android:textColor="#ffffff"
                 android:layout_gravity="center"/>
@@ -59,13 +59,13 @@
                 android:layout_marginBottom="5dp"/>
 
             <com.rey.material.widget.CheckBox
-                android:id="@+id/muscle_check"
+                android:id="@+id/perfect_check"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/muscle"
+                android:text="@string/perfect"
                 android:textColor="#ffffff"
                 android:textSize="16sp"
-                android:layout_gravity="center"
+                android:layout_gravity="left"
                 android:gravity="center_vertical"
                 app:cbd_strokeColor="#ffffff"
                 app:cbd_tickColor="@color/base_color"
@@ -77,13 +77,49 @@
                 android:checked="true" />
 
             <com.rey.material.widget.CheckBox
-                android:id="@+id/fat_check"
+                android:id="@+id/hp_check"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/fat"
+                android:text="@string/hp"
                 android:textColor="#ffffff"
                 android:textSize="16sp"
-                android:layout_gravity="center"
+                android:layout_gravity="left"
+                android:gravity="center_vertical"
+                app:cbd_strokeColor="#ffffff"
+                app:cbd_tickColor="@color/base_color"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:paddingLeft="15dp"
+                android:checked="true" />
+
+            <com.rey.material.widget.CheckBox
+                android:id="@+id/lk_check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lk"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:layout_gravity="left"
+                android:gravity="center_vertical"
+                app:cbd_strokeColor="#ffffff"
+                app:cbd_tickColor="@color/base_color"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:paddingLeft="15dp"
+                android:checked="true" />
+
+            <com.rey.material.widget.CheckBox
+                android:id="@+id/lf_check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lf"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:layout_gravity="left"
                 android:gravity="center_vertical"
                 app:cbd_strokeColor="#ffffff"
                 app:cbd_tickColor="@color/base_color"
@@ -117,7 +153,7 @@
                 android:text="@string/breakfast"
                 android:textColor="#ffffff"
                 android:textSize="16sp"
-                android:layout_gravity="center"
+                android:layout_gravity="left"
                 android:gravity="center_vertical"
                 app:cbd_strokeColor="#ffffff"
                 app:cbd_tickColor="@color/base_color"
@@ -135,7 +171,7 @@
                 android:text="@string/addmeal"
                 android:textColor="#ffffff"
                 android:textSize="16sp"
-                android:layout_gravity="center"
+                android:layout_gravity="left"
                 android:gravity="center_vertical"
                 app:cbd_strokeColor="#ffffff"
                 app:cbd_tickColor="@color/base_color"
@@ -153,7 +189,7 @@
                 android:text="@string/dinner"
                 android:textColor="#ffffff"
                 android:textSize="16sp"
-                android:layout_gravity="center"
+                android:layout_gravity="left"
                 android:gravity="center_vertical"
                 app:cbd_strokeColor="#ffffff"
                 app:cbd_tickColor="@color/base_color"
@@ -164,16 +200,22 @@
                 android:paddingLeft="15dp"
                 android:checked="true" />
 
-
-
             </LinearLayout>
-
-
-
-
         </LinearLayout>
 
-
-
-
+        <TextView
+            android:id="@+id/filter_sure_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/sure"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:background="@drawable/filter_sure_btn_border"/>
 </LinearLayout>

@@ -6,11 +6,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.Image;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,8 +38,13 @@ import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.model.RecipeCard;
+import pl.tajchert.sample.DotsTextView;
 
 public class ThemeActivity extends Activity implements View.OnClickListener {
+
+    private ScrollView themeContent;
+    private LinearLayout loadingInterface;
+    private DotsTextView dotsTextView;
 
     private ImageView back_btn;
     private ImageView recipe_img;
@@ -129,6 +137,23 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
         frThemeRecipeLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         frThemeRecipeRecyclerView.setLayoutManager(frThemeRecipeLayoutManager);
 
+        loadingInterface = (LinearLayout) findViewById(R.id.loading_interface);
+        themeContent = (ScrollView) findViewById(R.id.theme_content);
+        dotsTextView = (DotsTextView) findViewById(R.id.dots);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                hideLoading();
+            }
+        }, 2000);
+
+    }
+
+    private void hideLoading(){
+        loadingInterface.setVisibility(View.GONE);
+        dotsTextView.stop();
+        themeContent.setVisibility(View.VISIBLE);
     }
 
     private void initEvent() {
