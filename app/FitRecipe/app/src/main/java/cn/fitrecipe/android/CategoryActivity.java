@@ -203,7 +203,7 @@ public class CategoryActivity extends Activity implements View.OnClickListener, 
                 intent.putExtra("meat", meat);
                 intent.putExtra("effect", effect.substring(0,effect.length()-1));
                 intent.putExtra("time", time.substring(0,time.length()-1));
-                Toast.makeText(this, "URL: " + meat+ ":" + effect.substring(0,effect.length()-1) + ": " + time.substring(0,time.length()-1), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Meat: " + meat+ "Effect: " + effect.substring(0,effect.length()-1) + "Time: " + time.substring(0,time.length()-1), Toast.LENGTH_LONG).show();
                 startActivity(intent);
                 break;
             default:
