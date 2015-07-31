@@ -50,6 +50,15 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Re
         contactViewHolder.recipe_id.setText(rc.getRecipe_id());
         contactViewHolder.recipe_name.setText(rc.getRecipe_name());
         contactViewHolder.recipe_function.setText(rc.getRecipe_function());
+        if(rc.getRecipe_function().equals("完美")){
+            contactViewHolder.recipe_function.setBackground(context.getResources().getDrawable(R.drawable.perfect_background));
+        }else if(rc.getRecipe_function().equals("高蛋白")){
+            contactViewHolder.recipe_function.setBackground(context.getResources().getDrawable(R.drawable.hp_background));
+        }else if(rc.getRecipe_function().equals("低脂")){
+            contactViewHolder.recipe_function.setBackground(context.getResources().getDrawable(R.drawable.lf_background));
+        }else if(rc.getRecipe_function().equals("低卡")){
+            contactViewHolder.recipe_function.setBackground(context.getResources().getDrawable(R.drawable.lk_background));
+        }
         contactViewHolder.recipe_calorie.setText(rc.getRecipe_calorie());
         contactViewHolder.recipe_time.setText(rc.getRecipe_time());
         contactViewHolder.recipe_like.setText(rc.getRecipe_like());

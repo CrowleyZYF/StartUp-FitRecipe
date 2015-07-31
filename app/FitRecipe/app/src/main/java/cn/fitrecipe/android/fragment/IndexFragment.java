@@ -127,10 +127,13 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
                 JSONObject update = updates.getJSONObject(i);
                 String name = update.getString("title");
                 int id = update.getInt("id");
-                int function = 0;
+                JSONArray effect_labels = update.getJSONArray("effect_labels");
+                String function = null;
+                if(effect_labels.length() > 0)
+                    function = effect_labels.getJSONObject(0).getString("name");
                 int duration = update.getInt("duration");
                 String total_amount = update.getString("total_amount");
-                double calories = update.getDouble("calories") * Integer.parseInt(total_amount.substring(0, total_amount.indexOf("g"))) / 100;
+                double calories = update.getDouble("calories");// * Integer.parseInt(total_amount.substring(0, total_amount.indexOf("g"))) / 100;
                 String img = FrServerConfig.getImageCompressed(update.getString("img"));
                 RecipeCard rc = new RecipeCard(name, id, function, duration, (int) calories, 0, img);
                 recipeCards.add(rc);
@@ -139,7 +142,7 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
             JSONArray recommends = data.getJSONArray("recommend");
             for (int i = 0; i < recommends.length(); i++) {
                 JSONObject recommend = recommends.getJSONObject(i);
-                String img = FrServerConfig.getImageCompressed(recommend.getString("img"));
+                String img = FrServerConfig.getImageCompressed(recommend.getString("recommend_img"));
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put("id", recommend.getInt("id"));
                 map.put("type", "");

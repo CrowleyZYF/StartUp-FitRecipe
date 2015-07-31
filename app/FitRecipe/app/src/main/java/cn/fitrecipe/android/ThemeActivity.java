@@ -111,11 +111,15 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
             JSONObject recipe = data.getJSONObject(i);
             String recipe_name = recipe.getString("title");
             int recipe_id = recipe.getInt("id");
+            JSONArray effect_labels = recipe.getJSONArray("effect_labels");
+            String function = null;
+            if(effect_labels.length() > 0)
+                function = effect_labels.getJSONObject(0).getString("name");
             int duration = recipe.getInt("duration");
             String img = FrServerConfig.getImageCompressed(recipe.getString("img"));
             String total_amount = recipe.getString("total_amount");
             double calories = recipe.getDouble("calories") * Integer.parseInt(total_amount.substring(0, total_amount.indexOf("g"))) / 100;
-            RecipeCard rc = new RecipeCard(recipe_name, recipe_id, 0, duration, (int)calories, 100, img);
+            RecipeCard rc = new RecipeCard(recipe_name, recipe_id, function, duration, (int)calories, 100, img);
             result.add(rc);
         }
         RecipeCardAdapter recipeCardAdapter = new RecipeCardAdapter(this, result);

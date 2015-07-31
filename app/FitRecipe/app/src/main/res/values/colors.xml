@@ -18,6 +18,10 @@
     <color name="temp001">#ffefac32</color>
     <color name="temp002">#ff00a47b</color>
     <color name="temp003">#ff633a4a</color>
-
     <color name="black_overlay">#66000000</color>
+    
+    <color name="perfect_background">#ffefac32</color>
+    <color name="hp_background">#ff449ead</color>
+    <color name="lf_background">#badc2d</color>
+    <color name="lk_background">#ffc9c9c9</color>
 </resources>

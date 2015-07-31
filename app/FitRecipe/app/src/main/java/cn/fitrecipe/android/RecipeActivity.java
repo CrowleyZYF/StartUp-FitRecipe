@@ -332,6 +332,15 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
             effects.deleteCharAt(effects.length() - 1);
 
         recipe_feature.setText(effects);
+        if(effects.toString().equals("完美")){
+            recipe_feature.setBackground(getResources().getDrawable(R.drawable.perfect_background));
+        }else if(effects.toString().equals("高蛋白")){
+            recipe_feature.setBackground(getResources().getDrawable(R.drawable.hp_background));
+        }else if(effects.toString().equals("低脂")){
+            recipe_feature.setBackground(getResources().getDrawable(R.drawable.lf_background));
+        }else if(effects.toString().equals("低卡")){
+            recipe_feature.setBackground(getResources().getDrawable(R.drawable.lk_background));
+        }
         recipe_time.setText("烹饪时间："+ data.getInt("duration") + "min");
         calories = data.getDouble("calories");
         recipe_calorie.setText("热量："+ calories + "kcal/100g");
@@ -376,7 +385,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
             Map<String, Object> map=new HashMap<String, Object>();
             map.put("item_name", names[i]);//营养元素名称，按照固定的顺序输入
             map.put("item_weight", nutrition.getDouble("amount") + nutrition.getString("unit"));//重量，要注意单位
-            map.put("item_remark", "12%");//百分比，如果用户没有经过评测，则显示“--”
+            map.put("item_remark", "120g/12%");//百分比，如果用户没有经过评测，则显示“--”
             nutrition_dataList.add(map);
         }
 

@@ -64,7 +64,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:text="热量"
+                    android:text="总热量"
                     android:textSize="12sp"
                     android:textColor="@color/login_input_text_color"/>
 
@@ -135,7 +135,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3"
+            android:layout_weight="2"
             android:text="营养元素"
             android:textColor="#a4a4a4"
             android:textSize="14sp"
@@ -145,7 +145,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
-            android:text="含量"
+            android:text="每百克含量"
             android:textSize="14sp"
             android:textColor="#a4a4a4"
             android:gravity="center_vertical"/>
@@ -154,7 +154,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
-            android:text="占每日所需"
+            android:text="总含量/占比"
             android:textSize="14sp"
             android:textColor="#a4a4a4"
             android:gravity="center_vertical"/>

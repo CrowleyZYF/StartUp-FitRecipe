@@ -8,7 +8,7 @@ import cn.fitrecipe.android.R;
 public class RecipeCard {
     protected String recipe_name;
     protected int recipe_id;
-    protected int recipe_function;
+    protected String recipe_function;
     protected int recipe_time;
     protected int recipe_calorie;
     protected int recipe_like;
@@ -16,20 +16,20 @@ public class RecipeCard {
     protected static final String RECIPE_TIME_PREFIX = "烹饪时间：";
     protected static final String RECIPE_TIME_SUFFIX = "min";
     protected static final String RECIPE_CALORIE_PREFIX = "热量：";
-    protected static final String RECIPE_CALORIE_SUFFIX = "kcal/人份";
+    protected static final String RECIPE_CALORIE_SUFFIX = "kcal/100g";
     protected static final String RECIPE_LIKE_PREFIX = "收藏 ";
 
     public RecipeCard(){
         this.recipe_name="";
         this.recipe_id=0;
-        this.recipe_function=0;
+        this.recipe_function="";
         this.recipe_time=0;
         this.recipe_calorie=0;
         this.recipe_like=0;
 //        this.recipe_background= R.drawable.update_init;
     }
 
-    public RecipeCard(String name, int id, int function, int time, int calorie, int like, String background){
+    public RecipeCard(String name, int id, String function, int time, int calorie, int like, String background){
         this.recipe_name=name;
         this.recipe_id=id;
         this.recipe_function=function;
@@ -48,13 +48,7 @@ public class RecipeCard {
     }
 
     public String getRecipe_function(){
-        if(this.recipe_function==0){
-            return "不限";
-        }else if(this.recipe_function==1){
-            return "增肌";
-        }else{
-            return "减脂";
-        }
+        return this.recipe_function;
     }
 
     public String getRecipe_time(){

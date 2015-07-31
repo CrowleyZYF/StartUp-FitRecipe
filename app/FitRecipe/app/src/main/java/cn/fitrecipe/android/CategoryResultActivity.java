@@ -113,10 +113,16 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
         }
     }
 
+    private void beginLoading(){
+        loadingInterface.setVisibility(View.VISIBLE);
+        dotsTextView.start();
+        categoryContent.setVisibility(View.GONE);
+    }
+
     private void initData() {
         dataList = new ArrayList<RecipeCard>();
         getThemeRecipe(sort_type,sort_des);
-//        recipeCardAdapter = new RecipeCardAdapter(this, dataList);
+        recipeCardAdapter = new RecipeCardAdapter(this, dataList);
         frThemeRecipeRecyclerView.setAdapter(recipeCardAdapter);
     }
 
@@ -130,15 +136,22 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
 
     private void getThemeRecipe(int type,boolean des) {
         dataList.clear();
+        beginLoading();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                hideLoading(false,"");
+            }
+        }, 2000);
         if(type==0){
             if(des){
                 for (int i=5;i<9;i++){
-                    RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],i,0,(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
+                    RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],i,"",(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
                     dataList.add(rc);
                 }
             }else{
                 for (int i=8;i>4;i--){
-                    RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],i,0,(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
+                    RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],i,"",(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
                     dataList.add(rc);
                 }
             }
@@ -146,12 +159,12 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
         else if(type==1){
             if(des){
                 for (int i=1;i<5;i++){
-                    RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],i,0,(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
+                    RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],i,"",(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
                     dataList.add(rc);
                 }
             }else{
                 for (int i=4;i>0;i--){
-                    RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],i,0,(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
+                    RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],i,"",(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
                     dataList.add(rc);
                 }
             }
@@ -159,12 +172,12 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
         else if(type==2){
             if(des){
                 for (int i=3;i<7;i++){
-                    RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],i,0,(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
+                    RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],i,"",(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
                     dataList.add(rc);
                 }
             }else{
                 for (int i=6;i>2;i--){
-                    RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],i,0,(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
+                    RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],i,"",(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
                     dataList.add(rc);
                 }
             }
