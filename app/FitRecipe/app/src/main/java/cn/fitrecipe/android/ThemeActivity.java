@@ -123,7 +123,6 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
     }
 
     private void initView(String info) throws JSONException {
-
         JSONObject data = new JSONObject(info);
 
         recipe_content = (TextView) findViewById(R.id.recipe_content);
