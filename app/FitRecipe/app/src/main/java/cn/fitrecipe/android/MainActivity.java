@@ -1,7 +1,10 @@
 package cn.fitrecipe.android;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -47,12 +50,22 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     private List<LinearLayout> frTabs = new ArrayList<LinearLayout>();
     private View layout;
 
+    private final String action = "cn.fitrecipe.android.homedataready";
+    private HomeDataReadyRececiver readyRececiver;
+    private IntentFilter intentFilter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         layout = View.inflate(this, R.layout.framework_main_container, null);
         setContentView(layout);
+
+        //init receiver
+        readyRececiver = new HomeDataReadyRececiver();
+        intentFilter = new IntentFilter();
+        intentFilter.
+
         FeedbackAgent agent = new FeedbackAgent(this);
         agent.sync();
         initView();
@@ -265,6 +278,14 @@ public class MainActivity extends FragmentActivity implements OnClickListener
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    class HomeDataReadyRececiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals(""))
         }
     }
 }
