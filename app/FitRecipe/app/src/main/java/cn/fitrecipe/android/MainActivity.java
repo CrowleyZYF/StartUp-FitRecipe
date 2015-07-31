@@ -29,6 +29,7 @@ import cn.fitrecipe.android.fragment.IndexFragment;
 import cn.fitrecipe.android.fragment.KnowledgeFragment;
 import cn.fitrecipe.android.fragment.MeFragment;
 import cn.fitrecipe.android.fragment.PlanFragment;
+import cn.fitrecipe.android.service.GetHomeDataService;
 
 public class MainActivity extends FragmentActivity implements OnClickListener
 {
@@ -51,7 +52,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     private View layout;
 
     private final String action = "cn.fitrecipe.android.homedataready";
-/*    private HomeDataReadyRececiver readyRececiver;*/
+    private HomeDataReadyRececiver readyRececiver;
     private IntentFilter intentFilter;
 
     @Override
@@ -61,12 +62,10 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         layout = View.inflate(this, R.layout.framework_main_container, null);
         setContentView(layout);
 
-/*
         //init receiver
         readyRececiver = new HomeDataReadyRececiver();
         intentFilter = new IntentFilter();
-        intentFilter.
-*/
+        intentFilter.addAction(action);
 
         FeedbackAgent agent = new FeedbackAgent(this);
         agent.sync();
@@ -79,6 +78,18 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     protected void onStart() {
         super.onStart();
         frTabs.get(tab_index).setBackgroundColor(getResources().getColor(R.color.active_color));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(readyRececiver, intentFilter);
+    }
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(readyRececiver);
+        super.onPause();
     }
 
     private void initEvent()
@@ -282,12 +293,14 @@ public class MainActivity extends FragmentActivity implements OnClickListener
             e.printStackTrace();
         }
     }
-/*
     class HomeDataReadyRececiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent.getAction().equals(""))
+            if(intent.getAction().equals(action)) {
+                ((IndexFragment)frIndexFragment).fresh();
+                stopService(new Intent(MainActivity.this, GetHomeDataService.class));
+            }
         }
-    }*/
+    }
 }

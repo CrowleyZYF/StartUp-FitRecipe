@@ -2,7 +2,6 @@ package cn.fitrecipe.android.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,12 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.umeng.fb.FeedbackAgent;
-import pl.tajchert.sample.DotsTextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -65,24 +61,40 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
     List<ThemeCard> themeCards;
     List<RecipeCard> recipeCards;
 
-    String dataString = null;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_index, container, false);
-        dataString = FrApplication.getInstance().getData();
-        if(dataString != null) {
-            initView(view);
+        String dataString = FrApplication.getInstance().getData();
+        initView(view);
+        try {
+            initData(dataString);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        initEvent();
+        return view;
+    }
+
+    public void fresh() {
+        String dataString = FrApplication.getInstance().getData();
+        if(recipeCardAdapter == null && recommendViewPagerAdapter == null && themeCardAdapter == null) {
             try {
                 initData(dataString);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            initEvent();
+        }else {
+            try {
+                parseJsonData(dataString);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            recommendViewPagerAdapter.notifyDataSetChanged();
+            recipeCardAdapter.notifyDataSetChanged();
+            themeCardAdapter.notifyDataSetChanged();
         }
-        return view;
     }
 
     private void initView(View view) {
@@ -105,12 +117,20 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
 
     }
 
-    private void initData(String dataString) throws JSONException {
-        //get data
+    private void parseJsonData(String dataString) throws JSONException {
         JSONObject data = null;
-        recipeCards = new ArrayList<RecipeCard>();
-        themeCards = new ArrayList<ThemeCard>();
-        recommendRecipe = new ArrayList<Map<String, Object>>();
+        if(recipeCards != null)
+            recipeCards.clear();
+        else
+            recipeCards = new ArrayList<RecipeCard>();
+        if(themeCards != null)
+            themeCards.clear();
+        else
+            themeCards = new ArrayList<ThemeCard>();
+        if(recommendRecipe != null)
+            recommendRecipe.clear();
+        else
+            recommendRecipe = new ArrayList<Map<String, Object>>();
         if(dataString != null) {
             data = new JSONObject(dataString);
 
@@ -150,7 +170,11 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
                 recommendRecipe.add(map);
             }
         }
+    }
 
+    private void initData(String dataString) throws JSONException {
+        //get data
+        parseJsonData(dataString);
         //获得推荐数据，并初始化适配器
         recommendViewPagerAdapter = new RecommendViewPagerAdapter(getActivity(), recommendRecipe, recommendViewPager.getLayoutParams().width, recommendViewPager.getLayoutParams().height);
         recommendViewPager.setAdapter(recommendViewPagerAdapter);

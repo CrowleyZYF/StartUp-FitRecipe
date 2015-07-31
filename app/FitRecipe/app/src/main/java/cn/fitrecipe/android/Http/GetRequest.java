@@ -3,7 +3,6 @@ package cn.fitrecipe.android.Http;
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
-import com.android.volley.RetryPolicy;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONObject;
@@ -17,7 +16,8 @@ import java.util.Map;
 public class GetRequest extends JsonObjectRequest{
 
     private String token;
-    private final int timeout = 10000;
+    private final int timeout = 3000;
+    private final int retries = 2;
 
     public GetRequest(String url, String token, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         super(Method.GET, url, jsonRequest, listener, errorListener);
@@ -28,7 +28,7 @@ public class GetRequest extends JsonObjectRequest{
     public GetRequest(String url, String token, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         super(Method.GET, url, listener, errorListener);
         this.token = token;
-        this.setRetryPolicy(new DefaultRetryPolicy(timeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        this.setRetryPolicy(new DefaultRetryPolicy(timeout, retries, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
     }
 
     @Override

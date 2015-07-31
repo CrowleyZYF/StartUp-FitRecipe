@@ -37,7 +37,7 @@ import cn.fitrecipe.android.model.ThemeCard;
 import cn.fitrecipe.android.service.GetHomeDataService;
 
 public class WelcomeActivity extends Activity{
-    private final int SPLASH_DISPLAY_LENGTH = 2000;
+    private final int SPLASH_DISPLAY_LENGTH = 3000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
