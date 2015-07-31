@@ -14,13 +14,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="110dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/background_color">
 
         <TextView
             android:id="@+id/procedure_num"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="1"
             android:textSize="35sp"
             android:textColor="@color/active_color"
@@ -30,9 +30,8 @@
 
         <TextView
             android:id="@+id/procedure_content"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="10"
             android:paddingLeft="10dp"
             android:paddingRight="15dp"
             android:paddingBottom="10dp"

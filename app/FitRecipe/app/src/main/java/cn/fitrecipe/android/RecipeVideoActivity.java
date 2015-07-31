@@ -31,7 +31,7 @@ public class RecipeVideoActivity extends Activity {
         settings.setSaveFormData(false);
         settings.setAppCacheEnabled(true);
         settings.setCacheMode(WebSettings.LOAD_DEFAULT);
-        settings.setLoadWithOverviewMode(false);//<==== 一定要设置为false，不然有声音没图像
+        settings.setLoadWithOverviewMode(false);
         settings.setUseWideViewPort(true);
         webview.setWebChromeClient(new WebChromeClient());
         String ss = "<html>\n" +
@@ -67,21 +67,18 @@ public class RecipeVideoActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        //恢复播放
         webview.resumeTimers();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        //暂停播放
         webview.pauseTimers();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //一定要销毁，否则无法停止播放
         webview.destroy();
     }
 

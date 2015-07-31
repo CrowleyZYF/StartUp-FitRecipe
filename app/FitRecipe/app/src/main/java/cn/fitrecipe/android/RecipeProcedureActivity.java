@@ -5,10 +5,13 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -22,6 +25,7 @@ import cn.fitrecipe.android.Adpater.ProcedureCardAdapter;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.model.ProcedureCard;
+import pl.tajchert.sample.DotsTextView;
 
 public class RecipeProcedureActivity extends Activity implements View.OnClickListener{
 

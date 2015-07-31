@@ -31,7 +31,6 @@ public class CategoryActivity extends Activity implements View.OnClickListener, 
 
     private ImageView back_btn;
     private ImageView filter_btn;
-    private ImageView filter_btn_2;
     private TextView sure_btn;
 
     private CheckBox perfect_check;
@@ -62,8 +61,6 @@ public class CategoryActivity extends Activity implements View.OnClickListener, 
         filter_btn = (ImageView) findViewById(R.id.right_btn);
         filter_btn.setImageResource(R.drawable.icon_filter);
 
-        filter_btn_2 = (ImageView) findViewById(R.id.close_menu_btn);
-
         sure_btn = (TextView) findViewById(R.id.filter_sure_btn);
 
         gridView = (GridView) findViewById(R.id.category_gridview);
@@ -93,7 +90,6 @@ public class CategoryActivity extends Activity implements View.OnClickListener, 
     private void initEvent() {
         back_btn.setOnClickListener(this);
         filter_btn.setOnClickListener(this);
-        filter_btn_2.setOnClickListener(this);
         sure_btn.setOnClickListener(this);
         gridView.setOnItemClickListener(this);
     }
@@ -122,7 +118,6 @@ public class CategoryActivity extends Activity implements View.OnClickListener, 
                 finish();
                 break;
             case R.id.right_btn:
-            case R.id.close_menu_btn:
             case R.id.filter_sure_btn:
                 mRightMenu.toggle();
                 break;
@@ -203,7 +198,6 @@ public class CategoryActivity extends Activity implements View.OnClickListener, 
                 intent.putExtra("meat", meat);
                 intent.putExtra("effect", effect.substring(0,effect.length()-1));
                 intent.putExtra("time", time.substring(0,time.length()-1));
-                Toast.makeText(this, "Meat: " + meat+ "Effect: " + effect.substring(0,effect.length()-1) + "Time: " + time.substring(0,time.length()-1), Toast.LENGTH_LONG).show();
                 startActivity(intent);
                 break;
             default:

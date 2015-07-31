@@ -2,12 +2,15 @@ package cn.fitrecipe.android;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,14 +20,18 @@ import cn.fitrecipe.android.Config.LocalDemo;
 import cn.fitrecipe.android.UI.SlidingMenu;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.model.RecipeCard;
+import pl.tajchert.sample.DotsTextView;
 
 public class CategoryResultActivity extends Activity implements View.OnClickListener {
+
+    private ScrollView categoryContent;
+    private LinearLayout loadingInterface;
+    private DotsTextView dotsTextView;
 
     private SlidingMenu mRightMenu;
 
     private ImageView back_btn;
     private ImageView filter_btn;
-    private ImageView filter_btn_2;
 
     private RecyclerView frThemeRecipeRecyclerView;
     private RecyclerViewLayoutManager frThemeRecipeLayoutManager;
@@ -65,8 +72,6 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
         filter_btn = (ImageView) findViewById(R.id.right_btn);
         filter_btn.setImageResource(R.drawable.icon_filter);
 
-        filter_btn_2 = (ImageView) findViewById(R.id.close_menu_btn);
-
         mRightMenu = (SlidingMenu) findViewById(R.id.container_layout);
 
         frThemeRecipeRecyclerView = (RecyclerView) findViewById(R.id.theme_recipe_recycler_view);
@@ -85,6 +90,27 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
         calorie_sort_btn = (LinearLayout) findViewById(R.id.calorie_sort_btn);
         calorie_sort_text = (TextView) findViewById(R.id.calorie_sort_text);
         calorie_sort_icon = (ImageView) findViewById(R.id.calorie_sort_icon);
+
+        loadingInterface = (LinearLayout) findViewById(R.id.loading_interface);
+        categoryContent = (ScrollView) findViewById(R.id.category_result_list);
+        dotsTextView = (DotsTextView) findViewById(R.id.dots);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                hideLoading(false,"");
+            }
+        }, 2000);
+    }
+
+    private void hideLoading(boolean isError, String errorMessage){
+        loadingInterface.setVisibility(View.GONE);
+        dotsTextView.stop();
+        if(isError){
+            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+        }else{
+            categoryContent.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initData() {
@@ -97,7 +123,6 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
     private void initEvent() {
         back_btn.setOnClickListener(this);
         filter_btn.setOnClickListener(this);
-        filter_btn_2.setOnClickListener(this);
         time_sort_btn.setOnClickListener(this);
         like_sort_btn.setOnClickListener(this);
         calorie_sort_btn.setOnClickListener(this);
@@ -194,9 +219,6 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
                 sort_des = !sort_des;
                 getThemeRecipe(sort_type,sort_des);
                 recipeCardAdapter.notifyDataSetChanged();
-                break;
-            case R.id.close_menu_btn:
-                mRightMenu.toggle();
                 break;
             default:
                 break;

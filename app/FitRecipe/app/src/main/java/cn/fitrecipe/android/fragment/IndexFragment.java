@@ -43,9 +43,6 @@ import me.relex.circleindicator.CircleIndicator;
  * Created by 奕峰 on 2015/4/11.
  */
 public class IndexFragment extends Fragment implements ViewPager.OnPageChangeListener, View.OnClickListener {
-    private ScrollView indexContent;
-    private LinearLayout loadingInterface;
-    private DotsTextView dotsTextView;
     //推荐
     private ViewPager recommendViewPager;
     private RecommendViewPagerAdapter recommendViewPagerAdapter;
@@ -106,15 +103,6 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
         feedback_btn = (TextView) view.findViewById(R.id.feedback_btn);
         category_btn = (Button) view.findViewById(R.id.category_btn_2);
 
-        loadingInterface = (LinearLayout) view.findViewById(R.id.loading_interface);
-        indexContent = (ScrollView) view.findViewById(R.id.index_content);
-        dotsTextView = (DotsTextView) view.findViewById(R.id.dots);
-    }
-
-    public void hideLoading(){
-        loadingInterface.setVisibility(View.GONE);
-        dotsTextView.stop();
-        indexContent.setVisibility(View.VISIBLE);
     }
 
     private void initData(String dataString) throws JSONException {

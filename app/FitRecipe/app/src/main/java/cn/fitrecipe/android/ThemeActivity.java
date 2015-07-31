@@ -143,16 +143,20 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                hideLoading();
+                hideLoading(false,"");
             }
         }, 2000);
 
     }
 
-    private void hideLoading(){
+    private void hideLoading(boolean isError, String errorMessage){
         loadingInterface.setVisibility(View.GONE);
         dotsTextView.stop();
-        themeContent.setVisibility(View.VISIBLE);
+        if(isError){
+            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+        }else{
+            themeContent.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initEvent() {

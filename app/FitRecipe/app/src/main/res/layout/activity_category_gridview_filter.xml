@@ -11,14 +11,6 @@
         android:layout_height="45dp"
         android:background="@color/base_color">
 
-        <ImageView
-            android:id="@+id/close_menu_btn"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:src="@drawable/icon_filter_arrow"
-            android:background="@drawable/icon_selector"
-            android:padding="10dp"/>
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

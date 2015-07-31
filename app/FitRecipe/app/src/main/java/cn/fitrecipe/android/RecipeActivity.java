@@ -200,7 +200,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                hideLoading();
+                hideLoading(false, "");
             }
         }, 2000);
 
@@ -219,10 +219,15 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         share_btn = (ImageView) view.findViewById(R.id.share_btn);
     }
 
-    private void hideLoading(){
+    private void hideLoading(boolean isError, String errorMessage){
         loadingInterface.setVisibility(View.GONE);
         dotsTextView.stop();
-        recipeContent.setVisibility(View.VISIBLE);
+        if(isError){
+            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+        }else{
+            recipeContent.setVisibility(View.VISIBLE);
+            recipe_scrollView.smoothScrollTo(0, 0);
+        }
     }
 
     private void loadData(String url) {

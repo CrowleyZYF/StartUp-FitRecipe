@@ -4,7 +4,8 @@
     android:layout_height="fill_parent"
     android:background="@color/background_color"
     android:scrollbars="none"
-    android:fadingEdge="vertical">
+    android:fadingEdge="vertical"
+    android:id="@+id/procedure_content">
     
     <LinearLayout
         android:layout_width="match_parent"

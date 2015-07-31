@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:dots="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -116,21 +117,58 @@
 
     </LinearLayout>
 
-    <ScrollView
-        android:id="@+id/category_result_list"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="@color/background_color"
-        android:scrollbars="none"
-        android:fadingEdge="vertical">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/theme_recipe_recycler_view"
-            android:scrollbars="vertical"
+        <ScrollView
+            android:id="@+id/category_result_list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@color/background_color"
+            android:scrollbars="none"
+            android:fadingEdge="vertical">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/theme_recipe_recycler_view"
+                android:scrollbars="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                />
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/loading_interface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            />
-    </ScrollView>
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="-20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="拼命加载中"
+                android:textSize="14sp"
+                android:textColor="@color/base_color"
+                android:layout_gravity="bottom"/>
+
+            <pl.tajchert.sample.DotsTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/dots"
+                android:textSize="30sp"
+                android:textColor="@color/base_color"
+                dots:autoplay="true"
+                dots:period="1000"
+                android:layout_gravity="bottom"/>
+
+
+        </LinearLayout>
+
+
+    </FrameLayout>
 
 </LinearLayout>

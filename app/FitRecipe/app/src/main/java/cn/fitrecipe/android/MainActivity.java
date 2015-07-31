@@ -51,7 +51,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     private View layout;
 
     private final String action = "cn.fitrecipe.android.homedataready";
-    private HomeDataReadyRececiver readyRececiver;
+/*    private HomeDataReadyRececiver readyRececiver;*/
     private IntentFilter intentFilter;
 
     @Override
@@ -61,10 +61,12 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         layout = View.inflate(this, R.layout.framework_main_container, null);
         setContentView(layout);
 
+/*
         //init receiver
         readyRececiver = new HomeDataReadyRececiver();
         intentFilter = new IntentFilter();
         intentFilter.
+*/
 
         FeedbackAgent agent = new FeedbackAgent(this);
         agent.sync();
@@ -280,12 +282,12 @@ public class MainActivity extends FragmentActivity implements OnClickListener
             e.printStackTrace();
         }
     }
-
+/*
     class HomeDataReadyRececiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
             if(intent.getAction().equals(""))
         }
-    }
+    }*/
 }
