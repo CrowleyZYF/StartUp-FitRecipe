@@ -39,8 +39,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"
-            android:launchMode="singleTop">
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleTop" >
         </activity>
         <activity android:name=".LandingPageActivity" >
         </activity>
@@ -124,6 +125,14 @@
             android:enabled="true"
             android:exported="true" >
         </service>
+
+        <activity
+            android:hardwareAccelerated="true"
+            android:name=".RecipeVideoActivity"
+            android:screenOrientation="landscape"
+            android:label="@string/title_activity_recipe_video"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
+        </activity>
     </application>
 
 </manifest>

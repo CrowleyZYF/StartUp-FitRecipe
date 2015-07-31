@@ -103,15 +103,8 @@ public class RecipeProcedureActivity extends Activity implements View.OnClickLis
 
     private void playVideo() {
         System.out.println("play video!!!");
-        try{
-            Intent mIntent = new Intent();
-            ComponentName comp = new ComponentName("gov.anzong.mediaplayer","ReceiveIntentURLActivity");
-            mIntent.setComponent(comp);
-            Uri uri = Uri.parse("http://v.youku.com/v_show/id_XNDkyNzI5ODA4.html");//http://v.youku.com/v_show/id_XNDkyNzI5ODA4.html
-            mIntent.setData(uri);
-            startActivity(mIntent);
-        }catch(Exception e){
-            //TODO
-        }
+        Intent intent = new Intent(this, RecipeVideoActivity.class);
+        intent.putExtra("video_url", "http://player.youku.com/embed/XMTI0OTc5MzEyNA==");
+        startActivity(intent);
     }
 }

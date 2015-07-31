@@ -18,4 +18,6 @@
     <color name="temp001">#ffefac32</color>
     <color name="temp002">#ff00a47b</color>
     <color name="temp003">#ff633a4a</color>
+
+    <color name="black_overlay">#66000000</color>
 </resources>
