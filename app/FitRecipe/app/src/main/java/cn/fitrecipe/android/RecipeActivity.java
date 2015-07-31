@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -63,9 +64,13 @@ import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.UI.SlidingPage;
+import pl.tajchert.sample.DotsTextView;
 
 public class RecipeActivity extends Activity implements View.OnClickListener, PopupWindow.OnDismissListener {
     private ScrollView recipe_scrollView;
+    private ScrollView recipeContent;
+    private LinearLayout loadingInterface;
+    private DotsTextView dotsTextView;
     //成品图
     private ImageView recipe_pic;
     //标签
@@ -188,6 +193,17 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         add_btn = (ImageView) findViewById(R.id.add_btn);
         minus_btn = (ImageView) findViewById(R.id.minus_btn);
 
+        loadingInterface = (LinearLayout) findViewById(R.id.loading_interface);
+        recipeContent = (ScrollView) findViewById(R.id.recipe_scrollview);
+        dotsTextView = (DotsTextView) findViewById(R.id.dots);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                hideLoading();
+            }
+        }, 2000);
+
 
         View view = LayoutInflater.from(this).inflate(R.layout.activity_recipe_info_set, null);
         popupWindow = new PopupWindow(view, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics()), (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 152, getResources().getDisplayMetrics()));
@@ -201,6 +217,12 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         collect_btn = (ImageView) view.findViewById(R.id.collect_btn);
         comment_btn = (ImageView) view.findViewById(R.id.comment_btn);
         share_btn = (ImageView) view.findViewById(R.id.share_btn);
+    }
+
+    private void hideLoading(){
+        loadingInterface.setVisibility(View.GONE);
+        dotsTextView.stop();
+        recipeContent.setVisibility(View.VISIBLE);
     }
 
     private void loadData(String url) {

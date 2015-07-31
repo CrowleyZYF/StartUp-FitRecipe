@@ -10,10 +10,11 @@
         android:gravity="center">
 
         <TextView
+            android:id="@+id/recipe_header_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="菠菜金枪鱼芝麻卷饼"
+            android:text="食谱详情"
             android:textColor="#ffffff"
             android:textSize="20sp"
             android:textStyle="bold" />
