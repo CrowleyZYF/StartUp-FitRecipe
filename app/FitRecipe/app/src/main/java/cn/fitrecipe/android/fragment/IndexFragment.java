@@ -109,16 +109,9 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
         loadingInterface = (LinearLayout) view.findViewById(R.id.loading_interface);
         indexContent = (ScrollView) view.findViewById(R.id.index_content);
         dotsTextView = (DotsTextView) view.findViewById(R.id.dots);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                hideLoading();
-            }
-        }, 2000);
     }
 
-    private void hideLoading(){
+    public void hideLoading(){
         loadingInterface.setVisibility(View.GONE);
         dotsTextView.stop();
         indexContent.setVisibility(View.VISIBLE);
@@ -215,6 +208,4 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
                 break;
         }
     }
-
-
 }
