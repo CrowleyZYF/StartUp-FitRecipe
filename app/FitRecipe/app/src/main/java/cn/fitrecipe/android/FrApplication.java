@@ -6,17 +6,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.pgyersdk.crash.PgyCrashManager;
-
-import java.util.List;
-import java.util.Map;
 
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.ImageLoader.MyImageLoader;
-import cn.fitrecipe.android.function.Common;
-import cn.fitrecipe.android.model.RecipeCard;
-import cn.fitrecipe.android.model.ThemeCard;
 
 /**
  * Created by 奕峰 on 2015/5/5.
@@ -27,6 +20,7 @@ public class FrApplication extends Application {
     private MyImageLoader myImageLoader;
     //save home data json
     private String data;
+    private boolean isHomeDataNew = false;
 
 //    private List<ThemeCard> themeCards;
 //    private List<Map<String, Object>> recommendRecipes;
@@ -43,8 +37,7 @@ public class FrApplication extends Application {
         this.registerActivityLifecycleCallbacks(new MyActivityCallbacks());
 
         //init network
-        if(Common.isOpenNetwork(this))
-           FrRequest.getInstance().init(this);
+        FrRequest.getInstance().init(this);
 
         myImageLoader = new MyImageLoader();
         instance = this;
@@ -61,6 +54,7 @@ public class FrApplication extends Application {
     public String getData() {
         SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
         if(data == null || data.length() == 0) {
+            isHomeDataNew = false;
             if(preferences.contains("homeData"))
                 data = preferences.getString("homeData", null);
         }
@@ -69,10 +63,15 @@ public class FrApplication extends Application {
 
     public void saveData(String data) {
         this.data = data;
+        isHomeDataNew = true;
         SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("homeData", data);
         editor.commit();
+    }
+
+    public boolean isHomeDataNew() {
+        return isHomeDataNew;
     }
 
 

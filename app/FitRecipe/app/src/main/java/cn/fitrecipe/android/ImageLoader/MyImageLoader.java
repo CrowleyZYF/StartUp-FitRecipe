@@ -3,7 +3,6 @@ package cn.fitrecipe.android.ImageLoader;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -11,37 +10,18 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.nostra13.universalimageloader.cache.disc.impl.BaseDiskCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
-import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
-import com.nostra13.universalimageloader.core.download.ImageDownloader;
-import com.nostra13.universalimageloader.core.imageaware.NonViewAware;
 import com.nostra13.universalimageloader.core.imageaware.ViewAware;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListener;
 
-import java.io.File;
-import java.io.FileDescriptor;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import cn.fitrecipe.android.R;
 
 
 /**
@@ -51,7 +31,6 @@ public class MyImageLoader {
 
     private DisplayImageOptions options = null, options2;
     private Context mContext;
-    private ILoadingListener iLoadingListener;
 
 
     //count images that have not been loaded
@@ -99,18 +78,21 @@ public class MyImageLoader {
     //this is method is load image backend, it only load images in the urls
     public void loadImages(Set<String> urls, ILoadingListener listener ) {
         System.out.println(Calendar.getInstance().get(Calendar.MINUTE) + " " + Calendar.getInstance().get(Calendar.SECOND));
-        this.iLoadingListener = listener;
         if(urls != null) {
             total = urls.size();
             Iterator<String> iterator = urls.iterator();
             while (iterator.hasNext()) {
                 String url = iterator.next();
-                ImageLoader.getInstance().loadImage(url, options2, new MyImageLoadingListener());
+                ImageLoader.getInstance().loadImage(url, options2, new MyLoadingListener(listener));
             }
         }
     }
 
     public void displayImage(View view, final String imageUrl) {
+        displayImage(view, imageUrl, null);
+    }
+
+    public void displayImage(View view, final String imageUrl, ILoadingListener listener) {
         ImageLoader.getInstance().displayImage(imageUrl, new ViewAware(view, false) {
             @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             @Override
@@ -124,13 +106,13 @@ public class MyImageLoader {
             @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             @Override
             protected void setImageBitmapInto(Bitmap bitmap, View view) {
-                System.out.println(imageUrl + "    " + bitmap.getByteCount());
+//                System.out.println(imageUrl + "    " + bitmap.getByteCount());
                 if (view instanceof ImageView)
                     ((ImageView) view).setImageBitmap(bitmap);
                 else
                     view.setBackground(new BitmapDrawable(null, bitmap));
             }
-        }, options2, new MyImageLoadingListener());
+        }, options2, new MyDisplayListener(listener));
     }
 
     public void stop() {
@@ -147,7 +129,13 @@ public class MyImageLoader {
     }
 
 
-    class MyImageLoadingListener implements ImageLoadingListener {
+    class MyLoadingListener implements ImageLoadingListener {
+
+        private ILoadingListener listener;
+
+        public MyLoadingListener(ILoadingListener listener) {
+            this.listener = listener;
+        }
 
         @Override
         public void onLoadingStarted(String s, View view) {
@@ -155,23 +143,51 @@ public class MyImageLoader {
 
         @Override
         public void onLoadingFailed(String s, View view, FailReason failReason) {
-            if(view == null) {
-                iLoadingListener.loadFailed();
-            }
+            listener.loadFailed();
         }
 
         @Override
         public void onLoadingComplete(String s, View view, Bitmap bitmap) {
             // it is load not display
             synchronized (this) {
-                if (view == null) {
-                    int res = count.incrementAndGet();
-                    System.out.println("completed: " + res);
-                    if (count.compareAndSet(total, total)) {
-                        iLoadingListener.loadComplete();
-                    }
+                int res = count.incrementAndGet();
+                System.out.println("completed: " + res);
+                if (count.compareAndSet(total, total)) {
+                    listener.loadComplete();
                 }
             }
+        }
+
+        @Override
+        public void onLoadingCancelled(String s, View view) {
+
+        }
+    }
+
+
+    class MyDisplayListener implements ImageLoadingListener {
+
+        private ILoadingListener listener;
+
+        public MyDisplayListener(ILoadingListener listener) {
+            this.listener = listener;
+        }
+
+        @Override
+        public void onLoadingStarted(String s, View view) {
+
+        }
+
+        @Override
+        public void onLoadingFailed(String s, View view, FailReason failReason) {
+            if(listener != null)
+                listener.loadFailed();
+        }
+
+        @Override
+        public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+            if(listener != null)
+                listener.loadComplete();
         }
 
         @Override

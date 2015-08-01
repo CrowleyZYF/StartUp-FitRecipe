@@ -63,5 +63,7 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
 
+    <string name="network_close">网络未连接</string>
+    <string name="network_error">网络连接出错!</string>
 
 </resources>

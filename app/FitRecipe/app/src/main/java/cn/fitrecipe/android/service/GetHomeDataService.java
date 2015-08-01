@@ -20,9 +20,13 @@ import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.ImageLoader.ILoadingListener;
+import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.function.Common;
 
 public class GetHomeDataService extends Service {
+
+    final String action = "cn.fitrecipe.android.homedataready";
+
     public GetHomeDataService() {
     }
 
@@ -55,6 +59,9 @@ public class GetHomeDataService extends Service {
                 if(res != null && res.has("data")) {
                     try {
                         System.out.println(this.getClass().getSimpleName() + "get data from network status 200 !");
+                        Intent intent = new Intent();
+                        intent.setAction(action);
+                        sendBroadcast(intent);
                         JSONObject data = res.getJSONObject("data");
                         processData(data);
                     } catch (JSONException e) {
@@ -65,6 +72,10 @@ public class GetHomeDataService extends Service {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+                String error_info = getResources().getString(R.string.network_error);
+                if(!Common.isOpenNetwork(GetHomeDataService.this))
+                    error_info = getResources().getString(R.string.network_close);
+                Toast.makeText(GetHomeDataService.this, error_info, Toast.LENGTH_SHORT).show();
                 System.out.println("get Home data " + volleyError.getMessage());
             }
         });

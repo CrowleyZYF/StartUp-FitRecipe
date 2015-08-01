@@ -1,9 +1,10 @@
 package cn.fitrecipe.android.function;
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.widget.Toast;
 
+import cn.fitrecipe.android.R;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
@@ -30,5 +31,12 @@ public class Common {
             return connManager.getActiveNetworkInfo().isAvailable();
         }
         return false;
+    }
+
+    public static void toastNetworkError(Context context) {
+        String error_info = context.getResources().getString(R.string.network_error);
+        if(!isOpenNetwork(context))
+            error_info = context.getResources().getString(R.string.network_close);
+        Toast.makeText(context, error_info, Toast.LENGTH_SHORT).show();
     }
 }

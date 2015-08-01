@@ -1,6 +1,9 @@
 package cn.fitrecipe.android;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,13 +15,23 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.fitrecipe.android.Adpater.RecipeCardAdapter;
 import cn.fitrecipe.android.Config.LocalDemo;
-import cn.fitrecipe.android.UI.SlidingMenu;
+import cn.fitrecipe.android.Http.FrRequest;
+import cn.fitrecipe.android.Http.FrServerConfig;
+import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
+import cn.fitrecipe.android.UI.SlidingMenu;
 import cn.fitrecipe.android.model.RecipeCard;
 import pl.tajchert.sample.DotsTextView;
 
@@ -53,14 +66,25 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
     private int sort_type = 0;
     private boolean sort_des = false;
 
+    private String meat, effect, time;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_result_container);
 
+        Intent intent = getIntent();
+        meat = intent.getStringExtra("meat");
+        effect = intent.getStringExtra("effect");
+        time = intent.getStringExtra("time");
+
         initView();
-        initData();
+        try {
+            getData(0, 7);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         initEvent();
 
     }
@@ -103,6 +127,69 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
         }, 2000);
     }
 
+
+    private void getData(int start, int num) throws JSONException {
+        JSONObject params = new JSONObject();
+        params.put("meat", meat);
+        params.put("effect", effect);
+        params.put("time", time);
+        params.put("order", "duration");
+        params.put("start", start);
+        params.put("num", num);
+        String url = FrServerConfig.getRecipeListByCategory(params);
+        System.out.println(url);
+        SharedPreferences sp = getSharedPreferences("user", Context.MODE_PRIVATE);
+        String token = null;
+        if(sp.contains("token"))
+            token = sp.getString("token", null);
+        GetRequest request = new GetRequest(url, token, params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject res) {
+                 if(res.has("data")) {
+                     JSONArray data = null;
+                     hideLoading(false, "");
+                     try {
+                         data = res.getJSONArray("data");
+                         processData(data);
+                     } catch (JSONException e) {
+                         e.printStackTrace();
+                     }
+                 }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                hideLoading(true, getResources().getString(R.string.network_error));
+            }
+        });
+        FrRequest.getInstance().request(request);
+    }
+
+    private void processData(JSONArray data) throws JSONException {
+        if(dataList == null)
+            dataList = new ArrayList<RecipeCard>();
+        else
+            dataList.clear();
+        if(data != null) {
+            for(int i = 0; i < data.length(); i++) {
+                JSONObject recipe = data.getJSONObject(i);
+                String recipe_name = recipe.getString("title");
+                int recipe_id = recipe.getInt("id");
+                int duration = recipe.getInt("duration");
+                double calories = recipe.getDouble("calories");
+                String img = FrServerConfig.getImageCompressed(recipe.getString("img"));
+                JSONArray effects = recipe.getJSONArray("effect_labels");
+                String function = "不限";
+                if(effects != null && effects.length() > 0)
+                    function = effects.getJSONObject(0).getString("name");
+                RecipeCard rc = new RecipeCard(recipe_name, recipe_id, function, duration, (int)calories, 100, img);
+                dataList.add(rc);
+            }
+        }
+        recipeCardAdapter = new RecipeCardAdapter(this, dataList);
+        frThemeRecipeRecyclerView.setAdapter(recipeCardAdapter);
+    }
+
     private void hideLoading(boolean isError, String errorMessage){
         loadingInterface.setVisibility(View.GONE);
         dotsTextView.stop();
@@ -119,13 +206,6 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
         categoryContent.setVisibility(View.GONE);
     }
 
-    private void initData() {
-        dataList = new ArrayList<RecipeCard>();
-        getThemeRecipe(sort_type,sort_des);
-        recipeCardAdapter = new RecipeCardAdapter(this, dataList);
-        frThemeRecipeRecyclerView.setAdapter(recipeCardAdapter);
-    }
-
     private void initEvent() {
         back_btn.setOnClickListener(this);
         filter_btn.setOnClickListener(this);
@@ -137,12 +217,9 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
     private void getThemeRecipe(int type,boolean des) {
         dataList.clear();
         beginLoading();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                hideLoading(false,"");
-            }
-        }, 2000);
+
+
+
         if(type==0){
             if(des){
                 for (int i=5;i<9;i++){

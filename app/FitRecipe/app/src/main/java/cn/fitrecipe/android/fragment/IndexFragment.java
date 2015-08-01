@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.umeng.fb.FeedbackAgent;
@@ -55,6 +56,9 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
     private TextView feedback_btn;
     //分类
     private Button category_btn;
+    //ScrollView
+    private ScrollView scrollView;
+
 
     private List<String> urls;
     List<Map<String, Object>>  recommendRecipe;
@@ -68,12 +72,23 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
         View view = inflater.inflate(R.layout.fragment_index, container, false);
         String dataString = FrApplication.getInstance().getData();
         initView(view);
-        try {
-            initData(dataString);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        initEvent();
+        if(dataString != null) {
+            try {
+                initData(dataString);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            initEvent();
+        }else
+            scrollView.setVisibility(View.INVISIBLE);
+
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                if(!FrApplication.getInstance().isHomeDataNew())
+//                    Common.toastNetworkError(IndexFragment.this.getActivity());
+//            }
+//        }, 3000);
         return view;
     }
 
@@ -82,6 +97,7 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
         if(recipeCardAdapter == null && recommendViewPagerAdapter == null && themeCardAdapter == null) {
             try {
                 initData(dataString);
+                initEvent();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -115,6 +131,8 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
         feedback_btn = (TextView) view.findViewById(R.id.feedback_btn);
         category_btn = (Button) view.findViewById(R.id.category_btn_2);
 
+
+        scrollView = (ScrollView) view.findViewById(R.id.index_content);
     }
 
     private void parseJsonData(String dataString) throws JSONException {

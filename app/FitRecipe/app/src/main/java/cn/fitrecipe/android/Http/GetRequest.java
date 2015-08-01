@@ -17,12 +17,12 @@ public class GetRequest extends JsonObjectRequest{
 
     private String token;
     private final int timeout = 3000;
-    private final int retries = 2;
+    private final int retries = 5;
 
     public GetRequest(String url, String token, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         super(Method.GET, url, jsonRequest, listener, errorListener);
         this.token = token;
-        this.setRetryPolicy(new DefaultRetryPolicy(timeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        this.setRetryPolicy(new DefaultRetryPolicy(timeout, retries, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
     }
 
     public GetRequest(String url, String token, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {

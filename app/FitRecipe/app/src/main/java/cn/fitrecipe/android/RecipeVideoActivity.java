@@ -25,14 +25,13 @@ public class RecipeVideoActivity extends Activity {
         String video_url = intent.getStringExtra("video_url");
         WebSettings settings = webview.getSettings();
         settings.setJavaScriptEnabled(true);
+        settings.setBlockNetworkImage(true);
         settings.setAllowFileAccess(true);
         settings.setDatabaseEnabled(true);
         settings.setDomStorageEnabled(true);
         settings.setSaveFormData(false);
         settings.setAppCacheEnabled(true);
-        settings.setCacheMode(WebSettings.LOAD_DEFAULT);
-        settings.setLoadWithOverviewMode(false);
-        settings.setUseWideViewPort(true);
+        settings.setLoadWithOverviewMode(true);
         webview.setWebChromeClient(new WebChromeClient());
         String ss = "<html>\n" +
                 "<body  style=\"margin:0;padding:0}\">\n" +
@@ -72,14 +71,14 @@ public class RecipeVideoActivity extends Activity {
 
     @Override
     protected void onPause() {
-        super.onPause();
         webview.pauseTimers();
+        super.onPause();
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         webview.destroy();
+        super.onDestroy();
     }
 
 

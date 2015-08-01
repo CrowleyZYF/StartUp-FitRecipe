@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +40,7 @@ import java.util.Map;
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
+import cn.fitrecipe.android.ImageLoader.ILoadingListener;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import pl.tajchert.sample.DotsTextView;
 
@@ -175,12 +175,12 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         recipeContent = (ScrollView) findViewById(R.id.recipe_scrollview);
         dotsTextView = (DotsTextView) findViewById(R.id.dots);
 
-        new Handler().postDelayed(new Runnable() {
+        /*new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 hideLoading(false, "");
             }
-        }, 2000);
+        }, 2000);*/
 
 
         View view = LayoutInflater.from(this).inflate(R.layout.activity_recipe_info_set, null);
@@ -227,7 +227,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                System.out.println("get Recipe " + volleyError.getMessage());
+                hideLoading(true, "网络连接出错!");
                 if(volleyError != null && volleyError.networkResponse != null) {
                     int statusCode = volleyError.networkResponse.statusCode;
                     if(statusCode == 404) {
@@ -271,7 +271,17 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
     private void getData(JSONObject data) throws JSONException {
 
         if(data.has("img"))
-            FrApplication.getInstance().getMyImageLoader().displayImage(recipe_pic, FrServerConfig.getImageCompressed(data.getString("img")));
+            FrApplication.getInstance().getMyImageLoader().displayImage(recipe_pic, FrServerConfig.getImageCompressed(data.getString("img")), new ILoadingListener() {
+                @Override
+                public void loadComplete() {
+                    hideLoading(false, "");
+                }
+
+                @Override
+                public void loadFailed() {
+                    hideLoading(false, "图片未加载成功");
+                }
+            });
         StringBuilder tags = new StringBuilder();
         JSONArray time_labels = data.getJSONArray("time_labels");
         for(int i = 0; i < time_labels.length(); i++) {
