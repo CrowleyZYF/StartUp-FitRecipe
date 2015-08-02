@@ -159,13 +159,19 @@ class Recipe(BaseModel):
         num: 10 (string) - 返回数量，默认是10。字符串
         '''
         recipes = cls.objects.all()
+        query = {}
+        # 逗号里面的是或 是并集 出现一个就好
         if meat_labels is not None:
             # 对 食材 进行筛选
-            recipes = recipes.filter(meat_labels__id__in=split_labels_into_list(meat_labels))
+            query['meat_labels__id__in']=split_labels_into_list(meat_labels)
         if effect_labels is not None:
-            recipes = recipes.filter(effect_labels__id__in=split_labels_into_list(effect_labels))
+            query['effect_labels__id__in']=split_labels_into_list(effect_labels)
         if time_labels is not None:
-            recipes = recipes.filter(time_labels__id__in=split_labels_into_list(time_labels))
+            query['time_labels__id__in']=split_labels_into_list(time_labels)
+        if query:
+            print query
+            recipes = recipes.filter(**query);
+            print recipes
         if order == 'duration':
             recipes = recipes.order_by('duration')
         else:
@@ -176,6 +182,8 @@ class Recipe(BaseModel):
             recipes = recipes.reverse()
         start = str_to_int(start, 0)
         num = str_to_int(num, 10)
+        # bug in django 1.8.3, filter duplicate
+        recipes = recipes.distinct()
         if num < 1:
             # 如果请求num数量小于 0 是不对的，改成 10
             num = 10

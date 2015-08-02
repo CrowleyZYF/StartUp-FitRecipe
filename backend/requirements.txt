@@ -1,5 +1,5 @@
 Django==1.8.3
-djangorestframework==3.1.2
+djangorestframework==3.1.3
 PyMySQL
 Pillow
 requests

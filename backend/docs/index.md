@@ -4,7 +4,7 @@
 
 + 菜谱名称
 + 菜谱图片
-+ 烹饪时间 
++ 烹饪时间
 + 作者（头像，名称，ID）
 + 菜谱简介
 + 功效标签： 增肌 减脂
@@ -335,6 +335,115 @@
 - 转发数
 - 发布时间
 - 内容
+- 微信地址
+
+## Type List [/api/article/type/list]
+### Retrieve article type list [GET]
+获取文章类别的列表
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "error_message": null,
+            "data": [
+                {
+                    "id": 1,
+                    "created_time": "2015-08-02 15:14:43",
+                    "updated_time": "2015-08-02 15:14:43",
+                    "title": "test",
+                    "introduce": "123123123123"
+                }
+            ]
+        }
+
+## Type Detail [/api/article/type/{id}]
+
++ Parameters
+    + id: 1 (number) - 类别的 ID
+
+### Retreive article type detail [GET]
+获取文章列表的详情，包含其中的`系列`列表
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "error_message": null,
+            "data": {
+                "id": 1,
+                "series_set": [
+                    {
+                        "author_type": "test",
+                        "author_avatar": "https://www.google.com.sg/webhp?hl=zh-CN",
+                        "author": "123",
+                        "id": 1,
+                        "title": "test"
+                    }
+                ],
+                "created_time": "2015-08-02 15:14:43",
+                "updated_time": "2015-08-02 15:14:43",
+                "title": "test",
+                "introduce": "123123123123"
+            }
+        }
+
+## Series Detail [/api/article/series/{id}]
+
++ Parameters
+    + id: 1 (number) - 系列的 ID
+
+### Retreive series detail [GET]
+获取系列的详情，包含其中的`文章`列表
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "error_message": null,
+            "data": {
+                "id": 1,
+                "article_set": [
+                    {
+                        "img_cover": "https://www.google.com.sg/webhp?hl=zh-CN",
+                        "id": 1,
+                        "title": "test"
+                    }
+                ],
+                "created_time": "2015-08-02 15:14:46",
+                "updated_time": "2015-08-02 15:14:46",
+                "title": "test",
+                "author": "123",
+                "author_avatar": "https://www.google.com.sg/webhp?hl=zh-CN",
+                "author_type": "test",
+                "article_type": 1
+            }
+        }
+
+## Article Detail [/api/article/{id}]
+
++ Parameters
+    + id: 1 (number) - 文章的 ID
+
+### Retreive article detail [GET]
+获取文章详情
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "error_message": null,
+            "data": {
+                "id": 1,
+                "created_time": "2015-08-02 15:14:47",
+                "updated_time": "2015-08-02 15:14:47",
+                "title": "test",
+                "img_cover": "https://www.google.com.sg/webhp?hl=zh-CN",
+                "content": "dcewde",
+                "wx_url": "https://code.djangoproject.com/ticket/12625",
+                "series": 1
+            }
+        }
 
 # Group Theme
 ## Theme List [/api/theme/list/]
@@ -459,7 +568,7 @@
 
 登录注册和第三方登录不用带着 Token
 ## Register [/api/accounts/register/]
-### Normal Account Register [POST] 
+### Normal Account Register [POST]
 注册帐号
 正常的注册，需要密码和手机号
 
@@ -489,13 +598,13 @@
 + Response 400 (application/json)
 
         {
-            "status": 400, 
+            "status": 400,
             "error_message": "Phone registed",
             "data": null
         }
 
 ## Login [/api/accounts/login/]
-### Normal Account Login [POST] 
+### Normal Account Login [POST]
 正常帐号登录
 
 + Request (application/json)
@@ -524,7 +633,7 @@
 + Response 401 (application/json)
 
         {
-            "status": 401, 
+            "status": 401,
             "error_message": "password is not correct",
             "data": null
         }
@@ -532,7 +641,7 @@
 + Response 402 (application/json)
 
         {
-            "status": 402, 
+            "status": 402,
             "error_message": "Account not existed",
             "data": null
         }
