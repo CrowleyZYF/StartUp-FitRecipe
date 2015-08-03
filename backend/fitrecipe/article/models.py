@@ -40,6 +40,7 @@ class Article(BaseModel):
     title = models.CharField(max_length=50, verbose_name=u'标题')
     img_cover = models.URLField(max_length=200, verbose_name=u'封面图片')
     content = models.TextField(verbose_name=u'正文')
+    wx_url = models.URLField(blank=True, null=True, verbose_name=u'微信URL')
     series = models.ForeignKey(Series, verbose_name=u'所属系列')
 
     class Meta:
