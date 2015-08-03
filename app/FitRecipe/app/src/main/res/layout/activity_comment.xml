@@ -3,12 +3,20 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <include layout="@layout/framework_common_headers" />
+
+    <ListView
+        android:id="@+id/comment_list_view"
+        android:background="@color/background_color"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:gravity="center"
-        android:text="健身食谱——评论"
-        android:textSize="30sp"
-        android:textStyle="bold" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="none"
+        android:paddingTop="5dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp" />
+
+    <include layout="@layout/activity_comment_widget" />
 
 </LinearLayout>

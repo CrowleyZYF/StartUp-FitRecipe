@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -22,13 +21,11 @@ import com.rey.material.widget.CheckBox;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.fitrecipe.android.Adpater.RecipeCardAdapter;
-import cn.fitrecipe.android.Config.LocalDemo;
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
@@ -200,11 +197,15 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
                 int duration = recipe.getInt("duration");
                 double calories = recipe.getDouble("calories");
                 String img = FrServerConfig.getImageCompressed(recipe.getString("img"));
-                JSONArray effects = recipe.getJSONArray("effect_labels");
-                String function = "不限";
-                if(effects != null && effects.length() > 0)
-                    function = effects.getJSONObject(0).getString("name");
-                RecipeCard rc = new RecipeCard(recipe_name, recipe_id, function, duration, (int)calories, 100, img);
+                JSONArray effect_labels = recipe.getJSONArray("effect_labels");
+                String function = "";
+                String function_backup = "";
+                if(effect_labels.length() > 0)
+                    function = effect_labels.getJSONObject(0).getString("name");
+                if(effect_labels.length() > 1) {
+                    function_backup = effect_labels.getJSONObject(1).getString("name");
+                }
+                RecipeCard rc = new RecipeCard(recipe_name, recipe_id, function, function_backup, duration, (int)calories, 100, img);
                 dataList.add(rc);
             }
         }

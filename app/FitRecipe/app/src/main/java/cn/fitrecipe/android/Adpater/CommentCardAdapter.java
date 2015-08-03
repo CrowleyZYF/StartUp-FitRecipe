@@ -6,12 +6,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
 
-import cn.fitrecipe.android.FrApplication;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.RecipeActivity;
 import cn.fitrecipe.android.model.RecipeCard;
@@ -19,31 +18,31 @@ import cn.fitrecipe.android.model.RecipeCard;
 /**
  * Created by 奕峰 on 2015/4/24.
  */
-public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.RecipeCardViewHolder> implements View.OnClickListener {
+public class CommentCardAdapter extends RecyclerView.Adapter<CommentCardAdapter.CommentCardViewHolder> implements View.OnClickListener {
 
     private List<RecipeCard> recipeCardsList;
     private Context context;
 
 
-    public RecipeCardAdapter(Context context, List<RecipeCard> recipeCardsList) {
+    public CommentCardAdapter(Context context, List<RecipeCard> recipeCardsList) {
         this.context = context;
         this.recipeCardsList = recipeCardsList;
     }
 
     @Override
-    public RecipeCardAdapter.RecipeCardViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public CommentCardAdapter.CommentCardViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
                 inflate(R.layout.framework_common_recipe_card, viewGroup, false);
 
         itemView.setOnClickListener(this);
 
-        return new RecipeCardViewHolder(itemView);
+        return new CommentCardViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(RecipeCardAdapter.RecipeCardViewHolder contactViewHolder, int i) {
-        RecipeCard rc = recipeCardsList.get(i);
+    public void onBindViewHolder(CommentCardAdapter.CommentCardViewHolder contactViewHolder, int i) {
+        /*RecipeCard rc = recipeCardsList.get(i);
         contactViewHolder.recipe_id.setText(rc.getRecipe_id());
         contactViewHolder.recipe_name.setText(rc.getRecipe_name());
         contactViewHolder.recipe_function.setText(rc.getRecipe_function());
@@ -74,8 +73,7 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Re
         contactViewHolder.recipe_calorie.setText(rc.getRecipe_calorie());
         contactViewHolder.recipe_time.setText(rc.getRecipe_time());
         contactViewHolder.recipe_like.setText(rc.getRecipe_like());
-//        contactViewHolder.recipe_background.setBackground (this.context.getResources().getDrawable(rc.getRecipe_background()));
-        FrApplication.getInstance().getMyImageLoader().displayImage(contactViewHolder.recipe_background, rc.getRecipe_background());
+        contactViewHolder.recipe_background.setBackground (this.context.getResources().getDrawable(rc.getRecipe_background()));*/
     }
 
     @Override
@@ -95,26 +93,20 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Re
         context.startActivity(intent);
     }
 
-    public static class RecipeCardViewHolder extends RecyclerView.ViewHolder {
-        protected TextView recipe_name;
-        protected TextView recipe_id;
-        protected TextView recipe_function;
-        protected TextView recipe_function_backup;
-        protected TextView recipe_time;
-        protected TextView recipe_calorie;
-        protected TextView recipe_like;
-        protected RelativeLayout recipe_background;
+    public static class CommentCardViewHolder extends RecyclerView.ViewHolder {
+        protected ImageView comment_user_avatar;
+        protected TextView comment_user_name;
+        protected TextView comment_user_type;
+        protected TextView comment_time;
+        protected TextView comment_text;
 
-        public RecipeCardViewHolder(View itemView) {
+        public CommentCardViewHolder(View itemView) {
             super(itemView);
-            recipe_name =  (TextView) itemView.findViewById(R.id.recipe_name);
-            recipe_id = (TextView) itemView.findViewById(R.id.recipe_id);
-            recipe_function = (TextView)  itemView.findViewById(R.id.recipe_function);
-            recipe_function_backup = (TextView)  itemView.findViewById(R.id.recipe_function_backup);
-            recipe_time = (TextView)  itemView.findViewById(R.id.recipe_time);
-            recipe_calorie = (TextView) itemView.findViewById(R.id.recipe_calorie);
-            recipe_like = (TextView) itemView.findViewById(R.id.recipe_like);
-            recipe_background = (RelativeLayout) itemView.findViewById(R.id.recipe_background);
+            comment_user_avatar =  (ImageView) itemView.findViewById(R.id.comment_user_avatar);
+            comment_user_name = (TextView) itemView.findViewById(R.id.comment_user_name);
+            comment_user_type = (TextView) itemView.findViewById(R.id.comment_user_type);
+            comment_time = (TextView) itemView.findViewById(R.id.comment_time);
+            comment_text = (TextView) itemView.findViewById(R.id.comment_text);
         }
     }
 }

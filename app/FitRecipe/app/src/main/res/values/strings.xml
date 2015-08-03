@@ -38,6 +38,12 @@
     <string name="muscle">增肌</string>
     <string name="fat">减脂</string>
 
+    <!--评论-->
+    <string name="comment_hint">请输入你的评论……</string>
+    <string name="comment_user">长得好帅</string>
+    <string name="comment_time">2014-08-20 22:21</string>
+    <string name="comment_text">龙井虾仁，是配以龙井茶的嫩芽烹制而成的虾仁，是富有浙江杭州地方特色的汉族名菜。虾仁玉白，鲜嫩；芽叶碧绿，清香，色泽雅丽，滋味独特，食后清口开胃，回味无穷，在淮扬菜中堪称一绝。“龙井虾仁”选用活大河虾，配以清明节前后的龙井新茶烹制，虾仁肉白、鲜嫩龙井虾仁，茶叶碧绿、清香，色泽雅丽，滋味独特。</string>
+
     <!--登陆注册-->
     <string name="login">登陆</string>
     <string name="phone">手机</string>

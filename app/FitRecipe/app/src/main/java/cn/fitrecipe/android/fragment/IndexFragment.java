@@ -166,14 +166,18 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
                 String name = update.getString("title");
                 int id = update.getInt("id");
                 JSONArray effect_labels = update.getJSONArray("effect_labels");
-                String function = null;
+                String function = "";
+                String function_backup = "";
                 if(effect_labels.length() > 0)
                     function = effect_labels.getJSONObject(0).getString("name");
+                if(effect_labels.length() > 1) {
+                    function_backup = effect_labels.getJSONObject(1).getString("name");
+                }
                 int duration = update.getInt("duration");
                 String total_amount = update.getString("total_amount");
                 double calories = update.getDouble("calories");// * Integer.parseInt(total_amount.substring(0, total_amount.indexOf("g"))) / 100;
                 String img = FrServerConfig.getImageCompressed(update.getString("img"));
-                RecipeCard rc = new RecipeCard(name, id, function, duration, (int) calories, 0, img);
+                RecipeCard rc = new RecipeCard(name, id, function, function_backup, duration, (int) calories, 0, img);
                 recipeCards.add(rc);
             }
 
