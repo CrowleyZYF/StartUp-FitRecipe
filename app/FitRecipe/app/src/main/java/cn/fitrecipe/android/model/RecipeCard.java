@@ -1,7 +1,5 @@
 package cn.fitrecipe.android.model;
 
-import cn.fitrecipe.android.R;
-
 /**
  * Created by 奕峰 on 2015/4/24.
  */
@@ -9,6 +7,7 @@ public class RecipeCard {
     protected String recipe_name;
     protected int recipe_id;
     protected String recipe_function;
+    protected String recipe_function_backup;
     protected int recipe_time;
     protected int recipe_calorie;
     protected int recipe_like;
@@ -23,16 +22,18 @@ public class RecipeCard {
         this.recipe_name="";
         this.recipe_id=0;
         this.recipe_function="";
+        this.recipe_function_backup="";
         this.recipe_time=0;
         this.recipe_calorie=0;
         this.recipe_like=0;
 //        this.recipe_background= R.drawable.update_init;
     }
 
-    public RecipeCard(String name, int id, String function, int time, int calorie, int like, String background){
+    public RecipeCard(String name, int id, String function, String function_backup, int time, int calorie, int like, String background){
         this.recipe_name=name;
         this.recipe_id=id;
         this.recipe_function=function;
+        this.recipe_function_backup=function_backup;
         this.recipe_time=time;
         this.recipe_calorie=calorie;
         this.recipe_like=like;
@@ -49,6 +50,10 @@ public class RecipeCard {
 
     public String getRecipe_function(){
         return this.recipe_function;
+    }
+
+    public String getRecipe_function_backup(){
+        return this.recipe_function_backup;
     }
 
     public String getRecipe_time(){
