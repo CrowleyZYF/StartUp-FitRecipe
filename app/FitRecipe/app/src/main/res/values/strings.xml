@@ -34,6 +34,9 @@
 
     <!--指南-->
     <string name="info">贴士</string>
+    <string name="common">通用</string>
+    <string name="muscle">增肌</string>
+    <string name="fat">减脂</string>
 
     <!--登陆注册-->
     <string name="login">登陆</string>
