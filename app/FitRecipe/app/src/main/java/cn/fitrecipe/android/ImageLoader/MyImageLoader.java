@@ -68,7 +68,7 @@ public class MyImageLoader {
                 .threadPoolSize(3)
                 .memoryCacheSize(10 * 1024 * 1024)
 //                .threadPriority(Thread.MAX_PRIORITY)
-                .writeDebugLogs()
+//                .writeDebugLogs()
                 .build();
 
         //init Universal ImageLoader
