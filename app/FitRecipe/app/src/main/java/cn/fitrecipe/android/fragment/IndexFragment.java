@@ -193,7 +193,7 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
     private void initData(String dataString) throws JSONException {
         //get data
         parseJsonData(dataString);
-        //获得推荐数据，并初始化适配器
+        //获得推荐数据，并初始化适配器3
         recommendViewPagerAdapter = new RecommendViewPagerAdapter(getActivity(), recommendRecipe, recommendViewPager.getLayoutParams().width, recommendViewPager.getLayoutParams().height);
         recommendViewPager.setAdapter(recommendViewPagerAdapter);
         //初始化推荐的indicator

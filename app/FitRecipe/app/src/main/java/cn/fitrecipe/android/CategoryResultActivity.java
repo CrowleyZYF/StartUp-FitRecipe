@@ -17,10 +17,12 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.rey.material.widget.CheckBox;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,11 +64,24 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
     private LinearLayout calorie_sort_btn;
     private TextView calorie_sort_text;
     private ImageView calorie_sort_icon;
+    private TextView filter_sure_btn;
+
+    private int[] tese_ids = new int[] {R.id.perfect_check, R.id.hp_check, R.id.lk_check, R.id.lf_check};
+    private int[] time_ids = new int[]{R.id.breakfast_check, R.id.add_meal_check, R.id.dinner_check};
+
+    private int[] values = new int[]{17, 2, 4, 3, 5, 7, 6};
+    private CheckBox[] checkBoxes;
 
     private int sort_type = 0;
     private boolean sort_des = false;
 
-    private String meat, effect, time;
+    private String meat, effect, time, order;
+    private boolean desc;
+    private int start, num;
+
+    private final String DURATION = "duration";
+    private final String CALORIES = "calories";
+    private final String LIKE = "like";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,15 +93,14 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
         meat = intent.getStringExtra("meat");
         effect = intent.getStringExtra("effect");
         time = intent.getStringExtra("time");
+        desc = false;
+        order = DURATION;
+        start = 0;
+        num = 7;
 
         initView();
-        try {
-            getData(0, 7);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        getData();
         initEvent();
-
     }
 
     private void initView() {
@@ -95,6 +109,8 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
 
         filter_btn = (ImageView) findViewById(R.id.right_btn);
         filter_btn.setImageResource(R.drawable.icon_filter);
+
+        filter_sure_btn = (TextView) findViewById(R.id.filter_sure_btn);
 
         mRightMenu = (SlidingMenu) findViewById(R.id.container_layout);
 
@@ -119,50 +135,56 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
         categoryContent = (ScrollView) findViewById(R.id.category_result_list);
         dotsTextView = (DotsTextView) findViewById(R.id.dots);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                hideLoading(false,"");
-            }
-        }, 2000);
+        checkBoxes = new CheckBox[tese_ids.length + time_ids.length];
+        for(int i = 0; i < tese_ids.length; i++)
+            checkBoxes[i] = (CheckBox) findViewById(tese_ids[i]);
+        for(int i = tese_ids.length; i < checkBoxes.length; i++)
+            checkBoxes[i] = (CheckBox) findViewById(time_ids[i - tese_ids.length]);
+
     }
 
 
-    private void getData(int start, int num) throws JSONException {
+    private void getData(){
+        beginLoading();
         JSONObject params = new JSONObject();
-        params.put("meat", meat);
-        params.put("effect", effect);
-        params.put("time", time);
-        params.put("order", "duration");
-        params.put("start", start);
-        params.put("num", num);
-        String url = FrServerConfig.getRecipeListByCategory(params);
-        System.out.println(url);
-        SharedPreferences sp = getSharedPreferences("user", Context.MODE_PRIVATE);
-        String token = null;
-        if(sp.contains("token"))
-            token = sp.getString("token", null);
-        GetRequest request = new GetRequest(url, token, params, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject res) {
-                 if(res.has("data")) {
-                     JSONArray data = null;
-                     hideLoading(false, "");
-                     try {
-                         data = res.getJSONArray("data");
-                         processData(data);
-                     } catch (JSONException e) {
-                         e.printStackTrace();
-                     }
-                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                hideLoading(true, getResources().getString(R.string.network_error));
-            }
-        });
-        FrRequest.getInstance().request(request);
+        try {
+            params.put("meat", meat);
+            params.put("effect", effect);
+            params.put("time", time);
+            params.put("order", order);
+            params.put("desc", desc);
+            params.put("start", start);
+            params.put("num", num);
+            String url = FrServerConfig.getRecipeListByCategory(params);
+            System.out.println(url);
+            SharedPreferences sp = getSharedPreferences("user", Context.MODE_PRIVATE);
+            String token = null;
+            if(sp.contains("token"))
+                token = sp.getString("token", null);
+            GetRequest request = new GetRequest(url, token, params, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject res) {
+                    if(res.has("data")) {
+                        JSONArray data = null;
+                        hideLoading(false, "");
+                        try {
+                            data = res.getJSONArray("data");
+                            processData(data);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    hideLoading(true, getResources().getString(R.string.network_error));
+                }
+            });
+            FrRequest.getInstance().request(request);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void processData(JSONArray data) throws JSONException {
@@ -186,8 +208,11 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
                 dataList.add(rc);
             }
         }
-        recipeCardAdapter = new RecipeCardAdapter(this, dataList);
-        frThemeRecipeRecyclerView.setAdapter(recipeCardAdapter);
+        if(recipeCardAdapter == null) {
+            recipeCardAdapter = new RecipeCardAdapter(this, dataList);
+            frThemeRecipeRecyclerView.setAdapter(recipeCardAdapter);
+        }else
+            recipeCardAdapter.notifyDataSetChanged();
     }
 
     private void hideLoading(boolean isError, String errorMessage){
@@ -212,54 +237,7 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
         time_sort_btn.setOnClickListener(this);
         like_sort_btn.setOnClickListener(this);
         calorie_sort_btn.setOnClickListener(this);
-    }
-
-    private void getThemeRecipe(int type,boolean des) {
-        dataList.clear();
-        beginLoading();
-
-
-
-        if(type==0){
-            if(des){
-                for (int i=5;i<9;i++){
-                    RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],i,"",(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
-                    dataList.add(rc);
-                }
-            }else{
-                for (int i=8;i>4;i--){
-                    RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],i,"",(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
-                    dataList.add(rc);
-                }
-            }
-        }
-        else if(type==1){
-            if(des){
-                for (int i=1;i<5;i++){
-                    RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],i,"",(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
-                    dataList.add(rc);
-                }
-            }else{
-                for (int i=4;i>0;i--){
-                    RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],i,"",(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
-                    dataList.add(rc);
-                }
-            }
-        }
-        else if(type==2){
-            if(des){
-                for (int i=3;i<7;i++){
-                    RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],i,"",(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
-                    dataList.add(rc);
-                }
-            }else{
-                for (int i=6;i>2;i--){
-                    RecipeCard rc = new RecipeCard(LocalDemo.recipeName[i],i,"",(20+i),(200+i*10),(50+i*10),LocalDemo.recipeBG[i]);
-                    dataList.add(rc);
-                }
-            }
-        }
-
+        filter_sure_btn.setOnClickListener(this);
     }
 
     @Override
@@ -281,8 +259,9 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
                     time_sort_icon.setImageResource(R.drawable.icon_arrow_down_active);
                 }
                 sort_des = !sort_des;
-                getThemeRecipe(sort_type,sort_des);
-                recipeCardAdapter.notifyDataSetChanged();
+                desc = sort_des;
+                order=DURATION;
+                getData();
                 break;
             case R.id.like_sort_btn:
                 resetTextColor();
@@ -294,8 +273,9 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
                     like_sort_icon.setImageResource(R.drawable.icon_arrow_down_active);
                 }
                 sort_des = !sort_des;
-                getThemeRecipe(sort_type,sort_des);
-                recipeCardAdapter.notifyDataSetChanged();
+                desc = sort_des;
+                order = "";
+                getData();
                 break;
             case R.id.calorie_sort_btn:
                 resetTextColor();
@@ -307,8 +287,35 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
                     calorie_sort_icon.setImageResource(R.drawable.icon_arrow_down_active);
                 }
                 sort_des = !sort_des;
-                getThemeRecipe(sort_type,sort_des);
-                recipeCardAdapter.notifyDataSetChanged();
+                desc = sort_des;
+                order = CALORIES;
+                getData();
+                break;
+            case R.id.filter_sure_btn:
+                mRightMenu.toggle();
+                StringBuilder sb = new StringBuilder();
+                for(int i = 0; i < tese_ids.length; i++) {
+                    if(checkBoxes[i].isChecked()) {
+                        sb.append(values[i]);
+                        sb.append(",");
+                    }
+                }
+                if(sb.length() > 0)
+                    sb.substring(0, sb.length() - 1);
+                effect = sb.toString();
+                sb.setLength(0);
+
+                for(int i = 0; i < time_ids.length; i++) {
+                    if(checkBoxes[i + tese_ids.length].isChecked()) {
+                        sb.append(values[i + tese_ids.length]);
+                        sb.append(",");
+                    }
+                }
+
+                if(sb.length() > 0)
+                    sb.substring(0, sb.length() - 1);
+                time = sb.toString();
+                getData();
                 break;
             default:
                 break;
