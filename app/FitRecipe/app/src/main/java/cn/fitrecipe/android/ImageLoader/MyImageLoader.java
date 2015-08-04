@@ -47,13 +47,13 @@ public class MyImageLoader {
         options = new DisplayImageOptions.Builder()
                 .cacheInMemory(false)
                 .cacheOnDisk(true)          //permit cache image in memory and disk
-                .displayer(new FadeInBitmapDisplayer(500)) // set image fade in
+//                .displayer(new FadeInBitmapDisplayer(500)) // set image fade in
                 .build();
 
         options2 = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .cacheOnDisk(true)          //permit cache image in memory and disk
-                .displayer(new FadeInBitmapDisplayer(500)) // set image fade in
+//                .displayer(new FadeInBitmapDisplayer(500)) // set image fade in
                 .build();
 
         //init

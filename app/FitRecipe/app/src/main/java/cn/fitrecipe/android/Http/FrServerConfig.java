@@ -45,8 +45,17 @@ public class FrServerConfig {
     }
 
     //get Theme Details
-    public static String getThemeDetailsUrl(String id) {
-        return HOST + "/api/theme/" + id + "/recipes/";
+    public static String getThemeDetailsUrl(JSONObject params) throws JSONException {
+        StringBuilder sb = new StringBuilder(HOST + "/api/theme/");
+        if(params.has("id")) {
+            sb.append(params.getString("id") + "/recipes");
+            sb.append("?");
+            if (params.has("start"))
+                sb.append("start=" + params.getInt("start") + "&");
+            if (params.has("num"))
+                sb.append("num=" + params.getInt("num") + "&");
+        }
+        return  sb.toString();
     }
 
     //get Category
