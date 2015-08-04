@@ -7,6 +7,7 @@ import cn.fitrecipe.android.R;
  */
 public class CommentCard {
     protected int comment_id;
+    protected int comment_user_id;
     protected int comment_user_avatar;
     protected String comment_user_name;
     protected int comment_user_type;
@@ -16,16 +17,18 @@ public class CommentCard {
 
     public CommentCard(){
         this.comment_id = 0;
+        this.comment_user_id = 0;
         this.comment_user_avatar = R.drawable.pic_header;
         this.comment_user_name = "健食记";
-        this.comment_user_type = 0;
+        this.comment_user_type = 0;//0代表普通用户，1代表作者，2代表官方
         this.comment_time = "1991-11-26 21:11";
         this.comment_context = "这个最好吃了，可惜她吃不到唉";
         this.comment_reply_to_user = "";
     }
 
-    public CommentCard(int id, int avatar, String name, int type, String time, String context, String reply){
+    public CommentCard(int id, int userID, int avatar, String name, int type, String time, String context, String reply){
         this.comment_id = id;
+        this.comment_user_id = userID;
         this.comment_user_avatar = avatar;
         this.comment_user_name = name;
         this.comment_user_type = type;
@@ -35,6 +38,8 @@ public class CommentCard {
     }
 
     public String getComment_id(){return this.comment_id+"";}
+
+    public String getComment_user_id(){return this.comment_user_id+"";}
 
     public String getComment_user_name(){return this.comment_user_name;}
 
@@ -46,9 +51,11 @@ public class CommentCard {
         if(this.comment_reply_to_user.equals("")){
             return this.comment_context;
         }else{
-            return "回复 " + this.comment_reply_to_user + " :" + this.comment_context;
+            return "回复 " + this.comment_reply_to_user + " : " + this.comment_context;
         }
     }
+
+    public int getComment_user_avatar(){return this.comment_user_avatar;}
 }
 
 

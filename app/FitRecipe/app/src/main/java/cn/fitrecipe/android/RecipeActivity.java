@@ -26,7 +26,6 @@ import com.umeng.socialize.sso.SinaSsoHandler;
 import com.umeng.socialize.sso.TencentWBSsoHandler;
 import com.umeng.socialize.sso.UMQQSsoHandler;
 import com.umeng.socialize.sso.UMSsoHandler;
-import com.umeng.socialize.view.CommentActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -426,7 +425,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                 break;
             }
             case R.id.comment_btn:{
-                startActivity(new Intent(this, CommentActivity.class));
+                startActivity(new Intent(this, cn.fitrecipe.android.CommentActivity.class));
                 openSet();
                 break;
             }

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="55dp">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="wrap_content"
         android:background="@color/base_color"
         android:gravity="center"
         android:orientation="horizontal">
@@ -13,7 +13,9 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="36dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
             android:layout_marginLeft="10dp"
             android:background="@drawable/search_input"
             android:orientation="horizontal">
@@ -25,12 +27,14 @@
                 android:inputType="textMultiLine"
                 android:hint="@string/comment_hint"
                 android:ems="10"
-                android:id="@+id/editText" />
+                android:id="@+id/comment_editText"
+                android:padding="5dp"
+                android:background="@drawable/login_input" />
 
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/left_btn"
+            android:id="@+id/comment_reply_btn"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:padding="15dp"
@@ -38,6 +42,16 @@
             android:layout_centerVertical="true"
             android:src="@drawable/icon_comment"
             android:background="@drawable/icon_selector"/>
+
+        <TextView
+            android:id="@+id/comment_reply_comment_id"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+        <TextView
+            android:id="@+id/comment_reply_user_id"
+            android:layout_width="0dp"
+            android:layout_height="0dp" />
     </LinearLayout>
 
 </LinearLayout>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginLeft="10dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -9,22 +9,32 @@
         android:id="@+id/comment_user_avatar"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:src="@drawable/pic_header"
         app:border_width="3dp"
         app:border_color="#ffffff"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginLeft="10dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp">
+
+            <TextView
+                android:id="@+id/comment_id"
+                android:layout_width="0dp"
+                android:layout_height="0dp" />
+
+            <TextView
+                android:id="@+id/comment_user_id"
+                android:layout_width="0dp"
+                android:layout_height="0dp" />
             
             <TextView
                 android:id="@+id/comment_user_name"
@@ -69,7 +79,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@drawable/theme_line"/>
+            android:background="@drawable/comment_line"/>
 
         </LinearLayout>
 

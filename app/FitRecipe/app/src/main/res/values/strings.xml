@@ -39,6 +39,8 @@
     <string name="fat">减脂</string>
 
     <!--评论-->
+    <string name="comment">评论</string>
+    <string name="comment_cancel">取消回复</string>
     <string name="comment_hint">请输入你的评论……</string>
     <string name="comment_user">长得好帅</string>
     <string name="comment_time">2014-08-20 22:21</string>
