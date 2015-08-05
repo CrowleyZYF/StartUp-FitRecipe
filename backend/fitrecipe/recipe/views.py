@@ -65,6 +65,6 @@ class RecipeSearch(BaseView):
                 tag_list = tag_list + list(l.meat_set.all())
             elif l.type == u'其他':
                 tag_list = tag_list + list(l.other_set.all())
-        tag_list = list(set(tag_list).union(set(r)))
+        tag_list = list(set(tag_list).difference(set(r)))
         final = list(r) + tag_list
         return self.success_response(RecipeSerializer(final[start: start + num], many=True).data)
