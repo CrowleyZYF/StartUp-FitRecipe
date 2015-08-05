@@ -1,29 +1,30 @@
 package cn.fitrecipe.android.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-
-import com.daimajia.androidviewhover.BlurLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.fitrecipe.android.CategoryActivity;
-import cn.fitrecipe.android.KnowledgeSeriesActivity;
+import cn.fitrecipe.android.Adpater.SeriesCardAdapter;
+import cn.fitrecipe.android.Config.LocalDemo;
 import cn.fitrecipe.android.R;
+import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
+import cn.fitrecipe.android.model.SeriesCard;
+
 /**
  * Created by 奕峰 on 2015/4/11.
  */
-public class KnowledgeFragment extends Fragment implements View.OnClickListener {
-    private RelativeLayout add_muscle;
-    private RelativeLayout lose_fat;
-    private RelativeLayout tips;
+public class KnowledgeFragment extends Fragment{
+    private RecyclerView frKnowledgeSeriesRecyclerView;
+    private RecyclerViewLayoutManager frKnowledgeSeriesLayoutManager;
+    private SeriesCardAdapter seriesCardAdapter;
+    private List<SeriesCard> dataList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,39 +33,29 @@ public class KnowledgeFragment extends Fragment implements View.OnClickListener 
         View v = inflater.inflate(R.layout.fragment_knowledge, container, false);
 
         initView(v);
-        initEvent();
+        initData();
 
         return v;
     }
 
-    private void initEvent() {
-        add_muscle.setOnClickListener(this);
-        lose_fat.setOnClickListener(this);
-        tips.setOnClickListener(this);
+    private void initData() {
+        dataList = new ArrayList<SeriesCard>();
+        getKnowledgeSeries();
+        seriesCardAdapter = new SeriesCardAdapter(this.getActivity(), dataList);
+        frKnowledgeSeriesRecyclerView.setAdapter(seriesCardAdapter);
     }
 
     private void initView(View v) {
-        add_muscle = (RelativeLayout) v.findViewById(R.id.add_muscle);
-        lose_fat = (RelativeLayout) v.findViewById(R.id.lose_fat);
-        tips = (RelativeLayout) v.findViewById(R.id.tips);
+        frKnowledgeSeriesRecyclerView = (RecyclerView) v.findViewById(R.id.knowledge_series_recycler_view);
+        frKnowledgeSeriesLayoutManager = new RecyclerViewLayoutManager(this.getActivity());
+        frKnowledgeSeriesLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        frKnowledgeSeriesRecyclerView.setLayoutManager(frKnowledgeSeriesLayoutManager);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.add_muscle:{
-                startActivity(new Intent(this.getActivity(), KnowledgeSeriesActivity.class));
-                break;
-            }
-            case R.id.lose_fat:{
-                startActivity(new Intent(this.getActivity(), KnowledgeSeriesActivity.class));
-                break;
-            }
-            case R.id.tips:{
-                startActivity(new Intent(this.getActivity(), KnowledgeSeriesActivity.class));
-                break;
-            }
+    public void getKnowledgeSeries() {
+        for (int i=0;i< LocalDemo.authorName.length;i++){
+            SeriesCard sc = new SeriesCard(LocalDemo.seriesName[i],LocalDemo.authorName[i],i%3,i*20+i+15,i*63,LocalDemo.seriesBG[i],LocalDemo.headBG[i]);
+            dataList.add(sc);
         }
-
     }
 }

@@ -10,7 +10,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.rey.material.widget.CheckBox;
 
@@ -99,7 +98,7 @@ public class CategoryActivity extends Activity implements View.OnClickListener, 
                 R.drawable.category_fish, R.drawable.category_egg, R.drawable.category_seafood,
                 R.drawable.category_rice, R.drawable.category_fruit,
                 R.drawable.category_dessert, R.drawable.category_other };
-        String[] iconName = { "鸡肉", "牛肉", "鱼肉", "蛋/奶", "海鲜", "米面", "果蔬",
+        String[] iconName = { "鸡肉", "牛肉", "猪肉", "蛋/奶", "海鲜", "米面", "果蔬",
                 "点心", "其他"};
         for (int i = 0; i < drawable.length; i++) {
             Map<String, Object> map = new HashMap<String, Object>();

@@ -16,7 +16,7 @@ import java.util.Map;
 public class GetRequest extends JsonObjectRequest{
 
     private String token;
-    private final int timeout = 3000;
+    private final int timeout = 10000;
     private final int retries = 5;
 
     public GetRequest(String url, String token, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {

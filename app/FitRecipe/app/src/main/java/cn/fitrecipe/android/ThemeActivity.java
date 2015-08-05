@@ -4,12 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,16 +21,11 @@ import com.android.volley.VolleyError;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import cn.fitrecipe.android.Adpater.RecipeCardAdapter;
-import cn.fitrecipe.android.Config.HttpUrl;
-import cn.fitrecipe.android.Config.LocalDemo;
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
@@ -112,14 +105,18 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
             String recipe_name = recipe.getString("title");
             int recipe_id = recipe.getInt("id");
             JSONArray effect_labels = recipe.getJSONArray("effect_labels");
-            String function = null;
+            String function = "";
+            String function_backup = "";
             if(effect_labels.length() > 0)
                 function = effect_labels.getJSONObject(0).getString("name");
+            if(effect_labels.length() > 1) {
+                function_backup = effect_labels.getJSONObject(1).getString("name");
+            }
             int duration = recipe.getInt("duration");
             String img = FrServerConfig.getImageCompressed(recipe.getString("img"));
             String total_amount = recipe.getString("total_amount");
             double calories = recipe.getDouble("calories") * Integer.parseInt(total_amount.substring(0, total_amount.indexOf("g"))) / 100;
-            RecipeCard rc = new RecipeCard(recipe_name, recipe_id, function, duration, (int)calories, 100, img);
+            RecipeCard rc = new RecipeCard(recipe_name, recipe_id, function, function_backup, duration, (int)calories, 100, img);
             result.add(rc);
         }
         RecipeCardAdapter recipeCardAdapter = new RecipeCardAdapter(this, result);
