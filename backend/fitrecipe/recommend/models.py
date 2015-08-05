@@ -9,6 +9,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from base.models import BaseModel
 from recipe.models import Recipe
 from theme.models import Theme
+from article.models import Series, Article
 # Create your models here.
 
 
@@ -35,9 +36,35 @@ class Recommend(BaseModel):
             return []
         return r[0].recipes
 
+
+class RecommendSeries(BaseModel):
+    series = models.ForeignKey(Series)
+
+    class Meta:
+        verbose_name = u'首页推荐系列'
+        verbose_name_plural = verbose_name + u'表'
+
+    def __unicode__(self):
+        return self.series.title
+
+
+class RecommendArticle(BaseModel):
+    article = models.ForeignKey(Article)
+
+    class Meta:
+        verbose_name = u'首页推荐文章'
+        verbose_name_plural = verbose_name + u'表'
+
+    def __unicode__(self):
+        return self.article.title
+
+
 class RecommendTheme(BaseModel):
     theme = models.ForeignKey(Theme)
 
     class Meta:
         verbose_name = u'首页推荐主题'
         verbose_name_plural = verbose_name + u'表'
+
+    def __unicode__(self):
+        return self.theme.title

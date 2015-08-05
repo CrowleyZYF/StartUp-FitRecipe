@@ -23,6 +23,9 @@ class ArticleType(BaseModel):
 
 class Series(BaseModel):
     title = models.CharField(max_length=50, verbose_name=u'标题')
+    introduce = models.TextField(verbose_name=u'简介')
+    img_cover = models.URLField(verbose_name=u'封面')
+    recommend_img = models.URLField(null=True, blank=True, verbose_name=u'推荐封面')
     author = models.CharField(max_length=50, verbose_name=u'作者名字')
     author_avatar = models.URLField(max_length=200, verbose_name=u'作者头像')
     author_type = models.CharField(max_length=50, verbose_name=u'作者类型')
@@ -39,6 +42,7 @@ class Series(BaseModel):
 class Article(BaseModel):
     title = models.CharField(max_length=50, verbose_name=u'标题')
     img_cover = models.URLField(max_length=200, verbose_name=u'封面图片')
+    recommend_img = models.URLField(null=True, blank=True, verbose_name=u'推荐封面')
     content = models.TextField(verbose_name=u'正文')
     wx_url = models.URLField(blank=True, null=True, verbose_name=u'微信URL')
     series = models.ForeignKey(Series, verbose_name=u'所属系列')
