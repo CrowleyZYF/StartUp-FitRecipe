@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.pgyersdk.crash.PgyCrashManager;
+import com.youku.player.YoukuPlayerBaseConfiguration;
 
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.ImageLoader.MyImageLoader;
@@ -21,6 +22,7 @@ public class FrApplication extends Application {
     //save home data json
     private String data;
     private boolean isHomeDataNew = false;
+    public static YoukuPlayerBaseConfiguration configuration;
 
 //    private List<ThemeCard> themeCards;
 //    private List<Map<String, Object>> recommendRecipes;
@@ -41,6 +43,24 @@ public class FrApplication extends Application {
 
         myImageLoader = new MyImageLoader();
         instance = this;
+
+        configuration = new YoukuPlayerBaseConfiguration(this){
+
+            @Override
+            public Class<? extends Activity> getCachingActivityClass() {
+                return null;
+            }
+
+            @Override
+            public Class<? extends Activity> getCachedActivityClass() {
+                return null;
+            }
+
+            @Override
+            public String configDownloadPath() {
+                return null;
+            }
+        };
     }
 
     public static FrApplication getInstance() {

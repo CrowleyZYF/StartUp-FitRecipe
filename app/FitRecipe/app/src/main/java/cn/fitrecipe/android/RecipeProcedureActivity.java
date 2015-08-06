@@ -106,9 +106,8 @@ public class RecipeProcedureActivity extends Activity implements View.OnClickLis
     }
 
     private void playVideo() {
-        System.out.println("play video!!!");
-        Intent intent = new Intent(this, RecipeVideoActivity.class);
-        intent.putExtra("video_url", "http://player.youku.com/embed/XMTI0OTc5MzEyNA==");
+        Intent intent  = new Intent(RecipeProcedureActivity.this, PlayerActivity.class);
+        intent.putExtra("vid", "XMTI0OTc5MzEyNA");
         startActivity(intent);
     }
 }

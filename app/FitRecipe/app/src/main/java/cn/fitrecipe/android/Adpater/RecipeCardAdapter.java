@@ -9,12 +9,9 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-
 import java.util.List;
 
 import cn.fitrecipe.android.FrApplication;
-import cn.fitrecipe.android.ImageLoader.MyImageLoader;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.RecipeActivity;
 import cn.fitrecipe.android.model.RecipeCard;
@@ -50,6 +47,7 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Re
         contactViewHolder.recipe_id.setText(rc.getRecipe_id());
         contactViewHolder.recipe_name.setText(rc.getRecipe_name());
         contactViewHolder.recipe_function.setText(rc.getRecipe_function());
+        contactViewHolder.recipe_function_backup.setText(rc.getRecipe_function_backup());
         if(rc.getRecipe_function().equals("完美")){
             contactViewHolder.recipe_function.setBackground(context.getResources().getDrawable(R.drawable.perfect_background));
         }else if(rc.getRecipe_function().equals("高蛋白")){
@@ -58,6 +56,20 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Re
             contactViewHolder.recipe_function.setBackground(context.getResources().getDrawable(R.drawable.lf_background));
         }else if(rc.getRecipe_function().equals("低卡")){
             contactViewHolder.recipe_function.setBackground(context.getResources().getDrawable(R.drawable.lk_background));
+        }
+        if(!rc.getRecipe_function_backup().equals("")){
+            contactViewHolder.recipe_function_backup.setVisibility(View.VISIBLE);
+            if(rc.getRecipe_function_backup().equals("完美")){
+                contactViewHolder.recipe_function_backup.setBackground(context.getResources().getDrawable(R.drawable.perfect_background));
+            }else if(rc.getRecipe_function_backup().equals("高蛋白")){
+                contactViewHolder.recipe_function_backup.setBackground(context.getResources().getDrawable(R.drawable.hp_background));
+            }else if(rc.getRecipe_function_backup().equals("低脂")){
+                contactViewHolder.recipe_function_backup.setBackground(context.getResources().getDrawable(R.drawable.lf_background));
+            }else if(rc.getRecipe_function_backup().equals("低卡")){
+                contactViewHolder.recipe_function_backup.setBackground(context.getResources().getDrawable(R.drawable.lk_background));
+            }
+        }else{
+            contactViewHolder.recipe_function_backup.setVisibility(View.GONE);
         }
         contactViewHolder.recipe_calorie.setText(rc.getRecipe_calorie());
         contactViewHolder.recipe_time.setText(rc.getRecipe_time());
@@ -87,6 +99,7 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Re
         protected TextView recipe_name;
         protected TextView recipe_id;
         protected TextView recipe_function;
+        protected TextView recipe_function_backup;
         protected TextView recipe_time;
         protected TextView recipe_calorie;
         protected TextView recipe_like;
@@ -97,6 +110,7 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Re
             recipe_name =  (TextView) itemView.findViewById(R.id.recipe_name);
             recipe_id = (TextView) itemView.findViewById(R.id.recipe_id);
             recipe_function = (TextView)  itemView.findViewById(R.id.recipe_function);
+            recipe_function_backup = (TextView)  itemView.findViewById(R.id.recipe_function_backup);
             recipe_time = (TextView)  itemView.findViewById(R.id.recipe_time);
             recipe_calorie = (TextView) itemView.findViewById(R.id.recipe_calorie);
             recipe_like = (TextView) itemView.findViewById(R.id.recipe_like);
