@@ -57,9 +57,9 @@ class Recipe(BaseModel):
             total_amount += c_amount
             for n in item.ingredient.nutrition_set.all():
                 if n.name in r.keys():
-                    r[n.name]['amount'] += n.amount * c_amount
+                    r[n.eng_name]['amount'] += n.amount * c_amount
                 else:
-                    r[n.name] = {'amount': n.amount * c_amount, 'unit': n.unit}
+                    r[n.eng_name] = {'amount': n.amount * c_amount, 'unit': n.unit, 'name': n.name}
         for k, v in r.iteritems():
             v['amount'] = round(v['amount'] / total_amount, 2)  # 一百克含量
         return r
