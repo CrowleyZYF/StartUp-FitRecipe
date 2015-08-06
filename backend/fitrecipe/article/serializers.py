@@ -12,10 +12,21 @@ class ArticleSerializer(BaseSerializer):
 
 
 class SeriesSerializer(BaseSerializer):
-    article_set = ArticleSerializer(value=('id', 'title', 'img_cover'), many=True)
+    article_set = ArticleSerializer(value=('id', 'title', 'img_cover', 'created_time'), many=True)
 
     class Meta:
         model = Series
+
+    def to_representation(self, obj):
+        '''
+        加上简单模式，用于列表展示
+        '''
+        r = super(SeriesSerializer, self).to_representation(obj)
+        simple = self.context.get('simple', True)
+        if simple:
+            # 去掉 component_set, procedure_set, nutrition_set
+            r.pop('article_set')
+        return r
 
 
 class ArticleTypeSerializer(BaseSerializer):

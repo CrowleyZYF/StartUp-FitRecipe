@@ -8,6 +8,7 @@
 from base.views import BaseView
 from .models import Recipe
 from .serializers import RecipeSerializer
+from label.models import Label
 # Create your views here.
 
 
@@ -40,3 +41,30 @@ class RecipeDetail(BaseView):
         recipe = self.get_object(Recipe, pk)
         serializer = RecipeSerializer(recipe, context={'simple': False})
         return self.success_response(serializer.data)
+
+
+class RecipeSearch(BaseView):
+    def get(self, request, format=None):
+        '''
+        search
+        '''
+        keyword = request.GET.get('keyword', None)
+        start = abs(int(request.GET.get('start', 0)))
+        num = abs(int(request.GET.get('num', 10)))
+        if keyword is None:
+            return self.success_response([])
+        r = Recipe.objects.filter(title__contains=keyword)
+        labels = Label.objects.filter(name__contains=keyword)
+        tag_list = []
+        for l in labels:
+            if l.type == u'功效':
+                tag_list = tag_list + list(l.effect_set.all())
+            elif l.type == u'用餐时间':
+                tag_list = tag_list + list(l.time_set.all())
+            elif l.type == u'食材':
+                tag_list = tag_list + list(l.meat_set.all())
+            elif l.type == u'其他':
+                tag_list = tag_list + list(l.other_set.all())
+        tag_list = list(set(tag_list).difference(set(r)))
+        final = list(r) + tag_list
+        return self.success_response(RecipeSerializer(final[start: start + num], many=True).data)
