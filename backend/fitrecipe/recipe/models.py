@@ -95,7 +95,10 @@ class Recipe(BaseModel):
                 self.get_nutrition_amount(data, u'Protein'),
                 self.get_nutrition_amount(data, u'Total lipid (fat)')
                 )
-            ratio = [int(v / sum(ratio) * 100) for v in ratio]
+            if sum(ratio) == 0:
+                ratio = [0, 0, 0]
+            else:
+                ratio = [int(v / sum(ratio) * 100) for v in ratio]
             first_gcd = self.gcd(ratio[0], ratio[1])
             second_gcd = self.gcd(ratio[1], ratio[2])
             third_gcd = self.gcd(first_gcd, second_gcd)
