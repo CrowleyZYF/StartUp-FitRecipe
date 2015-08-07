@@ -2,17 +2,17 @@ package cn.fitrecipe.android;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ScrollView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,20 +27,20 @@ import com.umeng.socialize.sso.TencentWBSsoHandler;
 import com.umeng.socialize.sso.UMQQSsoHandler;
 import com.umeng.socialize.sso.UMSsoHandler;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.ImageLoader.ILoadingListener;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
+import cn.fitrecipe.android.entity.Component;
+import cn.fitrecipe.android.entity.Label;
+import cn.fitrecipe.android.entity.Recipe;
 import pl.tajchert.sample.DotsTextView;
 
 public class RecipeActivity extends Activity implements View.OnClickListener, PopupWindow.OnDismissListener {
@@ -82,12 +82,10 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
     private TextView calorie_radio;
     //食材表
     private LinearLayoutForListView ingredient_listView;
-    private SimpleAdapter ingredient_adapter;
-    private List<Map<String, Object>> ingredient_dataList;
+    private MyComponentAdapter component_adapter;
     //营养表
     private LinearLayoutForListView nutrition_listView;
-    private SimpleAdapter nutrition_adapter;
-    private List<Map<String, Object>> nutrition_dataList;
+    private MyNutritionAdapter nutrition_adapter;
     //查看步骤
     private TextView check_procedure_btn;
     //设置按钮
@@ -106,19 +104,18 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
     private ImageView comment_btn;
     //分享按钮
     private ImageView share_btn;
+    //put recipe in basket
+    private TextView put_in_basket;
     //菜单是否打开
     private boolean open = false;
     //食谱是否已经收藏
     private boolean isCollected = false;
-    //total weight
-    private int total_weight = 0;
-    private int count = -1;
-    //calories per 100g
-    double calories;
-    //records
-    List<List<Integer>> weight_records;
 
-    private JSONArray procedure_set;
+    //the recipe displayed
+    private Recipe recipe;
+    //add weight every
+    private List<Integer> increment_list;
+    private int init_weight;
 
     // 首先在您的Activity中添加如下成员变量
     final UMSocialService mController = UMServiceFactory.getUMSocialService("com.umeng.share");
@@ -163,6 +160,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         calorie_radio = (TextView) findViewById(R.id.calorie_radio);
         ingredient_listView = (LinearLayoutForListView) findViewById(R.id.recipe_ingredient_list);
         nutrition_listView = (LinearLayoutForListView) findViewById(R.id.recipe_nutrition_list);
+        put_in_basket = (TextView) findViewById(R.id.put_in_basket);
 
         check_procedure_btn = (TextView) findViewById(R.id.check_procedure);
         set_btn = (ImageView) findViewById(R.id.set_btn);
@@ -208,16 +206,16 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
     }
 
     private void loadData(String url) {
-        SharedPreferences preferences = getSharedPreferences("user", MODE_PRIVATE);
         Toast.makeText(this, "URL: "+ url, Toast.LENGTH_LONG).show();
-        GetRequest request = new GetRequest(url, preferences.getString("token", ""), new JSONObject(), new Response.Listener<JSONObject>() {
+        GetRequest request = new GetRequest(url, FrApplication.getInstance().getToken(), new JSONObject(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {
                 if(res != null && res.has("data")) {
                     try {
                         JSONObject data = res.getJSONObject("data");
-                        getData(data);
+                        processData(data);
                         initData();
+                        display();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -239,9 +237,9 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
     }
 
     private void initData() {
-        ingredient_adapter=new SimpleAdapter(this, ingredient_dataList, R.layout.activity_recipe_info_ingredient_item, new String[]{"item_name","item_weight","item_remark"}, new int[]{R.id.ingredient_name,R.id.ingredient_weight,R.id.ingredient_remark});
-        ingredient_listView.setAdapter(ingredient_adapter);
-        nutrition_adapter=new SimpleAdapter(this, nutrition_dataList, R.layout.activity_recipe_info_ingredient_item, new String[]{"item_name","item_weight","item_remark"}, new int[]{R.id.ingredient_name,R.id.ingredient_weight,R.id.ingredient_remark});
+        component_adapter=new MyComponentAdapter();
+        ingredient_listView.setAdapter(component_adapter);
+        nutrition_adapter=new MyNutritionAdapter();
         nutrition_listView.setAdapter(nutrition_adapter);
         collect_recipe();
 
@@ -267,118 +265,76 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         //                                BitmapFactory.decodeFile("/mnt/sdcard/icon.png")));
     }
 
-    private void getData(JSONObject data) throws JSONException {
+    private void processData(JSONObject data) throws JSONException {
+        recipe = Recipe.fromJson(data.toString());
+    }
 
-        if(data.has("img"))
-            FrApplication.getInstance().getMyImageLoader().displayImage(recipe_pic, FrServerConfig.getImageCompressed(data.getString("img")), new ILoadingListener() {
-                @Override
-                public void loadComplete() {
-                    hideLoading(false, "");
-                }
+    private void display(){
+        //display recipe image
+        FrApplication.getInstance().getMyImageLoader().displayImage(recipe_pic, recipe.getImg(), new ILoadingListener() {
+            @Override
+            public void loadComplete() {
+                hideLoading(false, "");
+            }
 
-                @Override
-                public void loadFailed() {
-                    hideLoading(false, "图片未加载成功");
-                }
-            });
-        StringBuilder tags = new StringBuilder();
-        JSONArray time_labels = data.getJSONArray("time_labels");
-        for(int i = 0; i < time_labels.length(); i++) {
-            JSONObject label = time_labels.getJSONObject(i);
-            tags.append(label.getString("name"));
-            tags.append("、");
+            @Override
+            public void loadFailed() {
+                hideLoading(false, getResources().getString(R.string.load_image_error));
+            }
+        });
+
+        //set the tag
+        recipe_tags.setText(getTags());
+        //set the recipe name
+        recipe_name.setText(recipe.getTitle());
+        //set the function
+        String function = getFunction();
+        recipe_feature.setText(function);
+        switch (function) {
+            case "完美":
+                recipe_feature.setBackground(getResources().getDrawable(R.drawable.perfect_background));
+                break;
+            case "高蛋白":
+                recipe_feature.setBackground(getResources().getDrawable(R.drawable.hp_background));
+                break;
+            case "低脂":
+                recipe_feature.setBackground(getResources().getDrawable(R.drawable.lf_background));
+                break;
+            case "低卡":
+                recipe_feature.setBackground(getResources().getDrawable(R.drawable.lk_background));
+                break;
         }
-
-        JSONArray meat_labels = data.getJSONArray("meat_labels");
-        for(int i = 0; i < meat_labels.length(); i++) {
-            JSONObject label = meat_labels.getJSONObject(i);
-            tags.append(label.getString("name"));
-            tags.append("、");
-        }
-
-        JSONArray other_labels = data.getJSONArray("other_labels");
-        for(int i = 0; i < other_labels.length(); i++) {
-            JSONObject label = other_labels.getJSONObject(i);
-            tags.append(label.getString("name"));
-            tags.append("、");
-        }
-        if(tags.length() > 0)
-            tags.deleteCharAt(tags.length() - 1);
-
-        recipe_tags.setText(tags.toString());
-        recipe_name.setText(data.getString("title"));
-
-        StringBuilder effects = new StringBuilder();
-        JSONArray effect_labels = data.getJSONArray("effect_labels");
-        for(int i = 0; i < effect_labels.length(); i++) {
-            JSONObject label = effect_labels.getJSONObject(i);
-            effects.append(label.getString("name"));
-            effects.append(" ");
-        }
-        if(effects.length() > 0)
-            effects.deleteCharAt(effects.length() - 1);
-
-        recipe_feature.setText(effects);
-        if(effects.toString().equals("完美")){
-            recipe_feature.setBackground(getResources().getDrawable(R.drawable.perfect_background));
-        }else if(effects.toString().equals("高蛋白")){
-            recipe_feature.setBackground(getResources().getDrawable(R.drawable.hp_background));
-        }else if(effects.toString().equals("低脂")){
-            recipe_feature.setBackground(getResources().getDrawable(R.drawable.lf_background));
-        }else if(effects.toString().equals("低卡")){
-            recipe_feature.setBackground(getResources().getDrawable(R.drawable.lk_background));
-        }
-        recipe_time.setText("烹饪时间："+ data.getInt("duration") + "min");
-        calories = data.getDouble("calories");
-        recipe_calorie.setText("热量："+ calories + "kcal/100g");
+        //set duration
+        recipe_time.setText("烹饪时间："+ recipe.getDuration() + "min");
+        recipe_calorie.setText("热量："+ recipe.getCalories() + "kcal/100g");
         recipe_collect.setText("收藏 " + "100");
         recipe_comment.setText("评论 " + "100");
-        //avatar_pic.setImageResource();
-        JSONObject author = data.getJSONObject("author");
-        FrApplication.getInstance().getMyImageLoader().displayImage(avatar_pic, author.getString("avatar"));
-        author_name.setText(author.getString("nick_name"));
-        recipe_intro.setText(data.getString("introduce"));
 
-        String total = data.getString("total_amount");
-        total_weight = Integer.parseInt(total.substring(0, total.length() - 1));
+        //set the recipe author
+        FrApplication.getInstance().getMyImageLoader().displayImage(avatar_pic, recipe.getAuthor().getAvatar());
+        author_name.setText(recipe.getAuthor().getNick_name());
+
+        //set the introduction of the recipe
+        recipe_intro.setText(recipe.getIntroduce());
+
+
+        int total_weight = recipe.getTotal_amount();
+        init_weight = recipe.getTotal_amount();
         recipe_weight.setText(total_weight + "克");
         ingredient_title_weight.setText("（" + total_weight + "克）");
+
+        double calories = recipe.getCalories();
         recipe_all_calorie.setText((int)(total_weight * calories / 100) +"kcal");
         user_need_calorie.setText("（"+"1730"+"kcal）");
         calorie_radio.setText((int)((total_weight * calories / 1730)) +"%");
 
-        weight_records = new ArrayList<List<Integer>>();
-        List<Integer> record = new ArrayList<Integer>();
-        JSONArray component_set = data.getJSONArray("component_set");
-        ingredient_dataList=new ArrayList<Map<String,Object>>();
-        for(int i = 0;i < component_set.length();i++){
-            JSONObject component = component_set.getJSONObject(i);
-            Map<String, Object> map=new HashMap<String, Object>();
-            JSONObject ingredient = component.getJSONObject("ingredient");
-            map.put("item_name",  ingredient.getString("name"));//食材名称
-            map.put("item_weight", component.getInt("amount"));//食材重量
-            record.add(component.getInt("amount"));
-            String item_remark = component.getString("remark");
-            map.put("item_remark", item_remark.equals("")?"--":item_remark);//食材备注
-            ingredient_dataList.add(map);
+        List<Component> component_set = recipe.getComponent_set();
+        increment_list = new ArrayList<Integer>();
+        for(int i = 0;i < component_set.size();i++){
+            Component component = component_set.get(i);
+            increment_list.add(component.getMAmount()/2);
         }
-        weight_records.add(++count, record);
-
-        JSONObject nutrition_set = data.getJSONObject("nutrition_set");
-        nutrition_dataList=new ArrayList<Map<String,Object>>();
-        String[] names = new String[]{"水", "蛋白质", "脂类", "碳水化合物", "纤维素", "钠", "维他命 C", "维他命 D", "不饱和脂肪酸", "胆固醇"};
-        for(int i = 0; i < names.length; i++) {
-            JSONObject nutrition = nutrition_set.getJSONObject(names[i]);
-            Map<String, Object> map=new HashMap<String, Object>();
-            map.put("item_name", names[i]);//营养元素名称，按照固定的顺序输入
-            map.put("item_weight", nutrition.getDouble("amount") + nutrition.getString("unit"));//重量，要注意单位
-            map.put("item_remark", "120g/12%");//百分比，如果用户没有经过评测，则显示“--”
-            nutrition_dataList.add(map);
-        }
-
         isCollected = false;
-
-        procedure_set = data.getJSONArray("procedure_set");
     }
 
     private void initEvent() {
@@ -390,6 +346,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         collect_btn.setOnClickListener(this);
         comment_btn.setOnClickListener(this);
         share_btn.setOnClickListener(this);
+        put_in_basket.setOnClickListener(this);
     }
 
 
@@ -398,7 +355,8 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         switch (v.getId()){
             case R.id.check_procedure:{
                 Intent intent = new Intent(this, RecipeProcedureActivity.class);
-                intent.putExtra("procedure_set", procedure_set.toString());
+                //TODO
+                intent.putExtra("procedure_set", recipe.getProcedure_set());
                 intent.putExtra("recipe_title", recipe_name.getText().toString());
                 startActivity(intent);
                 break;
@@ -434,6 +392,11 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                 openSet();
                 break;
             }
+            case R.id.put_in_basket:
+                List<Recipe> basket = FrApplication.getInstance().getBasket();
+                basket.add(recipe);
+                FrApplication.getInstance().saveBasket(basket);
+                Toast.makeText(this, recipe.getTitle() + "加入篮子", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -461,66 +424,62 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
     }
 
     public void adjustWeight(boolean isAdd){
-        List<Integer> now = null, last;
         if(isAdd){
-            Toast.makeText(this, "加100克，并调整相应食材表和营养表", Toast.LENGTH_LONG).show();
-            last = weight_records.get(count);
-            now = new ArrayList<Integer>();
-            int remain = 0;
-            for(int i = 0; i < last.size(); i++) {
-                double tmp = last.get(i) * 100.0 / total_weight;
-                remain += (int) tmp + last.get(i);
-                now.add((int) tmp + last.get(i));
-            }
-            remain = total_weight + 100 - remain;
-            for(int i = 0; i < now.size(); i++) {
-                int cnt = 0;
-                for (int j = 0; j < now.size(); j++) {
-                    if (i != j && now.get(j) < now.get(i)) {
-                        cnt ++;
-                    }
-                }
-                if(cnt == remain) {
-                    for (int j = 0; j < now.size(); j++) {
-                        if (i != j && now.get(j) < now.get(i)) {
-                            now.set(j, now.get(j) + 1);
-                        }
-                    }
-                    break;
-                }
-            }
-            total_weight += 100;
-            weight_records.add(++count, now);
+            recipe.addWeight(increment_list);
         }else{
-            if(count > 0) {
-                Toast.makeText(this, "减100克，并调整相应食材表和营养表", Toast.LENGTH_LONG).show();
-                total_weight -= 100;
-                now = weight_records.get(--count);
-            }else
-                now = weight_records.get(0);
-
+            if(recipe.getTotal_amount() >= init_weight)
+                recipe.subWeight(increment_list);
         }
-        recipe_weight.setText(total_weight + "克");
-        ingredient_title_weight.setText("（" + total_weight + "克）");
-        recipe_all_calorie.setText((int)(total_weight * calories / 100) +"kcal");
+        recipe_weight.setText(recipe.getTotal_amount() + "克");
+        ingredient_title_weight.setText("（" + recipe.getTotal_amount() + "克）");
+        recipe_all_calorie.setText((int)(recipe.getTotal_amount() * recipe.getCalories() / 100) +"kcal");
         user_need_calorie.setText("（"+"1730"+"kcal）");
-        calorie_radio.setText((int) ((total_weight * calories / 1730)) + "%");
+        calorie_radio.setText((int) ((recipe.getTotal_amount() * recipe.getCalories() / 1730)) + "%");
 
-        for(int i = 0; i < now.size(); i++) {
-            Map<String, Object> map = ingredient_dataList.get(i);
-            map.put("item_weight", now.get(i));
-        }
-        ingredient_adapter.notifyDataSetChanged();
-
-//        for(int i = 0; i < nutrition_dataList.size(); i++) {
-//            Map<String, Object> map = ingredient_dataList.get(i);
-//            String str = (String) map.get("item_weight");
-//            if(str.contains("ug")) {
-//                double item_weight = Double.parseDouble(str.substring(0, str.indexOf("ug")));
-//                map.put("item_remark",  * item_weight / 100);
-//            }
-//        }
+        component_adapter.notifyDataSetChanged();
     }
+
+    private String getTags() {
+        StringBuilder tags = new StringBuilder();
+        List<Label> time_labels = recipe.getTime_labels();
+        for(int i = 0; i < time_labels.size(); i++) {
+            Label label = time_labels.get(i);
+            tags.append(label.getName());
+            tags.append("、");
+        }
+
+        List<Label> meat_labels = recipe.getMeat_labels();
+        for(int i = 0; i < meat_labels.size(); i++) {
+            Label label = meat_labels.get(i);
+            tags.append(label.getName());
+            tags.append("、");
+        }
+
+        List<Label> other_labels = recipe.getOther_labels();
+        for(int i = 0; i < other_labels.size(); i++) {
+            Label label = other_labels.get(i);
+            tags.append(label.getName());
+            tags.append("、");
+        }
+        if(tags.length() > 0)
+            tags.deleteCharAt(tags.length() - 1);
+        return tags.toString();
+    }
+
+
+    private String getFunction() {
+        StringBuilder effects = new StringBuilder();
+        List<Label> effect_labels = recipe.getEffect_labels();
+        for(int i = 0; i < Math.min(effect_labels.size(), 2); i++) {
+            Label label = effect_labels.get(i);
+            effects.append(label.getName());
+            effects.append(" ");
+        }
+        if(effects.length() > 0)
+            effects.deleteCharAt(effects.length() - 1);
+        return effects.toString();
+    }
+
 
     @Override
     public void onDismiss() {
@@ -542,5 +501,85 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
     protected void onDestroy() {
         System.out.println("Recipe Activity destroy");
         super.onDestroy();
+    }
+
+    class MyComponentAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return recipe.getComponent_set().size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return recipe.getComponent_set().get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder viewHolder;
+            if(convertView != null)
+                viewHolder = (ViewHolder) convertView.getTag();
+            else {
+                viewHolder = new ViewHolder();
+                convertView = View.inflate(RecipeActivity.this, R.layout.activity_recipe_info_ingredient_item, null);
+                viewHolder.textView1 = (TextView) convertView.findViewById(R.id.ingredient_name);
+                viewHolder.textView2 = (TextView) convertView.findViewById(R.id.ingredient_weight);
+                viewHolder.textView3 = (TextView) convertView.findViewById(R.id.ingredient_remark);
+            }
+            viewHolder.textView1.setText(recipe.getComponent_set().get(position).getIngredient().getName());
+            viewHolder.textView2.setText(recipe.getComponent_set().get(position).getMAmount()+"");
+            viewHolder.textView3.setText(recipe.getComponent_set().get(position).getRemark());
+            convertView.setTag(viewHolder);
+            return convertView;
+        }
+    }
+
+    class MyNutritionAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return recipe.getNutrition_set().size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return recipe.getNutrition_set().get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder viewHolder;
+            if(convertView != null)
+                viewHolder = (ViewHolder) convertView.getTag();
+            else {
+                viewHolder = new ViewHolder();
+                convertView = View.inflate(RecipeActivity.this, R.layout.activity_recipe_info_ingredient_item, null);
+                viewHolder.textView1 = (TextView) convertView.findViewById(R.id.ingredient_name);
+                viewHolder.textView2 = (TextView) convertView.findViewById(R.id.ingredient_weight);
+                viewHolder.textView3 = (TextView) convertView.findViewById(R.id.ingredient_remark);
+            }
+            viewHolder.textView1.setText(recipe.getNutrition_set().get(position).getName());
+            viewHolder.textView2.setText(String.valueOf(recipe.getNutrition_set().get(position).getAmount()) + recipe.getNutrition_set().get(position).getUnit());
+            viewHolder.textView3.setText("12%");
+            convertView.setTag(viewHolder);
+            return convertView;
+        }
+    }
+
+    class ViewHolder {
+        TextView textView1;
+        TextView textView2;
+        TextView textView3;
     }
 }

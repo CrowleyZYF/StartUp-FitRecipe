@@ -71,8 +71,7 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
 
     private void getData() throws JSONException {
         //get Data from network
-        SharedPreferences sp = getSharedPreferences("user", Context.MODE_PRIVATE);
-        String token = sp.getString("token", null);
+        String token = FrApplication.getInstance().getToken();
         JSONObject params = new JSONObject();
         params.put("id", id);
         params.put("start", start);
