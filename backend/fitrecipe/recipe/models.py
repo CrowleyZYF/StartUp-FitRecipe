@@ -90,7 +90,11 @@ class Recipe(BaseModel):
         data = self.get_nutrition()
         if data:
             transfer_100_int = lambda x: int(self.get_nutrition_amount(data, x) * 100)
-            ratio = (self.get_nutrition_amount(data, u'碳水化合物'), self.get_nutrition_amount(data, u'蛋白质'), self.get_nutrition_amount(data, u'脂类'))
+            ratio = (
+                self.get_nutrition_amount(data,u'Carbohydrate, by difference'),
+                self.get_nutrition_amount(data, u'Protein'),
+                self.get_nutrition_amount(data, u'Total lipid (fat)')
+                )
             ratio = [int(v / sum(ratio) * 100) for v in ratio]
             first_gcd = self.gcd(ratio[0], ratio[1])
             second_gcd = self.gcd(ratio[1], ratio[2])
