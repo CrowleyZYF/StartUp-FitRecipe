@@ -57,9 +57,9 @@ class Recipe(BaseModel):
             total_amount += c_amount
             for n in item.ingredient.nutrition_set.all():
                 if n.name in r.keys():
-                    r[n.name]['amount'] += n.amount * c_amount
+                    r[n.eng_name]['amount'] += n.amount * c_amount
                 else:
-                    r[n.name] = {'amount': n.amount * c_amount, 'unit': n.unit}
+                    r[n.eng_name] = {'amount': n.amount * c_amount, 'unit': n.unit, 'name': n.name}
         for k, v in r.iteritems():
             v['amount'] = round(v['amount'] / total_amount, 2)  # 一百克含量
         return r
@@ -90,12 +90,19 @@ class Recipe(BaseModel):
         data = self.get_nutrition()
         if data:
             transfer_100_int = lambda x: int(self.get_nutrition_amount(data, x) * 100)
-            ratio = (self.get_nutrition_amount(data, u'碳水化合物'), self.get_nutrition_amount(data, u'蛋白质'), self.get_nutrition_amount(data, u'脂类'))
-            ratio = [int(v / sum(ratio) * 100) for v in ratio]
-            first_gcd = self.gcd(ratio[0], ratio[1])
-            second_gcd = self.gcd(ratio[1], ratio[2])
-            third_gcd = self.gcd(first_gcd, second_gcd)
-            ratio = [num/third_gcd for num in ratio]
+            ratio = (
+                self.get_nutrition_amount(data,u'Carbohydrate, by difference'),
+                self.get_nutrition_amount(data, u'Protein'),
+                self.get_nutrition_amount(data, u'Total lipid (fat)')
+                )
+            if sum(ratio) == 0:
+                ratio = [0, 0, 0]
+            else:
+                ratio = [int(v / sum(ratio) * 100) for v in ratio]
+                first_gcd = self.gcd(ratio[0], ratio[1])
+                second_gcd = self.gcd(ratio[1], ratio[2])
+                third_gcd = self.gcd(first_gcd, second_gcd)
+                ratio = [num/third_gcd for num in ratio]
             if list_format:
                 return ratio
             else:

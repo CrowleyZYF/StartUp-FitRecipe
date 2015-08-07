@@ -14,7 +14,7 @@ class ArticleDetail(BaseView):
 class SeriesDetail(BaseView):
     def get(self, request, id, format=None):
         series = Series.objects.get(pk=id)
-        return self.success_response(SeriesSerializer(series, simple=False).data)
+        return self.success_response(SeriesSerializer(series, context={'simple': False}).data)
 
 class ArticleTypeDetail(BaseView):
     def get(self, request, id, format=None):
