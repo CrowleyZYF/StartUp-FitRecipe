@@ -366,7 +366,8 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
 
         JSONObject nutrition_set = data.getJSONObject("nutrition_set");
         nutrition_dataList=new ArrayList<Map<String,Object>>();
-        String[] names = new String[]{"水", "蛋白质", "脂类", "碳水化合物", "纤维素", "钠", "维他命 C", "维他命 D", "不饱和脂肪酸", "胆固醇"};
+        //String[] names = new String[]{"水", "蛋白质", "脂类", "碳水化合物", "纤维素", "钠", "维他命 C", "维他命 D", "不饱和脂肪酸", "胆固醇"};
+        String[] names = new String[]{"Water", "Protein", "Total lipid (fat)", "Carbohydrate, by difference", "Fiber, total dietary", "Sodium, Na", "Vitamin C, total ascorbic acid", "Vitamin D", "Fatty acids", "Cholesterol"};
         for(int i = 0; i < names.length; i++) {
             JSONObject nutrition = nutrition_set.getJSONObject(names[i]);
             Map<String, Object> map=new HashMap<String, Object>();

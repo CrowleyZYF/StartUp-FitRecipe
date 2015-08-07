@@ -77,6 +77,8 @@
         </activity>
         <activity android:name=".CommentActivity" >
         </activity>
+        <activity android:name=".RecordActivity" >
+        </activity>
         <activity android:name="com.umeng.fb.ConversationActivity" />
 
         <meta-data
