@@ -4,50 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/background_color">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:background="@color/base_color"
-        android:gravity="center"
-        android:orientation="vertical" >
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:id="@+id/back_btn"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:padding="15dp"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/icon_back_white"
-                android:background="@drawable/icon_selector"/>
-
-            <TextView
-                android:id="@+id/header_name_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="@string/shopping"
-                android:textColor="#ffffff"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/shopping_clear"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="@string/shopping_clear"
-                android:textColor="@color/white"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="10dp"/>
-
-        </RelativeLayout>
-    </LinearLayout>
+    <include layout="@layout/framework_common_headers"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -55,7 +12,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:id="@+id/shopping_food"
+            android:id="@+id/record_punch"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -64,20 +21,20 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
-                android:text="@string/shopping_food"
+                android:text="@string/record_punch"
                 android:textSize="16sp"
                 android:textColor="@color/login_input_text_color"
                 android:gravity="center"
                 android:layout_gravity="center_horizontal" />
 
             <ImageView
-                android:id="@+id/shopping_food_active_line_1"
+                android:id="@+id/record_punch_active_line_1"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:background="@drawable/theme_line_active"/>
 
             <ImageView
-                android:id="@+id/shopping_food_active_line_2"
+                android:id="@+id/record_punch_active_line_2"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@drawable/theme_line_active"/>
@@ -89,7 +46,7 @@
             android:background="@drawable/line_v"/>
 
         <LinearLayout
-            android:id="@+id/shopping_recipe"
+            android:id="@+id/record_work"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -98,39 +55,68 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
-                android:text="@string/shopping_recipe"
+                android:text="@string/record_work"
                 android:textSize="16sp"
                 android:textColor="@color/login_input_text_color"
                 android:gravity="center"
                 android:layout_gravity="center_horizontal" />
 
             <ImageView
-                android:id="@+id/shopping_recipe_active_line_1"
+                android:id="@+id/record_work_active_line_1"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:background="@drawable/theme_line_active"
                 android:visibility="invisible"/>
 
             <ImageView
-                android:id="@+id/shopping_recipe_active_line_2"
+                android:id="@+id/record_work_active_line_2"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@drawable/theme_line"/>
         </LinearLayout>
 
+        <ImageView
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@drawable/line_v"/>
+
+        <LinearLayout
+            android:id="@+id/record_recipe"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:text="@string/record_recipe"
+                android:textSize="16sp"
+                android:textColor="@color/login_input_text_color"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal" />
+
+            <ImageView
+                android:id="@+id/record_recipe_active_line_1"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@drawable/theme_line_active"
+                android:visibility="invisible"/>
+
+            <ImageView
+                android:id="@+id/record_recipe_active_line_2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/theme_line"/>
+        </LinearLayout>
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/shopping_list_view"
-        android:background="@color/background_color"
-        android:layout_width="match_parent"
+    <FrameLayout
+        android:id="@+id/record_content"
+        android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:scrollbars="none"
-        android:paddingTop="5dp"
-        android:paddingBottom="10dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp" >
-    </ListView>
+        ></FrameLayout>
+
 
 </LinearLayout>

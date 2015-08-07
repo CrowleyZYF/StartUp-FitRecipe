@@ -7,15 +7,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import cn.fitrecipe.android.LoginActivity;
 import cn.fitrecipe.android.R;
-import cn.fitrecipe.android.RegisterActivity;
-
-import static com.tencent.open.utils.Global.getSharedPreferences;
+import cn.fitrecipe.android.RecordActivity;
 
 /**
  * Created by 奕峰 on 2015/4/11.
@@ -23,10 +20,18 @@ import static com.tencent.open.utils.Global.getSharedPreferences;
 public class MeFragment extends Fragment implements View.OnClickListener {
 
 
-    private TextView login_name;
-    private TextView login_platform;
-    private LinearLayout login_btn;
-    private TextView login_btn_text;
+    private TextView me_name;
+    private TextView me_status;
+    private TextView me_punch;
+    private TextView me_work;
+
+    private LinearLayout me_record_btn;
+    private LinearLayout me_collect_btn;
+    private LinearLayout me_report_btn;
+    private LinearLayout me_shopping_btn;
+    private LinearLayout me_login_btn;
+
+    private TextView me_login_btn_text;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,35 +47,51 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initView(View view) {
-        login_name = (TextView) view.findViewById(R.id.login_name);
-        login_platform = (TextView) view.findViewById(R.id.login_platform);
-        login_btn = (LinearLayout) view.findViewById(R.id.login_btn);
-        login_btn_text = (TextView) view.findViewById(R.id.login_btn_text);
+        me_name = (TextView) view.findViewById(R.id.me_name);
+        me_status = (TextView) view.findViewById(R.id.me_status);
+        me_punch = (TextView) view.findViewById(R.id.me_punch);
+        me_work = (TextView) view.findViewById(R.id.me_work);
+
+        me_record_btn = (LinearLayout) view.findViewById(R.id.me_record_btn);
+        me_collect_btn = (LinearLayout) view.findViewById(R.id.me_collect_btn);
+        me_report_btn = (LinearLayout) view.findViewById(R.id.me_report_btn);
+        me_shopping_btn = (LinearLayout) view.findViewById(R.id.me_shopping_btn);
+        me_login_btn = (LinearLayout) view.findViewById(R.id.me_login_btn);
+
+        me_login_btn_text = (TextView) view.findViewById(R.id.me_login_btn_text);
     }
 
     private void initData() {
         SharedPreferences preferences=getActivity().getSharedPreferences("user", getActivity().MODE_PRIVATE);
         boolean isLogined = preferences.getBoolean("isLogined", false);
         if(isLogined){
-            login_name.setText(preferences.getString("username", "出错啦"));
-            login_platform.setText("平台："+preferences.getString("platform", "出错啦"));
-            login_btn_text.setText("退出登陆");
+            me_name.setText(preferences.getString("username", "出错啦"));
+            //login_platform.setText("平台："+preferences.getString("platform", "出错啦"));
+            me_login_btn_text.setText("退出登陆");
         }else{
-            login_name.setText("暂无");
-            login_platform.setText("平台：暂无");
-            login_btn_text.setText("登陆");
+            me_name.setText("未登录");
+            //login_platform.setText("平台：暂无");
+            me_login_btn_text.setText("登陆");
         }
     }
 
     private void initEvent() {
-        login_btn.setOnClickListener(this);
+        me_record_btn.setOnClickListener(this);
+        me_collect_btn.setOnClickListener(this);
+        me_report_btn.setOnClickListener(this);
+        me_shopping_btn.setOnClickListener(this);
+        me_login_btn.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.login_btn:
-                if(login_btn_text.getText().toString().equals("退出登陆")){
+            case R.id.me_record_btn:{
+                startActivity(new Intent(getActivity(), RecordActivity.class));
+                break;
+            }
+            case R.id.me_login_btn:
+                if(me_login_btn_text.getText().toString().equals("退出登陆")){
                     SharedPreferences preferences=getActivity().getSharedPreferences("user", getActivity().MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putBoolean("isLogined", false);
