@@ -102,6 +102,8 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
     private PopupWindow popupWindow;
     //收藏按钮
     private ImageView collect_btn;
+    //菜篮子按钮
+    private ImageView shopping_btn;
     //评论按钮
     private ImageView comment_btn;
     //分享按钮
@@ -183,7 +185,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
 
 
         View view = LayoutInflater.from(this).inflate(R.layout.activity_recipe_info_set, null);
-        popupWindow = new PopupWindow(view, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics()), (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 152, getResources().getDisplayMetrics()));
+        popupWindow = new PopupWindow(view, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics()), (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 203, getResources().getDisplayMetrics()));
         popupWindow.setFocusable(true);
         // 设置允许在外点击消失
         popupWindow.setOutsideTouchable(true);
@@ -192,6 +194,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         popupWindow.update();
 
         collect_btn = (ImageView) view.findViewById(R.id.collect_btn);
+        shopping_btn = (ImageView) view.findViewById(R.id.shopping_btn);
         comment_btn = (ImageView) view.findViewById(R.id.comment_btn);
         share_btn = (ImageView) view.findViewById(R.id.share_btn);
     }
@@ -389,6 +392,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         add_btn.setOnClickListener(this);
         minus_btn.setOnClickListener(this);
         collect_btn.setOnClickListener(this);
+        shopping_btn.setOnClickListener(this);
         comment_btn.setOnClickListener(this);
         share_btn.setOnClickListener(this);
     }
@@ -422,6 +426,11 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
             }
             case R.id.collect_btn:{
                 collect_recipe();
+                openSet();
+                break;
+            }
+            case R.id.shopping_btn:{
+                startActivity(new Intent(this, IngredientActivity.class));
                 openSet();
                 break;
             }

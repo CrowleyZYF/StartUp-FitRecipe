@@ -79,6 +79,10 @@
         </activity>
         <activity android:name=".RecordActivity" >
         </activity>
+        <activity android:name=".CollectActivity" >
+        </activity>
+        <activity android:name=".ReportActivity" >
+        </activity>
         <activity android:name="com.umeng.fb.ConversationActivity" />
 
         <meta-data
