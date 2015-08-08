@@ -45,10 +45,10 @@ class RecipeAdmin(admin.ModelAdmin):
         '''
         row = 1
         for k, v in instance.get_nutrition().iteritems():
-            html += u'<tr class="form-row row%s"><td>%s</td><td>%s</td><td>%s</td></tr>' % (row % 2, k, str(v['amount']), v['unit'])
+            html += u'<tr class="form-row row%s"><td>%s</td><td>%s</td><td>%s</td></tr>' % (row % 2, v['name'], str(v['amount']), v['unit'])
             row += 1
         return html + u'</tbody></table>'
- 
+
     recipe_nutrition_list.short_description = u'菜谱营养表'
     recipe_nutrition_list.allow_tags = True
 

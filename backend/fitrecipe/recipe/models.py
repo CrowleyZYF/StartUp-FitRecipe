@@ -56,7 +56,7 @@ class Recipe(BaseModel):
             c_amount = item.amount
             total_amount += c_amount
             for n in item.ingredient.nutrition_set.all():
-                if n.name in r.keys():
+                if n.eng_name in r.keys():
                     r[n.eng_name]['amount'] += n.amount * c_amount
                 else:
                     r[n.eng_name] = {'amount': n.amount * c_amount, 'unit': n.unit, 'name': n.name}
