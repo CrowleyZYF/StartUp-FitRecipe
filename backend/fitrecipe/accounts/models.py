@@ -24,10 +24,14 @@ class Account(User):
     avatar = models.URLField(max_length=200, default='http://tp2.sinaimg.cn/1937464505/180/5708528601/1')
     nick_name = models.CharField(max_length=100)
     is_changed_nick = models.BooleanField(default=False)
+    is_official = models.BooleanField(default=False)
 
     def __unicode__(self):
         return u'%s_%s' % (self.id, self.phone or self.nick_name)
 
+    @classmethod
+    def find_account_by_user(cls, user):
+        return cls.objects.get(pk=user.id)
 
 class External(BaseModel):
     '''

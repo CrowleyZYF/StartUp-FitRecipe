@@ -13,12 +13,12 @@ from django.db import IntegrityError
 
 from .models import Account, External
 from .serializers import AccountSerializer
-from base.views import BaseView
+from base.views import NoAuthView
 from fitrecipe.utils import random_str
 
 
 # Create your views here.
-class LoginView(BaseView):
+class LoginView(NoAuthView):
     # authentication_classes = (TokenAuthentication,)
     # permission_classes = (IsAuthenticated,)
 
@@ -48,7 +48,7 @@ class LoginView(BaseView):
             return self.fail_response(402, 'Account not existed')
 
 
-class RegisterView(BaseView):
+class RegisterView(NoAuthView):
     def post(self, request, format=None):
         '''
         正常注册，需要手机号，密码
@@ -69,7 +69,7 @@ class RegisterView(BaseView):
         return self.success_response(result)
 
 
-class ThirdPartyLogin(BaseView):
+class ThirdPartyLogin(NoAuthView):
     def post(self, request, format=None):
         '''
         第三方登录
