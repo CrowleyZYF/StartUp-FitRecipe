@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import json
-from base.views import BaseView
+from base.views import BaseView, AuthView
 from .serializers import CommentSerializer
 from .models import Comment
 from accounts.models import Account
 from recipe.models import Recipe
 
-class CommentCreate(BaseView):
+class CommentCreate(AuthView):
     def post(self, request, format=None):
         c = Comment()
         try:
