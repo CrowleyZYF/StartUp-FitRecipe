@@ -244,7 +244,11 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         ingredient_listView.setAdapter(component_adapter);
         nutrition_adapter=new MyNutritionAdapter();
         nutrition_listView.setAdapter(nutrition_adapter);
-        collect_recipe();
+        if(isCollected){
+            collect_btn.setImageResource(R.drawable.icon_like_green);
+        }else{
+            collect_btn.setImageResource(R.drawable.icon_like_noshadow);
+        }
 
         //Sina
         mController.getConfig().setSsoHandler(new SinaSsoHandler());
@@ -422,14 +426,12 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
     }
 
     public void collect_recipe(){
-        isCollected=!isCollected;
-        //TODO
-        //save the value
         if(isCollected){
             collect_btn.setImageResource(R.drawable.icon_like_noshadow);
         }else{
             collect_btn.setImageResource(R.drawable.icon_like_green);
         }
+        isCollected=!isCollected;
     }
 
     public void adjustWeight(boolean isAdd){

@@ -78,7 +78,8 @@
     <string name="login_intro">已有账户？直接登陆</string>
 
     <string name="theme">主题</string>
-    <string name="follow">关注</string>
+    <string name="follow">收藏</string>
+    <string name="cancel_follow">取消收藏</string>
 
     <string name="category_chicken">鸡肉</string>
 

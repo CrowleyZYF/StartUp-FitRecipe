@@ -1,5 +1,6 @@
 package cn.fitrecipe.android;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -10,9 +11,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import cn.fitrecipe.android.fragment.PunchFragment;
-import cn.fitrecipe.android.fragment.RecipeFragment;
-import cn.fitrecipe.android.fragment.WorkFragment;
+import cn.fitrecipe.android.fragment.KnowledgeCollectFragment;
+import cn.fitrecipe.android.fragment.RecipeCollectFragment;
+import cn.fitrecipe.android.fragment.ThemeFragment;
 
 /**
  * Created by 奕峰 on 2015/5/8.
@@ -43,9 +44,18 @@ public class CollectActivity extends FragmentActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collect);
 
+        Intent intent =getIntent();
+
         initView();
         initEvent();
-        setSelect(0);
+        if(intent.hasExtra("tab")){
+            setSelect(intent.getIntExtra("tab",2));
+        }else {
+            setSelect(0);
+        }
+
+
+
     }
 
     private void initEvent() {
@@ -98,17 +108,17 @@ public class CollectActivity extends FragmentActivity implements View.OnClickLis
         FragmentTransaction transaction = fm.beginTransaction();
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         hideFragment(transaction);
-        collect_recipe_active_line_1.setVisibility(View.GONE);
+        collect_recipe_active_line_1.setVisibility(View.INVISIBLE);
         collect_recipe_active_line_2.setBackground(getResources().getDrawable(R.drawable.theme_line));
-        collect_theme_active_line_1.setVisibility(View.GONE);
+        collect_theme_active_line_1.setVisibility(View.INVISIBLE);
         collect_theme_active_line_2.setBackground(getResources().getDrawable(R.drawable.theme_line));
-        collect_knowledge_active_line_1.setVisibility(View.GONE);
+        collect_knowledge_active_line_1.setVisibility(View.INVISIBLE);
         collect_knowledge_active_line_2.setBackground(getResources().getDrawable(R.drawable.theme_line));
         switch (tab)
         {
             case 0:
                 if (recipe_fragment == null){
-                    recipe_fragment = new PunchFragment();
+                    recipe_fragment = new RecipeCollectFragment();
                     transaction.add(R.id.collect_content, recipe_fragment);
                 } else{
                     transaction.show(recipe_fragment);
@@ -119,7 +129,7 @@ public class CollectActivity extends FragmentActivity implements View.OnClickLis
                 break;
             case 1:
                 if (theme_fragment == null){
-                    theme_fragment = new WorkFragment();
+                    theme_fragment = new ThemeFragment();
                     transaction.add(R.id.collect_content, theme_fragment);
                 } else{
                     transaction.show(theme_fragment);
@@ -130,12 +140,12 @@ public class CollectActivity extends FragmentActivity implements View.OnClickLis
                 break;
             case 2:
                 if (knowledge_fragment == null){
-                    knowledge_fragment = new RecipeFragment();
+                    knowledge_fragment = new KnowledgeCollectFragment();
                     transaction.add(R.id.collect_content, knowledge_fragment);
                 } else{
                     transaction.show(knowledge_fragment);
                 }
-                right_btn.setVisibility(View.VISIBLE);
+                right_btn.setVisibility(View.GONE);
                 collect_knowledge_active_line_1.setVisibility(View.VISIBLE);
                 collect_knowledge_active_line_2.setBackground(getResources().getDrawable(R.drawable.theme_line_active));
                 break;

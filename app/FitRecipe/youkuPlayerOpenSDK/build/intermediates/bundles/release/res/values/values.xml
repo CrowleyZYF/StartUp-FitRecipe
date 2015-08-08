@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/color.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/color.xml -->
     <eat-comment/>
     <color name="app_background">#e2e2e2</color>
     <color name="black">#000000</color>
@@ -32,7 +32,7 @@
     <color name="yp_youku_dialog_ok_normal">#1500baff</color>
     <color name="yp_youku_dialog_ok_pressed">#33049dd5</color>
     <declare-styleable name="PlayerNewLoading"><attr format="string" name="playerloadingSize"/></declare-styleable>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/dimens.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/dimens.xml -->
     <eat-comment/>
     <dimen name="channel_main_tabindicator_height">40dp</dimen>
     <dimen name="channeltab_dividerpadding">10dp</dimen>
@@ -152,11 +152,11 @@
     <dimen name="yp_youku_dialog_height">148dp</dimen>
     <dimen name="yp_youku_dialog_txt_cancel_textsize">15dp</dimen>
     <dimen name="yp_youku_dialog_width">251dp</dimen>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/color.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/color.xml -->
     <eat-comment/>
     <drawable name="tab_indicator_normal">#ffffffff</drawable>
     <drawable name="tab_indicator_pressed_color">#fff0f0f0</drawable>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/strings.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="Player_error_f100">连接服务器异常，请您观看其他视频。</string>
     <string name="Player_error_timeout">网络不太给力哦,如需观看,请重试。</string>
@@ -237,7 +237,7 @@
     <string name="tudou_dialog_sub_title">"请输入密码观看"</string>
     <string name="tudou_dialog_title">"该视频已加密"</string>
     <string name="wait">等待</string>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/styles.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="Font1_blue_2bb5fc">
         <item name="android:textSize">@dimen/text_size_1</item>

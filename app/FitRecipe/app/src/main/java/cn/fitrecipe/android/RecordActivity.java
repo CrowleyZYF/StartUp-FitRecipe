@@ -1,7 +1,5 @@
 package cn.fitrecipe.android;
 
-import android.app.Activity;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -100,11 +98,11 @@ public class RecordActivity extends FragmentActivity implements View.OnClickList
         FragmentTransaction transaction = fm.beginTransaction();
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         hideFragment(transaction);
-        record_punch_active_line_1.setVisibility(View.GONE);
+        record_punch_active_line_1.setVisibility(View.INVISIBLE);
         record_punch_active_line_2.setBackground(getResources().getDrawable(R.drawable.theme_line));
-        record_work_active_line_1.setVisibility(View.GONE);
+        record_work_active_line_1.setVisibility(View.INVISIBLE);
         record_work_active_line_2.setBackground(getResources().getDrawable(R.drawable.theme_line));
-        record_recipe_active_line_1.setVisibility(View.GONE);
+        record_recipe_active_line_1.setVisibility(View.INVISIBLE);
         record_recipe_active_line_2.setBackground(getResources().getDrawable(R.drawable.theme_line));
         switch (tab)
         {

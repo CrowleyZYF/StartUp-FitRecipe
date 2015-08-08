@@ -16,4 +16,4 @@
         android:thumb="@drawable/yp_progressthumbstyle"
         android:thumbOffset="-10dp" />
 
-</RelativeLayout><!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/layout/yp_detail_loading_info_page.xml -->
+</RelativeLayout><!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/layout/yp_detail_loading_info_page.xml -->
