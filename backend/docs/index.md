@@ -668,6 +668,76 @@
             ]
         }
 
+# Group Comment
+## Create Comment [/api/comment/create]
+### Create Comment [POST]
+
++ Request (application/json)
+
+        {
+            "content": "xxxxxx",
+            "recipe": "4",
+            "reply": "2"
+        }
+
++ Response 200 (application/json)
+
+        {
+          "status": 200,
+          "error_message": null,
+          "data": {
+            "id": 5,
+            "author": {
+              "nick_name": "NQumr62816",
+              "is_official": false,
+              "id": 6,
+              "avatar": "http://tp2.sinaimg.cn/1937464505/180/5708528601/1"
+            },
+            "reply": {
+              "nick_name": "逗逼",
+              "is_official": false,
+              "id": 2,
+              "avatar": "https://tower.im/assets/default_avatars/nightfall.jpg"
+            },
+            "created_time": "2015-08-08 16:24:30",
+            "updated_time": "2015-08-08 16:24:30",
+            "content": "commentsssss",
+            "recipe": 4
+          }
+        }
+
+## Retrieve Comment List [/api/comment/{recipeid}/list?lastid={lastid}]
+### Retrieve comments below the recipes [GET]
+返回 20 条
+
++ Parameters
+    + recipeid: 2 - 菜谱的id
+    + lastid: 3 - 可选，上一页最后一条评论的id，不传则获取最新的20条
+
++ Response 200 (application/json)
+
+        {
+          "status": 200,
+          "error_message": null,
+          "data": [
+            {
+              "id": 2,
+              "author": {
+                "nick_name": "NQumr62816",
+                "is_official": false,
+                "id": 6,
+                "avatar": "http://tp2.sinaimg.cn/1937464505/180/5708528601/1"
+              },
+              "reply": null,
+              "created_time": "2015-08-08 15:36:47",
+              "updated_time": "2015-08-08 15:36:47",
+              "content": "commentsssss",
+              "recipe": 4
+            }
+          ]
+        }
+
+
 # Group Authorization
 我们使用 Token 的验证方式，保证 `https` 访问所有接口。
 

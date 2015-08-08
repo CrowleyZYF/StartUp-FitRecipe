@@ -12,7 +12,8 @@ class ArticleSerializer(BaseSerializer):
 
 
 class SeriesSerializer(BaseSerializer):
-    article_set = ArticleSerializer(value=('id', 'title', 'img_cover', 'created_time'), many=True)
+    article_set = ArticleSerializer(value=('id', 'title', 'img_cover', 'created_time', 'read_count'), many=True)
+    total_read_count = serializers.IntegerField()
 
     class Meta:
         model = Series

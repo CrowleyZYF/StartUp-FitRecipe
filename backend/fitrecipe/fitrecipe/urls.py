@@ -24,4 +24,6 @@ urlpatterns = patterns('',
     url(r'^api/recommend/', include('recommend.urls')),
     # article
     url(r'^api/article/', include('article.urls')),
+    # comment
+    url(r'^api/comment/', include('comment.urls')),
 )

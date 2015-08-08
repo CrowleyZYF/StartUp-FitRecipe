@@ -19,7 +19,7 @@ class AccountSerializer(BaseSerializer):
 
     class Meta:
         model = Account
-        fields = ('id', 'nick_name', 'externals', 'avatar', 'is_changed_nick', 'phone')
+        fields = ('id', 'nick_name', 'externals', 'avatar', 'is_changed_nick', 'phone', 'is_official')
 
 
 class OtherAuthorSerializer(BaseSerializer):

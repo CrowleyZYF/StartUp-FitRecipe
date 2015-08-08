@@ -38,6 +38,12 @@ class Series(BaseModel):
     def __unicode__(self):
         return self.title
 
+    def total_read_count(self):
+        count = 0
+        for a in self.article_set.all():
+            count += a.read_count
+        return count
+
 
 class Article(BaseModel):
     title = models.CharField(max_length=50, verbose_name=u'标题')
@@ -46,6 +52,7 @@ class Article(BaseModel):
     content = models.TextField(verbose_name=u'正文')
     wx_url = models.URLField(blank=True, null=True, verbose_name=u'微信URL')
     series = models.ForeignKey(Series, verbose_name=u'所属系列')
+    read_count = models.IntegerField(default=0, verbose_name=u'阅读数')
 
     class Meta:
         verbose_name = u'文章'
@@ -53,3 +60,8 @@ class Article(BaseModel):
 
     def __unicode__(self):
         return self.title
+
+    def incr_read_count(self):
+        self.read_count += 1
+        self.save()
+        return self

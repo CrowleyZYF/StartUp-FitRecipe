@@ -7,7 +7,8 @@
 from django.http import Http404
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 class BaseView(APIView):
@@ -27,3 +28,7 @@ class BaseView(APIView):
     def fail_response(self, status_code, error_message):
         r = {'status': status_code, 'error_message': error_message, 'data': None}
         return Response(r, status=status_code)
+
+class AuthView(BaseView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
