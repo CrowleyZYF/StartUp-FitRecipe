@@ -1,33 +1,29 @@
 package cn.fitrecipe.android.Adpater;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
 
 import cn.fitrecipe.android.FrApplication;
 import cn.fitrecipe.android.R;
-import cn.fitrecipe.android.RecipeActivity;
-import cn.fitrecipe.android.model.ProcedureCard;
-import cn.fitrecipe.android.model.RecipeCard;
+import cn.fitrecipe.android.entity.Procedure;
 
 /**
  * Created by 奕峰 on 2015/4/24.
  */
 public class ProcedureCardAdapter extends RecyclerView.Adapter<ProcedureCardAdapter.ProcedureCardViewHolder>{
 
-    private List<ProcedureCard> procedureCardsList;
+    private List<Procedure> procedureCardsList;
     private Context context;
 
 
-    public ProcedureCardAdapter(Context context, List<ProcedureCard> procedureCardsList) {
+    public ProcedureCardAdapter(Context context, List<Procedure> procedureCardsList) {
         this.context = context;
         this.procedureCardsList = procedureCardsList;
     }
@@ -43,10 +39,10 @@ public class ProcedureCardAdapter extends RecyclerView.Adapter<ProcedureCardAdap
 
     @Override
     public void onBindViewHolder(ProcedureCardAdapter.ProcedureCardViewHolder contactViewHolder, int i) {
-        ProcedureCard pc = procedureCardsList.get(i);
-        contactViewHolder.procedure_num.setText(pc.getProcedure_num());
-        contactViewHolder.procedure_content.setText(pc.getProcedure_content());
-        FrApplication.getInstance().getMyImageLoader().displayImage(contactViewHolder.procedure_img, pc.getProcedure_img());
+        Procedure pc = procedureCardsList.get(i);
+        contactViewHolder.procedure_num.setText(pc.getNum());
+        contactViewHolder.procedure_content.setText(pc.getContent());
+        FrApplication.getInstance().getMyImageLoader().displayImage(contactViewHolder.procedure_img, pc.getImg());
     }
 
     @Override

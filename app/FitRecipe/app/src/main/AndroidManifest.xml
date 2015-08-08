@@ -135,6 +135,20 @@
             android:label="@string/title_activity_recipe_video"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
         </activity>
+
+        <!-- 播放界面demo -->
+        <activity
+            android:name=".PlayerActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTask"
+            android:exported="true">
+        </activity>
+
+        !-- client_id及client_secret配置 -->
+        <meta-data android:name="client_id" android:value="60c0099801fa17b5"/>
+        <meta-data android:name="client_secret" android:value="c2a436d52422a438b1d6c4aeaaa8f483"/>
     </application>
 
 </manifest>

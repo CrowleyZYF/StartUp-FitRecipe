@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -29,13 +28,14 @@ import cn.fitrecipe.android.Adpater.RecipeCardAdapter;
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
+import cn.fitrecipe.android.UI.BorderScrollView;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.model.RecipeCard;
 import pl.tajchert.sample.DotsTextView;
 
 public class ThemeActivity extends Activity implements View.OnClickListener {
 
-    private ScrollView themeContent;
+    private BorderScrollView themeContent;
     private LinearLayout loadingInterface;
     private DotsTextView dotsTextView;
 
@@ -44,7 +44,11 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
     private TextView recipe_content;
     private RecyclerView frThemeRecipeRecyclerView;
     private RecyclerViewLayoutManager frThemeRecipeLayoutManager;
-
+    private String id;
+    private int start = 0;
+    private int num = 6;
+    List<RecipeCard> dataList;
+    RecipeCardAdapter recipeCardAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,33 +58,43 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
 
         //获取ID
         Intent intent =getIntent();
-        String id = intent.getStringExtra("id");
+        id = intent.getStringExtra("id");
         String info = intent.getStringExtra("info");
         try {
             initView(info);
-            getData(FrServerConfig.getThemeDetailsUrl(id), 0, 7);
+            getData();
         } catch (JSONException e) {
             e.printStackTrace();
         }
         initEvent();
     }
 
-    private void getData(String url, int start, int num) throws JSONException {
-        Toast.makeText(this, "URL: " + url, Toast.LENGTH_LONG).show();
-
+    private void getData() throws JSONException {
         //get Data from network
-        SharedPreferences sp = getSharedPreferences("user", Context.MODE_PRIVATE);
-        String token = sp.getString("token", null);
+        String token = FrApplication.getInstance().getToken();
         JSONObject params = new JSONObject();
+        params.put("id", id);
         params.put("start", start);
         params.put("num", num);
-        GetRequest request = new GetRequest(url, token, params, new Response.Listener<JSONObject>() {
+        String url = FrServerConfig.getThemeDetailsUrl(params);
+//        Toast.makeText(this, url, Toast.LENGTH_LONG).show();
+        GetRequest request = new GetRequest(url, token, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {
                 if(res.has("data")){
                     try {
                         JSONArray data = res.getJSONArray("data");
                         processData(data);
+                        if(start == 0)
+                            hideLoading(false, "");
+                        else {
+                            if (data.length() == 0) {
+                                themeContent.setNoMore();
+                                Toast.makeText(ThemeActivity.this, "没有多余的菜谱", Toast.LENGTH_SHORT).show();
+                            }
+                            themeContent.setCompleteMore();
+                        }
+                        start += num;
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -89,17 +103,23 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                if(start == 0)
+                    hideLoading(true, getResources().getString(R.string.network_error));
+                else {
+                    themeContent.setCompleteMore();
+                    Toast.makeText(ThemeActivity.this, getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                }
             }
         });
         FrRequest.getInstance().request(request);
-
     }
 
 
     private void processData(JSONArray data) throws JSONException {
-
-        List<RecipeCard> result = new ArrayList<RecipeCard>();
+        if(data == null || data.length() == 0)
+            return;
+        if(dataList == null)
+            dataList = new ArrayList<RecipeCard>();
         for(int i = 0; i < data.length(); i++) {
             JSONObject recipe = data.getJSONObject(i);
             String recipe_name = recipe.getString("title");
@@ -117,10 +137,15 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
             String total_amount = recipe.getString("total_amount");
             double calories = recipe.getDouble("calories") * Integer.parseInt(total_amount.substring(0, total_amount.indexOf("g"))) / 100;
             RecipeCard rc = new RecipeCard(recipe_name, recipe_id, function, function_backup, duration, (int)calories, 100, img);
-            result.add(rc);
+            dataList.add(rc);
         }
-        RecipeCardAdapter recipeCardAdapter = new RecipeCardAdapter(this, result);
-        frThemeRecipeRecyclerView.setAdapter(recipeCardAdapter);
+        if(recipeCardAdapter == null) {
+            recipeCardAdapter = new RecipeCardAdapter(this, dataList);
+            frThemeRecipeRecyclerView.setAdapter(recipeCardAdapter);
+        }
+        else
+            recipeCardAdapter.notifyDataSetChanged();
+
     }
 
     private void initView(String info) throws JSONException {
@@ -138,15 +163,8 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
         frThemeRecipeRecyclerView.setLayoutManager(frThemeRecipeLayoutManager);
 
         loadingInterface = (LinearLayout) findViewById(R.id.loading_interface);
-        themeContent = (ScrollView) findViewById(R.id.theme_content);
+        themeContent = (BorderScrollView) findViewById(R.id.theme_content);
         dotsTextView = (DotsTextView) findViewById(R.id.dots);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                hideLoading(false,"");
-            }
-        }, 2000);
 
     }
 
@@ -162,6 +180,22 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
 
     private void initEvent() {
         back_btn.setOnClickListener(this);
+        themeContent.setOnBorderListener(new BorderScrollView.OnBorderListener() {
+            @Override
+            public void onBottom() {
+//                Toast.makeText(ThemeActivity.this, "onBottom", Toast.LENGTH_LONG).show();
+                try {
+                    getData();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onTop() {
+
+            }
+        });
     }
 
     @Override

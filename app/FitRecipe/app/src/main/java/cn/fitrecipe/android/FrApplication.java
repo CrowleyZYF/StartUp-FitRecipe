@@ -5,11 +5,17 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
 
 import com.pgyersdk.crash.PgyCrashManager;
+import com.youku.player.YoukuPlayerBaseConfiguration;
+
+import java.util.List;
 
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.ImageLoader.MyImageLoader;
+import cn.fitrecipe.android.entity.BasketDao;
+import cn.fitrecipe.android.entity.Recipe;
 
 /**
  * Created by 奕峰 on 2015/5/5.
@@ -21,10 +27,12 @@ public class FrApplication extends Application {
     //save home data json
     private String data;
     private boolean isHomeDataNew = false;
+    private String token;
+    public static YoukuPlayerBaseConfiguration configuration;
 
-//    private List<ThemeCard> themeCards;
-//    private List<Map<String, Object>> recommendRecipes;
-//    private List<RecipeCard> recipeCards;
+    private SharedPreferences userSp;
+
+    private List<Recipe> basket;
 
     @Override
     public void onCreate() {
@@ -36,11 +44,31 @@ public class FrApplication extends Application {
         MyImageLoader.init(this);
         this.registerActivityLifecycleCallbacks(new MyActivityCallbacks());
 
+        userSp = getSharedPreferences("user", Context.MODE_PRIVATE);
+
         //init network
         FrRequest.getInstance().init(this);
 
         myImageLoader = new MyImageLoader();
         instance = this;
+
+        configuration = new YoukuPlayerBaseConfiguration(this){
+
+            @Override
+            public Class<? extends Activity> getCachingActivityClass() {
+                return null;
+            }
+
+            @Override
+            public Class<? extends Activity> getCachedActivityClass() {
+                return null;
+            }
+
+            @Override
+            public String configDownloadPath() {
+                return null;
+            }
+        };
     }
 
     public static FrApplication getInstance() {
@@ -64,8 +92,7 @@ public class FrApplication extends Application {
     public void saveData(String data) {
         this.data = data;
         isHomeDataNew = true;
-        SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
+        SharedPreferences.Editor editor = userSp.edit();
         editor.putString("homeData", data);
         editor.commit();
     }
@@ -74,6 +101,31 @@ public class FrApplication extends Application {
         return isHomeDataNew;
     }
 
+    public String getToken() {
+        if(token == null)
+            token = userSp.getString("token", null);
+        return token;
+    }
+
+    public List<Recipe> getBasket() {
+        if(basket == null) {
+            BasketDao basketDao = new BasketDao(this);
+            basket = basketDao.getBasket();
+        }
+        return basket;
+    }
+
+    public void clearBasket() {
+        basket = null;
+        BasketDao basketDao = new BasketDao(this);
+        basketDao.clearBasket();
+    }
+
+    public void saveBasket(List<Recipe> basket) {
+        this.basket = basket;
+        BasketDao basketDao = new BasketDao(this);
+        basketDao.saveBasket(basket);
+    }
 
     class MyActivityCallbacks implements ActivityLifecycleCallbacks {
 

@@ -11,54 +11,58 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import cn.fitrecipe.android.FrApplication;
 import cn.fitrecipe.android.KnowledgeArticleActivity;
 import cn.fitrecipe.android.R;
+import cn.fitrecipe.android.entity.Series;
 import cn.fitrecipe.android.model.SeriesCard;
 
 /**
  * Created by 奕峰 on 2015/4/24.
  */
-public class SeriesCardAdapter extends RecyclerView.Adapter<SeriesCardAdapter.SeriesCardViewHolder> implements View.OnClickListener {
+public class SeriesCardAdapter extends RecyclerView.Adapter<SeriesCardAdapter.SeriesCardViewHolder> {
 
-    private List<SeriesCard> seriesCardsList;
+    private List<Series> seriesCardsList;
     private Context context;
 
-    public SeriesCardAdapter(Context context, List<SeriesCard> seriesCardsList) {
+    public SeriesCardAdapter(Context context, List<Series> seriesCardsList) {
         this.context = context;
         this.seriesCardsList = seriesCardsList;
     }
 
     @Override
-    public SeriesCardAdapter.SeriesCardViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public SeriesCardAdapter.SeriesCardViewHolder onCreateViewHolder(ViewGroup viewGroup, final int i) {
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
                 inflate(R.layout.activity_knowledge_series_list_item, viewGroup, false);
 
-        itemView.setOnClickListener(this);
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, KnowledgeArticleActivity.class);
+                intent.putExtra("series", seriesCardsList.get(i));
+                context.startActivity(intent);
+            }
+        });
 
         return new SeriesCardViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(SeriesCardViewHolder contactViewHolder, int i) {
-        SeriesCard sc = seriesCardsList.get(i);
-        contactViewHolder.series_name.setText(sc.getSeries_name());
-        contactViewHolder.series_author_name.setText(sc.getSeries_author_name());
-        contactViewHolder.series_type.setText(sc.getSeries_author_type());
-        contactViewHolder.series_read.setText(sc.getSeries_read());
-        contactViewHolder.series_follow.setText(sc.getSeries_follow());
-        contactViewHolder.series_background.setImageResource(sc.getSeries_background());
-        contactViewHolder.series_author_background.setImageResource(sc.getSeries_author_background());
+        Series sc = seriesCardsList.get(i);
+        contactViewHolder.series_name.setText(sc.getTitle());
+        contactViewHolder.series_author_name.setText(sc.getAuthor());
+        contactViewHolder.series_type.setText(sc.getAuthor_type());
+        contactViewHolder.series_read.setText("0");
+        contactViewHolder.series_follow.setText("0");
+        FrApplication.getInstance().getMyImageLoader().displayImage(contactViewHolder.series_background, sc.getImg_cover());
+        FrApplication.getInstance().getMyImageLoader().displayImage(contactViewHolder.series_author_background, sc.getAuthor_avatar());
     }
 
     @Override
     public int getItemCount() {
         return seriesCardsList.size();
-    }
-
-    @Override
-    public void onClick(View v) {
-        this.context.startActivity(new Intent(this.context, KnowledgeArticleActivity.class));
     }
 
     public static class SeriesCardViewHolder extends RecyclerView.ViewHolder {
