@@ -10,9 +10,12 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import cn.fitrecipe.android.CollectActivity;
+import cn.fitrecipe.android.IngredientActivity;
 import cn.fitrecipe.android.LoginActivity;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.RecordActivity;
+import cn.fitrecipe.android.ReportActivity;
 
 /**
  * Created by 奕峰 on 2015/4/11.
@@ -88,6 +91,18 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()){
             case R.id.me_record_btn:{
                 startActivity(new Intent(getActivity(), RecordActivity.class));
+                break;
+            }
+            case R.id.me_collect_btn:{
+                startActivity(new Intent(getActivity(), CollectActivity.class));
+                break;
+            }
+            case R.id.me_report_btn:{
+                startActivity(new Intent(getActivity(), ReportActivity.class));
+                break;
+            }
+            case R.id.me_shopping_btn:{
+                startActivity(new Intent(getActivity(), IngredientActivity.class));
                 break;
             }
             case R.id.me_login_btn:

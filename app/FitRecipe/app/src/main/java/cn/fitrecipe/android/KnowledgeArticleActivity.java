@@ -1,7 +1,6 @@
 package cn.fitrecipe.android;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -44,6 +44,9 @@ public class KnowledgeArticleActivity extends Activity implements View.OnClickLi
     private ImageView right_btn;
 
     private Series series;
+    //是否已经收藏
+    private boolean isCollected = false;
+    private TextView follow_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +65,7 @@ public class KnowledgeArticleActivity extends Activity implements View.OnClickLi
     private void initEvent() {
         left_btn.setOnClickListener(this);
         right_btn.setOnClickListener(this);
+        follow_btn.setOnClickListener(this);
     }
 
     private void getData() {
@@ -85,6 +89,15 @@ public class KnowledgeArticleActivity extends Activity implements View.OnClickLi
             }
         });
         FrRequest.getInstance().request(request);
+        if(isCollected){
+            follow_btn.setText(R.string.cancel_follow);
+            follow_btn.setBackground(getResources().getDrawable(R.color.disable_color));
+            right_btn.setImageResource(R.drawable.icon_like_green);
+        }else{
+            follow_btn.setText(R.string.follow);
+            follow_btn.setBackground(getResources().getDrawable(R.color.active_color));
+            right_btn.setImageResource(R.drawable.icon_like_noshadow);
+        }
     }
 
     private void processData(JSONObject data) {
@@ -104,6 +117,7 @@ public class KnowledgeArticleActivity extends Activity implements View.OnClickLi
         left_btn.setImageResource(R.drawable.icon_back_white);
 
         right_btn = (ImageView) findViewById(R.id.right_btn);
+        right_btn.setImageResource(R.drawable.icon_like_noshadow);
 
         series_img = (RelativeLayout) findViewById(R.id.series_img);
         FrApplication.getInstance().getMyImageLoader().displayImage(series_img, series.getImg_cover());
@@ -111,6 +125,8 @@ public class KnowledgeArticleActivity extends Activity implements View.OnClickLi
         series_title.setText(series.getTitle());
         series_introduce = (TextView) findViewById(R.id.series_introduce);
         series_introduce.setText(series.getIntroduce());
+
+        follow_btn = (TextView) findViewById(R.id.follow_btn);
     }
 
     @Override
@@ -120,10 +136,27 @@ public class KnowledgeArticleActivity extends Activity implements View.OnClickLi
                 finish();
                 break;
             }
-            case R.id.right_btn:{
-                startActivity(new Intent(this, SearchActivity.class));
+            case R.id.right_btn:
+            case R.id.follow_btn:
+                collect_series();
                 break;
-            }
+            default:
+                break;
         }        
+    }
+
+    public void collect_series(){
+        if(isCollected){
+            Toast.makeText(this, "取消关注", Toast.LENGTH_LONG).show();
+            follow_btn.setText(R.string.follow);
+            follow_btn.setBackground(getResources().getDrawable(R.color.active_color));
+            right_btn.setImageResource(R.drawable.icon_like_noshadow);
+        }else{
+            Toast.makeText(this,"关注",Toast.LENGTH_LONG).show();
+            follow_btn.setText(R.string.cancel_follow);
+            follow_btn.setBackground(getResources().getDrawable(R.color.disable_color));
+            right_btn.setImageResource(R.drawable.icon_like_green);
+        }
+        isCollected=!isCollected;
     }
 }

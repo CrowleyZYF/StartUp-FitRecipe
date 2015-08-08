@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color">
+
+    <include layout="@layout/framework_common_headers"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/collect_recipe"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:text="@string/collect_recipe"
+                android:textSize="16sp"
+                android:textColor="@color/login_input_text_color"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal" />
+
+            <ImageView
+                android:id="@+id/collect_recipe_active_line_1"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@drawable/theme_line_active"/>
+
+            <ImageView
+                android:id="@+id/collect_recipe_active_line_2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/theme_line_active"/>
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@drawable/line_v"/>
+
+        <LinearLayout
+            android:id="@+id/collect_theme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:text="@string/collect_theme"
+                android:textSize="16sp"
+                android:textColor="@color/login_input_text_color"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal" />
+
+            <ImageView
+                android:id="@+id/collect_theme_active_line_1"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@drawable/theme_line_active"
+                android:visibility="invisible"/>
+
+            <ImageView
+                android:id="@+id/collect_theme_active_line_2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/theme_line"/>
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@drawable/line_v"/>
+
+        <LinearLayout
+            android:id="@+id/collect_knowledge"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:text="@string/collect_knowledge"
+                android:textSize="16sp"
+                android:textColor="@color/login_input_text_color"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal" />
+
+            <ImageView
+                android:id="@+id/collect_knowledge_active_line_1"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@drawable/theme_line_active"
+                android:visibility="invisible"/>
+
+            <ImageView
+                android:id="@+id/collect_knowledge_active_line_2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/theme_line"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/collect_content"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        ></FrameLayout>
+
+</LinearLayout>
