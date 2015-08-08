@@ -33,6 +33,8 @@ public class Common {
         return false;
     }
 
+
+
     public static void toastNetworkError(Context context) {
         String error_info = context.getResources().getString(R.string.network_error);
         if(!isOpenNetwork(context))

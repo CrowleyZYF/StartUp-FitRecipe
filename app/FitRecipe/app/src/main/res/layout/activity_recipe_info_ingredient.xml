@@ -94,12 +94,14 @@
         android:paddingRight="7dp">
 
         <TextView
+            android:id="@+id/put_in_basket"
             android:layout_width="wrap_content"
             android:layout_height="26dp"
             android:layout_gravity="center"
             android:gravity="center"
             android:text="+ 丢进菜篮子"
             android:textSize="18sp"
+            android:clickable="true"
             android:textColor="@color/active_color"/>
 
     </LinearLayout>

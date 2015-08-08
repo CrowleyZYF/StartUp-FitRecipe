@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +28,7 @@ import cn.fitrecipe.android.Adpater.RecipeCardAdapter;
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
+import cn.fitrecipe.android.UI.BorderScrollView;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.UI.SlidingMenu;
 import cn.fitrecipe.android.model.RecipeCard;
@@ -36,7 +36,7 @@ import pl.tajchert.sample.DotsTextView;
 
 public class CategoryResultActivity extends Activity implements View.OnClickListener {
 
-    private ScrollView categoryContent;
+    private BorderScrollView categoryContent;
     private LinearLayout loadingInterface;
     private DotsTextView dotsTextView;
 
@@ -80,6 +80,8 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
     private final String CALORIES = "calories";
     private final String LIKE = "like";
 
+    private boolean getMore = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -93,7 +95,7 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
         desc = false;
         order = DURATION;
         start = 0;
-        num = 7;
+        num = 4;
 
         initView();
         getData();
@@ -129,7 +131,7 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
         calorie_sort_icon = (ImageView) findViewById(R.id.calorie_sort_icon);
 
         loadingInterface = (LinearLayout) findViewById(R.id.loading_interface);
-        categoryContent = (ScrollView) findViewById(R.id.category_result_list);
+        categoryContent = (BorderScrollView) findViewById(R.id.category_result_list);
         dotsTextView = (DotsTextView) findViewById(R.id.dots);
 
         checkBoxes = new CheckBox[tese_ids.length + time_ids.length];
@@ -140,9 +142,11 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
 
     }
 
-
     private void getData(){
-        beginLoading();
+        if(!getMore) {
+            start = 0;
+            beginLoading();
+        }
         JSONObject params = new JSONObject();
         try {
             params.put("meat", meat);
@@ -163,9 +167,20 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
                 public void onResponse(JSONObject res) {
                     if(res.has("data")) {
                         JSONArray data = null;
-                        hideLoading(false, "");
                         try {
                             data = res.getJSONArray("data");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        if(!getMore)
+                            hideLoading(false, "");
+                        else {
+                            if(data.length() == 0)
+                                Toast.makeText(CategoryResultActivity.this, "没有多余的食谱", Toast.LENGTH_SHORT).show();
+                            categoryContent.setCompleteMore();
+                        }
+                        start += num;
+                        try {
                             processData(data);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -175,7 +190,12 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
-                    hideLoading(true, getResources().getString(R.string.network_error));
+                    if(!getMore)
+                        hideLoading(true, getResources().getString(R.string.network_error));
+                    else {
+                        categoryContent.setCompleteMore();
+                        Toast.makeText(CategoryResultActivity.this, getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
             FrRequest.getInstance().request(request);
@@ -188,7 +208,8 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
         if(dataList == null)
             dataList = new ArrayList<RecipeCard>();
         else
-            dataList.clear();
+            if(!getMore)
+                dataList.clear();
         if(data != null) {
             for(int i = 0; i < data.length(); i++) {
                 JSONObject recipe = data.getJSONObject(i);
@@ -213,7 +234,8 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
             recipeCardAdapter = new RecipeCardAdapter(this, dataList);
             frThemeRecipeRecyclerView.setAdapter(recipeCardAdapter);
         }else
-            recipeCardAdapter.notifyDataSetChanged();
+            if(data != null && data.length() > 0)
+                recipeCardAdapter.notifyDataSetChanged();
     }
 
     private void hideLoading(boolean isError, String errorMessage){
@@ -239,6 +261,18 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
         like_sort_btn.setOnClickListener(this);
         calorie_sort_btn.setOnClickListener(this);
         filter_sure_btn.setOnClickListener(this);
+        categoryContent.setOnBorderListener(new BorderScrollView.OnBorderListener() {
+            @Override
+            public void onBottom() {
+                getMore = true;
+                getData();
+            }
+
+            @Override
+            public void onTop() {
+
+            }
+        });
     }
 
     @Override
@@ -262,6 +296,7 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
                 sort_des = !sort_des;
                 desc = sort_des;
                 order=DURATION;
+                getMore = false;
                 getData();
                 break;
             case R.id.like_sort_btn:
@@ -276,6 +311,7 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
                 sort_des = !sort_des;
                 desc = sort_des;
                 order = "";
+                getMore = false;
                 getData();
                 break;
             case R.id.calorie_sort_btn:
@@ -290,6 +326,7 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
                 sort_des = !sort_des;
                 desc = sort_des;
                 order = CALORIES;
+                getMore = false;
                 getData();
                 break;
             case R.id.filter_sure_btn:
@@ -316,6 +353,7 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
                 if(sb.length() > 0)
                     sb.substring(0, sb.length() - 1);
                 time = sb.toString();
+                getMore = false;
                 getData();
                 break;
             default:

@@ -124,7 +124,8 @@
         android:layout_height="fill_parent"
         android:background="@color/background_color"
         android:scrollbars="none"
-        android:fadingEdge="vertical">
+        android:fadingEdge="vertical"
+        android:fillViewport="false">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/knowledge_series_recycler_view"

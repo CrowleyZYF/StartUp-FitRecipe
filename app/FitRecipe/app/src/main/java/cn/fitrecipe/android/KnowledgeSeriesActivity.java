@@ -14,6 +14,7 @@ import java.util.List;
 import cn.fitrecipe.android.Adpater.SeriesCardAdapter;
 import cn.fitrecipe.android.Config.LocalDemo;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
+import cn.fitrecipe.android.entity.Series;
 import cn.fitrecipe.android.model.SeriesCard;
 
 public class KnowledgeSeriesActivity extends Activity implements View.OnClickListener {
@@ -21,7 +22,7 @@ public class KnowledgeSeriesActivity extends Activity implements View.OnClickLis
     private RecyclerView frKnowledgeSeriesRecyclerView;
     private RecyclerViewLayoutManager frKnowledgeSeriesLayoutManager;
     private SeriesCardAdapter seriesCardAdapter;
-    private List<SeriesCard> dataList;
+    private List<Series> dataList;
 
     private ImageView left_btn;
     private ImageView right_btn;
@@ -44,7 +45,7 @@ public class KnowledgeSeriesActivity extends Activity implements View.OnClickLis
     }
 
     private void initData() {
-        dataList = new ArrayList<SeriesCard>();
+        dataList = new ArrayList<Series>();
         getKnowledgeSeries();
         seriesCardAdapter = new SeriesCardAdapter(this, dataList);
         frKnowledgeSeriesRecyclerView.setAdapter(seriesCardAdapter);
@@ -63,11 +64,7 @@ public class KnowledgeSeriesActivity extends Activity implements View.OnClickLis
     }
 
     public void getKnowledgeSeries() {
-        for (int i=0;i<LocalDemo.authorName.length;i++){
-            //String name, String author_name, int author_type, int series_follow, int series_read, int series_background, int series_author_background
-            SeriesCard sc = new SeriesCard(LocalDemo.seriesName[i],LocalDemo.authorName[i],i%3,i*20+i+15,i*63,LocalDemo.seriesBG[i],LocalDemo.headBG[i]);
-            dataList.add(sc);
-        }
+
     }
 
     @Override

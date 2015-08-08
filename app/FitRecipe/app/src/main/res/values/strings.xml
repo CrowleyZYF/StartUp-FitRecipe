@@ -92,6 +92,7 @@
 
     <string name="network_close">网络未连接</string>
     <string name="network_error">网络连接出错!</string>
+    <string name="load_image_error">加载图片出错！</string>
 
     <!--设置-->
     <string name="me_record">我的食记</string>
