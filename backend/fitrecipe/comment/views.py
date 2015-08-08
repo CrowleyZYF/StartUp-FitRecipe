@@ -28,7 +28,7 @@ class CommentList(BaseView):
         last_id = request.GET.get('lastid', None)
         r = Recipe.objects.get(pk=recipe_id)
         if last_id:
-            comment_list = Comment.objects.filter(recipe=r, id__gt=last_id).order_by('-created_time')[0:20]
+            comment_list = Comment.objects.filter(recipe=r, id__lt=last_id).order_by('-created_time')[0:20]
         else:
             comment_list = Comment.objects.filter(recipe=r).order_by('-created_time')[0:20]
         return self.success_response(CommentSerializer(comment_list, many=True).data)
