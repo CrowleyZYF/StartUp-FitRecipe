@@ -669,7 +669,7 @@
         }
 
 # Group Comment
-## Create Comment [/api/comment/create]
+## Create Comment [/api/comment/create/]
 ### Create Comment [POST]
 
 + Request (application/json)
@@ -706,7 +706,7 @@
           }
         }
 
-## Retrieve Comment List [/api/comment/{recipeid}/list?lastid={lastid}]
+## Retrieve Comment List [/api/comment/{recipeid}/list/?lastid={lastid}]
 ### Retrieve comments below the recipes [GET]
 返回 20 条
 
@@ -737,6 +737,83 @@
           ]
         }
 
+# Group Collection
+## Create Collection [/api/collection/create/]
+### Add to Collection [POST]
+返回对象根据传入的type变化，type只有三种，recipe/series/theme
+
++ Request (application/json)
+
+        {
+            "type": "recipe/series/theme",
+            "id": "2"
+        }
+
++ Response 200 (application/json)
+
+        {
+          "status": 200,
+          "error_message": null,
+          "data": {
+            "id": 2,
+            "recipe": {
+              "...":"..."
+            },
+            "created_time": "2015-08-08 21:01:13",
+            "updated_time": "2015-08-08 21:01:13",
+            "owner": 6
+          }
+        }
+
+## Retrieve Collection [/api/collection/list/{type}/?lastid={lastid}]
+
++ Parameters
+    + lastid: 4 - 分页，上一页最后一个 collection 的 id
+
+### Retrieve Collection [GET]
+
++ Response 200 (application/json)
+
+        {
+          "status": 200,
+          "error_message": null,
+          "data": [
+            {
+              "id": 4,
+              "series": {
+                "author": "12",
+                "total_read_count": 0,
+                "title": "cweca",
+                "introduce": "cesacaec",
+                "article_type": 2,
+                "author_avatar": "https://dn-wtbox.qbox.me/img//logo@2x.png",
+                "recommend_img": "https://dn-wtbox.qbox.me/img//logo@2x.png",
+                "id": 3,
+                "author_type": "qwx"
+              },
+              "created_time": "2015-08-08 20:54:06",
+              "updated_time": "2015-08-08 20:54:06",
+              "owner": 6
+            },
+            {
+              "id": 3,
+              "series": {
+                "author": "112e",
+                "total_read_count": 0,
+                "title": "cwec",
+                "introduce": "12deqwcewc",
+                "article_type": 2,
+                "author_avatar": "https://dn-wtbox.qbox.me/img//logo@2x.png",
+                "recommend_img": "https://dn-wtbox.qbox.me/img//logo@2x.png",
+                "id": 2,
+                "author_type": "142"
+              },
+              "created_time": "2015-08-08 20:46:10",
+              "updated_time": "2015-08-08 20:46:10",
+              "owner": 6
+            }
+          ]
+        }
 
 # Group Authorization
 我们使用 Token 的验证方式，保证 `https` 访问所有接口。

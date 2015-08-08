@@ -26,7 +26,10 @@ class SeriesSerializer(BaseSerializer):
         simple = self.context.get('simple', True)
         if simple:
             # 去掉 component_set, procedure_set, nutrition_set
-            r.pop('article_set')
+            try:
+                r.pop('article_set')
+            except KeyError:
+                pass
         return r
 
 
