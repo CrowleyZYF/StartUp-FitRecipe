@@ -3,6 +3,8 @@ package cn.fitrecipe.android.Http;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import cn.fitrecipe.android.CommentActivity;
+
 /**
  * Created by wk on 2015/7/23.
  */
@@ -44,6 +46,17 @@ public class FrServerConfig {
         return url + scale;
     }
 
+    //get compressed avatar data
+    public static String getAvatarCompressed(String url) {
+        String scale = "?imageMogr2/thumbnail/35000@";
+        return url + scale;
+    }
+
+    public static String getArticleImageCompressed(String url) {
+        String scale = "?imageMogr2/thumbnail/35000@";
+        return url + scale;
+    }
+
     //get Theme Details
     public static String getThemeDetailsUrl(JSONObject params) throws JSONException {
         StringBuilder sb = new StringBuilder(HOST + "/api/theme/");
@@ -76,5 +89,24 @@ public class FrServerConfig {
         if(params.has("num"))
             sb.append("num=" + params.getInt("num") + "&");
         return sb.toString();
+    }
+
+    //get article series
+    public static String getSeriesByType(boolean a, boolean b, boolean c) {
+        StringBuilder sb = new StringBuilder(HOST + "/api/article/series/list/?type=");
+        if(a) sb.append("1,");
+        if(b) sb.append("2,");
+        if(c) sb.append("3,");
+        if(sb.length() > 0)
+            sb.delete(sb.length() - 1, sb.length());
+        return sb.toString();
+    }
+
+    public static String getArticleInSeries(int id) {
+        return HOST + "/api/article/series/" +id;
+    }
+
+    public static String getArticleById(int id) {
+        return HOST + "/api/article/" + id;
     }
 }

@@ -1,14 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background_color">
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/base_color"
         android:gravity="center"
-        android:text="健身食谱——配料购物清单"
-        android:textSize="30sp"
-        android:textStyle="bold" />
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/back_btn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="15dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/icon_back_white"
+                android:background="@drawable/icon_selector"/>
+
+            <TextView
+                android:id="@+id/header_name_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/shopping"
+                android:textColor="#ffffff"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/shopping_clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:text="@string/shopping_clear"
+                android:textColor="@color/white"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"/>
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/shopping_food"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:text="@string/shopping_food"
+                android:textSize="16sp"
+                android:textColor="@color/login_input_text_color"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal" />
+
+            <ImageView
+                android:id="@+id/shopping_food_active_line_1"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@drawable/theme_line_active"/>
+
+            <ImageView
+                android:id="@+id/shopping_food_active_line_2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/theme_line_active"/>
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@drawable/line_v"/>
+
+        <LinearLayout
+            android:id="@+id/shopping_recipe"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:text="@string/shopping_recipe"
+                android:textSize="16sp"
+                android:textColor="@color/login_input_text_color"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal" />
+
+            <ImageView
+                android:id="@+id/shopping_recipe_active_line_1"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@drawable/theme_line_active"
+                android:visibility="invisible"/>
+
+            <ImageView
+                android:id="@+id/shopping_recipe_active_line_2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/theme_line"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/shopping_list_view"
+        android:background="@color/background_color"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="none"
+        android:paddingTop="5dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp" >
+    </ListView>
 
 </LinearLayout>

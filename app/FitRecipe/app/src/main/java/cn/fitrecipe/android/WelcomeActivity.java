@@ -52,6 +52,11 @@ public class WelcomeActivity extends Activity{
                 goToMainActivity();
             }
         }, SPLASH_DISPLAY_LENGTH);
+
+//
+//        Intent intent  = new Intent(WelcomeActivity.this, PlayerActivity.class);
+//        intent.putExtra("vid", "XMTI0OTc5MzEyNA");
+//        startActivity(intent);
     }
 
 

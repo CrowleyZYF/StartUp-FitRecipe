@@ -52,23 +52,23 @@ public class FrApplication extends Application {
         myImageLoader = new MyImageLoader();
         instance = this;
 
-//        configuration = new YoukuPlayerBaseConfiguration(this){
-//
-//            @Override
-//            public Class<? extends Activity> getCachingActivityClass() {
-//                return null;
-//            }
-//
-//            @Override
-//            public Class<? extends Activity> getCachedActivityClass() {
-//                return null;
-//            }
-//
-//            @Override
-//            public String configDownloadPath() {
-//                return null;
-//            }
-//        };
+        configuration = new YoukuPlayerBaseConfiguration(this){
+
+            @Override
+            public Class<? extends Activity> getCachingActivityClass() {
+                return null;
+            }
+
+            @Override
+            public Class<? extends Activity> getCachedActivityClass() {
+                return null;
+            }
+
+            @Override
+            public String configDownloadPath() {
+                return null;
+            }
+        };
     }
 
     public static FrApplication getInstance() {
@@ -113,6 +113,12 @@ public class FrApplication extends Application {
             basket = basketDao.getBasket();
         }
         return basket;
+    }
+
+    public void clearBasket() {
+        basket = null;
+        BasketDao basketDao = new BasketDao(this);
+        basketDao.clearBasket();
     }
 
     public void saveBasket(List<Recipe> basket) {
