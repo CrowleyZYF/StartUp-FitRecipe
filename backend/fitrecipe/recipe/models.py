@@ -32,6 +32,7 @@ class Recipe(BaseModel):
     meat_labels = models.ManyToManyField(Label, limit_choices_to={u'type': u'食材'}, related_name='meat_set', verbose_name=u'食材标签')
     other_labels = models.ManyToManyField(Label, limit_choices_to={u'type': u'其他'}, related_name='other_set', verbose_name=u'其他标签')
     calories = models.FloatField(default=0, help_text=u'自动计算，不用填', verbose_name=u'每百克卡路里')
+    collection_count = models.IntegerField(default=0, verbose_name=u'收藏数')
 
     class Meta:
         verbose_name = u'菜谱'

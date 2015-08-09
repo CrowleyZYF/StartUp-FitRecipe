@@ -21,6 +21,7 @@ class Theme(BaseModel):
     img = models.URLField(max_length=200, verbose_name=u'主题图片')
     thumbnail = models.URLField(max_length=200, verbose_name=u'缩略图图片')
     recipes = models.ManyToManyField(Recipe, verbose_name=u'包含的菜谱')
+    collection_count = models.IntegerField(default=0, verbose_name=u'收藏数')
 
     class Meta:
         verbose_name = u'主题'

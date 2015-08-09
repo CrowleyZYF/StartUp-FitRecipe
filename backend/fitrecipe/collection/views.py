@@ -38,6 +38,8 @@ class CollectionCreate(AuthView):
                 return self.fail_response(400, 'BadArgument')
         except ObjectDoesNotExist:
             return self.fail_response(400, 'DoesNotExist')
+        obj.collection_count += 1
+        obj.save()
         col = model()
         setattr(col, collection_type, obj)
         col.owner = Account.find_account_by_user(request.user)
