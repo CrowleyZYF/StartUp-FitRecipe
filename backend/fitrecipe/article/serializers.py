@@ -12,7 +12,8 @@ class ArticleSerializer(BaseSerializer):
 
 
 class SeriesSerializer(BaseSerializer):
-    article_set = ArticleSerializer(value=('id', 'title', 'img_cover', 'created_time'), many=True)
+    article_set = ArticleSerializer(value=('id', 'title', 'img_cover', 'created_time', 'read_count'), many=True)
+    total_read_count = serializers.IntegerField()
 
     class Meta:
         model = Series
@@ -25,7 +26,10 @@ class SeriesSerializer(BaseSerializer):
         simple = self.context.get('simple', True)
         if simple:
             # 去掉 component_set, procedure_set, nutrition_set
-            r.pop('article_set')
+            try:
+                r.pop('article_set')
+            except KeyError:
+                pass
         return r
 
 

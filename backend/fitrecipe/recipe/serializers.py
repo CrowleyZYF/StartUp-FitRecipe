@@ -9,7 +9,7 @@ from .models import Recipe, Component, Procedure, Ingredient, Nutrition
 from accounts.serializers import OtherAuthorSerializer
 from base.serializers import BaseSerializer
 from label.serializers import LabelSerializer
-
+from comment.serializers import CommentSerializer
 
 class NutritionSerializer(BaseSerializer):
     class Meta:
@@ -50,6 +50,7 @@ class RecipeSerializer(BaseSerializer):
     protein_ratio = serializers.CharField()
     fat_ratio = serializers.CharField()
     author = OtherAuthorSerializer(value=('id', 'nick_name', 'avatar'), read_only=True)
+    comment_set = CommentSerializer(source='get_latest_comment', many=True)
 
     class Meta:
         model = Recipe
@@ -62,7 +63,7 @@ class RecipeSerializer(BaseSerializer):
         simple = self.context.get('simple', True)
         if simple:
             # 去掉 component_set, procedure_set, nutrition_set
-            pop_keys = ('component_set', 'procedure_set', 'nutrition_set')
+            pop_keys = ('component_set', 'procedure_set', 'nutrition_set', 'comment_set')
             for k in pop_keys:
                 r.pop(k, None)
         return r

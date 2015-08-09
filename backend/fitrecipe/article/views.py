@@ -8,6 +8,7 @@ from .models import Article, ArticleType, Series
 class ArticleDetail(BaseView):
     def get(self, request, id, format=None):
         article = Article.objects.get(pk=id)
+        article.incr_read_count()
         return self.success_response(ArticleSerializer(article).data)
 
 

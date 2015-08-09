@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
     <eat-comment/>
     <attr format="reference" name="drawerArrowStyle"/>
     <attr format="dimension" name="height"/>
@@ -19,19 +19,19 @@
     <color name="abc_search_url_text_selected">@android:color/black</color>
     <color name="accent_material_dark">@color/material_deep_teal_200</color>
     <color name="accent_material_light">@color/material_deep_teal_500</color>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/color.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/color.xml -->
     <eat-comment/>
     <color name="app_background">#e2e2e2</color>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
     <eat-comment/>
     <color name="background_floating_material_dark">#ff424242</color>
     <color name="background_floating_material_light">#ffeeeeee</color>
     <color name="background_material_dark">#ff303030</color>
     <color name="background_material_light">#ffeeeeee</color>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/color.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/color.xml -->
     <eat-comment/>
     <color name="black">#000000</color>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
     <eat-comment/>
     <color name="bright_foreground_disabled_material_dark">#80ffffff</color>
     <color name="bright_foreground_disabled_material_light">#80000000</color>
@@ -56,12 +56,12 @@
     <color name="material_blue_grey_950">#ff21272b</color>
     <color name="material_deep_teal_200">#ff80cbc4</color>
     <color name="material_deep_teal_500">#ff009688</color>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/color.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/color.xml -->
     <eat-comment/>
     <color name="player_controller_background">#bf000000</color>
     <color name="player_controller_background_half_alpha">#7f000000</color>
     <color name="player_gray">#ff888888</color>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
     <eat-comment/>
     <color name="primary_dark_material_dark">#ff000000</color>
     <color name="primary_dark_material_light">#ff757575</color>
@@ -81,7 +81,7 @@
     <color name="switch_thumb_disabled_material_light">#ffbdbdbd</color>
     <color name="switch_thumb_normal_material_dark">#ffbdbdbd</color>
     <color name="switch_thumb_normal_material_light">#fff1f1f1</color>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/color.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/color.xml -->
     <eat-comment/>
     <color name="text_color_black">#000000</color>
     <color name="text_color_blue">#2bb5fc</color>
@@ -133,7 +133,7 @@
     <declare-styleable name="Toolbar"><attr format="reference" name="titleTextAppearance"/><attr format="reference" name="subtitleTextAppearance"/><attr name="title"/><attr name="subtitle"/><attr name="android:gravity"/><attr format="dimension" name="titleMargins"/><attr format="dimension" name="titleMarginStart"/><attr format="dimension" name="titleMarginEnd"/><attr format="dimension" name="titleMarginTop"/><attr format="dimension" name="titleMarginBottom"/><attr name="contentInsetStart"/><attr name="contentInsetEnd"/><attr name="contentInsetLeft"/><attr name="contentInsetRight"/><attr format="dimension" name="maxButtonHeight"/><attr format="reference" name="collapseIcon"/><attr format="string" name="collapseContentDescription"/><attr name="popupTheme"/><attr format="reference" name="navigationIcon"/><attr format="string" name="navigationContentDescription"/><attr name="android:minHeight"/></declare-styleable>
     <declare-styleable name="View"><attr format="dimension" name="paddingStart"/><attr format="dimension" name="paddingEnd"/><attr name="android:focusable"/><attr format="reference" name="theme"/><attr name="android:theme"/><attr format="color" name="backgroundTint"/><attr name="backgroundTintMode"><enum name="src_over" value="3"/><enum name="src_in" value="5"/><enum name="src_atop" value="9"/><enum name="multiply" value="14"/><enum name="screen" value="15"/></attr></declare-styleable>
     <declare-styleable name="ViewStubCompat"><attr name="android:layout"/><attr name="android:inflatedId"/><attr name="android:id"/></declare-styleable>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
     <eat-comment/>
     <dimen name="abc_action_bar_content_inset_material">16dp</dimen>
     <dimen name="abc_action_bar_default_height_material">56dp</dimen>
@@ -195,7 +195,7 @@
     <dimen name="abc_text_size_subtitle_material_toolbar">16dp</dimen>
     <dimen name="abc_text_size_title_material">20sp</dimen>
     <dimen name="abc_text_size_title_material_toolbar">20dp</dimen>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/dimens.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/dimens.xml -->
     <eat-comment/>
     <dimen name="channel_main_tabindicator_height">40dp</dimen>
     <dimen name="channeltab_dividerpadding">10dp</dimen>
@@ -210,13 +210,13 @@
     <dimen name="dialog_arrow_marginLeft">4dp</dimen>
     <dimen name="dialog_arrow_marginRight">20dp</dimen>
     <dimen name="dialog_firstItemBtn_marginTop">8dp</dimen>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
     <eat-comment/>
     <item name="dialog_fixed_height_major" type="dimen">80%</item>
     <item name="dialog_fixed_height_minor" type="dimen">100%</item>
     <item name="dialog_fixed_width_major" type="dimen">320dp</item>
     <item name="dialog_fixed_width_minor" type="dimen">320dp</item>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/dimens.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/dimens.xml -->
     <eat-comment/>
     <dimen name="dialog_height">246dp</dimen>
     <dimen name="dialog_item_marginH">14dp</dimen>
@@ -224,11 +224,11 @@
     <dimen name="dialog_radioBtn_dimen">28dp</dimen>
     <dimen name="dialog_title_height">32dp</dimen>
     <dimen name="dialog_width">229dp</dimen>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
     <eat-comment/>
     <item format="float" name="disabled_alpha_material_dark" type="dimen">0.30</item>
     <item format="float" name="disabled_alpha_material_light" type="dimen">0.26</item>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/dimens.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/dimens.xml -->
     <eat-comment/>
     <dimen name="download_grid_item_add_height">47dp</dimen>
     <dimen name="download_grid_item_image_padding_right">3dp</dimen>
@@ -259,12 +259,12 @@
     <dimen name="normal_dialog_btn_width">96dp</dimen>
     <dimen name="normal_dialog_message_marginTop">40dp</dimen>
     <dimen name="normal_dialog_width">229dp</dimen>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
     <eat-comment/>
     <dimen name="notification_large_icon_height">64dp</dimen>
     <dimen name="notification_large_icon_width">64dp</dimen>
     <dimen name="notification_subtext_size">12dp</dimen>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/dimens.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/dimens.xml -->
     <eat-comment/>
     <dimen name="paytip_close_height">32dp</dimen>
     <dimen name="paytip_close_margin">8dp</dimen>
@@ -336,14 +336,14 @@
     <dimen name="yp_youku_dialog_height">148dp</dimen>
     <dimen name="yp_youku_dialog_txt_cancel_textsize">15dp</dimen>
     <dimen name="yp_youku_dialog_width">251dp</dimen>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
     <eat-comment/>
     <drawable name="notification_template_icon_bg">#3333B5E5</drawable>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/color.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/color.xml -->
     <eat-comment/>
     <drawable name="tab_indicator_normal">#ffffffff</drawable>
     <drawable name="tab_indicator_pressed_color">#fff0f0f0</drawable>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
     <eat-comment/>
     <item name="action_bar_activity_content" type="id"/>
     <item name="action_bar_spinner" type="id"/>
@@ -359,11 +359,11 @@
     <integer name="abc_max_action_buttons">2</integer>
     <integer name="cancel_button_image_alpha">127</integer>
     <integer name="status_bar_notification_info_maxnum">999</integer>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/strings.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="Player_error_f100">连接服务器异常，请您观看其他视频。</string>
     <string name="Player_error_timeout">网络不太给力哦,如需观看,请重试。</string>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
     <eat-comment/>
     <string name="abc_action_bar_home_description">Navigate home</string>
     <string name="abc_action_bar_home_description_format">%1$s, %2$s</string>
@@ -382,7 +382,7 @@
     <string name="abc_shareactionprovider_share_with">Share with</string>
     <string name="abc_shareactionprovider_share_with_application">Share with %s</string>
     <string name="abc_toolbar_collapse_description">Collapse</string>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/strings.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="alert_dialog_cancel">取消</string>
     <string name="alert_dialog_ok">确定</string>
@@ -454,10 +454,10 @@
     <string name="playersdk_ad_skip">跳过广告</string>
     <string name="replay">重播</string>
     <string name="standard_pic">标清</string>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
     <eat-comment/>
     <string name="status_bar_notification_info_overflow">999+</string>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/strings.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="super_pic">超清</string>
     <string name="tips_no_cache">还未缓存任何视频</string>
@@ -466,7 +466,7 @@
     <string name="tudou_dialog_sub_title">"请输入密码观看"</string>
     <string name="tudou_dialog_title">"该视频已加密"</string>
     <string name="wait">等待</string>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
     <eat-comment/>
     <style name="AlertDialog.AppCompat" parent="Base.AlertDialog.AppCompat"/>
     <style name="AlertDialog.AppCompat.Light" parent="Base.AlertDialog.AppCompat.Light"/>
@@ -1386,7 +1386,7 @@
         <item name="android:scaleType">center</item>
         <item name="android:background">?attr/selectableItemBackground</item>
     </style>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/styles.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="Font1_blue_2bb5fc">
         <item name="android:textSize">@dimen/text_size_1</item>
@@ -1583,7 +1583,7 @@
     <style name="OverflowButton">
         <item name="android:src">@android:drawable/ic_menu_view</item>
     </style>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
     <eat-comment/>
     <style name="Platform.AppCompat" parent="android:Theme">
         <item name="android:windowNoTitle">true</item>
@@ -1726,7 +1726,7 @@
     <style name="RtlOverlay.Widget.AppCompat.Toolbar.Button.Navigation" parent="Base.Widget.AppCompat.Toolbar.Button.Navigation">
         <item name="android:paddingLeft">@dimen/abc_action_bar_navigation_padding_start_material</item>
     </style>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/styles.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="StyleBarTitle">
         <item name="android:layout_weight">1</item>
@@ -1740,7 +1740,7 @@
         <item name="android:shadowRadius">5</item>
         <item name="android:background">@null</item>
     </style>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
     <eat-comment/>
     <style name="TextAppearance.AppCompat" parent="Base.TextAppearance.AppCompat"/>
     <style name="TextAppearance.AppCompat.Body1" parent="Base.TextAppearance.AppCompat.Body1"/>
@@ -1809,7 +1809,7 @@
     </style>
     <style name="TextAppearance.Widget.AppCompat.Toolbar.Title" parent="Base.TextAppearance.Widget.AppCompat.Toolbar.Title">
     </style>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/styles.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="Theam.MyCustomDialogTheme" parent="android:Theme">
         <!--
@@ -1822,7 +1822,7 @@
         -->
     </style>
     <style name="Theme" parent="android:Theme"/>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
     <eat-comment/>
     <style name="Theme.AppCompat" parent="Base.Theme.AppCompat"/>
     <style name="Theme.AppCompat.CompactMenu" parent="Base.Theme.AppCompat.CompactMenu"/>
@@ -1846,7 +1846,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/styles.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="Theme.MyDialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowBackground">@color/transparent</item>
@@ -1857,17 +1857,17 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:colorForeground">#fff</item>
     </style>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
     <eat-comment/>
     <style name="ThemeOverlay.AppCompat" parent="Base.ThemeOverlay.AppCompat"/>
     <style name="ThemeOverlay.AppCompat.ActionBar" parent="Base.ThemeOverlay.AppCompat.ActionBar"/>
     <style name="ThemeOverlay.AppCompat.Dark" parent="Base.ThemeOverlay.AppCompat.Dark"/>
     <style name="ThemeOverlay.AppCompat.Dark.ActionBar" parent="Base.ThemeOverlay.AppCompat.Dark.ActionBar"/>
     <style name="ThemeOverlay.AppCompat.Light" parent="Base.ThemeOverlay.AppCompat.Light"/>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/styles.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="Widget"/>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
     <eat-comment/>
     <style name="Widget.AppCompat.ActionBar" parent="Base.Widget.AppCompat.ActionBar">
     </style>
@@ -1960,7 +1960,7 @@
     <style name="Widget.AppCompat.TextView.SpinnerItem" parent="Base.Widget.AppCompat.TextView.SpinnerItem"/>
     <style name="Widget.AppCompat.Toolbar" parent="Base.Widget.AppCompat.Toolbar"/>
     <style name="Widget.AppCompat.Toolbar.Button.Navigation" parent="RtlOverlay.Widget.AppCompat.Toolbar.Button.Navigation"/>
-    <!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/styles.xml -->
+    <!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="YoukuDialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>

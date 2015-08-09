@@ -229,7 +229,9 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                         nutrition_sv.smoothScrollTo(0,0);
                         break;
                     case 2:
-                        startActivity(new Intent(this, FollowActivity.class));
+                        Intent intent=new Intent(this,CollectActivity.class);
+                        intent.putExtra("tab", 2);
+                        startActivity(intent);
                         break;
                     case 3:
                         startActivity(new Intent(this, LetterActivity.class));

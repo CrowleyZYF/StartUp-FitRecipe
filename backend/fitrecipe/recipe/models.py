@@ -40,6 +40,9 @@ class Recipe(BaseModel):
     def __unicode__(self):
         return self.title
 
+    def get_latest_comment(self):
+        return self.comment_set.order_by('-created_time')[0:20]
+
     def get_total_amount(self, float_format=False):
         total_amount = 0.0
         for item in self.component_set.all():

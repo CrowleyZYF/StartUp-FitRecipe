@@ -1,16 +1,13 @@
 package cn.fitrecipe.android;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +46,11 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
     private int num = 6;
     List<RecipeCard> dataList;
     RecipeCardAdapter recipeCardAdapter;
+
+    private TextView follow_btn;
+    private ImageView follow_icon;
+    //食谱是否已经收藏
+    private boolean isCollected = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +114,15 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
             }
         });
         FrRequest.getInstance().request(request);
+        if(isCollected){
+            follow_btn.setText(R.string.cancel_follow);
+            follow_btn.setBackground(getResources().getDrawable(R.color.disable_color));
+            follow_icon.setImageResource(R.drawable.icon_like_green);
+        }else{
+            follow_btn.setText(R.string.follow);
+            follow_btn.setBackground(getResources().getDrawable(R.color.active_color));
+            follow_icon.setImageResource(R.drawable.icon_like_noshadow);
+        }
     }
 
 
@@ -166,6 +177,8 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
         themeContent = (BorderScrollView) findViewById(R.id.theme_content);
         dotsTextView = (DotsTextView) findViewById(R.id.dots);
 
+        follow_btn = (TextView) findViewById(R.id.follow_btn);
+        follow_icon = (ImageView) findViewById(R.id.follow_icon);
     }
 
     private void hideLoading(boolean isError, String errorMessage){
@@ -180,6 +193,8 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
 
     private void initEvent() {
         back_btn.setOnClickListener(this);
+        follow_btn.setOnClickListener(this);
+        follow_icon.setOnClickListener(this);
         themeContent.setOnBorderListener(new BorderScrollView.OnBorderListener() {
             @Override
             public void onBottom() {
@@ -204,9 +219,26 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
             case R.id.back_btn:
                 finish();
                 break;
+            case R.id.follow_btn:
+            case R.id.follow_icon:
+                collect_recipe();
             default:
                 break;
         }
+    }
 
+    public void collect_recipe(){
+        if(isCollected){
+            Toast.makeText(this,"取消关注",Toast.LENGTH_LONG).show();
+            follow_btn.setText(R.string.follow);
+            follow_btn.setBackground(getResources().getDrawable(R.color.active_color));
+            follow_icon.setImageResource(R.drawable.icon_like_noshadow);
+        }else{
+            Toast.makeText(this,"关注",Toast.LENGTH_LONG).show();
+            follow_btn.setText(R.string.cancel_follow);
+            follow_btn.setBackground(getResources().getDrawable(R.color.disable_color));
+            follow_icon.setImageResource(R.drawable.icon_like_green);
+        }
+        isCollected=!isCollected;
     }
 }
