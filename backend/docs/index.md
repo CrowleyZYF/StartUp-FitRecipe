@@ -815,6 +815,29 @@
           ]
         }
 
+## Delete Collection [/api/collection/delete/{type}/{id}/]
+
++ Parameters
+    + type: series - 类型，只有三种
+    + id: 2 - collection 的id
+
+### Delete Collection By id [POST]
++ Response 200 (application/json)
+
+        {
+          "status": 200,
+          "error_message": null,
+          "data": {
+            "id": 2,
+            "recipe": {
+              "...":"..."
+            },
+            "created_time": "2015-08-08 21:01:13",
+            "updated_time": "2015-08-08 21:01:13",
+            "owner": 6
+          }
+        }
+
 # Group Authorization
 我们使用 Token 的验证方式，保证 `https` 访问所有接口。
 
