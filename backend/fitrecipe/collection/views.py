@@ -40,13 +40,41 @@ class CollectionCreate(AuthView):
             return self.fail_response(400, 'DoesNotExist')
         obj.collection_count += 1
         obj.save()
-        col = model()
-        setattr(col, collection_type, obj)
-        col.owner = Account.find_account_by_user(request.user)
+        owner = Account.find_account_by_user(request.user)
         try:
-            col.save()
-        except IntegrityError:
-            return self.fail_response(400, 'HasAlreadyAdded')
+            kwargs = {collection_type: obj, 'owner': owner}
+            col = model.objects.get(**kwargs)
+        except model.DoesNotExist:
+            col = model()
+            col.owner = owner
+            setattr(col, collection_type, obj)
+        col.status = 10
+        col.save()
+        return self.success_response(serializer(col).data)
+
+
+class CollectionDelete(AuthView):
+    def post(self, request, collection_type, collection_id, format=None):
+        if collection_type == 'theme':
+            model = ThemeCollection
+            serializer = ThemeCollectionSerializer
+        elif collection_type == 'series':
+            model = SeriesCollection
+            serializer = SeriesCollectionSerializer
+        elif collection_type == 'recipe':
+            model = RecipeCollection
+            serializer = RecipeCollectionSerializer
+        else:
+            return self.fail_response(400, 'BadArgument')
+        try:
+            col = model.objects.get(pk=collection_id)
+        except model.DoesNotExist:
+            return self.fail_response(400, 'DoesNotExist')
+        col.status = -10
+        col.save()
+        obj = getattr(col, collection_type)
+        obj.collection_count -= 1
+        obj.save()
         return self.success_response(serializer(col).data)
 
 
@@ -66,7 +94,7 @@ class CollectionDetail(AuthView):
             return self.fail_response(400, 'BadArgument')
         owner = Account.find_account_by_user(request.user)
         if lastid:
-            result = model.objects.filter(owner=owner, id__lt=lastid).order_by('-created_time')[0:20]
+            result = model.objects.filter(owner=owner, id__lt=lastid, status__gt=0).order_by('-created_time')[0:20]
         else:
-            result = model.objects.filter(owner=owner).order_by('-created_time')[0:20]
+            result = model.objects.filter(owner=owner, status__gt=0).order_by('-created_time')[0:20]
         return self.success_response(serializer(result, many=True).data)
