@@ -1,6 +1,7 @@
 package cn.fitrecipe.android;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,12 +13,27 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.fitrecipe.android.Adpater.CommentCardAdapter;
+import cn.fitrecipe.android.Http.FrRequest;
+import cn.fitrecipe.android.Http.FrServerConfig;
+import cn.fitrecipe.android.Http.GetRequest;
+import cn.fitrecipe.android.Http.PostRequest;
+import cn.fitrecipe.android.UI.BorderScrollView;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
-import cn.fitrecipe.android.model.CommentCard;
+import cn.fitrecipe.android.entity.Author;
+import cn.fitrecipe.android.entity.Comment;
 import pl.tajchert.sample.DotsTextView;
 
 /**
@@ -30,6 +46,9 @@ public class CommentActivity extends Activity implements View.OnClickListener {
 
     private RecyclerView frCommentRecyclerView;
     private RecyclerViewLayoutManager frCommentLayoutManager;
+    private CommentCardAdapter commentCardAdapter;
+
+    private BorderScrollView scrollView;
 
     private ImageView commentBtn;
     private EditText editText;
@@ -39,30 +58,70 @@ public class CommentActivity extends Activity implements View.OnClickListener {
     private LinearLayout loadingInterface;
     private DotsTextView dotsTextView;
 
+    private List<Comment> comments;
+    private View rootView;
+    private int recipeId;
+    private int lastid = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-        View rootView = View.inflate(this, R.layout.activity_comment, null);
+        rootView = View.inflate(this, R.layout.activity_comment, null);
         setContentView(rootView);
 
         initView();
-        initData(rootView);
+        recipeId = getIntent().getIntExtra("recipe_id", -1);
+        if(recipeId != -1)
+            getData();
         initEvent();
     }
 
-    private void initData(View rootView) {
-        List<CommentCard> result = new ArrayList<CommentCard>();
-        for(int i = 0; i < 5; i++) {
-            CommentCard cc = new CommentCard(i, i, R.drawable.pic_header, "用户"+i, i%3, "1991-11-26 21:11", "你说什么啊，好玩嘛", "被回复的"+i);
-            result.add(cc);
+
+    private void getData() {
+        String url = FrServerConfig.getCommentByRecipe(recipeId, lastid);
+        Toast.makeText(this, url, Toast.LENGTH_SHORT).show();
+        GetRequest request = new GetRequest(url, FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject res) {
+                if(res.has("data")) {
+                    try {
+                        if(lastid == -1)
+                            hideLoading(false, "");
+                        else
+                            scrollView.setCompleteMore();
+                        JSONArray data = res.getJSONArray("data");
+                        processData(data);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                hideLoading(false, getResources().getString(R.string.network_error));
+            }
+        });
+        FrRequest.getInstance().request(request);
+    }
+
+    private void processData(JSONArray data) {
+        List<Comment> add  = new Gson().fromJson(data.toString(), new TypeToken<List<Comment>>(){}.getType());
+        if(comments ==  null)    comments = new ArrayList<>();
+        if(add != null && add.size() > 0) {
+            lastid = add.get(add.size() - 1).getId();
+            comments.addAll(add);
+        }else {
+            Toast.makeText(this, "没有多余的评论!", Toast.LENGTH_SHORT).show();
+            scrollView.setNoMore();
         }
-        for(int i = 5; i < 10; i++) {
-            CommentCard cc = new CommentCard(i, i, R.drawable.pic_header, "用户"+i, i%3, "1991-11-26 21:11", "是富有浙江杭州地方特色的汉族名菜是富有浙江杭州地方特色的汉族名菜是富有浙江杭州地方特色的汉族名菜是富有浙江杭州地方特色的汉族名菜是富有浙江杭州地方特色的汉族名菜是富有浙江杭州地方特色的汉族名菜", "");
-            result.add(cc);
-        }
-        CommentCardAdapter commentCardAdapter = new CommentCardAdapter(this, result, rootView);
-        frCommentRecyclerView.setAdapter(commentCardAdapter);
+        if(commentCardAdapter == null) {
+            commentCardAdapter = new CommentCardAdapter(this, comments, rootView);
+            frCommentRecyclerView.setAdapter(commentCardAdapter);
+        }else
+            commentCardAdapter.notifyDataSetChanged();
     }
 
     private void initView() {
@@ -82,18 +141,24 @@ public class CommentActivity extends Activity implements View.OnClickListener {
         loadingInterface = (LinearLayout) findViewById(R.id.loading_interface);
         dotsTextView = (DotsTextView) findViewById(R.id.dots);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                hideLoading(false,"");
-            }
-        }, 2000);
+        scrollView = (BorderScrollView) findViewById(R.id.scrollView);
     }
 
     private void initEvent() {
         backBtn.setOnClickListener(this);
         cancelBtn.setOnClickListener(this);
         commentBtn.setOnClickListener(this);
+        scrollView.setOnBorderListener(new BorderScrollView.OnBorderListener() {
+            @Override
+            public void onBottom() {
+                getData();
+            }
+
+            @Override
+            public void onTop() {
+
+            }
+        });
     }
 
     private void hideLoading(boolean isError, String errorMessage){
@@ -119,18 +184,65 @@ public class CommentActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.comment_reply_btn:
                 String content = editText.getText().toString();
+                editText.setText("");
                 if(content.equals("")){
                     Toast.makeText(this,"回复内容不得为空><",Toast.LENGTH_LONG).show();
                 }else{
                     if(cancelBtn.getVisibility()==View.GONE){
                         Toast.makeText(this,"回复内容为： "+content,Toast.LENGTH_LONG).show();
+                        comment(null, content);
                     }else{
-                        Toast.makeText(this,"回复用户的ID： "+replyUserID.getText() + " 回复评论的ID： "+replyCommentID.getText() + " 回复内容为： "+content, Toast.LENGTH_LONG).show();
+                        Toast.makeText(this,"回复用户的ID： "+ replyUserID.getText() + " 回复评论的ID： "+replyCommentID.getText() + " 回复内容为： "+content, Toast.LENGTH_LONG).show();
+                        comment(replyUserID.getText().toString(), content);
                     }
                 }
                 break;
             default:
                 break;
         }
+    }
+
+    private void comment(String id, String content) {
+        //modify the view
+        Author author = FrApplication.getInstance().getAuthor();
+        if(author == null) {
+            Toast.makeText(this, "请登录！！！", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            this.finish();
+            return;
+        }
+        String url = FrServerConfig.getCreateCommentUrl();
+        JSONObject params = null;
+        try {
+            params = new JSONObject();
+            params.put("reply", id);
+            params.put("recipe", String.valueOf(recipeId));
+            params.put("content", content);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        System.out.println(params.toString());
+        PostRequest request = new PostRequest(url, FrApplication.getInstance().getToken(), params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject res) {
+                Toast.makeText(CommentActivity.this, "评论成功!", Toast.LENGTH_SHORT).show();
+                if(res.has("data")) {
+                    try {
+                        Comment comment = new Gson().fromJson(res.getJSONObject("data").toString(), Comment.class);
+                        comments.add(0, comment);
+                        commentCardAdapter.notifyDataSetChanged();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        });
+        FrRequest.getInstance().request(request);
     }
 }

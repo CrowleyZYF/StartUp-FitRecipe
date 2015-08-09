@@ -14,6 +14,8 @@ import java.util.List;
 
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.ImageLoader.MyImageLoader;
+import cn.fitrecipe.android.entity.Author;
+import cn.fitrecipe.android.entity.AuthorDao;
 import cn.fitrecipe.android.entity.BasketDao;
 import cn.fitrecipe.android.entity.Recipe;
 
@@ -33,6 +35,7 @@ public class FrApplication extends Application {
     private SharedPreferences userSp;
 
     private List<Recipe> basket;
+    private Author author;
 
     @Override
     public void onCreate() {
@@ -102,9 +105,10 @@ public class FrApplication extends Application {
     }
 
     public String getToken() {
-        if(token == null)
-            token = userSp.getString("token", null);
-        return token;
+        Author author = getAuthor();
+        if(author != null)
+            return author.getToken();
+        return null;
     }
 
     public List<Recipe> getBasket() {
@@ -125,6 +129,22 @@ public class FrApplication extends Application {
         this.basket = basket;
         BasketDao basketDao = new BasketDao(this);
         basketDao.saveBasket(basket);
+    }
+
+    public Author getAuthor() {
+        if(author == null) {
+            author = new AuthorDao(this).getAuthor();
+        }
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
+        new AuthorDao(this).saveAuthor(author);
+    }
+
+    public void logOut() {
+        new AuthorDao(this).clear();
     }
 
     class MyActivityCallbacks implements ActivityLifecycleCallbacks {

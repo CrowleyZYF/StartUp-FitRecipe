@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dots="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/comment_header"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:background="@color/base_color"
@@ -51,18 +52,34 @@
     </LinearLayout>
 
     <FrameLayout
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_below="@+id/comment_header"
+        android:layout_alignParentLeft="true"
+        android:layout_above="@+id/comment_footer"
+        android:layout_alignParentStart="true">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/comment_recycler_view"
-            android:scrollbars="none"
-            android:background="@color/white"
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"
-            />
+        <cn.fitrecipe.android.UI.BorderScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/container_layout"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/comment_recycler_view"
+                    android:scrollbars="none"
+                    android:background="@color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    />
+            </LinearLayout>
+        </cn.fitrecipe.android.UI.BorderScrollView>
 
         <LinearLayout
             android:id="@+id/loading_interface"
@@ -95,6 +112,6 @@
 
 
     </FrameLayout>
-    <include layout="@layout/activity_comment_widget" />
+    <include layout="@layout/activity_comment_widget"/>
 
-</LinearLayout>
+</RelativeLayout>

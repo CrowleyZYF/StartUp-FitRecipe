@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
@@ -36,6 +37,7 @@ import java.util.Map;
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.PostRequest;
+import cn.fitrecipe.android.entity.Author;
 import cn.fitrecipe.android.function.Common;
 
 
@@ -61,24 +63,9 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
     private void loginSuccess(JSONObject data) throws JSONException {
 
-        String username = data.getString("nick_name");
-        String avatar = data.getString("avatar");
-        String account = data.getString("phone");
-        String token = data.getString("token");
-        JSONArray externals = data.getJSONArray("externals");
-        JSONObject platforms = null;
-        if(externals != null&& externals.length() > 0)
-            platforms = externals.getJSONObject(0);
-        SharedPreferences preferences=getSharedPreferences("user", MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("isLogined", true);
-        editor.putString("platform", platforms.toString());
-        editor.putString("account", account);
-        editor.putString("username", username);
-        editor.putString("token", token);
-        editor.putString("avatar", avatar);
-        editor.commit();
-        Toast.makeText(getApplicationContext(), "欢迎："+ username, Toast.LENGTH_LONG).show();
+        Author author = new Gson().fromJson(data.toString(), Author.class);
+        FrApplication.getInstance().setAuthor(author);
+        Toast.makeText(getApplicationContext(), "欢迎："+ author.getNick_name(), Toast.LENGTH_LONG).show();
         Intent intent = new Intent(nowContext, MainActivity.class);
         startActivity(intent);
         LoginActivity.this.finish();
@@ -173,7 +160,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            PostRequest request = new PostRequest(FrServerConfig.getLoginUrl(), params, new Response.Listener<JSONObject>() {
+            PostRequest request = new PostRequest(FrServerConfig.getLoginUrl(), null, params, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject res) {
                     if(res.has("data")) {
@@ -216,7 +203,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        PostRequest request = new PostRequest(FrServerConfig.getThirtyPartyLoginUrl(), params, new Response.Listener<JSONObject>() {
+        PostRequest request = new PostRequest(FrServerConfig.getThirtyPartyLoginUrl(), null, params, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {
                 if(res.has("data")) {

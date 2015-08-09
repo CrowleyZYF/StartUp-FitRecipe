@@ -233,7 +233,7 @@ public class RegisterActivity extends Activity implements OnClickListener {
             }catch (JSONException e) {
                 throw new RuntimeException(e);
             }
-            PostRequest request = new PostRequest(FrServerConfig.getRegisterUrl(), params, new Response.Listener<JSONObject>() {
+            PostRequest request = new PostRequest(FrServerConfig.getRegisterUrl(), null, params, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject res) {
                     if (res.has("data")) {

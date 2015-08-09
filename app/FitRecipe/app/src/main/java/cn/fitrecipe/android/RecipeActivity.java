@@ -383,7 +383,9 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                 break;
             }
             case R.id.comment_btn:{
-                startActivity(new Intent(this, cn.fitrecipe.android.CommentActivity.class));
+                Intent intent = new Intent(this, cn.fitrecipe.android.CommentActivity.class);
+                intent.putExtra("recipe_id", recipe.getId());
+                startActivity(intent);
                 openSet();
                 break;
             }
