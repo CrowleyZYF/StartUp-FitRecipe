@@ -102,5 +102,25 @@
     <string name="me_shopping_cart">菜篮子</string>
     <string name="me_login">退出登陆</string>
 
+    <!--测试-->
+    <string name="plan_test_name">评测</string>
+    <string name="plan_test_last">上一题</string>
+    <string name="plan_test_comment">使用计划前，先做一个简单的评测吧~这样能让我们的推荐更准确哦O(∩_∩)O</string>
+    <string name="plan_test_start">开始评测</string>
+    <string name="plan_test_question_01">1. 你的性别是？</string>
+    <string name="plan_test_question_01_man">纯爷们</string>
+    <string name="plan_test_question_01_woman">软妹纸</string>
+    <string name="plan_test_question_02">2. 你的年龄？（周岁）</string>
+    <string name="plan_test_question_02_unit">岁</string>
+    <string name="plan_test_question_03">3. 你的身高？</string>
+    <string name="plan_test_question_03_unit">cm</string>
+    <string name="plan_test_question_04">4. 你的体重？</string>
+    <string name="plan_test_question_04_unit">kg</string>
+    <string name="plan_test_question_05">5. 你的体脂？</string>
+    <string name="plan_test_question_05_unit">%</string>
+    <string name="plan_test_question_05_switch_01">没有精确数值</string>
+    <string name="plan_test_question_05_switch_02">有精确数值</string>
+
+
 
 </resources>

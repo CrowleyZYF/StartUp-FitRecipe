@@ -2,7 +2,6 @@ package cn.fitrecipe.android.Adpater;
 
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +15,6 @@ import java.util.Map;
 
 import cn.fitrecipe.android.ArticleActivity;
 import cn.fitrecipe.android.FrApplication;
-import cn.fitrecipe.android.ImageLoader.MyImageLoader;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.RecipeActivity;
 
@@ -90,6 +88,5 @@ public class RecommendViewPagerAdapter extends PagerAdapter implements View.OnCl
             intent.putExtra("id", id);
             context.startActivity(intent);
         }
-
     }
 }

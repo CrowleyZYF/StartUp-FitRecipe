@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/base_color">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:background="@color/base_color">
+
+        <TextView
+            android:id="@+id/plan_test_question_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="4/12"
+            android:textSize="20sp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/plan_test_question_04"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            android:padding="30dp"
+            android:lineSpacingExtra="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/plan_test_question_num"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            android:layout_centerInParent="true"
+            >
+
+            <TextView
+                android:id="@+id/plan_test_question_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="60sp"
+                android:text="1"
+                android:layout_centerHorizontal="true"/>
+
+            <TextView
+                android:id="@+id/plan_test_question_unit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                android:text="@string/plan_test_question_04_unit"
+                android:layout_toRightOf="@id/plan_test_question_value"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="5dp"/>
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="5dp"
+                android:src="@drawable/icon_delete_arrow"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginRight="30dp"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/plan_test_last_question"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="@string/plan_test_last"
+            android:textSize="20sp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="10dp"/>
+
+    </RelativeLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="vertical">
+
+    </LinearLayout>
+</LinearLayout>
