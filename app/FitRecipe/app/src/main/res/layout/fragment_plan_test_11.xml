@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
-            android:text="3/12"
+            android:text="11/12"
             android:textSize="20sp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"/>
@@ -25,7 +25,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/plan_test_question_03"
+            android:text="@string/plan_test_question_11_01"
             android:textColor="@color/white"
             android:textSize="25sp"
             android:padding="30dp"
@@ -34,6 +34,7 @@
             android:layout_below="@id/plan_test_question_num"/>
 
         <RelativeLayout
+            android:id="@+id/plan_test_value_area"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:orientation="horizontal"
@@ -55,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:textSize="25sp"
-                android:text="@string/plan_test_question_03_unit"
+                android:text="@string/plan_test_question_04_unit"
                 android:layout_toRightOf="@id/plan_test_question_value"
                 android:layout_alignParentBottom="true"
                 android:layout_marginLeft="5dp"/>
@@ -70,6 +71,17 @@
                 android:layout_marginRight="30dp"/>
 
         </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="@string/plan_test_question_11_03"
+            android:textSize="14sp"
+            android:layout_below="@id/plan_test_value_area"
+            android:layout_centerHorizontal="true"
+            android:padding="40dp"
+            android:layout_marginTop="10dp"/>
 
         <TextView
             android:id="@+id/plan_test_last_question"

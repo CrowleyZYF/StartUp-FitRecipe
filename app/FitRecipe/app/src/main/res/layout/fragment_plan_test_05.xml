@@ -150,7 +150,7 @@
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:padding="5dp"
+            android:padding="10dp"
             android:src="@drawable/icon_help"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
@@ -165,7 +165,109 @@
         android:layout_weight="3"
         android:background="@color/white"
         android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:background="@color/white"
+        android:gravity="center"
         android:orientation="vertical">
+
+        <com.rey.material.widget.RadioButton
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/plan_test_question_05_01"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/plan_test_question_05_01_man"
+            android:textColor="@color/login_input_text_color"
+            android:textSize="20sp"
+            android:layout_gravity="left"
+            android:gravity="center_vertical"
+            app:rbd_strokeColor="@color/base_color"
+            app:rbd_tickColor="@color/white"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:paddingLeft="15dp" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/theme_line"/>
+
+        <com.rey.material.widget.RadioButton
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/plan_test_question_05_02"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/plan_test_question_05_02_man"
+            android:textColor="@color/login_input_text_color"
+            android:textSize="20sp"
+            android:layout_gravity="left"
+            android:gravity="center_vertical"
+            app:rbd_strokeColor="@color/base_color"
+            app:rbd_tickColor="@color/white"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:paddingLeft="15dp" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/theme_line"/>
+
+        <com.rey.material.widget.RadioButton
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/plan_test_question_05_03"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/plan_test_question_05_03_man"
+            android:textColor="@color/login_input_text_color"
+            android:textSize="20sp"
+            android:layout_gravity="left"
+            android:gravity="center_vertical"
+            app:rbd_strokeColor="@color/base_color"
+            app:rbd_tickColor="@color/white"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:paddingLeft="15dp" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/theme_line"/>
+
+        <com.rey.material.widget.RadioButton
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/plan_test_question_05_04"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/plan_test_question_05_04_man"
+            android:textColor="@color/login_input_text_color"
+            android:textSize="20sp"
+            android:layout_gravity="left"
+            android:gravity="center_vertical"
+            app:rbd_strokeColor="@color/base_color"
+            app:rbd_tickColor="@color/white"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:paddingLeft="15dp" />
 
     </LinearLayout>
 </LinearLayout>

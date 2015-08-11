@@ -92,5 +92,7 @@
         android:gravity="center"
         android:orientation="vertical">
 
+        <include layout="@layout/fragment_plan_test_input_list" />
+
     </LinearLayout>
 </LinearLayout>

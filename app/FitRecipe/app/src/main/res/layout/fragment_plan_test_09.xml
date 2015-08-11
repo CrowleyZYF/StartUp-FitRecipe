@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/base_color">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:background="@color/base_color">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="9/12"
+            android:textSize="20sp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/plan_test_question_09"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            android:padding="40dp"
+            android:lineSpacingExtra="10dp"
+            android:layout_centerInParent="true"/>
+
+        <TextView
+            android:id="@+id/plan_test_last_question"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="@string/plan_test_last"
+            android:textSize="20sp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="10dp"/>
+    </RelativeLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <com.rey.material.widget.RadioButton
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/plan_test_question_09_01"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/plan_test_question_09_01"
+            android:textColor="@color/login_input_text_color"
+            android:textSize="20sp"
+            android:layout_gravity="left"
+            android:gravity="center_vertical"
+            app:rbd_strokeColor="@color/base_color"
+            app:rbd_tickColor="@color/white"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:paddingLeft="15dp" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/theme_line"/>
+
+        <com.rey.material.widget.RadioButton
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/plan_test_question_09_02"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/plan_test_question_09_02"
+            android:textColor="@color/login_input_text_color"
+            android:textSize="20sp"
+            android:layout_gravity="left"
+            android:gravity="center_vertical"
+            app:rbd_strokeColor="@color/base_color"
+            app:rbd_tickColor="@color/white"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:paddingLeft="15dp" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/theme_line"/>
+
+        <com.rey.material.widget.RadioButton
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/plan_test_question_09_03"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/plan_test_question_09_03"
+            android:textColor="@color/login_input_text_color"
+            android:textSize="20sp"
+            android:layout_gravity="left"
+            android:gravity="center_vertical"
+            app:rbd_strokeColor="@color/base_color"
+            app:rbd_tickColor="@color/white"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:paddingLeft="15dp" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/theme_line"/>
+
+        <com.rey.material.widget.RadioButton
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/plan_test_question_09_04"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/plan_test_question_09_04"
+            android:textColor="@color/login_input_text_color"
+            android:textSize="20sp"
+            android:layout_gravity="left"
+            android:gravity="center_vertical"
+            app:rbd_strokeColor="@color/base_color"
+            app:rbd_tickColor="@color/white"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:paddingLeft="15dp" />
+
+    </LinearLayout>
+</LinearLayout>
