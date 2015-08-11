@@ -1,9 +1,11 @@
-package cn.fitrecipe.android.entity;
+package cn.fitrecipe.android.dao;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
+
+import cn.fitrecipe.android.entity.Author;
 
 /**
  * Created by wk on 2015/8/8.

@@ -217,7 +217,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                         startActivity(new Intent(this, CategoryActivity.class));
                         break;
                     case 1:
-                        SlidingPage mRightMenu;
+                        /*SlidingPage mRightMenu;
                         mRightMenu = (SlidingPage) findViewById(R.id.filter_menu);
                         mRightMenu.toggle();
                         TextView name = (TextView) findViewById(R.id.meal_name);
@@ -226,7 +226,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                         TextView nutrition_weight = (TextView) findViewById(R.id.ingredient_title_weight);
                         nutrition_weight.setVisibility(View.GONE);
                         ScrollView nutrition_sv = (ScrollView) findViewById(R.id.plan_nutrition);
-                        nutrition_sv.smoothScrollTo(0,0);
+                        nutrition_sv.smoothScrollTo(0,0);*/
                         break;
                     case 2:
                         Intent intent=new Intent(this,CollectActivity.class);

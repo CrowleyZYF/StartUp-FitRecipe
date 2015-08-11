@@ -8,6 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,11 +20,16 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.fitrecipe.android.Adpater.RecipeCardAdapter;
 import cn.fitrecipe.android.Adpater.ThemeCardAdapter;
 import cn.fitrecipe.android.FrApplication;
+import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
+import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
+import cn.fitrecipe.android.entity.Collection;
+import cn.fitrecipe.android.entity.Theme;
 import cn.fitrecipe.android.model.ThemeCard;
 
 /**
@@ -32,7 +42,8 @@ public class ThemeFragment extends Fragment
     private ThemeCardAdapter themeCardAdapter;
     private RecyclerViewLayoutManager themeRecipeLayoutManager;
 
-    List<ThemeCard> themeCards;
+    List<Theme> themeCards;
+    private int lastid = -1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,13 +51,8 @@ public class ThemeFragment extends Fragment
     {
         View view = inflater.inflate(R.layout.fragment_collect_theme, container, false);
 
-        String dataString = FrApplication.getInstance().getData();
         initView(view);
-        try {
-            initData(dataString);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        getData();
         initEvent();
 
         return view;
@@ -56,25 +62,45 @@ public class ThemeFragment extends Fragment
 
     }
 
-    private void initData(String dataString) throws JSONException {
-        JSONObject data = null;
-        if(themeCards != null)
-            themeCards.clear();
-        else
-            themeCards = new ArrayList<ThemeCard>();
-        if(dataString != null) {
-            data = new JSONObject(dataString);
+    private void getData() {
+        String url = FrServerConfig.getCollectionsUrl("theme", lastid);
+        GetRequest request = new GetRequest(url, FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject res) {
+                if(res.has("data")) {
+                    try {
+                        JSONArray data = res.getJSONArray("data");
+                        processData(data);
 
-            JSONArray themes = data.getJSONArray("theme");
-            for (int i = 0; i < themes.length(); i++) {
-                JSONObject theme = themes.getJSONObject(i);
-                String bg = FrServerConfig.getImageCompressed(theme.getString("thumbnail"));
-                ThemeCard tc = new ThemeCard(theme.getInt("id"), bg, theme.toString());
-                themeCards.add(tc);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        });
+        FrRequest.getInstance().request(request);
+    }
+
+    private void processData(JSONArray data)  {
+        List<Collection> collections = new Gson().fromJson(data.toString(), new TypeToken<List<Collection>>(){}.getType());
+        if(themeCards == null)
+            themeCards = new ArrayList<>();
+        if(collections != null && collections.size() > 0) {
+            lastid = collections.get(collections.size()-1).getId();
+            for(int i = 0; i < collections.size(); i++) {
+                themeCards.add(collections.get(i).getTheme());
             }
         }
-        themeCardAdapter = new ThemeCardAdapter(getActivity(), themeCards);
-        themeRecipeRecyclerView.setAdapter(themeCardAdapter);
+        if(themeCardAdapter == null) {
+            themeCardAdapter = new ThemeCardAdapter(getActivity(), themeCards);
+            themeRecipeRecyclerView.setAdapter(themeCardAdapter);
+        }else
+            themeCardAdapter.notifyDataSetChanged();
     }
 
     private void initView(View view) {

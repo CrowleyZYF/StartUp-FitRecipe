@@ -121,4 +121,16 @@ public class FrServerConfig {
         else
             return str + "?lastid=" + lastid;
     }
+
+    public static String getCreateCollectionUrl() {
+        return HOST + "/api/collection/create/";
+    }
+
+    public static String getCollectionsUrl(String type, int lastid) {
+        String str = HOST + "/api/collection/list/" + type + "/";
+        if(lastid < 0)
+            return str;
+        else
+            return str + "?lastid=" + lastid;
+    }
 }

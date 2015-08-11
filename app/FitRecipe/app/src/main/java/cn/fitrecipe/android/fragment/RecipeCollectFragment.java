@@ -8,6 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,10 +21,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.fitrecipe.android.Adpater.RecipeCardAdapter;
+import cn.fitrecipe.android.CollectActivity;
 import cn.fitrecipe.android.FrApplication;
+import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
+import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
+import cn.fitrecipe.android.entity.Collection;
+import cn.fitrecipe.android.entity.Recipe;
 import cn.fitrecipe.android.model.RecipeCard;
 
 /**
@@ -31,24 +41,17 @@ public class RecipeCollectFragment extends Fragment
     private RecyclerView collectRecipeRecyclerView;
     private RecipeCardAdapter recipeCardAdapter;
     private RecyclerViewLayoutManager collectRecipeLayoutManager;
-
-    List<RecipeCard> recipeCards;
+    List<Recipe> recipeCards;
+    private int lastid = -1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_collect_recipe, container, false);
-
-        String dataString = FrApplication.getInstance().getData();
         initView(view);
-        try {
-            initData(dataString);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        getData();
         initEvent();
-
         return view;
     }
 
@@ -59,38 +62,45 @@ public class RecipeCollectFragment extends Fragment
         collectRecipeRecyclerView.setLayoutManager(collectRecipeLayoutManager);
     }
 
-    private void initData(String dataString) throws JSONException {
-        JSONObject data = null;
-        if(recipeCards != null)
-            recipeCards.clear();
-        else
-            recipeCards = new ArrayList<RecipeCard>();
-        if(dataString != null) {
-            data = new JSONObject(dataString);
-            JSONArray updates = data.getJSONArray("update");
-            for (int i = 0; i < updates.length(); i++) {
-                JSONObject update = updates.getJSONObject(i);
-                String name = update.getString("title");
-                int id = update.getInt("id");
-                JSONArray effect_labels = update.getJSONArray("effect_labels");
-                String function = "";
-                String function_backup = "";
-                if(effect_labels.length() > 0)
-                    function = effect_labels.getJSONObject(0).getString("name");
-                if(effect_labels.length() > 1) {
-                    function_backup = effect_labels.getJSONObject(1).getString("name");
+    private void getData() {
+        String url = FrServerConfig.getCollectionsUrl("recipe", lastid);
+        GetRequest request = new GetRequest(url, FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject res) {
+                if(res.has("data")) {
+                    try {
+                        JSONArray data = res.getJSONArray("data");
+                        processData(data);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-                int duration = update.getInt("duration");
-                String total_amount = update.getString("total_amount");
-                double calories = update.getDouble("calories");// * Integer.parseInt(total_amount.substring(0, total_amount.indexOf("g"))) / 100;
-                String img = FrServerConfig.getImageCompressed(update.getString("img"));
-                RecipeCard rc = new RecipeCard(name, id, function, function_backup, duration, (int) calories, 0, img);
-                recipeCards.add(rc);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        });
+        FrRequest.getInstance().request(request);
+    }
+
+    private void processData(JSONArray data)  {
+        List<Collection> collections = new Gson().fromJson(data.toString(), new TypeToken<List<Collection>>(){}.getType());
+        if(recipeCards == null)
+            recipeCards = new ArrayList<>();
+        if(collections != null && collections.size() > 0) {
+            lastid = collections.get(collections.size()-1).getId();
+            for(int i = 0; i < collections.size(); i++) {
+                recipeCards.add(collections.get(i).getRecipe());
             }
         }
-
-        recipeCardAdapter = new RecipeCardAdapter(getActivity(),  recipeCards);
-        collectRecipeRecyclerView.setAdapter(recipeCardAdapter);
+        if(recipeCardAdapter == null) {
+            recipeCardAdapter = new RecipeCardAdapter(getActivity(), recipeCards);
+            collectRecipeRecyclerView.setAdapter(recipeCardAdapter);
+        }else
+            recipeCardAdapter.notifyDataSetChanged();
     }
 
     private void initEvent() {

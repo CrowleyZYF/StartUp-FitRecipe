@@ -7,6 +7,8 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.daimajia.androidviewhover.BlurLayout;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,6 +23,7 @@ import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.ImageLoader.ILoadingListener;
 import cn.fitrecipe.android.R;
+import cn.fitrecipe.android.entity.HomeData;
 import cn.fitrecipe.android.function.Common;
 
 public class GetHomeDataService extends Service {
@@ -84,7 +87,8 @@ public class GetHomeDataService extends Service {
 
     private void processData(JSONObject data) throws JSONException {
         //save data to Application
-        FrApplication.getInstance().saveData(data.toString());
+        HomeData homeData = HomeData.fromJson(data.toString());
+        FrApplication.getInstance().setHomeData(homeData);
 
         Set<String> urls = new HashSet<String>();
         JSONArray themes = data.getJSONArray("theme");

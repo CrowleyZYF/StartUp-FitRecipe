@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,6 +29,7 @@ import org.json.JSONObject;
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.PostRequest;
+import cn.fitrecipe.android.entity.Author;
 import cn.fitrecipe.android.function.Common;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
@@ -239,7 +241,7 @@ public class RegisterActivity extends Activity implements OnClickListener {
                     if (res.has("data")) {
                         try {
                             JSONObject data = res.getJSONObject("data");
-                            registerSuccess("original", data);
+                            registerSuccess(data);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -310,22 +312,10 @@ public class RegisterActivity extends Activity implements OnClickListener {
         }
     }
 
-    private void registerSuccess(String platform, JSONObject data) throws JSONException {
-        String username = data.getString("nick_name");
-        String avatar = data.getString("avatar");
-        String account = data.getString("phone");
-        String token = data.getString("token");
-
-        SharedPreferences preferences=getSharedPreferences("user", MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("isLogined", true);
-        editor.putString("platform", platform);
-        editor.putString("account", account);
-        editor.putString("username", username);
-        editor.putString("token", token);
-        editor.putString("avatar", avatar);
-        editor.commit();
-        Toast.makeText(getApplicationContext(), "欢迎："+ username, Toast.LENGTH_LONG).show();
+    private void registerSuccess(JSONObject data) throws JSONException {
+        Author author = new Gson().fromJson(data.toString(), Author.class);
+        FrApplication.getInstance().setAuthor(author);
+        Toast.makeText(getApplicationContext(), "欢迎："+ author.getNick_name(), Toast.LENGTH_LONG).show();
         Intent intent = new Intent(nowContext, MainActivity.class);
         startActivity(intent);
         RegisterActivity.this.finish();

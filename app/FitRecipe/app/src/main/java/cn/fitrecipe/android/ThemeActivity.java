@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,7 +29,8 @@ import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.UI.BorderScrollView;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
-import cn.fitrecipe.android.model.RecipeCard;
+import cn.fitrecipe.android.entity.Recipe;
+import cn.fitrecipe.android.entity.Theme;
 import pl.tajchert.sample.DotsTextView;
 
 public class ThemeActivity extends Activity implements View.OnClickListener {
@@ -41,11 +44,11 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
     private TextView recipe_content;
     private RecyclerView frThemeRecipeRecyclerView;
     private RecyclerViewLayoutManager frThemeRecipeLayoutManager;
-    private String id;
     private int start = 0;
     private int num = 6;
-    List<RecipeCard> dataList;
+    List<Recipe> dataList;
     RecipeCardAdapter recipeCardAdapter;
+    Theme theme;
 
     private TextView follow_btn;
     private ImageView follow_icon;
@@ -60,10 +63,9 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
 
         //获取ID
         Intent intent =getIntent();
-        id = intent.getStringExtra("id");
-        String info = intent.getStringExtra("info");
+        theme = (Theme) intent.getSerializableExtra("theme");
         try {
-            initView(info);
+            initView();
             getData();
         } catch (JSONException e) {
             e.printStackTrace();
@@ -75,7 +77,7 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
         //get Data from network
         String token = FrApplication.getInstance().getToken();
         JSONObject params = new JSONObject();
-        params.put("id", id);
+        params.put("id", theme.getId());
         params.put("start", start);
         params.put("num", num);
         String url = FrServerConfig.getThemeDetailsUrl(params);
@@ -129,27 +131,14 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
     private void processData(JSONArray data) throws JSONException {
         if(data == null || data.length() == 0)
             return;
-        if(dataList == null)
-            dataList = new ArrayList<RecipeCard>();
-        for(int i = 0; i < data.length(); i++) {
-            JSONObject recipe = data.getJSONObject(i);
-            String recipe_name = recipe.getString("title");
-            int recipe_id = recipe.getInt("id");
-            JSONArray effect_labels = recipe.getJSONArray("effect_labels");
-            String function = "";
-            String function_backup = "";
-            if(effect_labels.length() > 0)
-                function = effect_labels.getJSONObject(0).getString("name");
-            if(effect_labels.length() > 1) {
-                function_backup = effect_labels.getJSONObject(1).getString("name");
-            }
-            int duration = recipe.getInt("duration");
-            String img = FrServerConfig.getImageCompressed(recipe.getString("img"));
-            String total_amount = recipe.getString("total_amount");
-            double calories = recipe.getDouble("calories") * Integer.parseInt(total_amount.substring(0, total_amount.indexOf("g"))) / 100;
-            RecipeCard rc = new RecipeCard(recipe_name, recipe_id, function, function_backup, duration, (int)calories, 100, img);
-            dataList.add(rc);
+        if(dataList == null) {
+            dataList = new ArrayList<>();
         }
+
+       for(int i = 0; i < data.length(); i++) {
+           Recipe recipe = Recipe.fromJson(data.getJSONObject(i).toString());
+           dataList.add(recipe);
+       }
         if(recipeCardAdapter == null) {
             recipeCardAdapter = new RecipeCardAdapter(this, dataList);
             frThemeRecipeRecyclerView.setAdapter(recipeCardAdapter);
@@ -159,13 +148,11 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
 
     }
 
-    private void initView(String info) throws JSONException {
-        JSONObject data = new JSONObject(info);
-
+    private void initView() throws JSONException {
         recipe_content = (TextView) findViewById(R.id.recipe_content);
         recipe_img = (ImageView) findViewById(R.id.recipe_img);
-        FrApplication.getInstance().getMyImageLoader().displayImage(recipe_img, FrServerConfig.getImageCompressed(data.getString("img")));
-        recipe_content.setText(data.getString("content"));
+        FrApplication.getInstance().getMyImageLoader().displayImage(recipe_img, theme.getImg());
+        recipe_content.setText(theme.getContent());
         back_btn = (ImageView) findViewById(R.id.back_btn);
 
         frThemeRecipeRecyclerView = (RecyclerView) findViewById(R.id.theme_recipe_recycler_view);

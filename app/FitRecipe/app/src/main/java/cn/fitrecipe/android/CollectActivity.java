@@ -1,6 +1,7 @@
 package cn.fitrecipe.android;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -11,8 +12,24 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import cn.fitrecipe.android.Http.FrRequest;
+import cn.fitrecipe.android.Http.FrServerConfig;
+import cn.fitrecipe.android.Http.GetRequest;
+import cn.fitrecipe.android.entity.Collection;
+import cn.fitrecipe.android.entity.Recipe;
+import cn.fitrecipe.android.entity.Series;
+import cn.fitrecipe.android.entity.Theme;
 import cn.fitrecipe.android.fragment.KnowledgeCollectFragment;
 import cn.fitrecipe.android.fragment.RecipeCollectFragment;
+import cn.fitrecipe.android.fragment.RecipeFragment;
 import cn.fitrecipe.android.fragment.ThemeFragment;
 
 /**
@@ -38,6 +55,9 @@ public class CollectActivity extends FragmentActivity implements View.OnClickLis
     private ImageView collect_knowledge_active_line_1;
     private ImageView collect_knowledge_active_line_2;
 
+    private List<Collection> collections;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -45,7 +65,6 @@ public class CollectActivity extends FragmentActivity implements View.OnClickLis
         setContentView(R.layout.activity_collect);
 
         Intent intent =getIntent();
-
         initView();
         initEvent();
         if(intent.hasExtra("tab")){
@@ -55,9 +74,7 @@ public class CollectActivity extends FragmentActivity implements View.OnClickLis
         }
 
 
-
     }
-
     private void initEvent() {
         back_btn.setOnClickListener(this);
         me_collect_recipe.setOnClickListener(this);
@@ -166,4 +183,5 @@ public class CollectActivity extends FragmentActivity implements View.OnClickLis
             transaction.hide(recipe_fragment);
         }
     }
+
 }

@@ -11,11 +11,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import cn.fitrecipe.android.CollectActivity;
+import cn.fitrecipe.android.FrApplication;
 import cn.fitrecipe.android.IngredientActivity;
 import cn.fitrecipe.android.LoginActivity;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.RecordActivity;
 import cn.fitrecipe.android.ReportActivity;
+import cn.fitrecipe.android.entity.Author;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by 奕峰 on 2015/4/11.
@@ -27,6 +30,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     private TextView me_status;
     private TextView me_punch;
     private TextView me_work;
+    private CircleImageView me_avatar;
 
     private LinearLayout me_record_btn;
     private LinearLayout me_collect_btn;
@@ -62,14 +66,15 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         me_login_btn = (LinearLayout) view.findViewById(R.id.me_login_btn);
 
         me_login_btn_text = (TextView) view.findViewById(R.id.me_login_btn_text);
+        me_avatar = (CircleImageView) view.findViewById(R.id.me_avatar);
     }
 
     private void initData() {
-        SharedPreferences preferences=getActivity().getSharedPreferences("user", getActivity().MODE_PRIVATE);
-        boolean isLogined = preferences.getBoolean("isLogined", false);
+        boolean isLogined = FrApplication.getInstance().isLogin();
         if(isLogined){
-            me_name.setText(preferences.getString("username", "出错啦"));
+            me_name.setText(FrApplication.getInstance().getAuthor().getNick_name());
             //login_platform.setText("平台："+preferences.getString("platform", "出错啦"));
+            FrApplication.getInstance().getMyImageLoader().displayImage(me_avatar, FrApplication.getInstance().getAuthor().getAvatar());
             me_login_btn_text.setText("退出登陆");
         }else{
             me_name.setText("未登录");
@@ -107,10 +112,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
             }
             case R.id.me_login_btn:
                 if(me_login_btn_text.getText().toString().equals("退出登陆")){
-                    SharedPreferences preferences=getActivity().getSharedPreferences("user", getActivity().MODE_PRIVATE);
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putBoolean("isLogined", false);
-                    editor.commit();
+                    FrApplication.getInstance().logOut();
                     initData();
                 }else{
                     startActivity(new Intent(getActivity(), LoginActivity.class));

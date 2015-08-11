@@ -14,6 +14,7 @@ import java.util.List;
 import cn.fitrecipe.android.FrApplication;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.RecipeActivity;
+import cn.fitrecipe.android.entity.Recipe;
 import cn.fitrecipe.android.model.RecipeCard;
 
 /**
@@ -21,11 +22,11 @@ import cn.fitrecipe.android.model.RecipeCard;
  */
 public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.RecipeCardViewHolder> implements View.OnClickListener {
 
-    private List<RecipeCard> recipeCardsList;
+    private List<Recipe> recipeCardsList;
     private Context context;
 
 
-    public RecipeCardAdapter(Context context, List<RecipeCard> recipeCardsList) {
+    public RecipeCardAdapter(Context context, List<Recipe> recipeCardsList) {
         this.context = context;
         this.recipeCardsList = recipeCardsList;
     }
@@ -43,9 +44,9 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Re
 
     @Override
     public void onBindViewHolder(RecipeCardAdapter.RecipeCardViewHolder contactViewHolder, int i) {
-        RecipeCard rc = recipeCardsList.get(i);
-        contactViewHolder.recipe_id.setText(rc.getRecipe_id());
-        contactViewHolder.recipe_name.setText(rc.getRecipe_name());
+        Recipe rc = recipeCardsList.get(i);
+        contactViewHolder.recipe_id.setText(rc.getId()+"");
+        contactViewHolder.recipe_name.setText(rc.getTitle());
         contactViewHolder.recipe_function.setText(rc.getRecipe_function());
         contactViewHolder.recipe_function_backup.setText(rc.getRecipe_function_backup());
         if(rc.getRecipe_function().equals("完美")){
@@ -71,11 +72,11 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Re
         }else{
             contactViewHolder.recipe_function_backup.setVisibility(View.GONE);
         }
-        contactViewHolder.recipe_calorie.setText(rc.getRecipe_calorie());
-        contactViewHolder.recipe_time.setText(rc.getRecipe_time());
-        contactViewHolder.recipe_like.setText(rc.getRecipe_like());
+        contactViewHolder.recipe_calorie.setText("热量： " + Math.round(rc.getCalories()) +"kcal/100g");
+        contactViewHolder.recipe_time.setText("烹饪时间： " + rc.getDuration() + " min");
+        contactViewHolder.recipe_like.setText("收藏 " + rc.getCollection_count());
 //        contactViewHolder.recipe_background.setBackground (this.context.getResources().getDrawable(rc.getRecipe_background()));
-        FrApplication.getInstance().getMyImageLoader().displayImage(contactViewHolder.recipe_background, rc.getRecipe_background());
+        FrApplication.getInstance().getMyImageLoader().displayImage(contactViewHolder.recipe_background, rc.getImg());
     }
 
     @Override

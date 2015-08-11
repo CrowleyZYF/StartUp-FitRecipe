@@ -75,12 +75,13 @@ public class PlanFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        View v = inflater.inflate(R.layout.fragment_plan, container, false);
+        //View v = inflater.inflate(R.layout.fragment_plan, container, false);
+        View v = inflater.inflate(R.layout.activity_temp, container, false);
         //BlurLayout.setGlobalDefaultDuration(450);
 
-        initView(v);
-        initData();
-        initEvent();
+        //initView(v);
+        //initData();
+        //initEvent();
 
         return v;
     }

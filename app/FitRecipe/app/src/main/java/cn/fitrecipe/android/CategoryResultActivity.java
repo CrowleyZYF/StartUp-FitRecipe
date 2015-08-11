@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.rey.material.widget.CheckBox;
 
 import org.json.JSONArray;
@@ -31,6 +33,7 @@ import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.UI.BorderScrollView;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.UI.SlidingMenu;
+import cn.fitrecipe.android.entity.Recipe;
 import cn.fitrecipe.android.model.RecipeCard;
 import pl.tajchert.sample.DotsTextView;
 
@@ -48,7 +51,7 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
     private RecyclerView frThemeRecipeRecyclerView;
     private RecyclerViewLayoutManager frThemeRecipeLayoutManager;
     private RecipeCardAdapter recipeCardAdapter;
-    private List<RecipeCard> dataList;
+    private List<Recipe> dataList;
 
     private LinearLayout time_sort_btn;
     private TextView time_sort_text;
@@ -206,28 +209,14 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
 
     private void processData(JSONArray data) throws JSONException {
         if(dataList == null)
-            dataList = new ArrayList<RecipeCard>();
+            dataList = new ArrayList<Recipe>();
         else
             if(!getMore)
                 dataList.clear();
         if(data != null) {
             for(int i = 0; i < data.length(); i++) {
-                JSONObject recipe = data.getJSONObject(i);
-                String recipe_name = recipe.getString("title");
-                int recipe_id = recipe.getInt("id");
-                int duration = recipe.getInt("duration");
-                double calories = recipe.getDouble("calories");
-                String img = FrServerConfig.getImageCompressed(recipe.getString("img"));
-                JSONArray effect_labels = recipe.getJSONArray("effect_labels");
-                String function = "";
-                String function_backup = "";
-                if(effect_labels.length() > 0)
-                    function = effect_labels.getJSONObject(0).getString("name");
-                if(effect_labels.length() > 1) {
-                    function_backup = effect_labels.getJSONObject(1).getString("name");
-                }
-                RecipeCard rc = new RecipeCard(recipe_name, recipe_id, function, function_backup, duration, (int)calories, 100, img);
-                dataList.add(rc);
+                Recipe recipe = Recipe.fromJson(data.getJSONObject(i).toString());
+                dataList.add(recipe);
             }
         }
         if(recipeCardAdapter == null) {

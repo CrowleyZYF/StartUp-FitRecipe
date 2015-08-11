@@ -24,7 +24,15 @@ public class Series implements Serializable{
     private String author_avatar;
     private String author_type;
     private int article_type;
+    private int total_read_count;
 
+    public int getTotal_read_count() {
+        return total_read_count;
+    }
+
+    public void setTotal_read_count(int total_read_count) {
+        this.total_read_count = total_read_count;
+    }
 
     public static Series fromJson(String json) {
         return new Gson().fromJson(json, Series.class);

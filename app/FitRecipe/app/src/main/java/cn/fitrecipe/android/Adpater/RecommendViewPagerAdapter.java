@@ -19,18 +19,19 @@ import cn.fitrecipe.android.FrApplication;
 import cn.fitrecipe.android.ImageLoader.MyImageLoader;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.RecipeActivity;
+import cn.fitrecipe.android.entity.Recommend;
 
 /**
  * Created by 奕峰 on 2015/4/25.
  */
 public class RecommendViewPagerAdapter extends PagerAdapter implements View.OnClickListener {
     private Context context;
-    private List<Map<String, Object>> dataList;
+    private List<Recommend> dataList;
     private List<View> recommendLinearLayout = new ArrayList<View>();
     private int width;
     private int height;
 
-    public RecommendViewPagerAdapter(Context context, List<Map<String, Object>> dataList, int width, int height){
+    public RecommendViewPagerAdapter(Context context, List<Recommend> dataList, int width, int height){
         this.context = context;
         this.dataList = dataList;
         this.width = width;
@@ -39,19 +40,21 @@ public class RecommendViewPagerAdapter extends PagerAdapter implements View.OnCl
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
+        Recommend recommend = dataList.get(position);
+
         View recommendContainer = LayoutInflater.from(context).inflate(R.layout.fragment_index_recommend_item, null);
         //背景图片
         ImageView imageView = (ImageView) recommendContainer.findViewById(R.id.recommend_image);
 //        imageView.setImageResource();
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        FrApplication.getInstance().getMyImageLoader().displayImage(imageView, (String) dataList.get(position).get("imgUrl"));
+        FrApplication.getInstance().getMyImageLoader().displayImage(imageView, recommend.getRecommendtype()==0?recommend.getRecipe().getRecommend_img():recommend.getSeries().getImg_cover());
 
         //ID
         TextView idTextView = (TextView) recommendContainer.findViewById(R.id.recommend_id);
-        idTextView.setText(dataList.get(position).get("id").toString());
+        idTextView.setText("" + (recommend.getRecommendtype()==0?recommend.getRecipe().getId():recommend.getSeries().getId()));
         //Type
         TextView typeTextView = (TextView) recommendContainer.findViewById(R.id.recommend_type);
-        typeTextView.setText(dataList.get(position).get("type").toString());
+        typeTextView.setText(recommend.getRecommendtype()+"");
         //添加点击事件
         recommendContainer.setOnClickListener(this);
         container.addView(recommendContainer);

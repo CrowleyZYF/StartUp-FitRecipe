@@ -1,6 +1,6 @@
 /*
  * This file is auto-generated.  DO NOT MODIFY.
- * Original file: E:\\fitRecipe\\app\\FitRecipe\\youkuPlayerOpenSDK\\src\\main\\aidl\\com\\youku\\service\\download\\ICallback.aidl
+ * Original file: D:\\fitRecipe\\app\\FitRecipe\\youkuPlayerOpenSDK\\src\\main\\aidl\\com\\youku\\service\\download\\ICallback.aidl
  */
 package com.youku.service.download;
 /**

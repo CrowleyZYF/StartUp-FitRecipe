@@ -76,4 +76,4 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/notify_linearLayout1" />
 
-</RelativeLayout><!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/layout/notify.xml -->
+</RelativeLayout><!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/layout/notify.xml -->
