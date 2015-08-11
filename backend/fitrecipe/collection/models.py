@@ -10,6 +10,7 @@ from theme.models import Theme
 # Create your models here.
 class Collection(BaseModel):
     owner = models.ForeignKey(Account)
+    status = models.IntegerField(default=10, verbose_name=u'状态')
 
     class Meta:
         abstract = True

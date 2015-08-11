@@ -30,6 +30,7 @@ class Series(BaseModel):
     author_avatar = models.URLField(max_length=200, verbose_name=u'作者头像')
     author_type = models.CharField(max_length=50, verbose_name=u'作者类型')
     article_type = models.ForeignKey(ArticleType, verbose_name=u'所属类别')
+    collection_count = models.IntegerField(default=0, verbose_name=u'收藏数')
 
     class Meta:
         verbose_name = u'系列'

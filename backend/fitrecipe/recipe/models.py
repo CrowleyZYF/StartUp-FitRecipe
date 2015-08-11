@@ -32,6 +32,8 @@ class Recipe(BaseModel):
     meat_labels = models.ManyToManyField(Label, limit_choices_to={u'type': u'食材'}, related_name='meat_set', verbose_name=u'食材标签')
     other_labels = models.ManyToManyField(Label, limit_choices_to={u'type': u'其他'}, related_name='other_set', verbose_name=u'其他标签')
     calories = models.FloatField(default=0, help_text=u'自动计算，不用填', verbose_name=u'每百克卡路里')
+    collection_count = models.IntegerField(default=0, verbose_name=u'收藏数')
+    status = models.IntegerField(default=-10, help_text=u'删除：-20，草稿: -10，正常：10', verbose_name=u'状态')
 
     class Meta:
         verbose_name = u'菜谱'
@@ -169,7 +171,7 @@ class Recipe(BaseModel):
         num: 10 (string) - 返回数量，默认是10。字符串
         '''
         recipes = cls.objects.all()
-        query = {}
+        query = {'status__gt': 0}
         # 逗号里面的是或 是并集 出现一个就好
         if meat_labels is not None:
             # 对 食材 进行筛选
@@ -204,7 +206,7 @@ class Recipe(BaseModel):
 
     @classmethod
     def get_latest_recipe(cls):
-        return cls.objects.order_by('-updated_time')[0:10]
+        return cls.objects.filter(status__gt=0).order_by('-updated_time')[0:10]
 
 
 class Component(BaseModel):

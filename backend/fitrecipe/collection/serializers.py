@@ -8,7 +8,7 @@ from article.serializers import SeriesSerializer
 from .models import RecipeCollection, SeriesCollection, ThemeCollection
 
 class RecipeCollectionSerializer(BaseSerializer):
-    recipe = RecipeSerializer(value=('id','author', 'img', 'thumbnail', 'recommend_img', 'recommend_thumbnail', 'title', 'introduce', 'duration', 'effect_labels', 'meat_labels', 'other_labels', 'calories'))
+    recipe = RecipeSerializer(value=('id','author', 'img', 'thumbnail', 'recommend_img', 'recommend_thumbnail', 'title', 'introduce', 'duration', 'effect_labels', 'meat_labels', 'other_labels', 'calories', 'collection_count'))
 
     class Meta:
         model = RecipeCollection
