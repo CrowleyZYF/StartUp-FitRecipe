@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -84,6 +85,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     protected void onResume() {
         super.onResume();
         registerReceiver(readyRececiver, intentFilter);
+        setSelect(tab_index);
     }
 
     @Override
@@ -124,6 +126,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         FragmentTransaction transaction = fm.beginTransaction();
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         hideFragment(transaction);
+        frTabs.get(i).setBackgroundColor(getResources().getColor(R.color.active_color));
         switch (i)
         {
             case 0:
@@ -138,15 +141,24 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                 tab_index = 0;
                 break;
             case 1:
-                if (frPlanFragment == null){
-                    frPlanFragment = new PlanFragment();
-                    transaction.add(R.id.content, frPlanFragment);
-                } else{
-                    transaction.show(frPlanFragment);
+                SharedPreferences preferences=getSharedPreferences("user", this.MODE_PRIVATE);
+                boolean isTest = preferences.getBoolean("isTested", false);
+                if(isTest){
+                    if (frPlanFragment == null){
+                        frPlanFragment = new PlanFragment();
+                        transaction.add(R.id.content, frPlanFragment);
+                    } else{
+                        transaction.show(frPlanFragment);
+                    }
+                    left_btn.setImageResource(R.drawable.icon_nutrition);
+                    right_btn.setImageResource(R.drawable.icon_shopping);
+                    tab_index = 1;
+                }else{
+                    frTabs.get(tab_index).setBackgroundColor(getResources().getColor(R.color.active_color));
+                    frTabs.get(i).setBackgroundColor(getResources().getColor(R.color.base_color));
+                    Intent intent=new Intent(this,PlanTestActivity.class);
+                    startActivity(intent);
                 }
-                left_btn.setImageResource(R.drawable.icon_nutrition);
-                right_btn.setImageResource(R.drawable.icon_shopping);
-                tab_index = 1;
                 break;
             case 2:
                 if (frKnowledgeFragment == null){
@@ -174,7 +186,6 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                 break;
         }
         transaction.commit();
-        frTabs.get(i).setBackgroundColor(getResources().getColor(R.color.active_color));
     }
 
     private void hideFragment(FragmentTransaction transaction)

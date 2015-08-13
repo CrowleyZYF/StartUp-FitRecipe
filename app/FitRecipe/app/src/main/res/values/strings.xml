@@ -102,5 +102,63 @@
     <string name="me_shopping_cart">菜篮子</string>
     <string name="me_login">退出登陆</string>
 
+    <!--测试-->
+    <string name="plan_test_name">评测</string>
+    <string name="plan_test_last">上一题</string>
+    <string name="plan_test_comment">使用计划前，先做一个简单的评测吧~这样能让我们的推荐更准确哦O(∩_∩)O</string>
+    <string name="plan_test_start">开始评测</string>
+    <string name="plan_test_question_01">1. 你的性别是？</string>
+    <string name="plan_test_question_01_man">纯爷们</string>
+    <string name="plan_test_question_01_woman">软妹纸</string>
+    <string name="plan_test_question_02">2. 你的年龄？（周岁）</string>
+    <string name="plan_test_question_02_unit">岁</string>
+    <string name="plan_test_question_03">3. 你的身高？</string>
+    <string name="plan_test_question_03_unit">cm</string>
+    <string name="plan_test_question_04">4. 你的体重？</string>
+    <string name="plan_test_question_04_unit">kg</string>
+    <string name="plan_test_question_05">5. 你的体脂？</string>
+    <string name="plan_test_question_05_unit">%</string>
+    <string name="plan_test_question_05_switch_01">没有精确数值</string>
+    <string name="plan_test_question_05_switch_02">有精确数值</string>
+    <string name="plan_test_question_05_01_man">小于12%</string>
+    <string name="plan_test_question_05_02_man">12%~20%</string>
+    <string name="plan_test_question_05_03_man">20%~30%</string>
+    <string name="plan_test_question_05_04_man">30%以上</string>
+    <string name="plan_test_question_05_01_woman">小于20%</string>
+    <string name="plan_test_question_05_02_woman">20%~30%</string>
+    <string name="plan_test_question_05_03_woman">30%~40%</string>
+    <string name="plan_test_question_05_04_woman">40%以上</string>
+    <string name="plan_test_question_06">6. 你所处职业的劳动强度？</string>
+    <string name="plan_test_question_06_01">轻劳动</string>
+    <string name="plan_test_question_06_02">中等劳动</string>
+    <string name="plan_test_question_06_03">重劳动</string>
+    <string name="plan_test_question_06_04">极重劳动</string>
+    <string name="plan_test_question_07">7. 运动类型？</string>
+    <string name="plan_test_question_07_01">增肌增重</string>
+    <string name="plan_test_question_07_02">减脂减肥</string>
+    <string name="plan_test_question_08">8. 一周运动几天？</string>
+    <string name="plan_test_question_08_01">1&#8211;2天</string>
+    <string name="plan_test_question_08_02">3&#8211;4天</string>
+    <string name="plan_test_question_08_03">5&#8211;6天</string>
+    <string name="plan_test_question_08_04">7天</string>
+    <string name="plan_test_question_09">9. 每次运动的时长？</string>
+    <string name="plan_test_question_09_01">小于30分钟</string>
+    <string name="plan_test_question_09_02">30&#8211;60分钟</string>
+    <string name="plan_test_question_09_03">60&#8211;90分钟</string>
+    <string name="plan_test_question_09_04">90分钟以上</string>
+    <string name="plan_test_question_10">10. 每天运动的时间段？</string>
+    <string name="plan_test_question_10_01">早餐前</string>
+    <string name="plan_test_question_10_02">午餐前</string>
+    <string name="plan_test_question_10_03">晚餐前</string>
+    <string name="plan_test_question_10_04">晚餐后</string>
+    <string name="plan_test_question_11_01">11. 打算增肌增重至？</string>
+    <string name="plan_test_question_11_02">11. 打算减脂减肥至？</string>
+    <string name="plan_test_question_11_03">Tips：建议目标体重不要高于你身高对应的健康体重上限55公斤</string>
+    <string name="plan_test_question_11_04">Tips：建议目标体重不要低于你身高对应的健康体重下限55公斤</string>
+    <string name="plan_test_question_12_01">12. 计划花多长时间？</string>
+    <string name="plan_test_question_12_unit">天</string>
+    <string name="plan_test_question_12_02">Tips：建议计划时长至少需要30天，再快可能会对身体有负面影响</string>
+
+
 
 </resources>
