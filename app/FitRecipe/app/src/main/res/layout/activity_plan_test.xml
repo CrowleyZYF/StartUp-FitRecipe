@@ -31,10 +31,8 @@
             android:textStyle="bold" />
     </RelativeLayout>
 
-    <FrameLayout
-        android:id="@+id/plan_test_content"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        ></FrameLayout>
+    <cn.fitrecipe.android.UI.TestViewPager
+        android:id="@+id/test_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></cn.fitrecipe.android.UI.TestViewPager>
 </LinearLayout>
