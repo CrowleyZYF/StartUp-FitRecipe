@@ -54,4 +54,5 @@ dependencies {
     compile 'pl.tajchert:waitingdots:0.2.0'
     //    compile 'in.srain.cube:ultra-ptr:1.0.9@aar'
     compile files('libs/gson-2.3.1.jar')
+    compile files('libs/ormlite-android-4.49-SNAPSHOT.jar')
 }

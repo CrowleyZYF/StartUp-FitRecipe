@@ -7,6 +7,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.Toast;
+
 import com.rey.material.widget.CheckBox;
 
 import com.android.volley.Response;
@@ -29,11 +33,17 @@ import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.entity.Series;
+import pl.tajchert.sample.DotsTextView;
 
 /**
  * Created by 奕峰 on 2015/4/11.
  */
 public class KnowledgeFragment extends Fragment{
+
+    private LinearLayout loadingInterface;
+    private DotsTextView dotsTextView;
+    private ScrollView knowledge_series_list;
+
     private RecyclerView frKnowledgeSeriesRecyclerView;
     private RecyclerViewLayoutManager frKnowledgeSeriesLayoutManager;
     private SeriesCardAdapter seriesCardAdapter;
@@ -59,6 +69,7 @@ public class KnowledgeFragment extends Fragment{
             @Override
             public void onResponse(JSONObject res) {
                 if(res.has("data")) {
+                    hideLoading(false, "");
                     try {
                         JSONArray data = res.getJSONArray("data");
                         processData(data);
@@ -70,12 +81,23 @@ public class KnowledgeFragment extends Fragment{
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                hideLoading(true, getResources().getString(R.string.network_error));
             }
         });
         FrRequest.getInstance().request(request);
     }
 
+
+    private void hideLoading(boolean isError, String errorMessage){
+        loadingInterface.setVisibility(View.GONE);
+        dotsTextView.stop();
+        if(isError){
+            Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+        }else{
+            knowledge_series_list.setVisibility(View.VISIBLE);
+            knowledge_series_list.smoothScrollTo(0, 0);
+        }
+    }
 
     private void processData(JSONArray data) {
         dataList = new Gson().fromJson(data.toString(), new TypeToken<ArrayList<Series>>(){}.getType());
@@ -89,6 +111,10 @@ public class KnowledgeFragment extends Fragment{
         frKnowledgeSeriesLayoutManager = new RecyclerViewLayoutManager(this.getActivity());
         frKnowledgeSeriesLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         frKnowledgeSeriesRecyclerView.setLayoutManager(frKnowledgeSeriesLayoutManager);
+
+        loadingInterface = (LinearLayout) v.findViewById(R.id.loading_interface);
+        knowledge_series_list = (ScrollView) v.findViewById(R.id.knowledge_series_list);
+        dotsTextView = (DotsTextView) v.findViewById(R.id.dots);
 
         checkBoxes = new CheckBox[3];
         for(int i = 0; i < cbIds.length; i++) {

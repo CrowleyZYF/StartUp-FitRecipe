@@ -43,7 +43,7 @@ public class GetHomeDataService extends Service {
         if(Common.isOpenNetwork(this))
             getDataFromNetwork();
         else{
-            Toast.makeText(this, "error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.network_close), Toast.LENGTH_SHORT).show();
         }
         return super.onStartCommand(intent, flags, startId);
     }

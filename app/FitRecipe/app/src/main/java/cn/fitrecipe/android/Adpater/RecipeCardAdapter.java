@@ -15,7 +15,6 @@ import cn.fitrecipe.android.FrApplication;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.RecipeActivity;
 import cn.fitrecipe.android.entity.Recipe;
-import cn.fitrecipe.android.model.RecipeCard;
 
 /**
  * Created by 奕峰 on 2015/4/24.

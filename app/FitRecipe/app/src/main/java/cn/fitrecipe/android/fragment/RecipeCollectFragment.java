@@ -7,6 +7,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -21,22 +24,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.fitrecipe.android.Adpater.RecipeCardAdapter;
-import cn.fitrecipe.android.CollectActivity;
 import cn.fitrecipe.android.FrApplication;
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.R;
+import cn.fitrecipe.android.UI.BorderScrollView;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.entity.Collection;
 import cn.fitrecipe.android.entity.Recipe;
-import cn.fitrecipe.android.model.RecipeCard;
+import pl.tajchert.sample.DotsTextView;
 
 /**
  * Created by 奕峰 on 2015/4/11.
  */
 public class RecipeCollectFragment extends Fragment
 {
+
+    private BorderScrollView borderScrollView;
+    private LinearLayout loadingInterface;
+    private DotsTextView dotsTextView;
 
     private RecyclerView collectRecipeRecyclerView;
     private RecipeCardAdapter recipeCardAdapter;
@@ -60,6 +67,32 @@ public class RecipeCollectFragment extends Fragment
         collectRecipeLayoutManager = new RecyclerViewLayoutManager(this.getActivity());
         collectRecipeLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         collectRecipeRecyclerView.setLayoutManager(collectRecipeLayoutManager);
+
+        loadingInterface = (LinearLayout) view.findViewById(R.id.loading_interface);
+        borderScrollView = (BorderScrollView) view.findViewById(R.id.index_content);
+        dotsTextView = (DotsTextView) view.findViewById(R.id.dots);
+        borderScrollView.setOnBorderListener(new BorderScrollView.OnBorderListener() {
+            @Override
+            public void onBottom() {
+                getData();
+            }
+
+            @Override
+            public void onTop() {
+
+            }
+        });
+    }
+
+    private void hideLoading(boolean isError, String errorMessage){
+        loadingInterface.setVisibility(View.GONE);
+        dotsTextView.stop();
+        if(isError){
+            Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+        }else{
+            borderScrollView.setVisibility(View.VISIBLE);
+            borderScrollView.smoothScrollTo(0, 0);
+        }
     }
 
     private void getData() {
@@ -68,10 +101,16 @@ public class RecipeCollectFragment extends Fragment
             @Override
             public void onResponse(JSONObject res) {
                 if(res.has("data")) {
+                    if(lastid == -1)
+                        hideLoading(false, "");
+                    else
+                        borderScrollView.setCompleteMore();
                     try {
                         JSONArray data = res.getJSONArray("data");
-                        processData(data);
-
+                        if(data == null || data.length() == 0) {
+                            Toast.makeText(getActivity(), "没有多余", Toast.LENGTH_SHORT).show();
+                        }else
+                            processData(data);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -80,7 +119,7 @@ public class RecipeCollectFragment extends Fragment
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                hideLoading(true, getResources().getString(R.string.network_error));
             }
         });
         FrRequest.getInstance().request(request);
@@ -91,7 +130,7 @@ public class RecipeCollectFragment extends Fragment
         if(recipeCards == null)
             recipeCards = new ArrayList<>();
         if(collections != null && collections.size() > 0) {
-            lastid = collections.get(collections.size()-1).getId();
+            lastid = collections.get(collections.size() - 1).getId();
             for(int i = 0; i < collections.size(); i++) {
                 recipeCards.add(collections.get(i).getRecipe());
             }

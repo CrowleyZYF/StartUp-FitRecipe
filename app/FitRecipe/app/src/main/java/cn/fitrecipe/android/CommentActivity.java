@@ -3,13 +3,11 @@ package cn.fitrecipe.android;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,16 +23,15 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.fitrecipe.android.Adpater.CommentCardAdapter;
+import cn.fitrecipe.android.Adpater.CommentAdapter;
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.UI.BorderScrollView;
-import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
+import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.entity.Author;
 import cn.fitrecipe.android.entity.Comment;
-import pl.tajchert.sample.DotsTextView;
 
 /**
  * Created by 奕峰 on 2015/5/8.
@@ -44,9 +41,8 @@ public class CommentActivity extends Activity implements View.OnClickListener {
     private ImageView backBtn;
     private TextView cancelBtn;
 
-    private RecyclerView frCommentRecyclerView;
-    private RecyclerViewLayoutManager frCommentLayoutManager;
-    private CommentCardAdapter commentCardAdapter;
+    private CommentAdapter commentAdapter;
+    private ListView comment_listview;
 
     private BorderScrollView scrollView;
 
@@ -55,13 +51,11 @@ public class CommentActivity extends Activity implements View.OnClickListener {
     private TextView replyCommentID;
     private TextView replyUserID;
 
-    private LinearLayout loadingInterface;
-    private DotsTextView dotsTextView;
-
     private List<Comment> comments;
     private View rootView;
     private int recipeId;
     private int lastid = -1;
+    private int authorId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,11 +66,13 @@ public class CommentActivity extends Activity implements View.OnClickListener {
 
         initView();
         recipeId = getIntent().getIntExtra("recipe_id", -1);
-        if(recipeId != -1)
-            getData();
+        comments = (List<Comment>) getIntent().getSerializableExtra("comment_set");
+        if(comments != null && comments.size() > 0)
+            lastid = comments.get(comments.size()-1).getId();
+        authorId = getIntent().getIntExtra("author_id", -1);
+        display();
         initEvent();
     }
-
 
     private void getData() {
         String url = FrServerConfig.getCommentByRecipe(recipeId, lastid);
@@ -86,10 +82,7 @@ public class CommentActivity extends Activity implements View.OnClickListener {
             public void onResponse(JSONObject res) {
                 if(res.has("data")) {
                     try {
-                        if(lastid == -1)
-                            hideLoading(false, "");
-                        else
-                            scrollView.setCompleteMore();
+                        scrollView.setCompleteMore();
                         JSONArray data = res.getJSONArray("data");
                         processData(data);
                     } catch (JSONException e) {
@@ -101,14 +94,15 @@ public class CommentActivity extends Activity implements View.OnClickListener {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                hideLoading(false, getResources().getString(R.string.network_error));
+                Toast.makeText(CommentActivity.this, getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
             }
         });
         FrRequest.getInstance().request(request);
     }
 
     private void processData(JSONArray data) {
-        List<Comment> add  = new Gson().fromJson(data.toString(), new TypeToken<List<Comment>>(){}.getType());
+        List<Comment> add  = new Gson().fromJson(data.toString(), new TypeToken<List<Comment>>() {
+        }.getType());
         if(comments ==  null)    comments = new ArrayList<>();
         if(add != null && add.size() > 0) {
             lastid = add.get(add.size() - 1).getId();
@@ -117,29 +111,27 @@ public class CommentActivity extends Activity implements View.OnClickListener {
             Toast.makeText(this, "没有多余的评论!", Toast.LENGTH_SHORT).show();
             scrollView.setNoMore();
         }
-        if(commentCardAdapter == null) {
-            commentCardAdapter = new CommentCardAdapter(this, comments, rootView);
-            frCommentRecyclerView.setAdapter(commentCardAdapter);
+       display();
+    }
+
+    private void display() {
+        if(commentAdapter == null) {
+            commentAdapter = new CommentAdapter(this, comments, rootView, authorId);
+            comment_listview.setAdapter(commentAdapter);
         }else
-            commentCardAdapter.notifyDataSetChanged();
+            commentAdapter.notifyDataSetChanged();
     }
 
     private void initView() {
         backBtn = (ImageView) findViewById(R.id.back_btn);
         cancelBtn = (TextView) findViewById(R.id.comment_cancel_reply);
 
-        frCommentRecyclerView = (RecyclerView) findViewById(R.id.comment_recycler_view);
-        frCommentLayoutManager = new RecyclerViewLayoutManager(this);
-        frCommentLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        frCommentRecyclerView.setLayoutManager(frCommentLayoutManager);
+        comment_listview = (ListView) findViewById(R.id.listview);
 
         commentBtn = (ImageView) findViewById(R.id.comment_reply_btn);
         editText = (EditText) findViewById(R.id.comment_editText);
         replyCommentID = (TextView) findViewById(R.id.comment_reply_comment_id);
         replyUserID = (TextView) findViewById(R.id.comment_reply_user_id);
-
-        loadingInterface = (LinearLayout) findViewById(R.id.loading_interface);
-        dotsTextView = (DotsTextView) findViewById(R.id.dots);
 
         scrollView = (BorderScrollView) findViewById(R.id.scrollView);
     }
@@ -159,16 +151,6 @@ public class CommentActivity extends Activity implements View.OnClickListener {
 
             }
         });
-    }
-
-    private void hideLoading(boolean isError, String errorMessage){
-        loadingInterface.setVisibility(View.GONE);
-        dotsTextView.stop();
-        if(isError){
-            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
-        }else{
-            frCommentRecyclerView.setVisibility(View.VISIBLE);
-        }
     }
 
     @Override
@@ -231,7 +213,7 @@ public class CommentActivity extends Activity implements View.OnClickListener {
                     try {
                         Comment comment = new Gson().fromJson(res.getJSONObject("data").toString(), Comment.class);
                         comments.add(0, comment);
-                        commentCardAdapter.notifyDataSetChanged();
+                        commentAdapter.notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

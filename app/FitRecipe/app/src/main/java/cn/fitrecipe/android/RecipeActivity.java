@@ -34,8 +34,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.crypto.Cipher;
-
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
@@ -43,7 +41,6 @@ import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.ImageLoader.ILoadingListener;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.entity.Collection;
-import cn.fitrecipe.android.entity.Comment;
 import cn.fitrecipe.android.entity.Component;
 import cn.fitrecipe.android.entity.Label;
 import cn.fitrecipe.android.entity.Recipe;
@@ -404,6 +401,8 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
             case R.id.comment_btn:{
                 Intent intent = new Intent(this, cn.fitrecipe.android.CommentActivity.class);
                 intent.putExtra("recipe_id", recipe.getId());
+                intent.putExtra("author_id", recipe.getAuthor().getId());
+                intent.putExtra("comment_set", recipe.getComment_set());
                 startActivity(intent);
                 openSet();
                 break;

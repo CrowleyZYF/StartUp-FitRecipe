@@ -133,4 +133,8 @@ public class FrServerConfig {
         else
             return str + "?lastid=" + lastid;
     }
+
+    public static String getDeleteCollectionUrl(String type, int id) {
+        return HOST + "/api/collection/delete/" + type + "/" + id + "/";
+    }
 }

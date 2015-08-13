@@ -52,7 +52,7 @@ public class FrApplication extends Application {
         //init network
         FrRequest.getInstance().init(this);
 
-        initYouku();
+//        initYouku();
         instance = this;
     }
 

@@ -23,6 +23,8 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import cn.fitrecipe.android.R;
+
 
 /**
  * Created by wk on 2015/7/17.
@@ -51,6 +53,8 @@ public class MyImageLoader {
                 .build();
 
         options2 = new DisplayImageOptions.Builder()
+                .showImageOnFail(R.drawable.loading_pic2)
+                .showImageForEmptyUri(R.drawable.loading_pic2)
                 .cacheInMemory(true)
                 .cacheOnDisk(true)          //permit cache image in memory and disk
 //                .displayer(new FadeInBitmapDisplayer(500)) // set image fade in

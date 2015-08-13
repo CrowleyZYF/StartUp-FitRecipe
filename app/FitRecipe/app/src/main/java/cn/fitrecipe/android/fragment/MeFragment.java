@@ -99,7 +99,11 @@ public class MeFragment extends Fragment implements View.OnClickListener {
                 break;
             }
             case R.id.me_collect_btn:{
-                startActivity(new Intent(getActivity(), CollectActivity.class));
+                if(!FrApplication.getInstance().isLogin()) {
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                }
+                else
+                    startActivity(new Intent(getActivity(), CollectActivity.class));
                 break;
             }
             case R.id.me_report_btn:{

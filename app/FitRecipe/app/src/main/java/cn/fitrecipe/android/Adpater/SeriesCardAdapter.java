@@ -15,7 +15,6 @@ import cn.fitrecipe.android.FrApplication;
 import cn.fitrecipe.android.KnowledgeArticleActivity;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.entity.Series;
-import cn.fitrecipe.android.model.SeriesCard;
 
 /**
  * Created by 奕峰 on 2015/4/24.
@@ -54,8 +53,8 @@ public class SeriesCardAdapter extends RecyclerView.Adapter<SeriesCardAdapter.Se
         contactViewHolder.series_name.setText(sc.getTitle());
         contactViewHolder.series_author_name.setText(sc.getAuthor());
         contactViewHolder.series_type.setText(sc.getAuthor_type());
-        contactViewHolder.series_read.setText("0");
-        contactViewHolder.series_follow.setText("0");
+        contactViewHolder.series_read.setText(sc.getTotal_read_count()+"");
+        contactViewHolder.series_follow.setText(sc.getCollection_count()+"");
         FrApplication.getInstance().getMyImageLoader().displayImage(contactViewHolder.series_background, sc.getImg_cover());
         FrApplication.getInstance().getMyImageLoader().displayImage(contactViewHolder.series_author_background, sc.getAuthor_avatar());
     }

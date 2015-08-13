@@ -25,6 +25,7 @@ public class Series implements Serializable{
     private String author_type;
     private int article_type;
     private int total_read_count;
+    private int collection_count;
 
     public int getTotal_read_count() {
         return total_read_count;
@@ -132,5 +133,13 @@ public class Series implements Serializable{
 
     public void setArticle_type(int article_type) {
         this.article_type = article_type;
+    }
+
+    public int getCollection_count() {
+        return collection_count;
+    }
+
+    public void setCollection_count(int collection_count) {
+        this.collection_count = collection_count;
     }
 }

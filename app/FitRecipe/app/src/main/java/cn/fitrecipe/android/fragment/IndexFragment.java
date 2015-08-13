@@ -15,29 +15,21 @@ import android.widget.TextView;
 
 import com.umeng.fb.FeedbackAgent;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import cn.fitrecipe.android.Adpater.RecipeCardAdapter;
 import cn.fitrecipe.android.Adpater.RecommendViewPagerAdapter;
 import cn.fitrecipe.android.Adpater.ThemeCardAdapter;
 import cn.fitrecipe.android.CategoryActivity;
 import cn.fitrecipe.android.FrApplication;
-import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.entity.HomeData;
 import cn.fitrecipe.android.entity.Recipe;
 import cn.fitrecipe.android.entity.Recommend;
 import cn.fitrecipe.android.entity.Theme;
-import cn.fitrecipe.android.model.RecipeCard;
-import cn.fitrecipe.android.model.ThemeCard;
 import me.relex.circleindicator.CircleIndicator;
 
 /**

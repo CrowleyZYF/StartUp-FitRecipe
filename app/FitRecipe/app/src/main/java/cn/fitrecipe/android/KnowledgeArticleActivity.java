@@ -23,6 +23,7 @@ import cn.fitrecipe.android.Adpater.ArticleCardAdapter;
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
+import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.entity.Article;
 import cn.fitrecipe.android.entity.Series;
@@ -147,15 +148,46 @@ public class KnowledgeArticleActivity extends Activity implements View.OnClickLi
 
     public void collect_series(){
         if(isCollected){
-            Toast.makeText(this, "取消关注", Toast.LENGTH_LONG).show();
-            follow_btn.setText(R.string.follow);
-            follow_btn.setBackground(getResources().getDrawable(R.color.active_color));
-            right_btn.setImageResource(R.drawable.icon_like_noshadow);
+            String url = FrServerConfig.getDeleteCollectionUrl("theme", 0);
+            PostRequest request = new PostRequest(url, FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject res) {
+                    Toast.makeText(KnowledgeArticleActivity.this, "取消收藏!", Toast.LENGTH_SHORT).show();
+                    follow_btn.setText(R.string.follow);
+                    follow_btn.setBackground(getResources().getDrawable(R.color.active_color));
+                    right_btn.setImageResource(R.drawable.icon_like_noshadow);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    Toast.makeText(KnowledgeArticleActivity.this, getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                }
+            });
+            FrRequest.getInstance().request(request);
         }else{
-            Toast.makeText(this,"关注",Toast.LENGTH_LONG).show();
-            follow_btn.setText(R.string.cancel_follow);
-            follow_btn.setBackground(getResources().getDrawable(R.color.disable_color));
-            right_btn.setImageResource(R.drawable.icon_like_green);
+            String url = FrServerConfig.getCreateCollectionUrl();
+            JSONObject params = new JSONObject();
+            try {
+                params.put("type", "series");
+                params.put("id", series.getId());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            PostRequest request = new PostRequest(url, FrApplication.getInstance().getToken(), params, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject res) {
+                    Toast.makeText(KnowledgeArticleActivity.this, "收藏成功!", Toast.LENGTH_SHORT).show();
+                    follow_btn.setText(R.string.cancel_follow);
+                    follow_btn.setBackground(getResources().getDrawable(R.color.disable_color));
+                    right_btn.setImageResource(R.drawable.icon_like_green);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    Toast.makeText(KnowledgeArticleActivity.this, getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                }
+            });
+            FrRequest.getInstance().request(request);
         }
         isCollected=!isCollected;
     }

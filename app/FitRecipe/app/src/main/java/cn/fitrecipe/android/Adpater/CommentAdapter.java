@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,56 +17,73 @@ import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.entity.Comment;
 
 /**
- * Created by 奕峰 on 2015/4/24.
+ * Created by wk on 2015/8/12.
  */
-public class CommentCardAdapter extends RecyclerView.Adapter<CommentCardAdapter.CommentCardViewHolder> implements View.OnClickListener {
+public class CommentAdapter extends BaseAdapter implements View.OnClickListener{
 
     private List<Comment> commentCardsList;
     private Context context;
+    private int authorId;
     private View rootView;
 
-
-    public CommentCardAdapter(Context context, List<Comment> commentCardsList, View rootView) {
+    public CommentAdapter(Context context, List<Comment> commentCardsList, View rootView, int authorId) {
         this.context = context;
         this.commentCardsList = commentCardsList;
+        this.authorId = authorId;
         this.rootView = rootView;
     }
 
     @Override
-    public CommentCardAdapter.CommentCardViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View itemView = LayoutInflater.
-                from(viewGroup.getContext()).
-                inflate(R.layout.activity_comment_item, viewGroup, false);
-
-        itemView.setOnClickListener(this);
-
-        return new CommentCardViewHolder(itemView);
-    }
-
-    @Override
-    public void onBindViewHolder(CommentCardAdapter.CommentCardViewHolder contactViewHolder, int i) {
-        Comment cc = commentCardsList.get(i);
-        contactViewHolder.comment_id.setText(cc.getId()+"");
-        contactViewHolder.comment_user_id.setText(cc.getAuthor().getId()+"");
-        contactViewHolder.comment_user_name.setText(cc.getAuthor().getNick_name());
-        contactViewHolder.comment_time.setText(cc.getCreated_time());
-        if(!cc.getAuthor().is_official()){
-            contactViewHolder.comment_user_type.setVisibility(View.VISIBLE);
-            contactViewHolder.comment_user_type.setText("(官方) ");
-        }else{
-            contactViewHolder.comment_user_type.setVisibility(View.GONE);
-        }
-        //contactViewHolder.comment_user_avatar.setImageResource (this.context.getResources().getDrawable(cc.getComment_user_avatar()));
-        FrApplication.getInstance().getMyImageLoader().displayImage(contactViewHolder.comment_user_avatar, cc.getAuthor().getAvatar());
-        contactViewHolder.comment_text.setText(cc.getContent());
-    }
-
-    @Override
-    public int getItemCount() {
+    public int getCount() {
         if(commentCardsList == null)
             return 0;
         else
             return commentCardsList.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return commentCardsList.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        CommentCardViewHolder holder;
+        if(convertView != null)
+            holder = (CommentCardViewHolder) convertView.getTag();
+        else {
+            convertView = LayoutInflater.
+                    from(parent.getContext()).
+                    inflate(R.layout.activity_comment_item, parent, false);
+            holder = new CommentCardViewHolder(convertView);
+            convertView.setTag(holder);
+        }
+        Comment c = commentCardsList.get(position);
+        holder.comment_id.setText(""+c.getId());
+        holder.comment_text.setText(c.getContent());
+        holder.comment_time.setText(c.getCreated_time());
+        holder.comment_user_id.setText("" + c.getAuthor().getId());
+        holder.comment_user_name.setText("" + c.getAuthor().getNick_name());
+        FrApplication.getInstance().getMyImageLoader().displayImage(holder.comment_user_avatar, c.getAuthor().getAvatar());
+        String type = "";
+        if(c.getAuthor().is_official()) {
+            type = "（官方）";
+            holder.comment_user_type.setText(type);
+        }
+        else
+            if(c.getAuthor().getId() == authorId) {
+                type = "（作者）";
+                holder.comment_user_type.setText(type);
+            }
+            else
+                holder.comment_user_type.setVisibility(View.GONE);
+        convertView.setOnClickListener(this);
+        return convertView;
     }
 
     @Override
@@ -81,7 +99,7 @@ public class CommentCardAdapter extends RecyclerView.Adapter<CommentCardAdapter.
         this.rootView.findViewById(R.id.comment_cancel_reply).setVisibility(View.VISIBLE);
     }
 
-    public static class CommentCardViewHolder extends RecyclerView.ViewHolder {
+    public static class CommentCardViewHolder {
         protected TextView comment_id;
         protected TextView comment_user_id;
         protected ImageView comment_user_avatar;
@@ -91,10 +109,9 @@ public class CommentCardAdapter extends RecyclerView.Adapter<CommentCardAdapter.
         protected TextView comment_text;
 
         public CommentCardViewHolder(View itemView) {
-            super(itemView);
             comment_id = (TextView) itemView.findViewById(R.id.comment_id);
             comment_user_id = (TextView) itemView.findViewById(R.id.comment_user_id);
-            comment_user_avatar =  (ImageView) itemView.findViewById(R.id.comment_user_avatar);
+            comment_user_avatar = (ImageView) itemView.findViewById(R.id.comment_user_avatar);
             comment_user_name = (TextView) itemView.findViewById(R.id.comment_user_name);
             comment_user_type = (TextView) itemView.findViewById(R.id.comment_user_type);
             comment_time = (TextView) itemView.findViewById(R.id.comment_time);

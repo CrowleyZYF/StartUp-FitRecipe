@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.util.List;
 
@@ -15,7 +14,6 @@ import cn.fitrecipe.android.FrApplication;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.ThemeActivity;
 import cn.fitrecipe.android.entity.Theme;
-import cn.fitrecipe.android.model.ThemeCard;
 
 /**
  * Created by 奕峰 on 2015/4/24.

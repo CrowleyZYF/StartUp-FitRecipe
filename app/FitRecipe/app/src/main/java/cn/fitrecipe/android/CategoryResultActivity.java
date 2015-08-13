@@ -15,8 +15,6 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.rey.material.widget.CheckBox;
 
 import org.json.JSONArray;
@@ -34,7 +32,6 @@ import cn.fitrecipe.android.UI.BorderScrollView;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.UI.SlidingMenu;
 import cn.fitrecipe.android.entity.Recipe;
-import cn.fitrecipe.android.model.RecipeCard;
 import pl.tajchert.sample.DotsTextView;
 
 public class CategoryResultActivity extends Activity implements View.OnClickListener {

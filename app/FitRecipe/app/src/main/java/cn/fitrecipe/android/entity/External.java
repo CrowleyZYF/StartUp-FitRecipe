@@ -1,9 +1,11 @@
 package cn.fitrecipe.android.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by wk on 2015/8/8.
  */
-public class External {
+public class External implements Serializable{
     private String external_id;
     private String nick_name;
     private String external_source;

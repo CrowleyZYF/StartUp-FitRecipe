@@ -1,9 +1,11 @@
 package cn.fitrecipe.android.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by wk on 2015/8/8.
  */
-public class Comment {
+public class Comment implements Serializable{
 
     private int id;
     private Author author;

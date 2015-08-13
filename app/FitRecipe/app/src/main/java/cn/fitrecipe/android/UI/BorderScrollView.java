@@ -34,11 +34,15 @@ public class BorderScrollView extends ScrollView {
     private boolean isScroll;
 
     public BorderScrollView(Context context) {
-        this(context, null);
+        super(context);
+        flag = false;
+        isScroll = true;
     }
 
     public BorderScrollView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+        super(context, attrs);
+        flag = false;
+        isScroll = true;
     }
 
     public BorderScrollView(Context context, AttributeSet attrs, int defStyle) {

@@ -1,5 +1,6 @@
 package cn.fitrecipe.android.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 import cn.fitrecipe.android.Http.FrServerConfig;
@@ -7,7 +8,7 @@ import cn.fitrecipe.android.Http.FrServerConfig;
 /**
  * Created by wk on 2015/8/6.
  */
-public class Author {
+public class Author implements Serializable{
 
     private String nick_name;
     private int id;
