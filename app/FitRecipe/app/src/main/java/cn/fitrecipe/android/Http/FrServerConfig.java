@@ -109,4 +109,32 @@ public class FrServerConfig {
     public static String getArticleById(int id) {
         return HOST + "/api/article/" + id;
     }
+
+    public static String getCreateCommentUrl() {
+        return HOST + "/api/comment/create/";
+    }
+
+    public static String getCommentByRecipe(int recipeid, int lastid) {
+        String str =  HOST + "/api/comment/"+ recipeid + "/list/";
+        if(lastid < 0)
+            return str;
+        else
+            return str + "?lastid=" + lastid;
+    }
+
+    public static String getCreateCollectionUrl() {
+        return HOST + "/api/collection/create/";
+    }
+
+    public static String getCollectionsUrl(String type, int lastid) {
+        String str = HOST + "/api/collection/list/" + type + "/";
+        if(lastid < 0)
+            return str;
+        else
+            return str + "?lastid=" + lastid;
+    }
+
+    public static String getDeleteCollectionUrl(String type, int id) {
+        return HOST + "/api/collection/delete/" + type + "/" + id + "/";
+    }
 }

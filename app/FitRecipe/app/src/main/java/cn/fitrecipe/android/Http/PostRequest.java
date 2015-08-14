@@ -17,15 +17,30 @@ import java.util.Map;
 public class PostRequest extends JsonObjectRequest{
 
     private final int timeout = 10000;
+    private String token;
 
-    public PostRequest(String url, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
+    public PostRequest(String url, String token, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         super(Method.POST, url, listener, errorListener);
         this.setRetryPolicy(new DefaultRetryPolicy(timeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        this.token = token;
     }
 
 
-    public PostRequest(String url,JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
+    public PostRequest(String url, String token, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         super(Method.POST, url, jsonRequest, listener, errorListener);
         this.setRetryPolicy(new DefaultRetryPolicy(timeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        this.token = token;
+    }
+
+
+    @Override
+    public Map<String, String> getHeaders() throws AuthFailureError {
+        Map<String, String> headers = new HashMap<String, String>();
+        headers.put("Content-Type", "application/json");
+        if(token != null && token.length() > 0) {
+            headers.put("Authorization", "Token " + token);
+            System.out.println("Authorization" + " : Token " + token);
+        }
+        return headers;
     }
 }

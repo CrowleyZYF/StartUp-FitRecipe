@@ -11,20 +11,21 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import cn.fitrecipe.android.FrApplication;
 import cn.fitrecipe.android.R;
-import cn.fitrecipe.android.model.CommentCard;
+import cn.fitrecipe.android.entity.Comment;
 
 /**
  * Created by 奕峰 on 2015/4/24.
  */
 public class CommentCardAdapter extends RecyclerView.Adapter<CommentCardAdapter.CommentCardViewHolder> implements View.OnClickListener {
 
-    private List<CommentCard> commentCardsList;
+    private List<Comment> commentCardsList;
     private Context context;
     private View rootView;
 
 
-    public CommentCardAdapter(Context context, List<CommentCard> commentCardsList, View rootView) {
+    public CommentCardAdapter(Context context, List<Comment> commentCardsList, View rootView) {
         this.context = context;
         this.commentCardsList = commentCardsList;
         this.rootView = rootView;
@@ -43,23 +44,20 @@ public class CommentCardAdapter extends RecyclerView.Adapter<CommentCardAdapter.
 
     @Override
     public void onBindViewHolder(CommentCardAdapter.CommentCardViewHolder contactViewHolder, int i) {
-        CommentCard cc = commentCardsList.get(i);
-        contactViewHolder.comment_id.setText(cc.getComment_id());
-        contactViewHolder.comment_user_id.setText(cc.getComment_user_id());
-        contactViewHolder.comment_user_name.setText(cc.getComment_user_name());
-        contactViewHolder.comment_time.setText(cc.getComment_time());
-        if(cc.getComment_user_type()!=0){
+        Comment cc = commentCardsList.get(i);
+        contactViewHolder.comment_id.setText(cc.getId()+"");
+        contactViewHolder.comment_user_id.setText(cc.getAuthor().getId()+"");
+        contactViewHolder.comment_user_name.setText(cc.getAuthor().getNick_name());
+        contactViewHolder.comment_time.setText(cc.getCreated_time());
+        if(!cc.getAuthor().is_official()){
             contactViewHolder.comment_user_type.setVisibility(View.VISIBLE);
-            if(cc.getComment_user_type()==1){
-                contactViewHolder.comment_user_type.setText("(作者) ");
-            }else {
-                contactViewHolder.comment_user_type.setText("(官方) ");
-            }
+            contactViewHolder.comment_user_type.setText("(官方) ");
         }else{
             contactViewHolder.comment_user_type.setVisibility(View.GONE);
         }
         //contactViewHolder.comment_user_avatar.setImageResource (this.context.getResources().getDrawable(cc.getComment_user_avatar()));
-        contactViewHolder.comment_text.setText(cc.getComment_context());
+        FrApplication.getInstance().getMyImageLoader().displayImage(contactViewHolder.comment_user_avatar, cc.getAuthor().getAvatar());
+        contactViewHolder.comment_text.setText(cc.getContent());
     }
 
     @Override

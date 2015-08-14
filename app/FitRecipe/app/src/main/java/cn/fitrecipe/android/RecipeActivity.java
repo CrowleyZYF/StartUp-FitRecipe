@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
 import com.umeng.socialize.media.UMImage;
@@ -36,8 +37,10 @@ import java.util.List;
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
+import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.ImageLoader.ILoadingListener;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
+import cn.fitrecipe.android.entity.Collection;
 import cn.fitrecipe.android.entity.Component;
 import cn.fitrecipe.android.entity.Label;
 import cn.fitrecipe.android.entity.Recipe;
@@ -396,7 +399,11 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                 break;
             }
             case R.id.comment_btn:{
-                startActivity(new Intent(this, cn.fitrecipe.android.CommentActivity.class));
+                Intent intent = new Intent(this, cn.fitrecipe.android.CommentActivity.class);
+                intent.putExtra("recipe_id", recipe.getId());
+                intent.putExtra("author_id", recipe.getAuthor().getId());
+                intent.putExtra("comment_set", recipe.getComment_set());
+                startActivity(intent);
                 openSet();
                 break;
             }
@@ -429,7 +436,46 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         if(isCollected){
             collect_btn.setImageResource(R.drawable.icon_like_noshadow);
         }else{
-            collect_btn.setImageResource(R.drawable.icon_like_green);
+            if(!FrApplication.getInstance().isLogin()) {
+                Toast.makeText(RecipeActivity.this, "请登录!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(RecipeActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+                return;
+            }
+            String url = FrServerConfig.getCreateCollectionUrl();
+            JSONObject params = new JSONObject();
+            try {
+                params.put("type", "recipe");
+                params.put("id", recipe.getId());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            PostRequest request = new PostRequest(url, FrApplication.getInstance().getToken(), params, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject res) {
+                    Toast.makeText(RecipeActivity.this, "收藏成功!", Toast.LENGTH_SHORT).show();
+                    collect_btn.setImageResource(R.drawable.icon_like_green);
+                    if(res.has("data")) {
+                        try {
+                            Collection collection = new Gson().fromJson(res.getJSONObject("data").toString(), Collection.class);
+                            collection.setType("recipe");
+                            List<Collection> collectionList = FrApplication.getInstance().getCollections();
+                            if(collectionList == null) collectionList = new ArrayList<>();
+                            collectionList.add(collection);
+                            FrApplication.getInstance().setCollections(collectionList);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+
+                }
+            });
+            FrRequest.getInstance().request(request);
         }
         isCollected=!isCollected;
     }

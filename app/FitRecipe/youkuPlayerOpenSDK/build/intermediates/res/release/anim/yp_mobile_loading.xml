@@ -6,4 +6,4 @@
     <item android:drawable="@drawable/loading_frame3" android:duration="100" />
     <item android:drawable="@drawable/loading_frame4" android:duration="100" />
 
-</animation-list><!-- From: file:/E:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/anim/yp_mobile_loading.xml -->
+</animation-list><!-- From: file:/D:/fitRecipe/app/FitRecipe/youkuPlayerOpenSDK/src/main/res/anim/yp_mobile_loading.xml -->

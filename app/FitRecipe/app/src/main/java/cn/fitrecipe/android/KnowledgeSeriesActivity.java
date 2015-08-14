@@ -12,10 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.fitrecipe.android.Adpater.SeriesCardAdapter;
-import cn.fitrecipe.android.Config.LocalDemo;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.entity.Series;
-import cn.fitrecipe.android.model.SeriesCard;
 
 public class KnowledgeSeriesActivity extends Activity implements View.OnClickListener {
 

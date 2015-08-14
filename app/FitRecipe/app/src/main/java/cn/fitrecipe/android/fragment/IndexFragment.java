@@ -15,25 +15,21 @@ import android.widget.TextView;
 
 import com.umeng.fb.FeedbackAgent;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import cn.fitrecipe.android.Adpater.RecipeCardAdapter;
 import cn.fitrecipe.android.Adpater.RecommendViewPagerAdapter;
 import cn.fitrecipe.android.Adpater.ThemeCardAdapter;
 import cn.fitrecipe.android.CategoryActivity;
 import cn.fitrecipe.android.FrApplication;
-import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
-import cn.fitrecipe.android.model.RecipeCard;
-import cn.fitrecipe.android.model.ThemeCard;
+import cn.fitrecipe.android.entity.HomeData;
+import cn.fitrecipe.android.entity.Recipe;
+import cn.fitrecipe.android.entity.Recommend;
+import cn.fitrecipe.android.entity.Theme;
 import me.relex.circleindicator.CircleIndicator;
 
 /**
@@ -61,20 +57,21 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
 
 
     private List<String> urls;
-    List<Map<String, Object>>  recommendRecipe;
-    List<ThemeCard> themeCards;
-    List<RecipeCard> recipeCards;
+    List<Recommend>  recommendRecipe;
+    List<Theme> themeCards;
+    List<Recipe> recipeCards;
+    private HomeData homeData;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_index, container, false);
-        String dataString = FrApplication.getInstance().getData();
+        homeData = FrApplication.getInstance().getHomeData();
         initView(view);
-        if(dataString != null) {
+        if(homeData != null) {
             try {
-                initData(dataString);
+                initData();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -93,17 +90,17 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
     }
 
     public void fresh() {
-        String dataString = FrApplication.getInstance().getData();
+        homeData= FrApplication.getInstance().getHomeData();
         if(recipeCardAdapter == null && recommendViewPagerAdapter == null && themeCardAdapter == null) {
             try {
-                initData(dataString);
+                initData();
                 initEvent();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }else {
             try {
-                parseJsonData(dataString);
+                processData();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -135,68 +132,15 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
         scrollView = (ScrollView) view.findViewById(R.id.index_content);
     }
 
-    private void parseJsonData(String dataString) throws JSONException {
-        JSONObject data = null;
-        if(recipeCards != null)
-            recipeCards.clear();
-        else
-            recipeCards = new ArrayList<RecipeCard>();
-        if(themeCards != null)
-            themeCards.clear();
-        else
-            themeCards = new ArrayList<ThemeCard>();
-        if(recommendRecipe != null)
-            recommendRecipe.clear();
-        else
-            recommendRecipe = new ArrayList<Map<String, Object>>();
-        if(dataString != null) {
-            data = new JSONObject(dataString);
-
-            JSONArray themes = data.getJSONArray("theme");
-            for (int i = 0; i < themes.length(); i++) {
-                JSONObject theme = themes.getJSONObject(i);
-                String bg = FrServerConfig.getImageCompressed(theme.getString("thumbnail"));
-                ThemeCard tc = new ThemeCard(theme.getInt("id"), bg, theme.toString());
-                themeCards.add(tc);
-            }
-
-            JSONArray updates = data.getJSONArray("update");
-            for (int i = 0; i < updates.length(); i++) {
-                JSONObject update = updates.getJSONObject(i);
-                String name = update.getString("title");
-                int id = update.getInt("id");
-                JSONArray effect_labels = update.getJSONArray("effect_labels");
-                String function = "";
-                String function_backup = "";
-                if(effect_labels.length() > 0)
-                    function = effect_labels.getJSONObject(0).getString("name");
-                if(effect_labels.length() > 1) {
-                    function_backup = effect_labels.getJSONObject(1).getString("name");
-                }
-                int duration = update.getInt("duration");
-                String total_amount = update.getString("total_amount");
-                double calories = update.getDouble("calories");// * Integer.parseInt(total_amount.substring(0, total_amount.indexOf("g"))) / 100;
-                String img = FrServerConfig.getImageCompressed(update.getString("img"));
-                RecipeCard rc = new RecipeCard(name, id, function, function_backup, duration, (int) calories, 0, img);
-                recipeCards.add(rc);
-            }
-
-            JSONArray recommends = data.getJSONArray("recommend");
-            for (int i = 0; i < recommends.length(); i++) {
-                JSONObject recommend = recommends.getJSONObject(i);
-                String img = FrServerConfig.getImageCompressed(recommend.getString("recommend_img"));
-                Map<String, Object> map = new HashMap<String, Object>();
-                map.put("id", recommend.getInt("id"));
-                map.put("type", "");
-                map.put("imgUrl", img);
-                recommendRecipe.add(map);
-            }
-        }
+    private void processData() throws JSONException {
+        recipeCards = homeData.getUpdate();
+        recommendRecipe = homeData.getRecommend();
+        themeCards = homeData.getTheme();
     }
 
-    private void initData(String dataString) throws JSONException {
+    private void initData() throws JSONException {
         //get data
-        parseJsonData(dataString);
+        processData();
         //获得推荐数据，并初始化适配器3
         recommendViewPagerAdapter = new RecommendViewPagerAdapter(getActivity(), recommendRecipe, recommendViewPager.getLayoutParams().width, recommendViewPager.getLayoutParams().height);
         recommendViewPager.setAdapter(recommendViewPagerAdapter);

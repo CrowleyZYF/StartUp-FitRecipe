@@ -7,6 +7,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.Toast;
+
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,10 +24,15 @@ import java.util.List;
 
 import cn.fitrecipe.android.Adpater.ThemeCardAdapter;
 import cn.fitrecipe.android.FrApplication;
+import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
+import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.R;
+import cn.fitrecipe.android.UI.BorderScrollView;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
-import cn.fitrecipe.android.model.ThemeCard;
+import cn.fitrecipe.android.entity.Collection;
+import cn.fitrecipe.android.entity.Theme;
+import pl.tajchert.sample.DotsTextView;
 
 /**
  * Created by 奕峰 on 2015/4/11.
@@ -28,11 +40,16 @@ import cn.fitrecipe.android.model.ThemeCard;
 public class ThemeFragment extends Fragment
 {
 
+    private BorderScrollView borderScrollView;
+    private LinearLayout loadingInterface;
+    private DotsTextView dotsTextView;
+
     private RecyclerView themeRecipeRecyclerView;
     private ThemeCardAdapter themeCardAdapter;
     private RecyclerViewLayoutManager themeRecipeLayoutManager;
 
-    List<ThemeCard> themeCards;
+    List<Theme> themeCards;
+    private int lastid = -1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,13 +57,8 @@ public class ThemeFragment extends Fragment
     {
         View view = inflater.inflate(R.layout.fragment_collect_theme, container, false);
 
-        String dataString = FrApplication.getInstance().getData();
         initView(view);
-        try {
-            initData(dataString);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        getData();
         initEvent();
 
         return view;
@@ -56,25 +68,63 @@ public class ThemeFragment extends Fragment
 
     }
 
-    private void initData(String dataString) throws JSONException {
-        JSONObject data = null;
-        if(themeCards != null)
-            themeCards.clear();
-        else
-            themeCards = new ArrayList<ThemeCard>();
-        if(dataString != null) {
-            data = new JSONObject(dataString);
 
-            JSONArray themes = data.getJSONArray("theme");
-            for (int i = 0; i < themes.length(); i++) {
-                JSONObject theme = themes.getJSONObject(i);
-                String bg = FrServerConfig.getImageCompressed(theme.getString("thumbnail"));
-                ThemeCard tc = new ThemeCard(theme.getInt("id"), bg, theme.toString());
-                themeCards.add(tc);
+    private void hideLoading(boolean isError, String errorMessage){
+        loadingInterface.setVisibility(View.GONE);
+        dotsTextView.stop();
+        if(isError){
+            Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+        }else{
+            borderScrollView.setVisibility(View.VISIBLE);
+            borderScrollView.smoothScrollTo(0, 0);
+        }
+    }
+
+    private void getData() {
+        String url = FrServerConfig.getCollectionsUrl("theme", lastid);
+        GetRequest request = new GetRequest(url, FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject res) {
+                if(res.has("data")) {
+                    if(lastid == -1)
+                        hideLoading(false, "");
+                    else
+                        borderScrollView.setCompleteMore();
+                    try {
+                        JSONArray data = res.getJSONArray("data");
+                        if(data == null || data.length() == 0) {
+                            Toast.makeText(getActivity(), "没有多余", Toast.LENGTH_SHORT).show();
+                        }else
+                            processData(data);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                hideLoading(true, getResources().getString(R.string.network_error));
+            }
+        });
+        FrRequest.getInstance().request(request);
+    }
+
+    private void processData(JSONArray data)  {
+        List<Collection> collections = new Gson().fromJson(data.toString(), new TypeToken<List<Collection>>(){}.getType());
+        if(themeCards == null)
+            themeCards = new ArrayList<>();
+        if(collections != null && collections.size() > 0) {
+            lastid = collections.get(collections.size() - 1).getId();
+            for(int i = 0; i < collections.size(); i++) {
+                themeCards.add(collections.get(i).getTheme());
             }
         }
-        themeCardAdapter = new ThemeCardAdapter(getActivity(), themeCards);
-        themeRecipeRecyclerView.setAdapter(themeCardAdapter);
+        if(themeCardAdapter == null) {
+            themeCardAdapter = new ThemeCardAdapter(getActivity(), themeCards);
+            themeRecipeRecyclerView.setAdapter(themeCardAdapter);
+        }else
+            themeCardAdapter.notifyDataSetChanged();
     }
 
     private void initView(View view) {
@@ -82,5 +132,20 @@ public class ThemeFragment extends Fragment
         themeRecipeLayoutManager = new RecyclerViewLayoutManager(this.getActivity());
         themeRecipeLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         themeRecipeRecyclerView.setLayoutManager(themeRecipeLayoutManager);
+
+        loadingInterface = (LinearLayout) view.findViewById(R.id.loading_interface);
+        borderScrollView = (BorderScrollView) view.findViewById(R.id.collect_theme_list);
+        dotsTextView = (DotsTextView) view.findViewById(R.id.dots);
+        borderScrollView.setOnBorderListener(new BorderScrollView.OnBorderListener() {
+            @Override
+            public void onBottom() {
+                getData();
+            }
+
+            @Override
+            public void onTop() {
+
+            }
+        });
     }
 }

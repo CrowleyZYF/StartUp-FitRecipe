@@ -2,10 +2,7 @@ package cn.fitrecipe.android;
 
 import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Editable;
 
 import com.pgyersdk.crash.PgyCrashManager;
 import com.youku.player.YoukuPlayerBaseConfiguration;
@@ -14,7 +11,13 @@ import java.util.List;
 
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.ImageLoader.MyImageLoader;
-import cn.fitrecipe.android.entity.BasketDao;
+import cn.fitrecipe.android.dao.AuthorDao;
+import cn.fitrecipe.android.dao.BasketDao;
+import cn.fitrecipe.android.dao.CollectionDao;
+import cn.fitrecipe.android.dao.HomeDataDao;
+import cn.fitrecipe.android.entity.Author;
+import cn.fitrecipe.android.entity.Collection;
+import cn.fitrecipe.android.entity.HomeData;
 import cn.fitrecipe.android.entity.Recipe;
 
 /**
@@ -24,34 +27,47 @@ public class FrApplication extends Application {
 
     private static FrApplication instance;
     private MyImageLoader myImageLoader;
-    //save home data json
-    private String data;
-    private boolean isHomeDataNew = false;
-    private String token;
     public static YoukuPlayerBaseConfiguration configuration;
 
-    private SharedPreferences userSp;
-
+    //菜篮子缓存
     private List<Recipe> basket;
+    //用户缓存
+    private Author author;
+    private String token;
+    //主页数据缓存
+    private HomeData homeData;
+    //收藏
+    private List<Collection> collections;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        String appId = "9f7d5e16543dfae53e38d616f3df0818";  //蒲公英注册或上传应用获取的AppId
-        PgyCrashManager.register(this, appId);
+        //初始化蒲公英
+        initPgy();
 
-        MyImageLoader.init(this);
-        this.registerActivityLifecycleCallbacks(new MyActivityCallbacks());
-
-        userSp = getSharedPreferences("user", Context.MODE_PRIVATE);
+        //初始化图片缓存
+        initImageLoader();
 
         //init network
         FrRequest.getInstance().init(this);
 
-        myImageLoader = new MyImageLoader();
+//        initYouku();
         instance = this;
+    }
 
+    private void initPgy() {
+        String appId = "9f7d5e16543dfae53e38d616f3df0818";  //蒲公英注册或上传应用获取的AppId
+        PgyCrashManager.register(this, appId);
+    }
+
+    private void initImageLoader() {
+        MyImageLoader.init(this);
+        this.registerActivityLifecycleCallbacks(new MyActivityCallbacks());
+        myImageLoader = new MyImageLoader();
+    }
+
+    private void initYouku() {
         configuration = new YoukuPlayerBaseConfiguration(this){
 
             @Override
@@ -71,6 +87,7 @@ public class FrApplication extends Application {
         };
     }
 
+
     public static FrApplication getInstance() {
         return instance;
     }
@@ -79,32 +96,11 @@ public class FrApplication extends Application {
         return myImageLoader;
     }
 
-    public String getData() {
-        SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
-        if(data == null || data.length() == 0) {
-            isHomeDataNew = false;
-            if(preferences.contains("homeData"))
-                data = preferences.getString("homeData", null);
-        }
-        return data;
-    }
-
-    public void saveData(String data) {
-        this.data = data;
-        isHomeDataNew = true;
-        SharedPreferences.Editor editor = userSp.edit();
-        editor.putString("homeData", data);
-        editor.commit();
-    }
-
-    public boolean isHomeDataNew() {
-        return isHomeDataNew;
-    }
-
     public String getToken() {
-        if(token == null)
-            token = userSp.getString("token", null);
-        return token;
+        Author author = getAuthor();
+        if(author != null)
+            return author.getToken();
+        return null;
     }
 
     public List<Recipe> getBasket() {
@@ -126,6 +122,53 @@ public class FrApplication extends Application {
         BasketDao basketDao = new BasketDao(this);
         basketDao.saveBasket(basket);
     }
+
+    public Author getAuthor() {
+        if(author == null) {
+            author = new AuthorDao(this).getAuthor();
+        }
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
+        new AuthorDao(this).saveAuthor(author);
+    }
+
+    public void logOut() {
+        new AuthorDao(this).clear();
+        new CollectionDao(this).clear();
+    }
+
+    public boolean isLogin() {
+        Author author = getAuthor();
+        return author == null ? false : true;
+    }
+
+    public HomeData getHomeData() {
+        if(homeData == null) {
+            homeData = new HomeDataDao(this).getHomeData();
+        }
+        return homeData;
+    }
+
+    public void setHomeData(HomeData homeData) {
+        this.homeData = homeData;
+        new HomeDataDao(this).savHomeData(homeData);
+    }
+
+    public List<Collection> getCollections() {
+        if(collections == null) {
+            collections = new CollectionDao(this).getCollections();
+        }
+        return collections;
+    }
+
+    public void setCollections(List<Collection> collections) {
+        this.collections = collections;
+        new CollectionDao(this).saveCollections(collections);
+    }
+
 
     class MyActivityCallbacks implements ActivityLifecycleCallbacks {
 

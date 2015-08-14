@@ -1,4 +1,4 @@
-package cn.fitrecipe.android.entity;
+package cn.fitrecipe.android.dao;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,6 +8,8 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.fitrecipe.android.entity.Recipe;
 
 /**
  * Created by wk on 2015/8/6.

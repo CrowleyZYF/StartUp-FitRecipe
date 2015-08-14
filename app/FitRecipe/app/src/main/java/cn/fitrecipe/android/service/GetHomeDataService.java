@@ -7,12 +7,15 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.daimajia.androidviewhover.BlurLayout;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import cn.fitrecipe.android.FrApplication;
@@ -21,6 +24,10 @@ import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.ImageLoader.ILoadingListener;
 import cn.fitrecipe.android.R;
+import cn.fitrecipe.android.entity.HomeData;
+import cn.fitrecipe.android.entity.Recipe;
+import cn.fitrecipe.android.entity.Recommend;
+import cn.fitrecipe.android.entity.Theme;
 import cn.fitrecipe.android.function.Common;
 
 public class GetHomeDataService extends Service {
@@ -40,7 +47,7 @@ public class GetHomeDataService extends Service {
         if(Common.isOpenNetwork(this))
             getDataFromNetwork();
         else{
-            Toast.makeText(this, "error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.network_close), Toast.LENGTH_SHORT).show();
         }
         return super.onStartCommand(intent, flags, startId);
     }
@@ -84,27 +91,25 @@ public class GetHomeDataService extends Service {
 
     private void processData(JSONObject data) throws JSONException {
         //save data to Application
-        FrApplication.getInstance().saveData(data.toString());
+        HomeData homeData = HomeData.fromJson(data.toString());
+        FrApplication.getInstance().setHomeData(homeData);
 
         Set<String> urls = new HashSet<String>();
-        JSONArray themes = data.getJSONArray("theme");
-        for(int i = 0; i < themes.length(); i++) {
-            JSONObject theme = themes.getJSONObject(i);
-            String img = FrServerConfig.getImageCompressed(theme.getString("thumbnail"));
+        List<Theme> themes = homeData.getTheme();
+        for(int i = 0; i < themes.size(); i++) {
+            String img = themes.get(i).getThumbnail();
             urls.add(img);
         }
 
-        JSONArray updates = data.getJSONArray("update");
-        for (int i = 0;i < updates.length(); i++){
-            JSONObject update = updates.getJSONObject(i);
-            String img = FrServerConfig.getImageCompressed(update.getString("img"));
+        List<Recipe> updates = homeData.getUpdate();
+        for (int i = 0;i < updates.size(); i++){
+            String img = updates.get(i).getImg();
             urls.add(img);
         }
 
-        JSONArray recommends = data.getJSONArray("recommend");
-        for(int i = 0;i < recommends.length(); i++){
-            JSONObject recommend = recommends.getJSONObject(i);
-            String img = FrServerConfig.getImageCompressed(recommend.getString("img"));
+        List<Recommend> recommends = homeData.getRecommend();
+        for(int i = 0;i < recommends.size(); i++){
+            String img = recommends.get(i).getRecipe().getRecommend_img();
             urls.add(img);
         }
         FrApplication.getInstance().getMyImageLoader().loadImages(urls, new ILoadingListener() {

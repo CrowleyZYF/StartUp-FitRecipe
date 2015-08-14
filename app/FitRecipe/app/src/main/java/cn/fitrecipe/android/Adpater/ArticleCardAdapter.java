@@ -13,10 +13,8 @@ import java.util.List;
 
 import cn.fitrecipe.android.ArticleActivity;
 import cn.fitrecipe.android.FrApplication;
-import cn.fitrecipe.android.KnowledgeArticleActivity;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.entity.Article;
-import cn.fitrecipe.android.model.ArticleCard;
 
 /**
  * Created by 奕峰 on 2015/4/24.

@@ -34,11 +34,15 @@ public class BorderScrollView extends ScrollView {
     private boolean isScroll;
 
     public BorderScrollView(Context context) {
-        this(context, null);
+        super(context);
+        flag = false;
+        isScroll = true;
     }
 
     public BorderScrollView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+        super(context, attrs);
+        flag = false;
+        isScroll = true;
     }
 
     public BorderScrollView(Context context, AttributeSet attrs, int defStyle) {
@@ -87,6 +91,7 @@ public class BorderScrollView extends ScrollView {
         if (contentView != null && contentView.getMeasuredHeight() <= getScrollY() + getHeight()) {
             if (onBorderListener != null && isScroll) {
                 onBorderListener.onBottom();
+                System.out.println("显示进度！");
                 getMore();
             }
         } else if (getScrollY() == 0) {

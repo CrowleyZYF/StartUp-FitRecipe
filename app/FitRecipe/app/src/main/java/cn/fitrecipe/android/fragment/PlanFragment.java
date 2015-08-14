@@ -11,18 +11,14 @@ import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-import com.daimajia.androidviewhover.BlurLayout;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cn.fitrecipe.android.Config.LocalDemo;
+import cn.fitrecipe.android.Adpater.PlanViewPagerAdapter;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.UI.SlidingPage;
-import cn.fitrecipe.android.Adpater.PlanViewPagerAdapter;
 
 /**
  * Created by 奕峰 on 2015/4/11.
@@ -75,12 +71,13 @@ public class PlanFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        View v = inflater.inflate(R.layout.fragment_plan, container, false);
+        //View v = inflater.inflate(R.layout.fragment_plan, container, false);
+        View v = inflater.inflate(R.layout.activity_temp, container, false);
         //BlurLayout.setGlobalDefaultDuration(450);
 
-        initView(v);
-        initData();
-        initEvent();
+        //initView(v);
+        //initData();
+        //initEvent();
 
         return v;
     }
@@ -124,49 +121,49 @@ public class PlanFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initMeal() {
-        listViews1.clear();
-        listViews2.clear();
-        listViews3.clear();
-        meal_name.setText(LocalDemo.mealName[nowState]);
-        meal_name_info.setText(LocalDemo.mealNotice[nowState]);
-        meal_pic.setImageResource(LocalDemo.mealPic[nowState]);
-        for (int i = begin[0][nowState]; i < end[0][nowState]; i++) {
-            View view1 = LayoutInflater.from(this.getActivity()).inflate(
-                    R.layout.fragment_plan_recipe_list_card, null);
-            BlurLayout iv1 = (BlurLayout) view1.findViewById(R.id.sample);
-//            iv1.setBackgroundResource(LocalDemo.recipeBG[i]);
-            TextView tv1 = (TextView) view1.findViewById(R.id.recipe_name);
-            tv1.setText(LocalDemo.recipeName[i]);
-            listViews1.add(view1);
-        }
-        for (int i = begin[1][nowState]; i < end[1][nowState]; i++) {
-            View view2 = LayoutInflater.from(this.getActivity()).inflate(
-                    R.layout.fragment_plan_recipe_list_card, null);
-            BlurLayout iv2 = (BlurLayout) view2.findViewById(R.id.sample);
-//            iv2.setBackgroundResource(LocalDemo.recipeBG[i]);
-            TextView tv2 = (TextView) view2.findViewById(R.id.recipe_name);
-            tv2.setText(LocalDemo.recipeName[i]);
-            listViews2.add(view2);
-        }
-        for (int i = begin[2][nowState]; i < end[2][nowState]; i++) {
-            View view3 = LayoutInflater.from(this.getActivity()).inflate(
-                    R.layout.fragment_plan_recipe_list_card, null);
-            BlurLayout iv3 = (BlurLayout) view3.findViewById(R.id.sample);
-//            iv3.setBackgroundResource(LocalDemo.recipeBG[i]);
-            TextView tv3 = (TextView) view3.findViewById(R.id.recipe_name);
-            tv3.setText(LocalDemo.recipeName[i]);
-            listViews3.add(view3);
-        }
+//        listViews1.clear();
+//        listViews2.clear();
+//        listViews3.clear();
+//        meal_name.setText(LocalDemo.mealName[nowState]);
+//        meal_name_info.setText(LocalDemo.mealNotice[nowState]);
+//        meal_pic.setImageResource(LocalDemo.mealPic[nowState]);
+//        for (int i = begin[0][nowState]; i < end[0][nowState]; i++) {
+//            View view1 = LayoutInflater.from(this.getActivity()).inflate(
+//                    R.layout.fragment_plan_recipe_list_card, null);
+//            BlurLayout iv1 = (BlurLayout) view1.findViewById(R.id.sample);
+////            iv1.setBackgroundResource(LocalDemo.recipeBG[i]);
+//            TextView tv1 = (TextView) view1.findViewById(R.id.recipe_name);
+//            tv1.setText(LocalDemo.recipeName[i]);
+//            listViews1.add(view1);
+//        }
+//        for (int i = begin[1][nowState]; i < end[1][nowState]; i++) {
+//            View view2 = LayoutInflater.from(this.getActivity()).inflate(
+//                    R.layout.fragment_plan_recipe_list_card, null);
+//            BlurLayout iv2 = (BlurLayout) view2.findViewById(R.id.sample);
+////            iv2.setBackgroundResource(LocalDemo.recipeBG[i]);
+//            TextView tv2 = (TextView) view2.findViewById(R.id.recipe_name);
+//            tv2.setText(LocalDemo.recipeName[i]);
+//            listViews2.add(view2);
+//        }
+//        for (int i = begin[2][nowState]; i < end[2][nowState]; i++) {
+//            View view3 = LayoutInflater.from(this.getActivity()).inflate(
+//                    R.layout.fragment_plan_recipe_list_card, null);
+//            BlurLayout iv3 = (BlurLayout) view3.findViewById(R.id.sample);
+////            iv3.setBackgroundResource(LocalDemo.recipeBG[i]);
+//            TextView tv3 = (TextView) view3.findViewById(R.id.recipe_name);
+//            tv3.setText(LocalDemo.recipeName[i]);
+//            listViews3.add(view3);
+//        }
     }
 
     private void getData() {
-        for(int i=0;i< LocalDemo.nutritionName.length;i++){
-            Map<String, Object> map=new HashMap<String, Object>();
-            map.put("item_name", LocalDemo.nutritionName[i]);
-            map.put("item_weight", "20g");
-            map.put("item_remark", "12%");
-            nutrition_dataList.add(map);
-        }
+//        for(int i=0;i< LocalDemo.nutritionName.length;i++){
+//            Map<String, Object> map=new HashMap<String, Object>();
+//            map.put("item_name", LocalDemo.nutritionName[i]);
+//            map.put("item_weight", "20g");
+//            map.put("item_remark", "12%");
+//            nutrition_dataList.add(map);
+//        }
     }
 
     private void initEvent() {

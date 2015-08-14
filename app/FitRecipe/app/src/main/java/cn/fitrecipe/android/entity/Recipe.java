@@ -42,6 +42,8 @@ public class Recipe implements Serializable{
     private String tips;
     private int duration;
     private double calories;
+    private int collection_count;
+    private ArrayList<Comment> comment_set;
 
 
 
@@ -194,8 +196,28 @@ public class Recipe implements Serializable{
         if(data.has("calories"))
             recipe.setCalories(data.getDouble("calories"));
 
+        if(data.has("collection_count"))
+            recipe.setCollection_count(data.getInt("collection_count"));
+
+        if(data.has("comment_set")) {
+            String jsona = data.getJSONArray("comment_set").toString();
+            ArrayList<Comment>  comments = new Gson().fromJson(jsona, new TypeToken<ArrayList<Comment>>() {
+            }.getType());
+            recipe.setComment_set(comments);
+        }
         //parse complete
         return recipe;
+    }
+
+    public String getRecipe_function() {
+        return effect_labels.get(0).getName();
+    }
+
+    public String getRecipe_function_backup() {
+        if(effect_labels.size() > 1) {
+            return effect_labels.get(1).getName();
+        }
+        return "";
     }
 
     public int getId() {
@@ -392,5 +414,19 @@ public class Recipe implements Serializable{
     }
 
 
+    public int getCollection_count() {
+        return collection_count;
+    }
 
+    public void setCollection_count(int collection_count) {
+        this.collection_count = collection_count;
+    }
+
+    public ArrayList<Comment> getComment_set() {
+        return comment_set;
+    }
+
+    public void setComment_set(ArrayList<Comment> comment_set) {
+        this.comment_set = comment_set;
+    }
 }

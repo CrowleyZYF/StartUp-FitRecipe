@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,9 +27,12 @@ import cn.fitrecipe.android.Adpater.RecipeCardAdapter;
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
+import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.UI.BorderScrollView;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
-import cn.fitrecipe.android.model.RecipeCard;
+import cn.fitrecipe.android.entity.Collection;
+import cn.fitrecipe.android.entity.Recipe;
+import cn.fitrecipe.android.entity.Theme;
 import pl.tajchert.sample.DotsTextView;
 
 public class ThemeActivity extends Activity implements View.OnClickListener {
@@ -41,11 +46,11 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
     private TextView recipe_content;
     private RecyclerView frThemeRecipeRecyclerView;
     private RecyclerViewLayoutManager frThemeRecipeLayoutManager;
-    private String id;
     private int start = 0;
     private int num = 6;
-    List<RecipeCard> dataList;
+    List<Recipe> dataList;
     RecipeCardAdapter recipeCardAdapter;
+    Theme theme;
 
     private TextView follow_btn;
     private ImageView follow_icon;
@@ -60,10 +65,9 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
 
         //获取ID
         Intent intent =getIntent();
-        id = intent.getStringExtra("id");
-        String info = intent.getStringExtra("info");
+        theme = (Theme) intent.getSerializableExtra("theme");
         try {
-            initView(info);
+            initView();
             getData();
         } catch (JSONException e) {
             e.printStackTrace();
@@ -75,7 +79,7 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
         //get Data from network
         String token = FrApplication.getInstance().getToken();
         JSONObject params = new JSONObject();
-        params.put("id", id);
+        params.put("id", theme.getId());
         params.put("start", start);
         params.put("num", num);
         String url = FrServerConfig.getThemeDetailsUrl(params);
@@ -129,27 +133,14 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
     private void processData(JSONArray data) throws JSONException {
         if(data == null || data.length() == 0)
             return;
-        if(dataList == null)
-            dataList = new ArrayList<RecipeCard>();
-        for(int i = 0; i < data.length(); i++) {
-            JSONObject recipe = data.getJSONObject(i);
-            String recipe_name = recipe.getString("title");
-            int recipe_id = recipe.getInt("id");
-            JSONArray effect_labels = recipe.getJSONArray("effect_labels");
-            String function = "";
-            String function_backup = "";
-            if(effect_labels.length() > 0)
-                function = effect_labels.getJSONObject(0).getString("name");
-            if(effect_labels.length() > 1) {
-                function_backup = effect_labels.getJSONObject(1).getString("name");
-            }
-            int duration = recipe.getInt("duration");
-            String img = FrServerConfig.getImageCompressed(recipe.getString("img"));
-            String total_amount = recipe.getString("total_amount");
-            double calories = recipe.getDouble("calories") * Integer.parseInt(total_amount.substring(0, total_amount.indexOf("g"))) / 100;
-            RecipeCard rc = new RecipeCard(recipe_name, recipe_id, function, function_backup, duration, (int)calories, 100, img);
-            dataList.add(rc);
+        if(dataList == null) {
+            dataList = new ArrayList<>();
         }
+
+       for(int i = 0; i < data.length(); i++) {
+           Recipe recipe = Recipe.fromJson(data.getJSONObject(i).toString());
+           dataList.add(recipe);
+       }
         if(recipeCardAdapter == null) {
             recipeCardAdapter = new RecipeCardAdapter(this, dataList);
             frThemeRecipeRecyclerView.setAdapter(recipeCardAdapter);
@@ -159,13 +150,11 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
 
     }
 
-    private void initView(String info) throws JSONException {
-        JSONObject data = new JSONObject(info);
-
+    private void initView() throws JSONException {
         recipe_content = (TextView) findViewById(R.id.recipe_content);
         recipe_img = (ImageView) findViewById(R.id.recipe_img);
-        FrApplication.getInstance().getMyImageLoader().displayImage(recipe_img, FrServerConfig.getImageCompressed(data.getString("img")));
-        recipe_content.setText(data.getString("content"));
+        FrApplication.getInstance().getMyImageLoader().displayImage(recipe_img, theme.getImg());
+        recipe_content.setText(theme.getContent());
         back_btn = (ImageView) findViewById(R.id.back_btn);
 
         frThemeRecipeRecyclerView = (RecyclerView) findViewById(R.id.theme_recipe_recycler_view);
@@ -229,15 +218,58 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
 
     public void collect_recipe(){
         if(isCollected){
-            Toast.makeText(this,"取消关注",Toast.LENGTH_LONG).show();
-            follow_btn.setText(R.string.follow);
-            follow_btn.setBackground(getResources().getDrawable(R.color.active_color));
-            follow_icon.setImageResource(R.drawable.icon_like_noshadow);
+            String url = FrServerConfig.getDeleteCollectionUrl("theme", 0);
+            PostRequest request = new PostRequest(url, FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject res) {
+                    Toast.makeText(ThemeActivity.this, "取消收藏!", Toast.LENGTH_SHORT).show();
+                    follow_btn.setText(R.string.follow);
+                    follow_btn.setBackground(getResources().getDrawable(R.color.active_color));
+                    follow_icon.setImageResource(R.drawable.icon_like_noshadow);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    Toast.makeText(ThemeActivity.this, getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                }
+            });
+            FrRequest.getInstance().request(request);
         }else{
-            Toast.makeText(this,"关注",Toast.LENGTH_LONG).show();
-            follow_btn.setText(R.string.cancel_follow);
-            follow_btn.setBackground(getResources().getDrawable(R.color.disable_color));
-            follow_icon.setImageResource(R.drawable.icon_like_green);
+            String url = FrServerConfig.getCreateCollectionUrl();
+            JSONObject params = new JSONObject();
+            try {
+                params.put("type", "theme");
+                params.put("id", theme.getId());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            PostRequest request = new PostRequest(url, FrApplication.getInstance().getToken(), params, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject res) {
+                    Toast.makeText(ThemeActivity.this, "收藏成功!", Toast.LENGTH_SHORT).show();
+                    follow_btn.setText(R.string.cancel_follow);
+                    follow_btn.setBackground(getResources().getDrawable(R.color.disable_color));
+                    follow_icon.setImageResource(R.drawable.icon_like_green);
+//                    if(res.has("data")) {
+//                        try {
+//                            Collection collection = new Gson().fromJson(res.getJSONObject("data").toString(), Collection.class);
+//                            collection.setType("theme");
+//                            List<Collection> collectionList = FrApplication.getInstance().getCollections();
+//                            if(collectionList == null) collectionList = new ArrayList<>();
+//                            collectionList.add(collection);
+//                            FrApplication.getInstance().setCollections(collectionList);
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    Toast.makeText(ThemeActivity.this, getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                }
+            });
+            FrRequest.getInstance().request(request);
         }
         isCollected=!isCollected;
     }

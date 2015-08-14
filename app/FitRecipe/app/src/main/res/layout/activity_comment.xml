@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:dots="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/comment_header"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:background="@color/base_color"
-        android:gravity="center"
-        android:orientation="vertical" >
+        android:layout_alignParentTop="true"
+        android:gravity="center">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -50,51 +50,88 @@
         </RelativeLayout>
     </LinearLayout>
 
-    <FrameLayout
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/comment_recycler_view"
-            android:scrollbars="none"
-            android:background="@color/white"
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"
-            />
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/comment_footer"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_height="45dp">
 
         <LinearLayout
-            android:id="@+id/loading_interface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:background="@color/base_color"
             android:gravity="center"
-            android:layout_gravity="center_vertical"
-            android:layout_marginTop="-20dp">
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/search_input"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:hint="@string/comment_hint"
+                    android:ems="10"
+                    android:id="@+id/comment_editText"
+                    android:padding="5dp"
+                    android:background="@drawable/login_input" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/comment_reply_btn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="15dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/icon_comment"
+                android:background="@drawable/icon_selector"/>
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="拼命加载中"
-                android:textSize="14sp"
-                android:textColor="@color/base_color"
-                android:layout_gravity="bottom"/>
+                android:id="@+id/comment_reply_comment_id"
+                android:layout_width="0dp"
+                android:layout_height="0dp"/>
 
-            <pl.tajchert.sample.DotsTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/dots"
-                android:textSize="30sp"
-                android:textColor="@color/base_color"
-                dots:autoplay="true"
-                dots:period="1000"
-                android:layout_gravity="bottom"/>
-
+            <TextView
+                android:id="@+id/comment_reply_user_id"
+                android:layout_width="0dp"
+                android:layout_height="0dp" />
         </LinearLayout>
 
+    </LinearLayout>
 
-    </FrameLayout>
-    <include layout="@layout/activity_comment_widget" />
-
-</LinearLayout>
+    <cn.fitrecipe.android.UI.BorderScrollView
+        android:layout_width="match_parent"
+        android:layout_below="@id/comment_header"
+        android:layout_above="@id/comment_footer"
+        android:id="@+id/scrollView"
+        android:scrollbars="none"
+        android:background="@android:color/white"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/container_layout"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <cn.fitrecipe.android.UI.LinearLayoutForListView
+                android:id="@+id/listview"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="0dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </cn.fitrecipe.android.UI.LinearLayoutForListView>
+        </LinearLayout>
+    </cn.fitrecipe.android.UI.BorderScrollView>
+</RelativeLayout>
