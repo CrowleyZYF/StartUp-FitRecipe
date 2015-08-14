@@ -9,6 +9,7 @@
     <color name="base_color">#49BDCC</color>
     <color name="base_color_selected">#ff449ead</color>
     <color name="active_color">#badc2d</color>
+    <color name="active_color_pressed">#ffa0c22c</color>
     <color name="disable_color">#ffc9c9c9</color>
     <color name="login_color">#4abdcc</color>
     <color name="login_text_color">#4f6202</color>

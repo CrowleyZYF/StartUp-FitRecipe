@@ -36,7 +36,7 @@
         <RelativeLayout
             android:id="@+id/plan_test_value_area"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="65dp"
             android:orientation="horizontal"
             android:layout_centerInParent="true"
             >
@@ -47,8 +47,22 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:textSize="60sp"
-                android:text="1"
+                android:text="0"
                 android:layout_centerHorizontal="true"/>
+
+            <TextView
+                android:id="@+id/isInt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/position"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/plan_test_question_unit"
@@ -62,6 +76,7 @@
                 android:layout_marginLeft="5dp"/>
 
             <ImageView
+                android:id="@+id/delete_btn"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:padding="5dp"

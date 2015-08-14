@@ -7,6 +7,7 @@
     android:background="@color/base_color">
 
     <RelativeLayout
+        android:id="@+id/test_05_01_up"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="5"
@@ -47,8 +48,22 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:textSize="60sp"
-                android:text="1"
+                android:text="0"
                 android:layout_centerHorizontal="true"/>
+
+            <TextView
+                android:id="@+id/isInt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/position"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/plan_test_question_unit"
@@ -62,6 +77,7 @@
                 android:layout_marginLeft="5dp"/>
 
             <ImageView
+                android:id="@+id/delete_btn"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:padding="5dp"
@@ -98,6 +114,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/test_05_02_up"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="5"
@@ -160,6 +177,7 @@
     </RelativeLayout>
     
     <LinearLayout
+        android:id="@+id/test_05_01_down"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="3"
@@ -168,9 +186,12 @@
         android:orientation="vertical"
         android:visibility="gone">
 
+        <include layout="@layout/fragment_plan_test_input_list" />
+
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/radioGroup"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="3"
