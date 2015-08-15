@@ -5,42 +5,44 @@ import android.content.Context;
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
-import java.util.List;
 
-import cn.fitrecipe.android.entity.Recipe;
+import cn.fitrecipe.android.entity.Nutrition;
 
 /**
- * Created by wk on 2015/8/12.
+ * Created by wk on 2015/8/15.
  */
-public class RecipeDao {
+public class NutritionDao {
 
-    private Dao<Recipe, Integer> recipeDaoOpe;
+    private Dao<Nutrition, Integer> nutritionDaoOpe;
     private DatabaseHelper helper;
 
-    public RecipeDao(Context context) {
+    public NutritionDao(Context context) {
         try {
             helper = DatabaseHelper.getHelper(context);
-            recipeDaoOpe = helper.getDao(Recipe.class);
+            nutritionDaoOpe = helper.getDao(Nutrition.class);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void add(Recipe recipe) {
+    public int add(Nutrition nutrition) {
+        int id = 0;
         try {
-            recipeDaoOpe.create(recipe);
+            id = nutritionDaoOpe.create(nutrition);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return id;
     }
 
-    public List<Recipe> getAll() {
-        List<Recipe> recipes = null;
+    public Nutrition get(int id) {
+        Nutrition nutrition = null;
         try {
-            recipes = recipeDaoOpe.queryForAll();
+            nutrition = nutritionDaoOpe.queryForId(id);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return recipes;
+        return nutrition;
     }
+
 }

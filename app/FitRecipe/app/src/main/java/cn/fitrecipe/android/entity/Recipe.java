@@ -2,6 +2,9 @@ package cn.fitrecipe.android.entity;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
+import com.j256.ormlite.table.DatabaseTable;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -9,41 +12,67 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-
+import java.util.Collection;
 import cn.fitrecipe.android.Http.FrServerConfig;
 
 /**
  * Created by wk on 2015/8/6.
  */
+@DatabaseTable(tableName = "fr_recipe")
 public class Recipe implements Serializable{
 
+    @DatabaseField(id = true)
     private int id;
+
+    //ingnore when create database
     private ArrayList<Label> meat_labels;
     private ArrayList<Label> time_labels;
     private ArrayList<Label> effect_labels;
     private ArrayList<Label> other_labels;
-    private ArrayList<Component> component_set;
     private ArrayList<Procedure>  procedure_set;
-    private ArrayList<Nutrition> nutrition_set;
+    private ArrayList<Comment> comment_set;
+
+    @ForeignCollectionField
+    private Collection<Component> component_set;
+    @ForeignCollectionField
+    private Collection<Nutrition> nutrition_set;
+    @DatabaseField
     private String macro_element_ratio;
+    @DatabaseField
     private int total_amount;
+    @DatabaseField
     private double protein_ratio;
+    @DatabaseField
     private double fat_ratio;
     private Author author;
+    @DatabaseField
     private String created_time;
+    @DatabaseField
     private String updated_time;
+    @DatabaseField
     private String img;
+    @DatabaseField
     private String thumbnail;
+    @DatabaseField
     private String recommend_img;
+    @DatabaseField
     private String recommend_thumbnail;
+    @DatabaseField
     private String title;
+    @DatabaseField
     private String introduce;
+    @DatabaseField
     private String tips;
+    @DatabaseField
     private int duration;
+    @DatabaseField
     private double calories;
+    @DatabaseField
     private int collection_count;
-    private ArrayList<Comment> comment_set;
+    @DatabaseField
+    private String tags;
 
 
 
@@ -51,7 +80,7 @@ public class Recipe implements Serializable{
         int total = 0;
         if(increment_list.size() == component_set.size()) {
             for (int i = 0; i < component_set.size(); i++) {
-                component_set.get(i).setMAmount(component_set.get(i).getMAmount() + increment_list.get(i));
+                getComponent_set().get(i).setMAmount(getComponent_set().get(i).getMAmount() + increment_list.get(i));
                 total += increment_list.get(i);
             }
             setTotal_amount(getTotal_amount() + total);
@@ -62,7 +91,7 @@ public class Recipe implements Serializable{
         int total = 0;
         if(increment_list.size() == component_set.size()) {
             for (int i = 0; i < component_set.size(); i++) {
-                component_set.get(i).setMAmount(component_set.get(i).getMAmount() - increment_list.get(i));
+                getComponent_set().get(i).setMAmount(getComponent_set().get(i).getMAmount() - increment_list.get(i));
                 total -= increment_list.get(i);
             }
             setTotal_amount(getTotal_amount() + total);
@@ -228,21 +257,11 @@ public class Recipe implements Serializable{
         this.id = id;
     }
 
-    public ArrayList<Label> getMeat_labels() {
-        return meat_labels;
-    }
 
     public void setMeat_labels(ArrayList<Label> meat_labels) {
         this.meat_labels = meat_labels;
     }
 
-    public ArrayList<Nutrition> getNutrition_set() {
-        return nutrition_set;
-    }
-
-    public void setNutrition_set(ArrayList<Nutrition> nutrition_set) {
-        this.nutrition_set = nutrition_set;
-    }
 
     public int getTotal_amount() {
         return total_amount;
@@ -268,17 +287,14 @@ public class Recipe implements Serializable{
         this.fat_ratio = fat_ratio;
     }
 
-    public ArrayList<Label> getTime_labels() {
-        return time_labels;
+    public List<Component> getComponent_set() {
+        return (List<Component>)component_set;
     }
 
     public void setTime_labels(ArrayList<Label> time_labels) {
         this.time_labels = time_labels;
     }
 
-    public ArrayList<Label> getEffect_labels() {
-        return effect_labels;
-    }
 
     public void setEffect_labels(ArrayList<Label> effect_labels) {
         this.effect_labels = effect_labels;
@@ -292,13 +308,6 @@ public class Recipe implements Serializable{
         this.other_labels = other_labels;
     }
 
-    public ArrayList<Component> getComponent_set() {
-        return component_set;
-    }
-
-    public void setComponent_set(ArrayList<Component> component_set) {
-        this.component_set = component_set;
-    }
 
     public ArrayList<Procedure> getProcedure_set() {
         return procedure_set;
@@ -428,5 +437,41 @@ public class Recipe implements Serializable{
 
     public void setComment_set(ArrayList<Comment> comment_set) {
         this.comment_set = comment_set;
+    }
+
+    public String getTags() {
+        StringBuilder tags = new StringBuilder();
+        for(int i = 0; i < time_labels.size(); i++) {
+            Label label = time_labels.get(i);
+            tags.append(label.getName());
+            tags.append("、");
+        }
+
+        for(int i = 0; i < meat_labels.size(); i++) {
+            Label label = meat_labels.get(i);
+            tags.append(label.getName());
+            tags.append("、");
+        }
+
+        for(int i = 0; i < other_labels.size(); i++) {
+            Label label = other_labels.get(i);
+            tags.append(label.getName());
+            tags.append("、");
+        }
+        if(tags.length() > 0)
+            tags.deleteCharAt(tags.length() - 1);
+        return tags.toString();
+    }
+
+    public void setComponent_set(List<Component> component_set) {
+        this.component_set = component_set;
+    }
+
+    public List<Nutrition> getNutrition_set() {
+        return (List<Nutrition>)nutrition_set;
+    }
+
+    public void setNutrition_set(List<Nutrition> nutrition_set) {
+        this.nutrition_set = nutrition_set;
     }
 }

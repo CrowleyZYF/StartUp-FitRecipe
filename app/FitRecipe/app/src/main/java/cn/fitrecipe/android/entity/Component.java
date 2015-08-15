@@ -1,13 +1,24 @@
 package cn.fitrecipe.android.entity;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 /**
  * Created by wk on 2015/8/6.
  */
+@DatabaseTable(tableName = "fr_component")
 public class Component {
 
+    @DatabaseField(generatedId = true)
+    private int id;
+    @DatabaseField(canBeNull = true, foreign = true, foreignAutoRefresh = true)
     private Ingredient ingredient;
+    @DatabaseField
     private String amount;
+    @DatabaseField
     private String remark;
+    @DatabaseField(foreign = true, canBeNull = true, foreignAutoRefresh = true)
+    private Recipe recipe;
 
     public int getMAmount() {
         return Integer.parseInt(amount);
@@ -41,5 +52,21 @@ public class Component {
 
     public void setIngredient(Ingredient ingredient) {
         this.ingredient = ingredient;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Recipe getRecipe() {
+        return recipe;
+    }
+
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
     }
 }

@@ -1,11 +1,18 @@
 package cn.fitrecipe.android.entity;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 /**
  * Created by wk on 2015/8/6.
  */
+@DatabaseTable(tableName = "fr_ingredient")
 public class Ingredient {
+    @DatabaseField(id = true)
     private int id;
+    @DatabaseField
     private String name;
+    @DatabaseField
     private int status;
 
     public int getId() {

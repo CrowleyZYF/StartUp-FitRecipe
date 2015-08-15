@@ -1,55 +1,67 @@
 package cn.fitrecipe.android.dao;
 
-
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 
-import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
-import com.j256.ormlite.support.ConnectionSource;
-import com.j256.ormlite.table.TableUtils;
+import java.util.List;
 
-import java.sql.SQLException;
-
-import cn.fitrecipe.android.entity.Label;
-import cn.fitrecipe.android.entity.Labels;
+import cn.fitrecipe.android.entity.Component;
+import cn.fitrecipe.android.entity.Ingredient;
+import cn.fitrecipe.android.entity.Nutrition;
+import cn.fitrecipe.android.entity.Recipe;
 
 /**
- * Created by wk on 2015/8/11.
+ * Created by wk on 2015/8/15.
  */
-public class FrDbHelper extends OrmLiteSqliteOpenHelper{
+public class FrDbHelper {
 
-    private static final String DB_NAME = "fr-recipe.db";
     private static FrDbHelper instance;
+    private static Context context;
 
     private FrDbHelper(Context context) {
-        super(context, DB_NAME, null, 1);
+        this.context = context;
     }
 
-    public static synchronized FrDbHelper getHelper(Context context) {
-//        context = context.getApplicationContext();
-        if(instance == null)
-            instance = new FrDbHelper(context);
+    public static FrDbHelper getInstance(Context context) {
+        synchronized (FrDbHelper.class) {
+            if(instance == null)
+                instance = new FrDbHelper(context);
+        }
         return instance;
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource) {
-        try {
-            TableUtils.createTable(connectionSource, Label.class);
-            TableUtils.createTable(connectionSource, Labels.class);
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public static void addRecipe(Recipe recipe) {
+        RecipeDao recipeDao = new RecipeDao(context);
+        IngredientDao ingredientDao = new IngredientDao(context);
+        ComponentDao componentDao = new ComponentDao(context);
+        NutritionDao nutritionDao = new NutritionDao(context);
+
+        recipeDao.add(recipe);
+        List<Component> component_set = recipe.getComponent_set();
+        for(int i = 0; i < component_set.size(); i++) {
+            Component component = component_set.get(i);
+            component.setRecipe(recipe);
+
+            Ingredient ingredient = component.getIngredient();
+            ingredientDao.add(ingredient);
+
+            componentDao.add(component);
+        }
+
+        List<Nutrition> nutrition_set = recipe.getNutrition_set();
+        for(int i = 0; i < nutrition_set.size(); i++) {
+            Nutrition nutrition = nutrition_set.get(i);
+            nutrition.setRecipe(recipe);
+            nutritionDao.add(nutrition);
         }
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource, int i, int i1) {
-        try {
-            TableUtils.dropTable(connectionSource, Label.class, true);
-            TableUtils.dropTable(connectionSource, Labels.class, true);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        onCreate(sqLiteDatabase, connectionSource);
+    public static List<Recipe> getAllRecipe() {
+        RecipeDao recipeDao = new RecipeDao(context);
+        return  recipeDao.getAll();
+    }
+
+    public static List<Ingredient> getAllIngredient() {
+        IngredientDao ingredientDao = new IngredientDao(context);
+        return ingredientDao.getAll();
     }
 }

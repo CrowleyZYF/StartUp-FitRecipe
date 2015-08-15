@@ -294,11 +294,11 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         });
 
         //set the tag
-        recipe_tags.setText(getTags());
+        recipe_tags.setText(recipe.getTags());
         //set the recipe name
         recipe_name.setText(recipe.getTitle());
         //set the function
-        String function = getFunction();
+        String function = recipe.getRecipe_function();
         recipe_feature.setText(function);
         switch (function) {
             case "完美":
@@ -496,46 +496,6 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         component_adapter.notifyDataSetChanged();
     }
 
-    private String getTags() {
-        StringBuilder tags = new StringBuilder();
-        List<Label> time_labels = recipe.getTime_labels();
-        for(int i = 0; i < time_labels.size(); i++) {
-            Label label = time_labels.get(i);
-            tags.append(label.getName());
-            tags.append("、");
-        }
-
-        List<Label> meat_labels = recipe.getMeat_labels();
-        for(int i = 0; i < meat_labels.size(); i++) {
-            Label label = meat_labels.get(i);
-            tags.append(label.getName());
-            tags.append("、");
-        }
-
-        List<Label> other_labels = recipe.getOther_labels();
-        for(int i = 0; i < other_labels.size(); i++) {
-            Label label = other_labels.get(i);
-            tags.append(label.getName());
-            tags.append("、");
-        }
-        if(tags.length() > 0)
-            tags.deleteCharAt(tags.length() - 1);
-        return tags.toString();
-    }
-
-
-    private String getFunction() {
-        StringBuilder effects = new StringBuilder();
-        List<Label> effect_labels = recipe.getEffect_labels();
-        for(int i = 0; i < Math.min(effect_labels.size(), 2); i++) {
-            Label label = effect_labels.get(i);
-            effects.append(label.getName());
-            effects.append(" ");
-        }
-        if(effects.length() > 0)
-            effects.deleteCharAt(effects.length() - 1);
-        return effects.toString();
-    }
 
 
     @Override

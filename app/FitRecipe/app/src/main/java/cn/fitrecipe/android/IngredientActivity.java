@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.fitrecipe.android.Adpater.ShoppingAdapter;
+import cn.fitrecipe.android.entity.Collection;
 import cn.fitrecipe.android.entity.Component;
 import cn.fitrecipe.android.entity.Ingredient;
 import cn.fitrecipe.android.entity.Recipe;

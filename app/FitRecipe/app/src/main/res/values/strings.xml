@@ -158,6 +158,7 @@
     <string name="plan_test_question_12_01">12. 计划花多长时间？</string>
     <string name="plan_test_question_12_unit">天</string>
     <string name="plan_test_question_12_02">Tips：建议计划时长至少需要30天，再快可能会对身体有负面影响</string>
+    <string name="title_activity_custom_view_test_activtiy">CustomViewTestActivtiy</string>
 
 
 

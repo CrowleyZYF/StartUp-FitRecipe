@@ -15,8 +15,8 @@ public class Label {
     private String name;
     @DatabaseField
     private String type;
-    @DatabaseField(canBeNull = true, foreign = true, columnName = "labels_id", foreignAutoRefresh = true)
-    private Labels labels;
+    @DatabaseField(canBeNull = true, foreign = true)
+    private Recipe recipe;
 
     public int getId() {
         return id;
@@ -42,11 +42,11 @@ public class Label {
         this.type = type;
     }
 
-    public Labels getLabels() {
-        return labels;
+    public Recipe getRecipe() {
+        return recipe;
     }
 
-    public void setLabels(Labels labels) {
-        this.labels = labels;
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
     }
 }
