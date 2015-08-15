@@ -50,6 +50,13 @@ public class PlanTestActivity extends Activity implements View.OnClickListener {
         testData = new ArrayList<Map<String, Object>>();
         for(int i=0;i<13;i++){
             Map<String, Object> data = new HashMap<String, Object>();
+            if(i==0){
+                data.put("type","-1");
+            }else if(i==1||i==5||i==6||i==7||i==8||i==9||i==10){
+                data.put("type","0");
+            }else{
+                data.put("type","1");
+            }
             data.put("data","-1");
             testData.add(data);
         }

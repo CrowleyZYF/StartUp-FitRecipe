@@ -202,7 +202,7 @@
         <com.rey.material.widget.RadioButton
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/plan_test_question_05_01"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:text="@string/plan_test_question_05_01_man"
@@ -225,7 +225,7 @@
         <com.rey.material.widget.RadioButton
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/plan_test_question_05_02"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:text="@string/plan_test_question_05_02_man"
@@ -248,7 +248,7 @@
         <com.rey.material.widget.RadioButton
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/plan_test_question_05_03"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:text="@string/plan_test_question_05_03_man"
@@ -271,7 +271,7 @@
         <com.rey.material.widget.RadioButton
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/plan_test_question_05_04"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:text="@string/plan_test_question_05_04_man"

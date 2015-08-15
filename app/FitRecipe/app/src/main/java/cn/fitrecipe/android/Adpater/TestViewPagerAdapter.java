@@ -19,6 +19,7 @@ import java.util.Map;
 
 import cn.fitrecipe.android.PlanTestActivity;
 import cn.fitrecipe.android.R;
+import cn.fitrecipe.android.function.Evaluation;
 
 /**
  * Created by 奕峰 on 2015/4/25.
@@ -27,6 +28,10 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
     private PlanTestActivity context;
     private List<Map<String, Object>> dataList;
     private List<View> questionLinearLayout = new ArrayList<View>();
+    private Evaluation userEvaluation;
+    private double lose_weight_max;
+    private double gain_muslce_max;
+    private int gain_goal_time;
     private final int AGE=2;
     private final int AGE_MIN=18;
     private final int AGE_MAX=80;
@@ -72,17 +77,18 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
                 break;
             case 5:
                 questionContainer = LayoutInflater.from(context).inflate(R.layout.fragment_plan_test_05, null);
+                final View q5 = questionContainer;
                 initRadio(questionContainer);
                 initCal(questionContainer);
                 TextView switchBtn_01 = (TextView) questionContainer.findViewById(R.id.plan_test_switch_01);
                 switchBtn_01.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        View rootView = v.getRootView();
-                        RelativeLayout test_05_01_up = (RelativeLayout) rootView.findViewById(R.id.test_05_01_up);
-                        RelativeLayout test_05_02_up = (RelativeLayout) rootView.findViewById(R.id.test_05_02_up);
-                        LinearLayout test_05_01_down = (LinearLayout) rootView.findViewById(R.id.test_05_01_down);
-                        LinearLayout test_05_02_down = (LinearLayout) rootView.findViewById(R.id.radioGroup);
+                        dataList.get(5).put("type",1);
+                        RelativeLayout test_05_01_up = (RelativeLayout) q5.findViewById(R.id.test_05_01_up);
+                        RelativeLayout test_05_02_up = (RelativeLayout) q5.findViewById(R.id.test_05_02_up);
+                        LinearLayout test_05_01_down = (LinearLayout) q5.findViewById(R.id.test_05_01_down);
+                        LinearLayout test_05_02_down = (LinearLayout) q5.findViewById(R.id.radioGroup);
                         test_05_01_up.setVisibility(View.VISIBLE);
                         test_05_02_up.setVisibility(View.GONE);
                         test_05_01_down.setVisibility(View.VISIBLE);
@@ -93,11 +99,11 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
                 switchBtn_02.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        View rootView = v.getRootView();
-                        RelativeLayout test_05_01_up = (RelativeLayout) rootView.findViewById(R.id.test_05_01_up);
-                        RelativeLayout test_05_02_up = (RelativeLayout) rootView.findViewById(R.id.test_05_02_up);
-                        LinearLayout test_05_01_down = (LinearLayout) rootView.findViewById(R.id.test_05_01_down);
-                        LinearLayout test_05_02_down = (LinearLayout) rootView.findViewById(R.id.radioGroup);
+                        dataList.get(5).put("type",0);
+                        RelativeLayout test_05_01_up = (RelativeLayout) q5.findViewById(R.id.test_05_01_up);
+                        RelativeLayout test_05_02_up = (RelativeLayout) q5.findViewById(R.id.test_05_02_up);
+                        LinearLayout test_05_01_down = (LinearLayout) q5.findViewById(R.id.test_05_01_down);
+                        LinearLayout test_05_02_down = (LinearLayout) q5.findViewById(R.id.radioGroup);
                         test_05_01_up.setVisibility(View.GONE);
                         test_05_02_up.setVisibility(View.VISIBLE);
                         test_05_01_down.setVisibility(View.GONE);
@@ -128,10 +134,18 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
             case 11:
                 questionContainer = LayoutInflater.from(context).inflate(R.layout.fragment_plan_test_11, null);
                 initCal(questionContainer);
+                TextView tips = (TextView) questionContainer.findViewById(R.id.plan_tips);
+                if(userEvaluation.getGoalType()){
+                    tips.setText(R.string.plan_test_question_11_tips_gain_muscle + this.gain_muslce_max + "公斤");
+                }else{
+                    tips.setText(R.string.plan_test_question_11_tips_lose_weight + this.lose_weight_max + "公斤");
+                }
                 break;
             case 12:
                 questionContainer = LayoutInflater.from(context).inflate(R.layout.fragment_plan_test_12, null);
                 initCal(questionContainer);
+                TextView tips2 = (TextView) questionContainer.findViewById(R.id.plan_tips);
+                tips2.setText(R.string.plan_test_question_12_tips_prefix + this.gain_goal_time + R.string.plan_test_question_12_tips_suffix);
                 break;
         }
         container.addView(questionContainer);
@@ -141,7 +155,7 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
 
     private void initRadio(final View questionContainer) {
         LinearLayout radioGroup = (LinearLayout) questionContainer.findViewById(R.id.radioGroup);
-        int position = Integer.parseInt(((TextView) questionContainer.findViewById(R.id.position)).getText().toString());
+        final int position = Integer.parseInt(((TextView) questionContainer.findViewById(R.id.position)).getText().toString());
         //获取所有radio
         List<RadioButton> radioButtons = new ArrayList<RadioButton>();
         for(int i=0;i<radioGroup.getChildCount();i++){
@@ -169,9 +183,44 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
                     i++;
                     if(v == resetBtn) {
                         resetBtn.setChecked(true);
-                        dataList.get(position).put("type",0);
                         dataList.get(position).put("data",i/2);
                     }
+                }
+                //如果第九个问题 可以计算相关的数值
+                if(position==9){
+                    int roughFat;
+                    double preciseFat;
+                    boolean goalType;
+                    if(Integer.parseInt(dataList.get(5).get("type").toString())==0){
+                        roughFat = Integer.parseInt(dataList.get(5).get("data").toString());
+                        preciseFat = 0;
+                    }else{
+                        roughFat = 4;
+                        preciseFat = Double.parseDouble(dataList.get(5).get("data").toString());
+                    }
+                    if(Integer.parseInt(dataList.get(7).get("data").toString())==0){
+                        goalType = true;
+                    }else{
+                        goalType = false;
+                    }
+                    userEvaluation = new Evaluation(
+                            Integer.parseInt(dataList.get(1).get("data").toString()),
+                            Integer.parseInt(dataList.get(2).get("data").toString()),
+                            Integer.parseInt(dataList.get(3).get("data").toString()),
+                            Double.parseDouble(dataList.get(4).get("data").toString()),
+                            roughFat,
+                            preciseFat,
+                            Integer.parseInt(dataList.get(6).get("data").toString()),
+                            goalType,
+                            Integer.parseInt(dataList.get(8).get("data").toString()),
+                            Integer.parseInt(dataList.get(9).get("data").toString())
+                    );
+                    lose_weight_max = userEvaluation.getWeightBoundary()[0];
+                    gain_muslce_max = userEvaluation.getWeightBoundary()[1];
+                    gain_goal_time = userEvaluation.getShortestDaysToGoal();
+                }
+                if (position==10){
+                    userEvaluation.setExerciseTime(Integer.parseInt(dataList.get(10).get("data").toString()));
                 }
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -253,9 +302,16 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
                         break;
                     case R.id.plan_num_sure:
                         if(checkVaild(Double.parseDouble(value.getText().toString()), position)){
-                            dataList.get(position).put("type",1);
                             dataList.get(position).put("data",value.getText().toString());
-                            context.goNext();
+                            if(position==11){
+                                userEvaluation.setWeightGoal(Integer.parseInt(dataList.get(11).get("data").toString()));
+                            }
+                            if(position==12){
+                                userEvaluation.setDaysToGoal(Integer.parseInt(dataList.get(12).get("data").toString()));
+                                getAllData();
+                            }else{
+                                context.goNext();
+                            }
                         }
                         break;
                     case R.id.delete_btn:
@@ -282,6 +338,20 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
         plan_num_sure.setOnClickListener(calHandler);
         delete.setOnClickListener(calHandler);
         prev.setOnClickListener(this);
+    }
+
+    private void getAllData() {
+        String allData="";
+        for(int i=0;i<13;i++){
+            if(Integer.parseInt(dataList.get(i).get("type").toString())==-1){
+                allData+="Type:开始\n";
+            }else if (Integer.parseInt(dataList.get(i).get("type").toString())==0){
+                allData+="Type:选项 Data:"+ dataList.get(i).get("data").toString()+"\n";
+            }else{
+                allData+="Type:输入 Data:"+ dataList.get(i).get("data").toString()+"\n";
+            }
+        }
+        Toast.makeText(context,allData,Toast.LENGTH_LONG).show();
     }
 
     @Override
