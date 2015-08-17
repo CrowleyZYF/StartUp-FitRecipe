@@ -160,6 +160,12 @@
     <string name="plan_test_question_12_tips_prefix">Tips：建议计划时长至少需要</string>
     <string name="plan_test_question_12_tips_suffix">天，再快可能会对身体有负面影响</string>
 
+    <!--测试-->
+    <string name="report">我的报告</string>
+    <string name="report_body_info">身体状况</string>
+    <string name="report_base_info">基本报告</string>
+    <string name="report_base_info_bmi">BMI(身体质量指数)</string>
+
 
 
 </resources>
