@@ -317,19 +317,19 @@ public class Evaluation {
 			ALSodium = 1.2;
 			ULSodium = 2.3;
 		}
-		result.put("SodiumIntake", ALSodium);
+		result.put("SodiumIntakeMin", ALSodium);
 		result.put("SodiumIntakeMax", ULSodium);
 		
 		//VC intake, from USDA, mg/day
 		double ALVC = 90;
 		double ULVC = 2000;
-		result.put("VCIntake", (ALVC - gender * 15));
+		result.put("VCIntakeMin", (ALVC - gender * 15));
 		result.put("VCIntakeMax", ULVC);
 		
 		//VD intake, from USDA, IU/day
 		double ALVD = 600;
 		double ULVD = 4000;
-		result.put("VDIntake", ALVD);
+		result.put("VDIntakeMin", ALVD);
 		result.put("VDIntakeMax", ULVD);
 		
 		//breakfast should have about 0.3 of total calories intakes
@@ -338,8 +338,7 @@ public class Evaluation {
 		result.put("BreakfastRate", 0.3 * intake);
 		result.put("LunchRate", 0.4 * intake);
 		result.put("DinnerRate", 0.3 * intake);
-				
-		
-		return result;
+
+        return result;
 	}
 }
