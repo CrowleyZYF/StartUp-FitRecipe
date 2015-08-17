@@ -17,7 +17,7 @@ public class Evaluation {
 	 * @param height: int, cm
 	 * @param weight: double, kg
 	 * @param roughFat: input the rough body fat, choose from pictures, 0 to 6
-     * @param preciseFat: 0 for not sure
+     * @param preciseFat: -1 for not sure
      * @param jobType: 0, 1, 2, 3, 4 for tight, medium, high and very high work intensity, 0 for not sure
 	 * @param goalType: true for gain muscle, false for lose weight
      * @param exerciseFrequency: 0, 1, 2, 3, 4, 5, 6, 7, 8 times/week, 0 for not sure, 8 for more than 7 times/week
@@ -228,6 +228,7 @@ public class Evaluation {
 	}
 	
 	public Map<String, Object> report() {
+		static String NotSure = "ToBeContinued";
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		
 		//BMI
@@ -281,27 +282,44 @@ public class Evaluation {
 			fat = protein / 2;
 		}
 		result.put("ProteinIntake", protein);
-		result.put("CarbohydrateIntake", carbohydrate);
+		result.put("ProteinIntakeMin", protein * 0.9);
+		result.put("ProteinIntakeMax", protein * 1.1);
+		result.put("CarbohydrateIntakeMin", carbohydrate * 0.9);
+		result.put("CarbohydrateIntakeMax", carbohydrate * 1.1);
 		result.put("FatIntake", fat);
+		result.put("FatIntakeMin", fat * 0.9);
+		result.put("FatIntakeMax", fat * 1.1);
 		
 		//total calories intake pre day, nore precise, kcal/day
 		double intake = protein * 4 + carbohydrate * 4 + fat * 9;
 		result.put("CaloriesIntake", intake);
+		result.put("CaloriesIntakeMin", intake * 0.9);
+		result.put("CaloriesIntakeMax", intake * 1.1);
 		
 		//exercise should consume about 0.2 ~ 0.3 of total intake, not precise
 		result.put("SuggestFitCalories", 0.25 * intake);
+		result.put("SuggestFitCaloriesMin", 0.2 * intake);
+		result.put("SuggestFitCaloriesMax", 0.3 * intake);
 		
 		//water intake, from USDA
 		result.put("WaterIntake", (3.7 - gender));
+		result.put("WaterIntakeMin", (3.7 - gender) * 0.9);
+		result.put("WaterIntakeMax", (3.7 - gender) * 1.1);
 		
 		//fiber intake is constant? more than 25g/day
 		result.put("FiberIntake", 25);
+		result.put("FiberIntakeMin", 22.5);
+		result.put("FiberIntakeMax", 27.5);
 		
 		//unsaturated fatty acids intake, constant, 250mg/day
 		result.put("UnsaturatedFattyAcidsIntake", 250);
+		result.put("UnsaturatedFattyAcidsIntakeMin", 225);
+		result.put("UnsaturatedFattyAcidsIntakeMax", 275);
 		
 		//cholesterol less than 300mg/day, not sure
 		result.put("CholesterolIntake", 300);
+		result.put("CholesterolIntakeMin", 270);
+		result.put("CholesterolIntakeMax", 330);
 		
 		//sodium intake, from USDA
 		//ALSodium for Adequate intakes and ULSodium for max level, g/day
@@ -338,6 +356,23 @@ public class Evaluation {
 		result.put("BreakfastRate", 0.3 * intake);
 		result.put("LunchRate", 0.4 * intake);
 		result.put("DinnerRate", 0.3 * intake);
+
+		//not sure
+		result.put("DietStructureOilMin",NotSure);
+		result.put("DietStructureOilMax",NotSure);
+		result.put("DietStructureMeatMin",NotSure);
+		result.put("DietStructureMeatMax",NotSure);
+		result.put("DietStructureMilkMin",NotSure);
+		result.put("DietStructureMilkMax",NotSure);
+		result.put("DietStructureVegetableMin",NotSure);
+		result.put("DietStructureVegetableMax",NotSure);
+		result.put("DietStructureFruitMin",NotSure);
+		result.put("DietStructureFruitMax",NotSure);
+		result.put("DietStructureGrainMin",NotSure);
+		result.put("DietStructureGrainMax",NotSure);
+		result.put("SnackMorningRate",NotSure);
+		result.put("SnackAfternoonRate",NotSure);
+
 
         return result;
 	}
