@@ -410,7 +410,7 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
     }
 
     private void getAllData() {
-        String input = "性别：" + (Integer.parseInt(dataList.get(1).get("data").toString())==0?"男":"女") + "\n"
+        /*String input = "性别：" + (Integer.parseInt(dataList.get(1).get("data").toString())==0?"男":"女") + "\n"
                 + "年龄：" + (Integer.parseInt(dataList.get(2).get("data").toString())) + "\n"
                 + "身高：" + (Double.parseDouble(dataList.get(3).get("data").toString())) + "\n"
                 + "体重：" + (Double.parseDouble(dataList.get(4).get("data").toString())) + "\n"
@@ -429,10 +429,19 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
         String output = "";
         for(int i=0;i<this.output.length;i++){
             output += this.output[i][1] + ": " + report.get(this.output[i][0]) + "\n";
-        }
+        }*/
+        Map<String, Object> report = userEvaluation.report();
         Intent intent=new Intent(context,ReportActivity.class);
-        intent.putExtra("input", input);
-        intent.putExtra("output", output);
+        intent.putExtra("sex", Integer.parseInt(dataList.get(1).get("data").toString()));
+        intent.putExtra("age", Integer.parseInt(dataList.get(2).get("data").toString()));
+        intent.putExtra("height", (Double.parseDouble(dataList.get(3).get("data").toString())));
+        intent.putExtra("weight", (Double.parseDouble(dataList.get(4).get("data").toString())));
+        intent.putExtra("fat", (Integer.parseInt(dataList.get(5).get("type").toString())==0?
+                (this.input[5][Integer.parseInt(dataList.get(5).get("data").toString())+Integer.parseInt(dataList.get(1).get("data").toString())]):
+                (Integer.parseInt(dataList.get(5).get("data").toString()))));
+        for(int i=0;i<this.output.length;i++){
+            intent.putExtra(this.output[i][0], report.get(this.output[i][0]).toString());
+        }
         context.startActivity(intent);
     }
 

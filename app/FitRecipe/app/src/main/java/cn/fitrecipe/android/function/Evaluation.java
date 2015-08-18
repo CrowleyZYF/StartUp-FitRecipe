@@ -228,7 +228,7 @@ public class Evaluation {
 	}
 	
 	public Map<String, Object> report() {
-		static String NotSure = "ToBeContinued";
+		final String NotSure = "ToBeContinued";
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		
 		//BMI

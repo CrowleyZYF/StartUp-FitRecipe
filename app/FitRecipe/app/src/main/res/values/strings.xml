@@ -164,7 +164,16 @@
     <string name="report">我的报告</string>
     <string name="report_body_info">身体状况</string>
     <string name="report_base_info">基本报告</string>
+    <string name="report_sport_info">热量及运动建议</string>
+    <string name="report_nutrition_info">营养建议</string>
     <string name="report_base_info_bmi">BMI(身体质量指数)</string>
+    <string name="report_base_info_bmr">BMR(基础代谢率)</string>
+    <string name="report_base_info_burning">燃脂心率</string>
+    <string name="report_base_info_best_weight">最佳体重</string>
+    <string name="report_base_info_weight_range">健康体重范围</string>
+    <string name="report_nutrition_info_rate">宏量营养元素比 ( 蛋白质：碳水化合物：脂类 )</string>
+    <string name="report_nutrition_info_diet">膳食结构</string>
+    <string name="report_nutrition_info_nutrition">营养元素</string>
 
 
 
