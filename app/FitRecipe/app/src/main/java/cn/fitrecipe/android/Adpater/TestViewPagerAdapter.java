@@ -1,5 +1,6 @@
 package cn.fitrecipe.android.Adpater;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import java.util.Map;
 
 import cn.fitrecipe.android.PlanTestActivity;
 import cn.fitrecipe.android.R;
+import cn.fitrecipe.android.ReportActivity;
 import cn.fitrecipe.android.function.Evaluation;
 
 /**
@@ -44,6 +46,72 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
     private final int FAT=5;
     private final int FAT_MIN=0;
     private final int FAT_MAX=100;
+    private final String[][] input={{},{},{},{},{},
+            {"小于12%","12%~20%","20%~30%","30%","20%以下","20%~30%","30~40%","40%以上"},
+            {"轻劳动","中等劳动","重劳动","极重劳动"},
+            {"增肌增重","减脂减肥"},
+            {"1-2天","3-4天","5-6天","7天"},
+            {"小于30分钟","30-60分钟","60-90分钟","90分钟以上"},
+            {"早餐前","午餐前","晚餐前","晚餐后"},
+            {},{}};
+    private final String[][] output = {
+            //BaseInfo
+            {"BMI","身体质量指数（BMI）"},
+            {"BMR","基础代谢率（BMR）"},
+            {"SuggestFitFrequency","建议每周运动频率"},
+            {"SuggestFitTime","建议每次运动时长"},
+            {"CaloriesIntake","每日所需热量"},
+            {"CaloriesIntakeMin","每日所需热量下限"},
+            {"CaloriesIntakeMax","每日所需热量上限"},
+            {"SuggestFitCalories","每日运动量"},
+            {"SuggestFitCaloriesMin","每日运动量下限"},
+            {"SuggestFitCaloriesMax","每日运动量上限"},
+            {"BestWeight","最佳体重"},
+            {"BestWeightMin","健康体重下限"},
+            {"BestWeightMax","健康体重上限"},
+            {"BurningRateMin","燃脂心率下限"},
+            {"BurningRateMax","燃脂心率上限"},
+            //NutritionInfo
+            {"ProteinIntakeMin","蛋白质摄入量下限"},
+            {"ProteinIntakeMax","蛋白质摄入量上限"},
+            {"CarbohydrateIntakeMin","碳水化合物摄入量下限"},
+            {"CarbohydrateIntakeMax","碳水化合物摄入量上限"},
+            {"FatIntakeMin","脂类摄入量下限"},
+            {"FatIntakeMax","脂类摄入量上限"},
+            {"WaterIntakeMin","水摄入量下限"},
+            {"WaterIntakeMax","水摄入量上限"},
+            {"FiberIntakeMin","纤维素摄入量下限"},
+            {"FiberIntakeMax","纤维素摄入量上限"},
+            {"UnsaturatedFattyAcidsIntakeMin","不饱和脂肪酸摄入量下限"},
+            {"UnsaturatedFattyAcidsIntakeMax","不饱和脂肪酸摄入量上限"},
+            {"CholesterolIntakeMin","胆固醇摄入量下限"},
+            {"CholesterolIntakeMax","胆固醇摄入量上限"},
+            {"SodiumIntakeMin","钠摄入量下限"},
+            {"SodiumIntakeMax","钠摄入量上限"},
+            {"VCIntakeMin","维生素C摄入量下限"},
+            {"VCIntakeMax","维生素C摄入量上限"},
+            {"VDIntakeMin","维生素D摄入量下限"},
+            {"VDIntakeMax","维生素D摄入量上限"},
+            //DietStructure
+            {"DietStructureOilMin", "油脂下限"},
+            {"DietStructureOilMax", "油脂上限"},
+            {"DietStructureMeatMin", "肉类下限"},
+            {"DietStructureMeatMax", "肉类上限"},
+            {"DietStructureMilkMin", "蛋奶下限"},
+            {"DietStructureMilkMax", "蛋奶上限"},
+            {"DietStructureVegetableMin", "蔬菜下限"},
+            {"DietStructureVegetableMax", "蔬菜上限"},
+            {"DietStructureFruitMin", "水果下限"},
+            {"DietStructureFruitMax", "水果上限"},
+            {"DietStructureGrainMin", "谷物下限"},
+            {"DietStructureGrainMax", "谷物上限"},
+            //OtherInfo
+            {"BreakfastRate","早餐摄入"},
+            {"SnackMorningRate","上午加餐摄入"},
+            {"LunchRate","午餐摄入"},
+            {"SnackAfternoonRate","下午加餐摄入"},
+            {"DinnerRate","晚餐摄入"}
+    };
 
     public TestViewPagerAdapter(PlanTestActivity context, List<Map<String, Object>> dataList) {
         this.context = context;
@@ -136,9 +204,9 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
                 initCal(questionContainer);
                 TextView tips = (TextView) questionContainer.findViewById(R.id.plan_tips);
                 if(userEvaluation.getGoalType()){
-                    tips.setText(R.string.plan_test_question_11_tips_gain_muscle + this.gain_muslce_max + "公斤");
+                    tips.setText(context.getResources().getString(R.string.plan_test_question_11_tips_gain_muscle) + this.gain_muslce_max + "公斤");
                 }else{
-                    tips.setText(R.string.plan_test_question_11_tips_lose_weight + this.lose_weight_max + "公斤");
+                    tips.setText(context.getResources().getString(R.string.plan_test_question_11_tips_lose_weight) + this.lose_weight_max + "公斤");
                 }
                 break;
             case 12:
@@ -196,7 +264,7 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
                         preciseFat = 0;
                     }else{
                         roughFat = 4;
-                        preciseFat = Double.parseDouble(dataList.get(5).get("data").toString());
+                        preciseFat = Double.parseDouble(dataList.get(5).get("data").toString())/100;
                     }
                     if(Integer.parseInt(dataList.get(7).get("data").toString())==0){
                         goalType = true;
@@ -217,7 +285,6 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
                     );
                     lose_weight_max = userEvaluation.getWeightBoundary()[0];
                     gain_muslce_max = userEvaluation.getWeightBoundary()[1];
-                    gain_goal_time = userEvaluation.getShortestDaysToGoal();
                 }
                 if (position==10){
                     userEvaluation.setExerciseTime(Integer.parseInt(dataList.get(10).get("data").toString()));
@@ -305,6 +372,8 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
                             dataList.get(position).put("data",value.getText().toString());
                             if(position==11){
                                 userEvaluation.setWeightGoal(Integer.parseInt(dataList.get(11).get("data").toString()));
+                                TextView tips2 = (TextView) (questionLinearLayout.get(12)).findViewById(R.id.plan_tips);
+                                tips2.setText(context.getResources().getString(R.string.plan_test_question_12_tips_prefix) + userEvaluation.getShortestDaysToGoal() + context.getResources().getString(R.string.plan_test_question_12_tips_suffix));
                             }
                             if(position==12){
                                 userEvaluation.setDaysToGoal(Integer.parseInt(dataList.get(12).get("data").toString()));
@@ -341,17 +410,39 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
     }
 
     private void getAllData() {
-        String allData="";
-        for(int i=0;i<13;i++){
-            if(Integer.parseInt(dataList.get(i).get("type").toString())==-1){
-                allData+="Type:开始\n";
-            }else if (Integer.parseInt(dataList.get(i).get("type").toString())==0){
-                allData+="Type:选项 Data:"+ dataList.get(i).get("data").toString()+"\n";
-            }else{
-                allData+="Type:输入 Data:"+ dataList.get(i).get("data").toString()+"\n";
-            }
+        /*String input = "性别：" + (Integer.parseInt(dataList.get(1).get("data").toString())==0?"男":"女") + "\n"
+                + "年龄：" + (Integer.parseInt(dataList.get(2).get("data").toString())) + "\n"
+                + "身高：" + (Double.parseDouble(dataList.get(3).get("data").toString())) + "\n"
+                + "体重：" + (Double.parseDouble(dataList.get(4).get("data").toString())) + "\n"
+                + "体脂：" + (Integer.parseInt(dataList.get(5).get("type").toString())==0?
+                (this.input[5][Integer.parseInt(dataList.get(5).get("data").toString())+Integer.parseInt(dataList.get(1).get("data").toString())]):
+                (Integer.parseInt(dataList.get(5).get("data").toString()))) + "\n"
+                + "劳动等级：" + (this.input[6][Integer.parseInt(dataList.get(6).get("data").toString())]) + "\n"
+                + "运动类型：" + (this.input[7][Integer.parseInt(dataList.get(7).get("data").toString())]) + "\n"
+                + "一周运动几天：" + (this.input[8][Integer.parseInt(dataList.get(8).get("data").toString())]) + "\n"
+                + "每次运动的时长：" + (this.input[9][Integer.parseInt(dataList.get(9).get("data").toString())]) + "\n"
+                + "运动时间段：" + (this.input[10][Integer.parseInt(dataList.get(10).get("data").toString())]) + "\n"
+                + "目标：" + (Double.parseDouble(dataList.get(11).get("data").toString())) + "\n"
+                + "时间：" + (Double.parseDouble(dataList.get(12).get("data").toString())) + "\n"
+        ;
+        Map<String, Object> report = userEvaluation.report();
+        String output = "";
+        for(int i=0;i<this.output.length;i++){
+            output += this.output[i][1] + ": " + report.get(this.output[i][0]) + "\n";
+        }*/
+        Map<String, Object> report = userEvaluation.report();
+        Intent intent=new Intent(context,ReportActivity.class);
+        intent.putExtra("sex", Integer.parseInt(dataList.get(1).get("data").toString()));
+        intent.putExtra("age", Integer.parseInt(dataList.get(2).get("data").toString()));
+        intent.putExtra("height", (Double.parseDouble(dataList.get(3).get("data").toString())));
+        intent.putExtra("weight", (Double.parseDouble(dataList.get(4).get("data").toString())));
+        intent.putExtra("fat", (Integer.parseInt(dataList.get(5).get("type").toString())==0?
+                (this.input[5][Integer.parseInt(dataList.get(5).get("data").toString())+Integer.parseInt(dataList.get(1).get("data").toString())]):
+                (Integer.parseInt(dataList.get(5).get("data").toString()))));
+        for(int i=0;i<this.output.length;i++){
+            intent.putExtra(this.output[i][0], report.get(this.output[i][0]).toString());
         }
-        Toast.makeText(context,allData,Toast.LENGTH_LONG).show();
+        context.startActivity(intent);
     }
 
     @Override
