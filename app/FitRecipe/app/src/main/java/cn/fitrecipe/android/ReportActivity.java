@@ -11,7 +11,7 @@ public class ReportActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_report);
+        setContentView(R.layout.activity_custom_view_test_activtiy);
     }
 
 }

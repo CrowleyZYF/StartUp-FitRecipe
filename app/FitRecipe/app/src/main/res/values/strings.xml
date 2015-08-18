@@ -153,13 +153,14 @@
     <string name="plan_test_question_10_04">晚餐后</string>
     <string name="plan_test_question_11_01">11. 打算增肌增重至？</string>
     <string name="plan_test_question_11_02">11. 打算减脂减肥至？</string>
-    <string name="plan_test_question_11_03">Tips：建议目标体重不要高于你身高对应的健康体重上限55公斤</string>
-    <string name="plan_test_question_11_04">Tips：建议目标体重不要低于你身高对应的健康体重下限55公斤</string>
+    <string name="plan_test_question_11_tips_gain_muscle">Tips：建议目标体重不要高于你身高对应的健康体重上限</string>
+    <string name="plan_test_question_11_tips_lose_weight">Tips：建议目标体重不要低于你身高对应的健康体重下限</string>
     <string name="plan_test_question_12_01">12. 计划花多长时间？</string>
     <string name="plan_test_question_12_unit">天</string>
     <string name="plan_test_question_12_02">Tips：建议计划时长至少需要30天，再快可能会对身体有负面影响</string>
     <string name="title_activity_custom_view_test_activtiy">CustomViewTestActivtiy</string>
-
+    <string name="plan_test_question_12_tips_prefix">Tips：建议计划时长至少需要</string>
+    <string name="plan_test_question_12_tips_suffix">天，再快可能会对身体有负面影响</string>
 
 
 </resources>

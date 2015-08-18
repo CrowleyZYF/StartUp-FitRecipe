@@ -32,6 +32,13 @@
             android:layout_centerInParent="true"/>
 
         <TextView
+            android:id="@+id/position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="7"
+            android:visibility="gone"/>
+
+        <TextView
             android:id="@+id/plan_test_last_question"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -45,6 +52,7 @@
     </RelativeLayout>
     
     <LinearLayout
+        android:id="@+id/radioGroup"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="3"
@@ -55,7 +63,7 @@
         <com.rey.material.widget.RadioButton
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/plan_test_question_07_01"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:text="@string/plan_test_question_07_01"
@@ -78,7 +86,7 @@
         <com.rey.material.widget.RadioButton
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/plan_test_question_07_02"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:text="@string/plan_test_question_07_02"

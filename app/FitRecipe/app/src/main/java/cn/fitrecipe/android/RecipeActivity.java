@@ -3,6 +3,7 @@ package cn.fitrecipe.android;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -40,6 +41,7 @@ import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.ImageLoader.ILoadingListener;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
+import cn.fitrecipe.android.dao.FrDbHelper;
 import cn.fitrecipe.android.entity.Collection;
 import cn.fitrecipe.android.entity.Component;
 import cn.fitrecipe.android.entity.Label;
@@ -277,6 +279,24 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
 
     private void processData(JSONObject data) throws JSONException {
         recipe = Recipe.fromJson(data.toString());
+
+        /**
+         * 存储菜谱
+         */
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected void onProgressUpdate(Void... values) {
+                super.onProgressUpdate(values);
+                Toast.makeText(RecipeActivity.this, "添加到数据库！", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                FrDbHelper.getInstance(RecipeActivity.this).addRecipe(recipe);
+                publishProgress();
+                return null;
+            }
+        }.execute();
     }
 
     private void display(){

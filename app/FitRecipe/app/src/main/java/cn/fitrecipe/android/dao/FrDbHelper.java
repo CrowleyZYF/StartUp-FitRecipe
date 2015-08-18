@@ -29,7 +29,7 @@ public class FrDbHelper {
         return instance;
     }
 
-    public static void addRecipe(Recipe recipe) {
+    public void addRecipe(Recipe recipe) {
         RecipeDao recipeDao = new RecipeDao(context);
         IngredientDao ingredientDao = new IngredientDao(context);
         ComponentDao componentDao = new ComponentDao(context);
@@ -55,12 +55,12 @@ public class FrDbHelper {
         }
     }
 
-    public static List<Recipe> getAllRecipe() {
+    public List<Recipe> getAllRecipe() {
         RecipeDao recipeDao = new RecipeDao(context);
         return  recipeDao.getAll();
     }
 
-    public static List<Ingredient> getAllIngredient() {
+    public List<Ingredient> getAllIngredient() {
         IngredientDao ingredientDao = new IngredientDao(context);
         return ingredientDao.getAll();
     }
