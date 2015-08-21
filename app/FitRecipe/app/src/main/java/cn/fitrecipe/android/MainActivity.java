@@ -150,7 +150,9 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                     Toast.makeText(this, getResources().getString(R.string.login_tip), Toast.LENGTH_SHORT).show();
                     break;
                 }
-                if(FrApplication.getInstance().isTested()){
+                boolean isTest = FrApplication.getInstance().isTested();
+                isTest = true;
+                if(isTest){
                     if (frPlanFragment == null){
                         frPlanFragment = new PlanFragment();
                         transaction.add(R.id.content, frPlanFragment);
@@ -158,7 +160,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                         transaction.show(frPlanFragment);
                     }
                     left_btn.setImageResource(R.drawable.icon_nutrition);
-                    right_btn.setImageResource(R.drawable.icon_shopping);
+                    right_btn.setImageResource(R.drawable.icon_change);
                     tab_index = 1;
                 }else{
                     frTabs.get(tab_index).setBackgroundColor(getResources().getColor(R.color.active_color));

@@ -32,6 +32,12 @@
     <string name="addmeal">加餐</string>
     <string name="dinner">正餐</string>
 
+    <!--计划-->
+    <string name="plan_diy">自定义计划</string>
+    <string name="plan_status_muscle">增肌第</string>
+    <string name="plan_status_fat">减脂第</string>
+    <string name="plan_status_unit">天</string>
+
     <!--指南-->
     <string name="info">贴士</string>
     <string name="common">通用</string>
