@@ -147,6 +147,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
             case 1:
                 SharedPreferences preferences=getSharedPreferences("user", this.MODE_PRIVATE);
                 boolean isTest = preferences.getBoolean("isTested", false);
+                isTest = true;
                 if(isTest){
                     if (frPlanFragment == null){
                         frPlanFragment = new PlanFragment();
@@ -155,7 +156,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                         transaction.show(frPlanFragment);
                     }
                     left_btn.setImageResource(R.drawable.icon_nutrition);
-                    right_btn.setImageResource(R.drawable.icon_shopping);
+                    right_btn.setImageResource(R.drawable.icon_change);
                     tab_index = 1;
                 }else{
                     frTabs.get(tab_index).setBackgroundColor(getResources().getColor(R.color.active_color));
