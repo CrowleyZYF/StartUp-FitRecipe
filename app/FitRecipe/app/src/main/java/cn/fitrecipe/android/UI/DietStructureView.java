@@ -15,6 +15,8 @@ import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
+import cn.fitrecipe.android.R;
+
 /**
  * Created by wk on 2015/8/17.
  */

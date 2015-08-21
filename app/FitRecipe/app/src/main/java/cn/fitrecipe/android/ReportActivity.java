@@ -1,9 +1,7 @@
 package cn.fitrecipe.android;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
 
 /**
  * Created by 奕峰 on 2015/5/8.
