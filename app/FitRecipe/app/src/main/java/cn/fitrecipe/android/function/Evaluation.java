@@ -7,6 +7,7 @@ package cn.fitrecipe.android.function;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.fitrecipe.android.entity.Report;
 
 
 public class Evaluation {
@@ -189,7 +190,7 @@ public class Evaluation {
 		if (goalType == GAINMUSCLE) {
 			delta = 1000;
 		} else {
-			delta = 700;
+			delta = -700;
 		}
 		
 		return (int)((double)((weightGoal - weight) * 7200) / delta);
@@ -227,25 +228,38 @@ public class Evaluation {
 		return metabolic;
 	}
 	
-	public Map<String, Object> report() {
+	public Report report() {
 		final String NotSure = "ToBeContinued";
-		HashMap<String, Object> result = new HashMap<String, Object>();
-		
+//		HashMap<String, Object> result = new HashMap<String, Object>();
+		Report report = new Report();
+		report.setGender(gender);
+		report.setAge(age);
+		report.setHeight(height);
+		report.setWeight(weight);
+
+		report.setRoughFat(roughFat);
+		report.setPreciseFat(preciseFat);
+
 		//BMI
 		double heightInM = (double)height / 100;
 		double BMI = weight / (heightInM * heightInM);
-		result.put("BMI", BMI);
+//		result.put("BMI", BMI);
+		report.setBMI(BMI);
 		
 		//BMR
-		result.put("BMR", getBMR());
-		
+//		result.put("BMR", getBMR());
+		report.setBMR(getBMR());
+
 		//weight
 		double lWeight = 18.5 * heightInM * heightInM;
 		double hWeight = 24 * heightInM * heightInM;
 		double bWeight = (lWeight + hWeight) / 2;
-		result.put("BestWeight", bWeight);
-		result.put("BestWeightMin", lWeight);
-		result.put("BestWeightMax", hWeight);
+//		result.put("BestWeight", bWeight);
+//		result.put("BestWeightMin", lWeight);
+//		result.put("BestWeightMax", hWeight);
+		report.setBestWeight(bWeight);
+		report.setBestWeightMin(lWeight);
+		report.setBestWeightMax(hWeight);
 		
 		//heart rate: HRmax = 208 - 0.7 * age, fat if 200 - 0.5 * age
 		//the burning heart rate is 0.6 ~ 0.9 HRmax
@@ -256,14 +270,18 @@ public class Evaluation {
 			HRmax = 208 - 0.7 * (double)age;
 		double lHR = 0.6 * HRmax;
 		double hHR = 0.9 * HRmax;
-		result.put("BurningRateMin", lHR);
-		result.put("BurningRateMax", hHR);
+//		result.put("BurningRateMin", lHR);
+//		result.put("BurningRateMax", hHR);
+		report.setBurningRateMin(lHR);
+		report.setBurningRateMax(hHR);
 		
 		//exercise frequency and interval are constant
 		//frequency 3 times/week
 		//interval 45 minutes
-		result.put("SuggestFitFrequency", 3);
-		result.put("SuggestFitTime", 45);
+//		result.put("SuggestFitFrequency", 3);
+//		result.put("SuggestFitTime", 45);
+		report.setSuggestFitFrequency(3);
+		report.setSuggestFitTime(45);
 		
 		//protein intaking per day, g/day, not precise
 		// GAINMUSCLE: carbohydrate : protein : fat = 4:2:1
@@ -281,45 +299,72 @@ public class Evaluation {
 			carbohydrate = protein;
 			fat = protein / 2;
 		}
-		result.put("ProteinIntake", protein);
-		result.put("ProteinIntakeMin", protein * 0.9);
-		result.put("ProteinIntakeMax", protein * 1.1);
-		result.put("CarbohydrateIntakeMin", carbohydrate * 0.9);
-		result.put("CarbohydrateIntakeMax", carbohydrate * 1.1);
-		result.put("FatIntake", fat);
-		result.put("FatIntakeMin", fat * 0.9);
-		result.put("FatIntakeMax", fat * 1.1);
+//		result.put("ProteinIntake", protein);
+//		result.put("ProteinIntakeMin", protein * 0.9);
+//		result.put("ProteinIntakeMax", protein * 1.1);
+//		result.put("CarbohydrateIntakeMin", carbohydrate * 0.9);
+//		result.put("CarbohydrateIntakeMax", carbohydrate * 1.1);
+//		result.put("FatIntake", fat);
+//		result.put("FatIntakeMin", fat * 0.9);
+//		result.put("FatIntakeMax", fat * 1.1);
+		report.setProteinIntake(protein);
+		report.setProteinIntakeMin(protein * 0.9);
+		report.setProteinIntakeMax(protein * 1.1);
+		report.setCarbohydrateIntake(carbohydrate);
+		report.setCarbohydrateIntakeMin(carbohydrate * 0.9);
+		report.setCarbohydrateIntakeMax(carbohydrate * 1.1);
+		report.setFatIntake(fat);
+		report.setFatIntakeMax(fat * 1.1);
+		report.setFatIntakeMin(fat * 0.9);
 		
 		//total calories intake pre day, nore precise, kcal/day
 		double intake = protein * 4 + carbohydrate * 4 + fat * 9;
-		result.put("CaloriesIntake", intake);
-		result.put("CaloriesIntakeMin", intake * 0.9);
-		result.put("CaloriesIntakeMax", intake * 1.1);
-		
+//		result.put("CaloriesIntake", intake);
+//		result.put("CaloriesIntakeMin", intake * 0.9);
+//		result.put("CaloriesIntakeMax", intake * 1.1);
+		report.setCaloriesIntake(intake);
+		report.setCaloriesIntakeMax(intake * 1.1);
+		report.setCaloriesIntakeMin(intake * 0.9);
+
 		//exercise should consume about 0.2 ~ 0.3 of total intake, not precise
-		result.put("SuggestFitCalories", 0.25 * intake);
-		result.put("SuggestFitCaloriesMin", 0.2 * intake);
-		result.put("SuggestFitCaloriesMax", 0.3 * intake);
-		
+//		result.put("SuggestFitCalories", 0.25 * intake);
+//		result.put("SuggestFitCaloriesMin", 0.2 * intake);
+//		result.put("SuggestFitCaloriesMax", 0.3 * intake);
+		report.setSuggestFitCalories(0.25 * intake);
+		report.setSuggestFitCaloriesMin(0.2 * intake);
+		report.setSuggestFitCaloriesMax(0.3 * intake);
+
 		//water intake, from USDA
-		result.put("WaterIntake", (3.7 - gender));
-		result.put("WaterIntakeMin", (3.7 - gender) * 0.9);
-		result.put("WaterIntakeMax", (3.7 - gender) * 1.1);
+//		result.put("WaterIntake", (3.7 - gender));
+//		result.put("WaterIntakeMin", (3.7 - gender) * 0.9);
+//		result.put("WaterIntakeMax", (3.7 - gender) * 1.1);
+		report.setWaterIntakeMax((3.7 - gender) * 1.1);
+		report.setWaterIntakeMin((3.7 - gender) * 0.9);
+		report.setWaterIntake((3.7 - gender));
 		
 		//fiber intake is constant? more than 25g/day
-		result.put("FiberIntake", 25);
-		result.put("FiberIntakeMin", 22.5);
-		result.put("FiberIntakeMax", 27.5);
+//		result.put("FiberIntake", 25);
+//		result.put("FiberIntakeMin", 22.5);
+//		result.put("FiberIntakeMax", 27.5);
+		report.setFiberIntake(25);
+		report.setFiberIntakeMax(27.5);
+		report.setFiberIntakeMin(22.5);
 		
 		//unsaturated fatty acids intake, constant, 250mg/day
-		result.put("UnsaturatedFattyAcidsIntake", 250);
-		result.put("UnsaturatedFattyAcidsIntakeMin", 225);
-		result.put("UnsaturatedFattyAcidsIntakeMax", 275);
+//		result.put("UnsaturatedFattyAcidsIntake", 250);
+//		result.put("UnsaturatedFattyAcidsIntakeMin", 225);
+//		result.put("UnsaturatedFattyAcidsIntakeMax", 275);
+		report.setUnsaturatedFattyAcidsIntake(250);
+		report.setUnsaturatedFattyAcidsIntakeMax(275);
+		report.setUnsaturatedFattyAcidsIntakeMin(225);
 		
 		//cholesterol less than 300mg/day, not sure
-		result.put("CholesterolIntake", 300);
-		result.put("CholesterolIntakeMin", 270);
-		result.put("CholesterolIntakeMax", 330);
+//		result.put("CholesterolIntake", 300);
+//		result.put("CholesterolIntakeMin", 270);
+//		result.put("CholesterolIntakeMax", 330);
+		report.setCholesterolIntakeMax(330);
+		report.setCholesterolIntakeMin(270);
+		report.setCholesterolIntake(300);
 		
 		//sodium intake, from USDA
 		//ALSodium for Adequate intakes and ULSodium for max level, g/day
@@ -335,45 +380,53 @@ public class Evaluation {
 			ALSodium = 1.2;
 			ULSodium = 2.3;
 		}
-		result.put("SodiumIntakeMin", ALSodium);
-		result.put("SodiumIntakeMax", ULSodium);
+//		result.put("SodiumIntakeMin", ALSodium);
+//		result.put("SodiumIntakeMax", ULSodium);
+		report.setSodiumIntakeMax(ULSodium);
+		report.setSodiumIntakeMin(ALSodium);
 		
 		//VC intake, from USDA, mg/day
 		double ALVC = 90;
 		double ULVC = 2000;
-		result.put("VCIntakeMin", (ALVC - gender * 15));
-		result.put("VCIntakeMax", ULVC);
+//		result.put("VCIntakeMin", (ALVC - gender * 15));
+//		result.put("VCIntakeMax", ULVC);
+		report.setVCIntakeMin((ALVC - gender * 15));
+		report.setVCIntakeMax(ULVC);
 		
 		//VD intake, from USDA, IU/day
 		double ALVD = 600;
 		double ULVD = 4000;
-		result.put("VDIntakeMin", ALVD);
-		result.put("VDIntakeMax", ULVD);
+//		result.put("VDIntakeMin", ALVD);
+//		result.put("VDIntakeMax", ULVD);
+		report.setVDIntakeMin(ALVD);
+		report.setVDIntakeMax(ULVD);
 		
 		//breakfast should have about 0.3 of total calories intakes
 		//lunch 0.4
 		//dinner 0.3
-		result.put("BreakfastRate", 0.3 * intake);
-		result.put("LunchRate", 0.4 * intake);
-		result.put("DinnerRate", 0.3 * intake);
+//		result.put("BreakfastRate", 0.3 * intake);
+//		result.put("LunchRate", 0.4 * intake);
+//		result.put("DinnerRate", 0.3 * intake);
+		report.setBreakfastRate(0.3 * intake);
+		report.setLunchRate(0.4 * intake);
+		report.setDinnerRate(0.3 * intake);
 
 		//not sure
-		result.put("DietStructureOilMin",NotSure);
-		result.put("DietStructureOilMax",NotSure);
-		result.put("DietStructureMeatMin",NotSure);
-		result.put("DietStructureMeatMax",NotSure);
-		result.put("DietStructureMilkMin",NotSure);
-		result.put("DietStructureMilkMax",NotSure);
-		result.put("DietStructureVegetableMin",NotSure);
-		result.put("DietStructureVegetableMax",NotSure);
-		result.put("DietStructureFruitMin",NotSure);
-		result.put("DietStructureFruitMax",NotSure);
-		result.put("DietStructureGrainMin",NotSure);
-		result.put("DietStructureGrainMax",NotSure);
-		result.put("SnackMorningRate",NotSure);
-		result.put("SnackAfternoonRate",NotSure);
+//		result.put("DietStructureOilMin",NotSure);
+//		result.put("DietStructureOilMax",NotSure);
+//		result.put("DietStructureMeatMin",NotSure);
+//		result.put("DietStructureMeatMax",NotSure);
+//		result.put("DietStructureMilkMin",NotSure);
+//		result.put("DietStructureMilkMax",NotSure);
+//		result.put("DietStructureVegetableMin",NotSure);
+//		result.put("DietStructureVegetableMax",NotSure);
+//		result.put("DietStructureFruitMin",NotSure);
+//		result.put("DietStructureFruitMax",NotSure);
+//		result.put("DietStructureGrainMin",NotSure);
+//		result.put("DietStructureGrainMax",NotSure);
+//		result.put("SnackMorningRate",NotSure);
+//		result.put("SnackAfternoonRate",NotSure);
 
-
-        return result;
+        return report;
 	}
 }

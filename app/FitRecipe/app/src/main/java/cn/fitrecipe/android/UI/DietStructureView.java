@@ -16,12 +16,17 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 
 import cn.fitrecipe.android.R;
+<<<<<<< HEAD
+=======
+import cn.fitrecipe.android.entity.Report;
+>>>>>>> d10c1ecdb042e4bfd667e9f64c0cba2a73e78c75
 
 /**
  * Created by wk on 2015/8/17.
  */
 public class DietStructureView extends ImageView{
 
+    private Report report = null;
 
     public DietStructureView(Context context) {
         super(context);
@@ -35,13 +40,16 @@ public class DietStructureView extends ImageView{
         super(context, attrs, defStyleAttr);
     }
 
-    public DietStructureView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
+    public void setValue(Report report) {
+        this.report = report;
+        invalidate();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        if(report == null)
+            return;
         int height = canvas.getHeight();
         int width = canvas.getWidth();
         int square = Math.min(width, height);
@@ -132,7 +140,7 @@ public class DietStructureView extends ImageView{
         tmp.drawBitmap(icon, new Rect(0, 0, icon.getWidth(), icon.getHeight()), new RectF(alignX, y3, alignX + radius_outter / 8, y3 + radius_outter / 4), textPaint);
         alignY += radius_outter / 4 + radius_outter/15;
         textPaint.setTextSize(radius_outter / 12);
-        tmp.drawText("300~500mL", x3 + radius_outter/15, alignY - textPaint.ascent(), textPaint);
+        tmp.drawText(Math.round(report.getDietStructureMilkMin()) +"~" + Math.round(report.getDietStructureMilkMax()) + "mL", x3 + radius_outter/15, alignY - textPaint.ascent(), textPaint);
 
 
         //肉
@@ -146,13 +154,13 @@ public class DietStructureView extends ImageView{
         tmp.drawBitmap(icon, new Rect(0, 0, icon.getWidth(), icon.getHeight()), new RectF(alignX, alignY, alignX + radius_outter / 6, alignY + radius_outter / 6), textPaint);
         alignY += radius_outter / 6 + radius_outter/15;
         textPaint.setTextSize(radius_outter / 12);
-        tmp.drawText("300~500g", x5 + radius_outter / 9, alignY - textPaint.ascent(), textPaint);
+        tmp.drawText(Math.round(report.getDietStructureMeatMin()) +"~" + Math.round(report.getDietStructureMeatMax()) + "g", x5 + radius_outter / 9, alignY - textPaint.ascent(), textPaint);
 
 
         //油脂
         textPaint.setTextSize(radius_outter / 8);
         text = "油脂";
-        String amount = "300~500g";
+        String amount = Math.round(report.getDietStructureOilMin()) +"~" + Math.round(report.getDietStructureOilMax()) + "g";
         alignX = x6 - textPaint.measureText(text)/2;
         alignY = y6 + radius_outter / 9;
         tmp.drawText(text, alignX, alignY - textPaint.ascent(), textPaint);
@@ -170,16 +178,15 @@ public class DietStructureView extends ImageView{
         //谷物
         textPaint.setTextSize(radius_outter / 8);
         text = "谷物";
-        amount = "300~500g";
+        amount = Math.round(report.getDietStructureGrainMin()) +"~" + Math.round(report.getDietStructureGrainMax()) + "g";
         alignX = x1 - textPaint.measureText(text) - radius_outter/6;
         alignY = y1;
         tmp.drawText(text, alignX, alignY - textPaint.ascent(), textPaint);
         textPaint.setTextSize(radius_outter / 12);
-        alignX = x1 - textPaint.measureText(amount) - radius_outter/9;
+        alignX = x1 - textPaint.measureText(amount) - radius_outter/6;
         alignY += textPaint.descent() - textPaint.ascent() + radius_outter / 15;
         tmp.drawText(amount, alignX, alignY - textPaint.ascent(), textPaint);
 
-        alignX += radius_outter/9;
         alignY += textPaint.descent() - textPaint.ascent() + radius_outter / 15;
         icon = BitmapFactory.decodeResource(getResources(), R.drawable.icon_rice);
         tmp.drawBitmap(icon, new Rect(0, 0, icon.getWidth(), icon.getHeight()), new RectF(alignX, alignY, alignX + radius_outter / 6, alignY + radius_outter / 6), textPaint);
@@ -195,13 +202,13 @@ public class DietStructureView extends ImageView{
         tmp.drawBitmap(icon, new Rect(0, 0, icon.getWidth(), icon.getHeight()), new RectF(alignX, alignY , alignX + radius_outter / 6, alignY + radius_outter / 6), textPaint);
         alignY += radius_outter / 6 + radius_outter / 15;
         textPaint.setTextSize(radius_outter / 12);
-        tmp.drawText("300~500mL", x1 - radius_outter / 6, alignY - textPaint.ascent(), textPaint);
+        tmp.drawText(Math.round(report.getDietStructureVegetableMin()) +"~" + Math.round(report.getDietStructureVegetableMax()) + "g", x1 - radius_outter / 6, alignY - textPaint.ascent(), textPaint);
 
 
         //水果
         textPaint.setTextSize(radius_outter / 8);
         text = "水果";
-        amount = "300~500g";
+        amount = Math.round(report.getDietStructureFruitMin()) +"~" + Math.round(report.getDietStructureFruitMax()) + "g";
         alignX = rx + radius_outter / 15;
         alignY = ry - radius_outter + radius_outter / 12;
         tmp.drawText(text, alignX, alignY - textPaint.ascent(), textPaint);

@@ -78,8 +78,10 @@ public class PlanTestActivity extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.left_btn:
-                //finish();
-                goNext();
+                if(testViewPager.getCurrentItem() == 0)
+                    finish();
+                else
+                    goPrev();
                 break;
             case R.id.plan_test_begin_btn:
                 break;
