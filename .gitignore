@@ -18,3 +18,5 @@ plugins
 *.DS_Store
 backend/fitrecipe/static
 app/FitRecipe/youkuPlayerOpenSDK
+app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/bundles/release/classes.jar
+app/FitRecipe/youkuPlayerOpenSDK/build/intermediates/bundles/release/classes.jar
