@@ -23,6 +23,7 @@
             android:layout_marginTop="30dp"/>
 
         <TextView
+            android:id="@+id/plan_test_goal_weight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/plan_test_question_11_01"

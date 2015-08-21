@@ -17,10 +17,13 @@ import com.rey.material.widget.RadioButton;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import cn.fitrecipe.android.PlanTestActivity;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.ReportActivity;
+import cn.fitrecipe.android.UI.TestViewPager;
+import cn.fitrecipe.android.entity.Report;
 import cn.fitrecipe.android.function.Evaluation;
 
 /**
@@ -54,68 +57,15 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
             {"小于30分钟","30-60分钟","60-90分钟","90分钟以上"},
             {"早餐前","午餐前","晚餐前","晚餐后"},
             {},{}};
-    private final String[][] output = {
-            //BaseInfo
-            {"BMI","身体质量指数（BMI）"},
-            {"BMR","基础代谢率（BMR）"},
-            {"SuggestFitFrequency","建议每周运动频率"},
-            {"SuggestFitTime","建议每次运动时长"},
-            {"CaloriesIntake","每日所需热量"},
-            {"CaloriesIntakeMin","每日所需热量下限"},
-            {"CaloriesIntakeMax","每日所需热量上限"},
-            {"SuggestFitCalories","每日运动量"},
-            {"SuggestFitCaloriesMin","每日运动量下限"},
-            {"SuggestFitCaloriesMax","每日运动量上限"},
-            {"BestWeight","最佳体重"},
-            {"BestWeightMin","健康体重下限"},
-            {"BestWeightMax","健康体重上限"},
-            {"BurningRateMin","燃脂心率下限"},
-            {"BurningRateMax","燃脂心率上限"},
-            //NutritionInfo
-            {"ProteinIntakeMin","蛋白质摄入量下限"},
-            {"ProteinIntakeMax","蛋白质摄入量上限"},
-            {"CarbohydrateIntakeMin","碳水化合物摄入量下限"},
-            {"CarbohydrateIntakeMax","碳水化合物摄入量上限"},
-            {"FatIntakeMin","脂类摄入量下限"},
-            {"FatIntakeMax","脂类摄入量上限"},
-            {"WaterIntakeMin","水摄入量下限"},
-            {"WaterIntakeMax","水摄入量上限"},
-            {"FiberIntakeMin","纤维素摄入量下限"},
-            {"FiberIntakeMax","纤维素摄入量上限"},
-            {"UnsaturatedFattyAcidsIntakeMin","不饱和脂肪酸摄入量下限"},
-            {"UnsaturatedFattyAcidsIntakeMax","不饱和脂肪酸摄入量上限"},
-            {"CholesterolIntakeMin","胆固醇摄入量下限"},
-            {"CholesterolIntakeMax","胆固醇摄入量上限"},
-            {"SodiumIntakeMin","钠摄入量下限"},
-            {"SodiumIntakeMax","钠摄入量上限"},
-            {"VCIntakeMin","维生素C摄入量下限"},
-            {"VCIntakeMax","维生素C摄入量上限"},
-            {"VDIntakeMin","维生素D摄入量下限"},
-            {"VDIntakeMax","维生素D摄入量上限"},
-            //DietStructure
-            {"DietStructureOilMin", "油脂下限"},
-            {"DietStructureOilMax", "油脂上限"},
-            {"DietStructureMeatMin", "肉类下限"},
-            {"DietStructureMeatMax", "肉类上限"},
-            {"DietStructureMilkMin", "蛋奶下限"},
-            {"DietStructureMilkMax", "蛋奶上限"},
-            {"DietStructureVegetableMin", "蔬菜下限"},
-            {"DietStructureVegetableMax", "蔬菜上限"},
-            {"DietStructureFruitMin", "水果下限"},
-            {"DietStructureFruitMax", "水果上限"},
-            {"DietStructureGrainMin", "谷物下限"},
-            {"DietStructureGrainMax", "谷物上限"},
-            //OtherInfo
-            {"BreakfastRate","早餐摄入"},
-            {"SnackMorningRate","上午加餐摄入"},
-            {"LunchRate","午餐摄入"},
-            {"SnackAfternoonRate","下午加餐摄入"},
-            {"DinnerRate","晚餐摄入"}
-    };
+
+    AtomicBoolean flag;
 
     public TestViewPagerAdapter(PlanTestActivity context, List<Map<String, Object>> dataList) {
         this.context = context;
         this.dataList = dataList;
+        flag = new AtomicBoolean(true);
+        for(int i= 0; i <=12; i++)
+            questionLinearLayout.add(null);
     }
 
     @Override
@@ -202,24 +152,29 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
             case 11:
                 questionContainer = LayoutInflater.from(context).inflate(R.layout.fragment_plan_test_11, null);
                 initCal(questionContainer);
+                TextView title = (TextView) questionContainer.findViewById(R.id.plan_test_goal_weight);
                 TextView tips = (TextView) questionContainer.findViewById(R.id.plan_tips);
                 if(userEvaluation.getGoalType()){
-                    tips.setText(context.getResources().getString(R.string.plan_test_question_11_tips_gain_muscle) + this.gain_muslce_max + "公斤");
+                    title.setText(context.getResources().getString(R.string.plan_test_question_11_01));
+                    tips.setText(context.getResources().getString(R.string.plan_test_question_11_tips_gain_muscle) + Math.round(this.gain_muslce_max) + "公斤");
                 }else{
-                    tips.setText(context.getResources().getString(R.string.plan_test_question_11_tips_lose_weight) + this.lose_weight_max + "公斤");
+                    title.setText(context.getResources().getString(R.string.plan_test_question_11_02));
+                    tips.setText(context.getResources().getString(R.string.plan_test_question_11_tips_lose_weight) + Math.round(this.lose_weight_max) + "公斤");
                 }
                 break;
             case 12:
                 questionContainer = LayoutInflater.from(context).inflate(R.layout.fragment_plan_test_12, null);
                 initCal(questionContainer);
-                TextView tips2 = (TextView) questionContainer.findViewById(R.id.plan_tips);
-                tips2.setText(context.getResources().getString(R.string.plan_test_question_12_tips_prefix) + this.gain_goal_time + context.getResources().getString(R.string.plan_test_question_12_tips_suffix));
+//                TextView tips2 = (TextView) questionContainer.findViewById(R.id.plan_tips);
+//                tips2.setText(context.getResources().getString(R.string.plan_test_question_12_tips_prefix) + userEvaluation.getShortestDaysToGoal() + context.getResources().getString(R.string.plan_test_question_12_tips_suffix));
                 break;
         }
         container.addView(questionContainer);
-        questionLinearLayout.add(questionContainer);
+        questionLinearLayout.set(position, questionContainer);
         return questionContainer;
     }
+
+
 
     private void initRadio(final View questionContainer) {
         LinearLayout radioGroup = (LinearLayout) questionContainer.findViewById(R.id.radioGroup);
@@ -261,7 +216,7 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
                     boolean goalType;
                     if(Integer.parseInt(dataList.get(5).get("type").toString())==0){
                         roughFat = Integer.parseInt(dataList.get(5).get("data").toString());
-                        preciseFat = 0;
+                        preciseFat = -1;
                     }else{
                         roughFat = 4;
                         preciseFat = Double.parseDouble(dataList.get(5).get("data").toString())/100;
@@ -289,12 +244,15 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
                 if (position==10){
                     userEvaluation.setExerciseTime(Integer.parseInt(dataList.get(10).get("data").toString()));
                 }
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        context.goNext();
-                    }
-                }, 600);
+                if(flag.compareAndSet(true, false)) {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            context.goNext();
+                            flag.set(true);
+                        }
+                    }, 600);
+                }
             }
         };
         //设置监听事件
@@ -305,7 +263,7 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
             TextView prev = (TextView) questionContainer.findViewById(R.id.plan_test_last_question);
             prev.setOnClickListener(this);
         }
-        if(position==5){
+        if(position == 5){
             TextView prev = (TextView) questionContainer.findViewById(R.id.plan_test_last_question_01);
             prev.setOnClickListener(this);
         }
@@ -370,6 +328,19 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
                     case R.id.plan_num_sure:
                         if(checkVaild(Double.parseDouble(value.getText().toString()), position)){
                             dataList.get(position).put("data",value.getText().toString());
+                            if(position==4 && Integer.parseInt(dataList.get(1).get("data").toString()) == 1) {
+                                View view = questionLinearLayout.get(5);
+                                TextView plan_test_question_05_01 = (TextView) view.findViewById(R.id.plan_test_question_05_01);
+                                TextView plan_test_question_05_02 = (TextView) view.findViewById(R.id.plan_test_question_05_02);
+                                TextView plan_test_question_05_03 = (TextView) view.findViewById(R.id.plan_test_question_05_03);
+                                TextView plan_test_question_05_04 = (TextView) view.findViewById(R.id.plan_test_question_05_04);
+
+                                plan_test_question_05_01.setText(context.getResources().getString(R.string.plan_test_question_05_01_woman));
+                                plan_test_question_05_02.setText(context.getResources().getString(R.string.plan_test_question_05_02_woman));
+                                plan_test_question_05_03.setText(context.getResources().getString(R.string.plan_test_question_05_03_woman));
+                                plan_test_question_05_04.setText(context.getResources().getString(R.string.plan_test_question_05_04_woman));
+
+                            }
                             if(position==11){
                                 userEvaluation.setWeightGoal(Integer.parseInt(dataList.get(11).get("data").toString()));
                                 TextView tips2 = (TextView) (questionLinearLayout.get(12)).findViewById(R.id.plan_tips);
@@ -430,18 +401,9 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
         for(int i=0;i<this.output.length;i++){
             output += this.output[i][1] + ": " + report.get(this.output[i][0]) + "\n";
         }*/
-        Map<String, Object> report = userEvaluation.report();
+        Report report = userEvaluation.report();
         Intent intent=new Intent(context,ReportActivity.class);
-        intent.putExtra("sex", Integer.parseInt(dataList.get(1).get("data").toString()));
-        intent.putExtra("age", Integer.parseInt(dataList.get(2).get("data").toString()));
-        intent.putExtra("height", (Double.parseDouble(dataList.get(3).get("data").toString())));
-        intent.putExtra("weight", (Double.parseDouble(dataList.get(4).get("data").toString())));
-        intent.putExtra("fat", (Integer.parseInt(dataList.get(5).get("type").toString())==0?
-                (this.input[5][Integer.parseInt(dataList.get(5).get("data").toString())+Integer.parseInt(dataList.get(1).get("data").toString())]):
-                (Integer.parseInt(dataList.get(5).get("data").toString()))));
-        for(int i=0;i<this.output.length;i++){
-            intent.putExtra(this.output[i][0], report.get(this.output[i][0]).toString());
-        }
+        intent.putExtra("report", report);
         context.startActivity(intent);
     }
 
@@ -465,6 +427,7 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.plan_test_last_question:
+            case R.id.plan_test_last_question_01:
                 context.goPrev();
                 break;
             case R.id.plan_test_begin_btn:
