@@ -1,15 +1,11 @@
 package cn.fitrecipe.android;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-<<<<<<< HEAD
-=======
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
->>>>>>> d10c1ecdb042e4bfd667e9f64c0cba2a73e78c75
-
-import org.w3c.dom.Text;
 
 import cn.fitrecipe.android.UI.DietStructureView;
 import cn.fitrecipe.android.UI.PieChartView;
@@ -18,7 +14,7 @@ import cn.fitrecipe.android.entity.Report;
 /**
  * Created by 奕峰 on 2015/5/8.
  */
-public class ReportActivity extends Activity {
+public class ReportActivity extends Activity implements View.OnClickListener {
 
     private Report report;
     private ImageView report_sex;
@@ -34,6 +30,8 @@ public class ReportActivity extends Activity {
     private TextView unsaturatedFattyAcids_min, unsaturatedFattyAcids_max, cholesterol_min, cholesterol_max;
     private TextView vc_min, vc_max, vd_min, vd_max;
 
+    private TextView check_plan_btn;
+
     //view
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +42,11 @@ public class ReportActivity extends Activity {
         report = (Report) getIntent().getSerializableExtra("report");
 
         initView();
+        initEvent();
+    }
+
+    private void initEvent() {
+        check_plan_btn.setOnClickListener(this);
     }
 
     private void initView() {
@@ -187,11 +190,26 @@ public class ReportActivity extends Activity {
         vd_min.setText(Math.round(report.getVDIntakeMin()) + "g");
         vd_max = (TextView) findViewById(R.id.vd_max);
         vd_max.setText(Math.round(report.getVDIntakeMax())+"g");
+
+        check_plan_btn = (TextView) findViewById(R.id.check_plan);
     }
 
     private double round(double x) {
         int a = (int)(x * 10);
         if(a % 10 == 0) return a/10;
         else return a / 10.0;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.check_plan:
+                Intent intent=new Intent(this,MainActivity.class);
+                intent.putExtra("tab", 1);
+                this.startActivity(intent);
+                break;
+            default:
+                break;
+        }
     }
 }

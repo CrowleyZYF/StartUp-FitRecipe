@@ -16,10 +16,7 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 
 import cn.fitrecipe.android.R;
-<<<<<<< HEAD
-=======
 import cn.fitrecipe.android.entity.Report;
->>>>>>> d10c1ecdb042e4bfd667e9f64c0cba2a73e78c75
 
 /**
  * Created by wk on 2015/8/17.

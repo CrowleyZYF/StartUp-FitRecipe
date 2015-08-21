@@ -84,6 +84,10 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     @Override
     protected void onResume() {
         super.onResume();
+        Intent intent =getIntent();
+        if (intent.hasExtra("tab")){
+            tab_index = intent.getIntExtra("tab",1);
+        }
         registerReceiver(readyRececiver, intentFilter);
         setSelect(tab_index);
     }

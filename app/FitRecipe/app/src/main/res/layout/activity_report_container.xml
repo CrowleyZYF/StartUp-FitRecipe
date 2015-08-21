@@ -1,36 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/background_color">
 
-    <LinearLayout
+    <include layout="@layout/activity_report_header" />
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@color/background_color">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-        <include layout="@layout/activity_report_header" />
-
-        <include layout="@layout/activity_report_body_info" />
-
-        <include layout="@layout/activity_report_base_info" />
-
-        <include layout="@layout/activity_report_sport_info" />
-
-        <include layout="@layout/activity_report_nutrition" />
-
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/base_color"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:text="查看饮食计划"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:gravity="center"/>
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <include layout="@layout/activity_report_body_info" />
 
-</ScrollView>
+            <include layout="@layout/activity_report_base_info" />
+
+            <include layout="@layout/activity_report_sport_info" />
+
+            <include layout="@layout/activity_report_nutrition" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/check_plan"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/base_color"
+        android:text="查看饮食计划"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:gravity="center"/>
+
+</LinearLayout>
