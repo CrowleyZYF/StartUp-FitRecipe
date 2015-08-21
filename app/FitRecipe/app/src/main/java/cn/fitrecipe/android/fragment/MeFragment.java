@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import cn.fitrecipe.android.CollectActivity;
 import cn.fitrecipe.android.FrApplication;
@@ -80,6 +81,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
             me_name.setText("未登录");
             //login_platform.setText("平台：暂无");
             me_login_btn_text.setText("登陆");
+            me_avatar.setImageResource(R.drawable.pic_header);
         }
     }
 
@@ -100,14 +102,18 @@ public class MeFragment extends Fragment implements View.OnClickListener {
             }
             case R.id.me_collect_btn:{
                 if(!FrApplication.getInstance().isLogin()) {
-                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                    Toast.makeText(getActivity(), getResources().getString(R.string.login_tip), Toast.LENGTH_SHORT).show();
                 }
                 else
                     startActivity(new Intent(getActivity(), CollectActivity.class));
                 break;
             }
             case R.id.me_report_btn:{
-                startActivity(new Intent(getActivity(), ReportActivity.class));
+                if(!FrApplication.getInstance().isLogin()) {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.login_tip), Toast.LENGTH_SHORT).show();
+                }
+                else
+                    startActivity(new Intent(getActivity(), ReportActivity.class));
                 break;
             }
             case R.id.me_shopping_btn:{
@@ -120,6 +126,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
                     initData();
                 }else{
                     startActivity(new Intent(getActivity(), LoginActivity.class));
+                    getActivity().finish();
                 }
                 break;
             default:

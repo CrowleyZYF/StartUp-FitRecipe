@@ -42,7 +42,7 @@ public class FrServerConfig {
 
     //get compressed image data
     public static String getImageCompressed(String url) {
-        String scale = "?imageMogr2/thumbnail/100000@";
+        String scale = "?imageMogr2/thumbnail/400000@";
         return url + scale;
     }
 

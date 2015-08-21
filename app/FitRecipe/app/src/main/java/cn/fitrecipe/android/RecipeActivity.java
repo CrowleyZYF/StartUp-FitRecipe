@@ -458,9 +458,9 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         }else{
             if(!FrApplication.getInstance().isLogin()) {
                 Toast.makeText(RecipeActivity.this, "请登录!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(RecipeActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
+//                Intent intent = new Intent(RecipeActivity.this, LoginActivity.class);
+//                startActivity(intent);
+//                finish();
                 return;
             }
             String url = FrServerConfig.getCreateCollectionUrl();

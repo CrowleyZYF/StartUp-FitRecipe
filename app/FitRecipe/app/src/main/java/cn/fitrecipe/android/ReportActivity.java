@@ -1,24 +1,22 @@
 package cn.fitrecipe.android;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
-<<<<<<< HEAD
-=======
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
->>>>>>> d10c1ecdb042e4bfd667e9f64c0cba2a73e78c75
-
-import org.w3c.dom.Text;
+import android.widget.Toast;
 
 import cn.fitrecipe.android.UI.DietStructureView;
 import cn.fitrecipe.android.UI.PieChartView;
+import cn.fitrecipe.android.dao.FrDbHelper;
 import cn.fitrecipe.android.entity.Report;
 
 /**
  * Created by 奕峰 on 2015/5/8.
  */
-public class ReportActivity extends Activity {
+public class ReportActivity extends Activity implements View.OnClickListener{
 
     private Report report;
     private ImageView report_sex;
@@ -34,6 +32,8 @@ public class ReportActivity extends Activity {
     private TextView unsaturatedFattyAcids_min, unsaturatedFattyAcids_max, cholesterol_min, cholesterol_max;
     private TextView vc_min, vc_max, vd_min, vd_max;
 
+    private ImageView back_btn;
+
     //view
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +41,27 @@ public class ReportActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_container);
 
-        report = (Report) getIntent().getSerializableExtra("report");
+        if(getIntent().hasExtra("report")) {
+            report = (Report) getIntent().getSerializableExtra("report");
+            FrApplication.getInstance().setIsTested(true);
+            new AsyncTask<Void, Void, Void>(){
 
+                @Override
+                protected void onProgressUpdate(Void... values) {
+                    super.onProgressUpdate(values);
+                    Toast.makeText(ReportActivity.this, "保存报告!", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                protected Void doInBackground(Void... params) {
+                    FrDbHelper.getInstance(ReportActivity.this).addReport(report);
+                    publishProgress();
+                    return null;
+                }
+            }.execute();
+        }
+        else
+            report = FrDbHelper.getInstance(this).getReport();
         initView();
     }
 
@@ -179,19 +198,31 @@ public class ReportActivity extends Activity {
         cholesterol_max.setText(Math.round(report.getCholesterolIntakeMax())+"mg");
 
         vc_min = (TextView) findViewById(R.id.vc_min);
-        vc_min.setText(Math.round(report.getVCIntakeMin()) + "g");
+        vc_min.setText(Math.round(report.getVCIntakeMin()) + "mg");
         vc_max = (TextView) findViewById(R.id.vc_max);
-        vc_max.setText(Math.round(report.getVCIntakeMax())+"g");
+        vc_max.setText(Math.round(report.getVCIntakeMax())+"mg");
 
         vd_min = (TextView) findViewById(R.id.vd_min);
-        vd_min.setText(Math.round(report.getVDIntakeMin()) + "g");
+        vd_min.setText(Math.round(report.getVDIntakeMin()) + "mg");
         vd_max = (TextView) findViewById(R.id.vd_max);
-        vd_max.setText(Math.round(report.getVDIntakeMax())+"g");
+        vd_max.setText(Math.round(report.getVDIntakeMax())+"mg");
+
+        back_btn = (ImageView) findViewById(R.id.back_btn);
+        back_btn.setOnClickListener(this);
     }
 
     private double round(double x) {
         int a = (int)(x * 10);
         if(a % 10 == 0) return a/10;
         else return a / 10.0;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.back_btn:
+                finish();
+                break;
+        }
     }
 }
