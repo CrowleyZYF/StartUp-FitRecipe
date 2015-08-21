@@ -2,6 +2,7 @@ package cn.fitrecipe.android;
 
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,6 +17,7 @@ import cn.fitrecipe.android.entity.Report;
 /**
  * Created by 奕峰 on 2015/5/8.
  */
+
 public class ReportActivity extends Activity implements View.OnClickListener{
 
     private Report report;
@@ -33,6 +35,8 @@ public class ReportActivity extends Activity implements View.OnClickListener{
     private TextView vc_min, vc_max, vd_min, vd_max;
 
     private ImageView back_btn;
+    private TextView check_plan_btn;
+    private String last;
 
     //view
     @Override
@@ -43,6 +47,7 @@ public class ReportActivity extends Activity implements View.OnClickListener{
 
         if(getIntent().hasExtra("report")) {
             report = (Report) getIntent().getSerializableExtra("report");
+            last = "plan";
             FrApplication.getInstance().setIsTested(true);
             new AsyncTask<Void, Void, Void>(){
 
@@ -60,9 +65,22 @@ public class ReportActivity extends Activity implements View.OnClickListener{
                 }
             }.execute();
         }
-        else
+        else {
+            last = "me";
             report = FrDbHelper.getInstance(this).getReport();
-        initView();
+        }
+        if(report != null) {
+            initView();
+            initEvent();
+        }else {
+            Toast.makeText(this, "先来做个测评吧!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, PlanTestActivity.class);
+            startActivity(intent);
+        }
+    }
+
+    private void initEvent() {
+        check_plan_btn.setOnClickListener(this);
     }
 
     private void initView() {
@@ -209,6 +227,9 @@ public class ReportActivity extends Activity implements View.OnClickListener{
 
         back_btn = (ImageView) findViewById(R.id.back_btn);
         back_btn.setOnClickListener(this);
+        vd_max.setText(Math.round(report.getVDIntakeMax())+"g");
+
+        check_plan_btn = (TextView) findViewById(R.id.check_plan);
     }
 
     private double round(double x) {
@@ -221,7 +242,16 @@ public class ReportActivity extends Activity implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.back_btn:
-                finish();
+                if(last.equals("me")) {
+                    finish();
+                    break;
+                }
+            case R.id.check_plan:
+                Intent intent=new Intent(this,MainActivity.class);
+                intent.putExtra("tab", 1);
+                this.startActivity(intent);
+                break;
+            default:
                 break;
         }
     }

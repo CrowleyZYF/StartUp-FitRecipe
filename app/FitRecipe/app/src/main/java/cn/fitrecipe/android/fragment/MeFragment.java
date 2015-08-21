@@ -112,8 +112,9 @@ public class MeFragment extends Fragment implements View.OnClickListener {
                 if(!FrApplication.getInstance().isLogin()) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.login_tip), Toast.LENGTH_SHORT).show();
                 }
-                else
+                else {
                     startActivity(new Intent(getActivity(), ReportActivity.class));
+                }
                 break;
             }
             case R.id.me_shopping_btn:{
