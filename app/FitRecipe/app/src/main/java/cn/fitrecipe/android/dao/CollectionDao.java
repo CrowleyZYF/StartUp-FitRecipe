@@ -15,31 +15,5 @@ import cn.fitrecipe.android.entity.Collection;
  */
 public class CollectionDao {
 
-    SharedPreferences sp;
-    Gson gson;
 
-    public CollectionDao(Context context) {
-        sp = context.getSharedPreferences("user", Context.MODE_PRIVATE);
-        gson = new Gson();
-    }
-
-    public void saveCollections(List<Collection> collections) {
-        SharedPreferences.Editor editor = sp.edit();
-        String json = gson.toJson(collections);
-        editor.putString("collections", json);
-        editor.commit();
-    }
-
-    public List<Collection> getCollections() {
-        String json = sp.getString("collections", null);
-        if(json == null)
-            return null;
-        return gson.fromJson(json, new TypeToken<List<Collection>>(){}.getType());
-    }
-
-    public void clear() {
-        SharedPreferences.Editor editor = sp.edit();
-        editor.remove("collections");
-        editor.commit();
-    }
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.util.List;
 
+import cn.fitrecipe.android.entity.Author;
 import cn.fitrecipe.android.entity.Component;
 import cn.fitrecipe.android.entity.Ingredient;
 import cn.fitrecipe.android.entity.Nutrition;
@@ -66,13 +67,25 @@ public class FrDbHelper {
         return ingredientDao.getAll();
     }
 
-    public Report getReport() {
+    public Report getReport(Author author) {
         ReportDao dao = new ReportDao(context);
-        return dao.getReport();
+        return dao.getReport(author);
     }
 
     public void addReport(Report report) {
         ReportDao dao = new ReportDao(context);
         dao.add(report);
+    }
+
+    public void saveAuthor(Author author) {
+        new AuthorDao(context).save(author);
+    }
+
+    public void authorLogout(Author author) {
+        new AuthorDao(context).logout(author);
+    }
+
+    public Author getLoginAuthor() {
+        return new AuthorDao(context).getAuthor();
     }
 }

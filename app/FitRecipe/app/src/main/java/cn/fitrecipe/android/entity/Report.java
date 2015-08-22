@@ -153,6 +153,9 @@ public class Report implements Serializable{
     private double SnackAfternoonRate;          //下午加餐摄入
     @DatabaseField
     private double DinnerRate;                  //晚餐摄入
+    @DatabaseField(foreign = true, canBeNull = false)
+    private Author author;
+
 
     public double getBMI() {
         return BMI;
@@ -675,5 +678,13 @@ public class Report implements Serializable{
 
     public void setCarbohydrateIntake(double carbohydrateIntake) {
         CarbohydrateIntake = carbohydrateIntake;
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
     }
 }

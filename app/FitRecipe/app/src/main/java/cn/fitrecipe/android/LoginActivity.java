@@ -64,6 +64,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private void loginSuccess(JSONObject data) throws JSONException {
 
         Author author = new Gson().fromJson(data.toString(), Author.class);
+        author.setIsLogin(true);
         FrApplication.getInstance().setAuthor(author);
         Toast.makeText(getApplicationContext(), "欢迎："+ author.getNick_name(), Toast.LENGTH_LONG).show();
         Intent intent = new Intent(nowContext, MainActivity.class);

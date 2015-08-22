@@ -1,9 +1,11 @@
 package cn.fitrecipe.android.dao;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 
-import com.google.gson.Gson;
+import com.j256.ormlite.dao.Dao;
+
+import java.sql.SQLException;
+import java.util.List;
 
 import cn.fitrecipe.android.entity.Author;
 
@@ -12,31 +14,47 @@ import cn.fitrecipe.android.entity.Author;
  */
 public class AuthorDao {
 
-    SharedPreferences sp;
-    Gson gson;
+    private Dao<Author, Integer> authorDaoOpe;
+    private DatabaseHelper helper;
 
     public AuthorDao(Context context) {
-        sp = context.getSharedPreferences("user", Context.MODE_PRIVATE);
-        gson = new Gson();
+        try {
+            helper = DatabaseHelper.getHelper(context);
+            authorDaoOpe = helper.getDao(Author.class);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public void saveAuthor(Author author) {
-        SharedPreferences.Editor editor = sp.edit();
-        String json = gson.toJson(author);
-        editor.putString("author", json);
-        editor.commit();
+    public void save(Author author) {
+        try {
+            if(authorDaoOpe.idExists(author.getId()))
+                authorDaoOpe.update(author);
+            else
+                authorDaoOpe.create(author);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void logout(Author author) {
+        author.setIsLogin(false);
+        try {
+            authorDaoOpe.update(author);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Author getAuthor() {
-        String json = sp.getString("author", null);
-        if(json == null)
-            return null;
-        return gson.fromJson(json, Author.class);
-    }
-
-    public void clear() {
-        SharedPreferences.Editor editor = sp.edit();
-        editor.remove("author");
-        editor.commit();
+        List<Author> authors = null;
+        try {
+            authors = authorDaoOpe.queryForEq("isLogin", true);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        if(authors != null && authors.size() > 0)
+            return authors.get(0);
+        return null;
     }
 }

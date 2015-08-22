@@ -11,6 +11,7 @@ import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
 
+import cn.fitrecipe.android.entity.Author;
 import cn.fitrecipe.android.entity.Component;
 import cn.fitrecipe.android.entity.Ingredient;
 import cn.fitrecipe.android.entity.Label;
@@ -42,13 +43,14 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource) {
         try {
-
+            TableUtils.createTableIfNotExists(connectionSource, Author.class);
             TableUtils.createTableIfNotExists(connectionSource, Label.class);
             TableUtils.createTableIfNotExists(connectionSource, Ingredient.class);
             TableUtils.createTableIfNotExists(connectionSource, Component.class);
             TableUtils.createTableIfNotExists(connectionSource, Nutrition.class);
             TableUtils.createTableIfNotExists(connectionSource, Recipe.class);
             TableUtils.createTableIfNotExists(connectionSource, Report.class);
+
         } catch (SQLException e) {
             e.printStackTrace();
             Log.e("error", e.getMessage());
@@ -58,6 +60,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource, int i, int i1) {
         try {
+            TableUtils.dropTable(connectionSource, Author.class, true);
             TableUtils.dropTable(connectionSource, Label.class, true);
             TableUtils.dropTable(connectionSource, Ingredient.class, true);
             TableUtils.dropTable(connectionSource, Component.class, true);
