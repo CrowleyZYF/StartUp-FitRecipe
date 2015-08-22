@@ -8,6 +8,7 @@ import cn.fitrecipe.android.entity.Component;
 import cn.fitrecipe.android.entity.Ingredient;
 import cn.fitrecipe.android.entity.Nutrition;
 import cn.fitrecipe.android.entity.Recipe;
+import cn.fitrecipe.android.entity.Report;
 
 /**
  * Created by wk on 2015/8/15.
@@ -63,5 +64,15 @@ public class FrDbHelper {
     public List<Ingredient> getAllIngredient() {
         IngredientDao ingredientDao = new IngredientDao(context);
         return ingredientDao.getAll();
+    }
+
+    public Report getReport() {
+        ReportDao dao = new ReportDao(context);
+        return dao.getReport();
+    }
+
+    public void addReport(Report report) {
+        ReportDao dao = new ReportDao(context);
+        dao.add(report);
     }
 }

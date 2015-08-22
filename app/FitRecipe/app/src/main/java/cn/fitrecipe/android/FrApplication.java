@@ -135,14 +135,28 @@ public class FrApplication extends Application {
         new AuthorDao(this).saveAuthor(author);
     }
 
+    public void setIsTested(boolean isTested) {
+        if(author == null)  getAuthor();
+        if(author != null) {
+            author.setIsTested(isTested);
+            new AuthorDao(this).saveAuthor(author);
+        }
+    }
+
     public void logOut() {
+        author = null;
         new AuthorDao(this).clear();
-        new CollectionDao(this).clear();
+//        new CollectionDao(this).clear();
     }
 
     public boolean isLogin() {
         Author author = getAuthor();
         return author == null ? false : true;
+    }
+
+    public boolean isTested() {
+        Author author = getAuthor();
+        return author == null ? false : author.isTested();
     }
 
     public HomeData getHomeData() {

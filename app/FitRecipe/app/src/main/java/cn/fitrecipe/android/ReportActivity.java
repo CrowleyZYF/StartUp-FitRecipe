@@ -1,20 +1,24 @@
 package cn.fitrecipe.android;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import cn.fitrecipe.android.UI.DietStructureView;
 import cn.fitrecipe.android.UI.PieChartView;
+import cn.fitrecipe.android.dao.FrDbHelper;
 import cn.fitrecipe.android.entity.Report;
 
 /**
  * Created by 奕峰 on 2015/5/8.
  */
-public class ReportActivity extends Activity implements View.OnClickListener {
+
+public class ReportActivity extends Activity implements View.OnClickListener{
 
     private Report report;
     private ImageView report_sex;
@@ -30,7 +34,9 @@ public class ReportActivity extends Activity implements View.OnClickListener {
     private TextView unsaturatedFattyAcids_min, unsaturatedFattyAcids_max, cholesterol_min, cholesterol_max;
     private TextView vc_min, vc_max, vd_min, vd_max;
 
+    private ImageView back_btn;
     private TextView check_plan_btn;
+    private String last;
 
     //view
     @Override
@@ -39,10 +45,38 @@ public class ReportActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_container);
 
-        report = (Report) getIntent().getSerializableExtra("report");
+        if(getIntent().hasExtra("report")) {
+            report = (Report) getIntent().getSerializableExtra("report");
+            last = "plan";
+            FrApplication.getInstance().setIsTested(true);
+            new AsyncTask<Void, Void, Void>(){
 
-        initView();
-        initEvent();
+                @Override
+                protected void onProgressUpdate(Void... values) {
+                    super.onProgressUpdate(values);
+                    Toast.makeText(ReportActivity.this, "保存报告!", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                protected Void doInBackground(Void... params) {
+                    FrDbHelper.getInstance(ReportActivity.this).addReport(report);
+                    publishProgress();
+                    return null;
+                }
+            }.execute();
+        }
+        else {
+            last = "me";
+            report = FrDbHelper.getInstance(this).getReport();
+        }
+        if(report != null) {
+            initView();
+            initEvent();
+        }else {
+            Toast.makeText(this, "先来做个测评吧!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, PlanTestActivity.class);
+            startActivity(intent);
+        }
     }
 
     private void initEvent() {
@@ -182,13 +216,17 @@ public class ReportActivity extends Activity implements View.OnClickListener {
         cholesterol_max.setText(Math.round(report.getCholesterolIntakeMax())+"mg");
 
         vc_min = (TextView) findViewById(R.id.vc_min);
-        vc_min.setText(Math.round(report.getVCIntakeMin()) + "g");
+        vc_min.setText(Math.round(report.getVCIntakeMin()) + "mg");
         vc_max = (TextView) findViewById(R.id.vc_max);
-        vc_max.setText(Math.round(report.getVCIntakeMax())+"g");
+        vc_max.setText(Math.round(report.getVCIntakeMax())+"mg");
 
         vd_min = (TextView) findViewById(R.id.vd_min);
-        vd_min.setText(Math.round(report.getVDIntakeMin()) + "g");
+        vd_min.setText(Math.round(report.getVDIntakeMin()) + "mg");
         vd_max = (TextView) findViewById(R.id.vd_max);
+        vd_max.setText(Math.round(report.getVDIntakeMax())+"mg");
+
+        back_btn = (ImageView) findViewById(R.id.back_btn);
+        back_btn.setOnClickListener(this);
         vd_max.setText(Math.round(report.getVDIntakeMax())+"g");
 
         check_plan_btn = (TextView) findViewById(R.id.check_plan);
@@ -202,7 +240,12 @@ public class ReportActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
+            case R.id.back_btn:
+                if(last.equals("me")) {
+                    finish();
+                    break;
+                }
             case R.id.check_plan:
                 Intent intent=new Intent(this,MainActivity.class);
                 intent.putExtra("tab", 1);

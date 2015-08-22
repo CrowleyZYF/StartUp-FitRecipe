@@ -16,6 +16,7 @@ import cn.fitrecipe.android.entity.Ingredient;
 import cn.fitrecipe.android.entity.Label;
 import cn.fitrecipe.android.entity.Nutrition;
 import cn.fitrecipe.android.entity.Recipe;
+import cn.fitrecipe.android.entity.Report;
 
 /**
  * Created by wk on 2015/8/11.
@@ -45,8 +46,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
             TableUtils.createTableIfNotExists(connectionSource, Label.class);
             TableUtils.createTableIfNotExists(connectionSource, Ingredient.class);
             TableUtils.createTableIfNotExists(connectionSource, Component.class);
-            TableUtils.createTable(connectionSource, Nutrition.class);
-            TableUtils.createTable(connectionSource, Recipe.class);
+            TableUtils.createTableIfNotExists(connectionSource, Nutrition.class);
+            TableUtils.createTableIfNotExists(connectionSource, Recipe.class);
+            TableUtils.createTableIfNotExists(connectionSource, Report.class);
         } catch (SQLException e) {
             e.printStackTrace();
             Log.e("error", e.getMessage());
@@ -61,6 +63,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
             TableUtils.dropTable(connectionSource, Component.class, true);
             TableUtils.dropTable(connectionSource, Nutrition.class, true);
             TableUtils.dropTable(connectionSource, Recipe.class, true);
+            TableUtils.dropTable(connectionSource, Report.class, true);
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -327,7 +327,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 login_qq();
                 break;
             case R.id.back_btn:
-                if(backActivity.equals("landingPage")){
+                if(backActivity != null && backActivity.equals("landingPage")){
                     startActivity(new Intent(this, LandingPageActivity.class));
                     finish();
                 }else{

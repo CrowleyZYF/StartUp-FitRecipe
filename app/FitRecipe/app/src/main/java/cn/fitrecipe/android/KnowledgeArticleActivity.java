@@ -147,6 +147,10 @@ public class KnowledgeArticleActivity extends Activity implements View.OnClickLi
     }
 
     public void collect_series(){
+        if(!FrApplication.getInstance().isLogin()) {
+            Toast.makeText(this, getResources().getString(R.string.login_tip), Toast.LENGTH_SHORT).show();
+            return;
+        }
         if(isCollected){
             String url = FrServerConfig.getDeleteCollectionUrl("theme", 0);
             PostRequest request = new PostRequest(url, FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {

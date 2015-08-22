@@ -27,7 +27,7 @@ public class Article implements Serializable{
     }
 
     public String getRecommend_img() {
-        return recommend_img;
+        return FrServerConfig.getImageCompressed(recommend_img);
     }
 
     public void setRecommend_img(String recommend_img) {
@@ -67,7 +67,7 @@ public class Article implements Serializable{
     }
 
     public String getImg_cover() {
-        return FrServerConfig.getImageCompressed(img_cover);
+        return FrServerConfig.getArticleImageCompressed(img_cover);
     }
 
     public void setImg_cover(String img_cover) {

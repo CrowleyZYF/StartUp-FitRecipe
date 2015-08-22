@@ -13,7 +13,7 @@ import cn.fitrecipe.android.entity.Report;
 public class Evaluation {
 	
 	/**
-	 * @param gender: true for male, false for female, use MALE and FEMALE
+	 * @param gender: int, use MALE and FEMALE
 	 * @param age: int, should elder than 18
 	 * @param height: int, cm
 	 * @param weight: double, kg
@@ -49,8 +49,8 @@ public class Evaluation {
 	public static final boolean GAINMUSCLE = true;
 	public static final boolean LOSEWEIGHT = false;
 	
-	private static final double[] maleRoughFat = {0.08, 0.12, 0.15, 0.20, 0.25, 0.30, 0.35};
-	private static final double[] femaleRoughFat = {0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45};
+	private static final double[] maleRoughFat = {0.08, 0.15, 0.25, 0.35};
+	private static final double[] femaleRoughFat = {0.15, 0.25, 0.35, 0.45};
 
     /**
      * @author ZYF
@@ -139,9 +139,9 @@ public class Evaluation {
 		this.weightGoal = weightGoal;
 		this.daysToGoal = daysToGoal;
 		this.preciseFat = preciseFat;
-		this.jobType = jobType;
-		this.exerciseFrequency = exerciseFrequency;
-		this.exerciseInterval = exerciseInterval;
+		this.jobType = jobType + 1;
+		this.exerciseFrequency = exerciseFrequency + 1;
+		this.exerciseInterval = exerciseInterval + 1;
 	}
 	
 	Evaluation (int gender, int age, int height, double weight, int roughFat, boolean goalType, double weightGoal, int daysToGoal) {
@@ -211,20 +211,20 @@ public class Evaluation {
 				preciseFat = maleRoughFat[roughFat];
 			else
 				preciseFat = femaleRoughFat[roughFat];
-			
+
 		}
-		
-		BMR = Math.max((370 + 21.6 * preciseFat), 
+
+		BMR = Math.max((370 + 21.6 * preciseFat),
 				(13.88 * weight + 4.16 * (double)height - 3.43 * (double)age - 112.4 * (double)gender + 53.34));
-		
+
 		if (jobType != INVALID) {
-			alpha = jobType / 4 * 0.5;
+			alpha = (double)jobType / 4 * 0.5;
 		}
 		if (exerciseInterval != INVALID) {
-			beta = (exerciseInterval / 8 * 0.5 +  exerciseFrequency / 3 * 0.5) * 0.5;
+			beta = ((double)exerciseInterval / 4 * 0.5 +  (double)exerciseFrequency / 4 * 0.5) * 0.5;
 		}
-		
-		double metabolic = BMR * (1.2 + (alpha + beta) * 0.15);
+
+		double metabolic = BMR * (1.0 + (alpha + beta) * 0.15);
 		return metabolic;
 	}
 	

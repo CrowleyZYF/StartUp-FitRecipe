@@ -18,7 +18,15 @@ public class Author implements Serializable{
     private String token;
     private boolean is_changed_nick;
     private List<External> externals;
+    private boolean isTested;
 
+    public boolean isTested() {
+        return isTested;
+    }
+
+    public void setIsTested(boolean isTested) {
+        this.isTested = isTested;
+    }
 
     public boolean is_changed_nick() {
         return is_changed_nick;

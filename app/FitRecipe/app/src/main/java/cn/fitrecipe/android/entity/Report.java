@@ -1,89 +1,157 @@
 package cn.fitrecipe.android.entity;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 import java.io.Serializable;
 
 /**
  * Created by wk on 2015/8/18.
  */
 
-
+@DatabaseTable(tableName = "fr_report")
 public class Report implements Serializable{
     //user info
+    @DatabaseField
     private int gender;
+    @DatabaseField
     private int age;
+    @DatabaseField
     private int height;
+    @DatabaseField
     private double weight;
+    @DatabaseField
     private String roughFat;
+    @DatabaseField
     private double preciseFat;
 
     //BaseInfo
+    @DatabaseField
     private double BMI;                         //身体质量指数（BMI）
+    @DatabaseField
     private double BMR;                         //基础代谢率（BMR）
+    @DatabaseField
     private double SuggestFitFrequency;         //建议每周运动频率
+    @DatabaseField
     private double SuggestFitTime;              //建议每次运动时长
+    @DatabaseField
     private double CaloriesIntake;              //每日所需热量
+    @DatabaseField
     private double CaloriesIntakeMin;           //每日所需热量下限
+    @DatabaseField
     private double CaloriesIntakeMax;           //每日所需热量上限
+    @DatabaseField
     private double SuggestFitCalories;          //每日运动量
+    @DatabaseField
     private double SuggestFitCaloriesMin;       //每日运动量下限
+    @DatabaseField
     private double SuggestFitCaloriesMax;       //每日运动量上限
+    @DatabaseField
     private double BestWeight;                  //最佳体重
+    @DatabaseField
     private double BestWeightMin;               //健康体重下限
+    @DatabaseField
     private double BestWeightMax;               //健康体重上限
+    @DatabaseField
     private double BurningRateMin;              //燃脂心率下限
+    @DatabaseField
     private double BurningRateMax;              //燃脂心率上限
 
 
     //NutritionInfo
+    @DatabaseField
     private double ProteinIntake;               //蛋白质摄入量
+    @DatabaseField
     private double ProteinIntakeMin;            //蛋白质摄入量下限
+    @DatabaseField
     private double ProteinIntakeMax;            //蛋白质摄入量上限
+    @DatabaseField
     private double CarbohydrateIntake;
+    @DatabaseField
     private double CarbohydrateIntakeMin;       //碳水化合物摄入量下限
+    @DatabaseField
     private double CarbohydrateIntakeMax;       //碳水化合物摄入量上限
+    @DatabaseField
     private double FatIntake;                   //脂类摄入量
+    @DatabaseField
     private double FatIntakeMin;                //脂类摄入量下限
+    @DatabaseField
     private double FatIntakeMax;                //脂类摄入量上限
+    @DatabaseField
     private double WaterIntake;                 //水摄入量
+    @DatabaseField
     private double WaterIntakeMin;              //水摄入量下限
+    @DatabaseField
     private double WaterIntakeMax;              //水摄入量上限
+    @DatabaseField
     private double FiberIntake;                 //纤维素摄
+    @DatabaseField
     private double FiberIntakeMin;              //纤维素摄入量下限
+    @DatabaseField
     private double FiberIntakeMax;              //纤维素摄入量上限
+    @DatabaseField
     private double UnsaturatedFattyAcidsIntake; //不饱和脂肪酸摄
+    @DatabaseField
     private double UnsaturatedFattyAcidsIntakeMin;//不饱和脂肪酸摄入量下限
+    @DatabaseField
     private double UnsaturatedFattyAcidsIntakeMax;//不饱和脂肪酸摄入量上限
+    @DatabaseField
     private double CholesterolIntake;           //胆固醇摄
+    @DatabaseField
     private double CholesterolIntakeMin;        //胆固醇摄入量下限
+    @DatabaseField
     private double CholesterolIntakeMax;        //胆固醇摄入量上限
+    @DatabaseField
     private double SodiumIntakeMin;             //钠摄入量下限
+    @DatabaseField
     private double SodiumIntakeMax;             //钠摄入量上限
+    @DatabaseField
     private double VCIntakeMin;                 //维生素C摄入量下限
+    @DatabaseField
     private double VCIntakeMax;                 //维生素C摄入量上限
+    @DatabaseField
     private double VDIntakeMin;                 //维生素D摄入量下限
+    @DatabaseField
     private double VDIntakeMax;                 //维生素D摄入量上限
 
 
     //DietStructure
+    @DatabaseField
     private double DietStructureOilMin;         //油脂下限
+    @DatabaseField
     private double DietStructureOilMax;         //油脂上限
+    @DatabaseField
     private double DietStructureMeatMin;        //肉类下限
+    @DatabaseField
     private double DietStructureMeatMax;        //肉类上限
+    @DatabaseField
     private double DietStructureMilkMin;        //蛋奶下限
+    @DatabaseField
     private double DietStructureMilkMax;        //蛋奶上限
+    @DatabaseField
     private double DietStructureVegetableMin;   //蔬菜下限
+    @DatabaseField
     private double DietStructureVegetableMax;   //蔬菜上限
+    @DatabaseField
     private double DietStructureFruitMin;       //水果下限
+    @DatabaseField
     private double DietStructureFruitMax;       //水果上限
+    @DatabaseField
     private double DietStructureGrainMin;       //谷物下限
+    @DatabaseField
     private double DietStructureGrainMax;       //谷物上限
 
 
     //OtherInfo
+    @DatabaseField
     private double BreakfastRate;               //早餐摄入
+    @DatabaseField
     private double SnackMorningRate;            //上午加餐摄入
+    @DatabaseField
     private double LunchRate;                   //午餐摄入
+    @DatabaseField
     private double SnackAfternoonRate;          //下午加餐摄入
+    @DatabaseField
     private double DinnerRate;                  //晚餐摄入
 
     public double getBMI() {

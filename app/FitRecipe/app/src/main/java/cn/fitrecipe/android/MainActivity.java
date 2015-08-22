@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.umeng.fb.FeedbackAgent;
 
@@ -145,8 +146,11 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                 tab_index = 0;
                 break;
             case 1:
-                SharedPreferences preferences=getSharedPreferences("user", this.MODE_PRIVATE);
-                boolean isTest = preferences.getBoolean("isTested", false);
+                if(!FrApplication.getInstance().isLogin()) {
+                    Toast.makeText(this, getResources().getString(R.string.login_tip), Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                boolean isTest = FrApplication.getInstance().isTested();
                 isTest = true;
                 if(isTest){
                     if (frPlanFragment == null){

@@ -189,9 +189,9 @@ public class CommentActivity extends Activity implements View.OnClickListener {
         Author author = FrApplication.getInstance().getAuthor();
         if(author == null) {
             Toast.makeText(this, "请登录！！！", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-            this.finish();
+//            Intent intent = new Intent(this, LoginActivity.class);
+//            startActivity(intent);
+//            this.finish();
             return;
         }
         String url = FrServerConfig.getCreateCommentUrl();

@@ -196,6 +196,7 @@
     <string name="report_nutrition_info_rate">宏量营养元素比 ( 蛋白质：碳水化合物：脂类 )</string>
     <string name="report_nutrition_info_diet">膳食结构</string>
     <string name="report_nutrition_info_nutrition">营养元素</string>
+    <string name="login_tip">请登录！</string>
 
 
 </resources>
