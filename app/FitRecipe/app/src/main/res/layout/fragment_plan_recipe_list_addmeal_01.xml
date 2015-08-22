@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/plan_addmeal_01"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/addmeal_01_shopping"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="13dp"
+            android:src="@drawable/icon_plan_shopping"/>
+
+        <ImageView
+            android:layout_width="1dp"
+            android:layout_height="15dp"
+            android:layout_marginLeft="25dp"
+            android:background="@drawable/line_v_base_color"/>
+
+        <ImageView
+            android:id="@+id/addmeal_01_punch"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="13dp"
+            android:src="@drawable/icon_plan_punch"/>
+
+        <ImageView
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:background="@drawable/line_v_base_color"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="20dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:background="@drawable/atest002"
+            android:paddingTop="7dp"
+            android:paddingBottom="7dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/addmeal_01"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/addmeal"
+                    android:textSize="28sp"
+                    android:textColor="@color/white"
+                    android:shadowColor="@color/login_input_text_color"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:shadowRadius="4" />
+
+                <LinearLayout
+                    android:layout_toRightOf="@id/addmeal_01"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="10dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/calorie_addmeal_01_intake"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="250"
+                            android:textSize="14sp"
+                            android:textColor="@color/white"
+                            android:shadowColor="@color/login_input_text_color"
+                            android:shadowDx="2"
+                            android:shadowDy="2"
+                            android:shadowRadius="4"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="/"
+                            android:textSize="14sp"
+                            android:textColor="@color/white"
+                            android:shadowColor="@color/login_input_text_color"
+                            android:shadowDx="2"
+                            android:shadowDy="2"
+                            android:shadowRadius="4"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"/>
+
+                        <TextView
+                            android:id="@+id/calorie_addmeal_01_need"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="250"
+                            android:textSize="14sp"
+                            android:textColor="@color/white"
+                            android:shadowColor="@color/login_input_text_color"
+                            android:shadowDx="2"
+                            android:shadowDy="2"
+                            android:shadowRadius="4"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="kcal ("
+                            android:textSize="14sp"
+                            android:textColor="@color/white"
+                            android:shadowColor="@color/login_input_text_color"
+                            android:shadowDx="2"
+                            android:shadowDy="2"
+                            android:shadowRadius="4"
+                            android:layout_marginLeft="5dp"/>
+
+                        <TextView
+                            android:id="@+id/calorie_addmeal_01_radio"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="100"
+                            android:textSize="14sp"
+                            android:textColor="@color/white"
+                            android:shadowColor="@color/login_input_text_color"
+                            android:shadowDx="2"
+                            android:shadowDy="2"
+                            android:shadowRadius="4"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="%)"
+                            android:textSize="14sp"
+                            android:textColor="@color/white"
+                            android:shadowColor="@color/login_input_text_color"
+                            android:shadowDx="2"
+                            android:shadowDy="2"
+                            android:shadowRadius="4" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/addmeal_01_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="08:30"
+                            android:textSize="14sp"
+                            android:textColor="@color/white"
+                            android:shadowColor="@color/login_input_text_color"
+                            android:shadowDx="2"
+                            android:shadowDy="2"
+                            android:shadowRadius="4"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="AM"
+                            android:textSize="14sp"
+                            android:textColor="@color/white"
+                            android:shadowColor="@color/login_input_text_color"
+                            android:shadowDx="2"
+                            android:shadowDy="2"
+                            android:shadowRadius="4"
+                            android:layout_marginLeft="5dp"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_alignParentRight="true">
+
+                    <ImageView
+                        android:id="@+id/addmeal_01_photo"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:padding="5dp"
+                        android:src="@drawable/icon_photo"/>
+
+                    <ImageView
+                        android:id="@+id/addmeal_01_nutrition"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:padding="5dp"
+                        android:src="@drawable/icon_nutrition"/>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/plan_nutrition_rate"
+                    android:textSize="10sp"
+                    android:textColor="@color/white"
+                    android:shadowColor="@color/login_input_text_color"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:shadowRadius="4" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/addmeal_01_carbohydrate_intake"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="100"
+                        android:textSize="10sp"
+                        android:textColor="@color/white"
+                        android:shadowColor="@color/login_input_text_color"
+                        android:shadowDx="2"
+                        android:shadowDy="2"
+                        android:shadowRadius="4" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/plan_nutrition_rate_prefix_00"
+                        android:textSize="10sp"
+                        android:textColor="@color/white"
+                        android:shadowColor="@color/login_input_text_color"
+                        android:shadowDx="2"
+                        android:shadowDy="2"
+                        android:shadowRadius="4" />
+
+                    <TextView
+                        android:id="@+id/addmeal_01_carbohydrate_need"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="100"
+                        android:textSize="10sp"
+                        android:textColor="@color/white"
+                        android:shadowColor="@color/login_input_text_color"
+                        android:shadowDx="2"
+                        android:shadowDy="2"
+                        android:shadowRadius="4" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/plan_nutrition_rate_prefix_01"
+                        android:textSize="10sp"
+                        android:textColor="@color/white"
+                        android:shadowColor="@color/login_input_text_color"
+                        android:shadowDx="2"
+                        android:shadowDy="2"
+                        android:shadowRadius="4" />
+
+                    <TextView
+                        android:id="@+id/addmeal_01_carbohydrate_rate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="120"
+                        android:textSize="10sp"
+                        android:textColor="@color/white"
+                        android:shadowColor="@color/login_input_text_color"
+                        android:shadowDx="2"
+                        android:shadowDy="2"
+                        android:shadowRadius="4" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/plan_nutrition_rate_prefix_02"
+                        android:textSize="10sp"
+                        android:textColor="@color/white"
+                        android:shadowColor="@color/login_input_text_color"
+                        android:shadowDx="2"
+                        android:shadowDy="2"
+                        android:shadowRadius="4"
+                        android:layout_marginRight="2dp"/>
+
+                    <TextView
+                        android:id="@+id/addmeal_01_protein_intake"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="100"
+                        android:textSize="10sp"
+                        android:textColor="@color/white"
+                        android:shadowColor="@color/login_input_text_color"
+                        android:shadowDx="2"
+                        android:shadowDy="2"
+                        android:shadowRadius="4" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/plan_nutrition_rate_prefix_00"
+                        android:textSize="10sp"
+                        android:textColor="@color/white"
+                        android:shadowColor="@color/login_input_text_color"
+                        android:shadowDx="2"
+                        android:shadowDy="2"
+                        android:shadowRadius="4" />
+
+                    <TextView
+                        android:id="@+id/addmeal_01_protein_need"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="100"
+                        android:textSize="10sp"
+                        android:textColor="@color/white"
+                        android:shadowColor="@color/login_input_text_color"
+                        android:shadowDx="2"
+                        android:shadowDy="2"
+                        android:shadowRadius="4" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/plan_nutrition_rate_prefix_01"
+                        android:textSize="10sp"
+                        android:textColor="@color/white"
+                        android:shadowColor="@color/login_input_text_color"
+                        android:shadowDx="2"
+                        android:shadowDy="2"
+                        android:shadowRadius="4" />
+
+                    <TextView
+                        android:id="@+id/addmeal_01_protein_rate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="120"
+                        android:textSize="10sp"
+                        android:textColor="@color/white"
+                        android:shadowColor="@color/login_input_text_color"
+                        android:shadowDx="2"
+                        android:shadowDy="2"
+                        android:shadowRadius="4" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/plan_nutrition_rate_prefix_02"
+                        android:textSize="10sp"
+                        android:textColor="@color/white"
+                        android:shadowColor="@color/login_input_text_color"
+                        android:shadowDx="2"
+                        android:shadowDy="2"
+                        android:shadowRadius="4"
+                        android:layout_marginRight="2dp" />
+
+                    <TextView
+                        android:id="@+id/addmeal_01_fat_intake"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="100"
+                        android:textSize="10sp"
+                        android:textColor="@color/white"
+                        android:shadowColor="@color/login_input_text_color"
+                        android:shadowDx="2"
+                        android:shadowDy="2"
+                        android:shadowRadius="4" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/plan_nutrition_rate_prefix_00"
+                        android:textSize="10sp"
+                        android:textColor="@color/white"
+                        android:shadowColor="@color/login_input_text_color"
+                        android:shadowDx="2"
+                        android:shadowDy="2"
+                        android:shadowRadius="4" />
+
+                    <TextView
+                        android:id="@+id/addmeal_01_fat_need"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="100"
+                        android:textSize="10sp"
+                        android:textColor="@color/white"
+                        android:shadowColor="@color/login_input_text_color"
+                        android:shadowDx="2"
+                        android:shadowDy="2"
+                        android:shadowRadius="4" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/plan_nutrition_rate_prefix_01"
+                        android:textSize="10sp"
+                        android:textColor="@color/white"
+                        android:shadowColor="@color/login_input_text_color"
+                        android:shadowDx="2"
+                        android:shadowDy="2"
+                        android:shadowRadius="4" />
+
+                    <TextView
+                        android:id="@+id/addmeal_01_fat_rate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="120"
+                        android:textSize="10sp"
+                        android:textColor="@color/white"
+                        android:shadowColor="@color/login_input_text_color"
+                        android:shadowDx="2"
+                        android:shadowDy="2"
+                        android:shadowRadius="4" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="%)"
+                        android:textSize="10sp"
+                        android:textColor="@color/white"
+                        android:shadowColor="@color/login_input_text_color"
+                        android:shadowDx="2"
+                        android:shadowDy="2"
+                        android:shadowRadius="4" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/plan_border_radius">
+
+            <cn.fitrecipe.android.UI.LinearLayoutForListView
+                android:id="@+id/addmeal_01_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+            </cn.fitrecipe.android.UI.LinearLayoutForListView>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/plan_add"
+                    android:textSize="14sp"
+                    android:textColor="@color/plan_add"
+                    android:layout_centerInParent="true"/>
+
+                <ImageView
+                    android:id="@+id/addmeal_01_add"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="12dp"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/icon_add_round"/>
+
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>
+
+
+

@@ -25,4 +25,7 @@
     <color name="hp_background">#ff54943d</color>
     <color name="lf_background">#ffb9db2d</color>
     <color name="lk_background">#ff4abccb</color>
+
+    <color name="plan_add">#ff7a7a7a</color>
+    <color name="plan_border">#ffdbdbdb</color>
 </resources>
