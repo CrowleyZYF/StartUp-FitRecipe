@@ -2,7 +2,6 @@ package cn.fitrecipe.android.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +10,13 @@ import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.rey.material.app.Dialog;
+import com.rey.material.app.SimpleDialog;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import cn.fitrecipe.android.Adpater.PlanViewPagerAdapter;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.UI.SlidingPage;
@@ -27,31 +28,9 @@ public class PlanFragment extends Fragment implements View.OnClickListener {
 
     private SlidingPage mRightMenu;
 
-    private ViewPager frFirstViewPager;
-    private PlanViewPagerAdapter rcFirstViewPagerAdapter;
+    private RelativeLayout add_breakfast;
 
-    private ViewPager frSecondViewPager;
-    private PlanViewPagerAdapter rcSecondViewPagerAdapter;
 
-    private ViewPager frThirdViewPager;
-    private PlanViewPagerAdapter rcThirdViewPagerAdapter;
-
-    private List<View> listViews1 = null;
-    private List<View> listViews2 = null;
-    private List<View> listViews3 = null;
-    private int[] imgs = { R.drawable.loading_pic2, R.drawable.loading_pic2, R.drawable.loading_pic2,
-            R.drawable.loading_pic2, R.drawable.loading_pic2, R.drawable.loading_pic2};
-
-    private int[][] begin = {
-            {0,4,2,6,3},
-            {1,3,1,5,2},
-            {4,2,3,2,4}
-    };
-    private int[][] end = {
-            {5,8,6,8,5},
-            {5,8,7,8,4},
-            {8,5,6,5,7}
-    };
 
     private LinearLayoutForListView nutrition_listView;
     private SimpleAdapter nutrition_adapter;
@@ -71,23 +50,22 @@ public class PlanFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        //View v = inflater.inflate(R.layout.fragment_plan, container, false);
-        View v = inflater.inflate(R.layout.activity_temp, container, false);
+        View v = inflater.inflate(R.layout.fragment_plan, container, false);
+        //View v = inflater.inflate(R.layout.activity_temp, container, false);
         //BlurLayout.setGlobalDefaultDuration(450);
 
-        //initView(v);
+        initView(v);
         //initData();
-        //initEvent();
+        initEvent();
 
         return v;
     }
 
     private void initView(View v) {
-        frFirstViewPager = (ViewPager) v.findViewById(R.id.first);
-        frSecondViewPager = (ViewPager) v.findViewById(R.id.second);
-        frThirdViewPager = (ViewPager) v.findViewById(R.id.third);
 
-        mRightMenu = (SlidingPage) v.findViewById(R.id.filter_menu);
+        add_breakfast = (RelativeLayout) v.findViewById(R.id.add_breakfast);
+
+        /*mRightMenu = (SlidingPage) v.findViewById(R.id.filter_menu);
 
         nutrition_listView = (LinearLayoutForListView) v.findViewById(R.id.recipe_nutrition_list);
 
@@ -98,21 +76,10 @@ public class PlanFragment extends Fragment implements View.OnClickListener {
         meal_pic = (ImageView) v.findViewById(R.id.meal_pic);
 
         meal_name = (TextView) v.findViewById(R.id.meal_name);
-        meal_name_info = (TextView) v.findViewById(R.id.meal_notice);
+        meal_name_info = (TextView) v.findViewById(R.id.meal_notice);*/
     }
 
     private void initData() {
-        listViews1 = new ArrayList<View>();
-        listViews2 = new ArrayList<View>();
-        listViews3 = new ArrayList<View>();
-
-        initMeal();
-        rcFirstViewPagerAdapter = new PlanViewPagerAdapter(listViews1,this.getActivity());
-        frFirstViewPager.setAdapter(rcFirstViewPagerAdapter);
-        rcSecondViewPagerAdapter = new PlanViewPagerAdapter(listViews2,this.getActivity());
-        frSecondViewPager.setAdapter(rcSecondViewPagerAdapter);
-        rcThirdViewPagerAdapter = new PlanViewPagerAdapter(listViews3,this.getActivity());
-        frThirdViewPager.setAdapter(rcThirdViewPagerAdapter);
 
         nutrition_dataList=new ArrayList<Map<String,Object>>();
         getData();
@@ -174,30 +141,36 @@ public class PlanFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.prev_btn:{
-                if (nowState!=0){
-                    nowState--;
-                }else {
-                    nowState=4;
-                }
-                initMeal();
-                rcFirstViewPagerAdapter.notifyDataSetChanged();
-                rcSecondViewPagerAdapter.notifyDataSetChanged();
-                rcThirdViewPagerAdapter.notifyDataSetChanged();
+            case R.id.add_breakfast:
+                Dialog.Builder builder = null;
+                builder = new SimpleDialog.Builder( ){
+
+                    @Override
+                    protected void onBuildDone(Dialog dialog) {
+                        dialog.layoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    }
+
+                    @Override
+                    public void onPositiveActionClicked(DialogFragment fragment) {
+                        EditText et_pass = (EditText)fragment.getDialog().findViewById(R.id.custom_et_password);
+                        Toast.makeText(mActivity, "Connected. pass=" + et_pass.getText().toString(), Toast.LENGTH_SHORT).show();
+                        super.onPositiveActionClicked(fragment);
+                    }
+
+                    @Override
+                    public void onNegativeActionClicked(DialogFragment fragment) {
+                        Toast.makeText(mActivity, "Cancelled", Toast.LENGTH_SHORT).show();
+                        super.onNegativeActionClicked(fragment);
+                    }
+                };
+
+                builder.title("Google Wi-Fi")
+                        .positiveAction("CONNECT")
+                        .negativeAction("CANCEL")
+                        .contentView(R.layout.layout_dialog_custom);
                 break;
-            }
-            case R.id.next_btn:{
-                if (nowState!=4){
-                    nowState++;
-                }else {
-                    nowState=0;
-                }
-                initMeal();
-                rcFirstViewPagerAdapter.notifyDataSetChanged();
-                rcSecondViewPagerAdapter.notifyDataSetChanged();
-                rcThirdViewPagerAdapter.notifyDataSetChanged();
-                break;
-            }
+
+
         }
     }
 }

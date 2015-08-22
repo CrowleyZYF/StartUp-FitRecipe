@@ -30,6 +30,10 @@
     <string name="breakfast">早餐</string>
     <string name="breakfast_intro">早餐很重要，不要错过哦</string>
     <string name="addmeal">加餐</string>
+    <string name="addmeal_01">上午加餐</string>
+    <string name="addmeal_02">下午加餐</string>
+    <string name="lunch">午餐</string>
+    <string name="supper">晚餐</string>
     <string name="dinner">正餐</string>
 
     <!--计划-->
@@ -37,6 +41,11 @@
     <string name="plan_status_muscle">增肌第</string>
     <string name="plan_status_fat">减脂第</string>
     <string name="plan_status_unit">天</string>
+    <string name="plan_nutrition_rate">碳水化合物：蛋白质：脂类</string>
+    <string name="plan_nutrition_rate_prefix_00">/</string>
+    <string name="plan_nutrition_rate_prefix_01">g(</string>
+    <string name="plan_nutrition_rate_prefix_02">%) : </string>
+    <string name="plan_add">添加食材/食谱</string>
 
     <!--指南-->
     <string name="info">贴士</string>
@@ -92,6 +101,11 @@
     <!--搜索-->
     <string name="search_hint">搜索食材、菜谱、标签</string>
     <string name="search">搜索</string>
+    <string name="search_food">搜索食材/食谱</string>
+    <string name="search_unit">克</string>
+    <string name="search_next">下一步</string>
+    <string name="search_finish">完成</string>
+    <string name="search_cancel">取消</string>
 
     <string name="title_activity_recipe_video">RecipeVideoActivity</string>
     <string name="dummy_button">Dummy Button</string>

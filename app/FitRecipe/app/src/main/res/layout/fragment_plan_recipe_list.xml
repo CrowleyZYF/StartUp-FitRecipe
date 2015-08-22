@@ -125,96 +125,24 @@
         android:layout_height="match_parent"
         android:scrollbars="none"
         android:background="@color/background_color"
+        android:paddingTop="20dp"
         >
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+            <include layout="@layout/fragment_plan_recipe_list_breakfast" />
 
-                <LinearLayout
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+            <include layout="@layout/fragment_plan_recipe_list_addmeal_01" />
 
-                    <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:padding="15dp"
-                        android:src="@drawable/icon_plan_shopping"/>
+            <include layout="@layout/fragment_plan_recipe_list_lunch" />
 
-                    <ImageView
-                        android:layout_width="2dp"
-                        android:layout_height="10dp"
-                        android:layout_marginTop="-15dp"
-                        android:layout_marginLeft="29dp"
-                        android:background="@drawable/line_v_base_color"/>
+            <include layout="@layout/fragment_plan_recipe_list_addmeal_02" />
 
-                    <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:padding="15dp"
-                        android:layout_marginTop="-15dp"
-                        android:src="@drawable/icon_plan_punch"/>
+            <include layout="@layout/fragment_plan_recipe_list_supper" />
 
-                    <ImageView
-                        android:layout_width="2dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="-15dp"
-                        android:layout_marginLeft="29dp"
-                        android:background="@drawable/line_v_base_color"/>
-
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="10dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="140dp"
-                        android:background="@drawable/r002_thumbnail"
-                        android:paddingTop="20dp"
-                        android:paddingBottom="20dp"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:orientation="vertical">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/plan_diy"
-                                android:textSize="16sp"
-                                android:textColor="@color/white" />
-
-                        </RelativeLayout>
-
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"></LinearLayout>
-
-                </LinearLayout>
-
-
-            </LinearLayout>
 
         </LinearLayout>
 
