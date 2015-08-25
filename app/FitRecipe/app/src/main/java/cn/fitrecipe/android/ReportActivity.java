@@ -12,6 +12,7 @@ import android.widget.Toast;
 import cn.fitrecipe.android.UI.DietStructureView;
 import cn.fitrecipe.android.UI.PieChartView;
 import cn.fitrecipe.android.dao.FrDbHelper;
+import cn.fitrecipe.android.entity.Author;
 import cn.fitrecipe.android.entity.Report;
 
 /**
@@ -59,6 +60,7 @@ public class ReportActivity extends Activity implements View.OnClickListener{
 
                 @Override
                 protected Void doInBackground(Void... params) {
+                    report.setAuthor(FrApplication.getInstance().getAuthor());
                     FrDbHelper.getInstance(ReportActivity.this).addReport(report);
                     publishProgress();
                     return null;
@@ -67,7 +69,8 @@ public class ReportActivity extends Activity implements View.OnClickListener{
         }
         else {
             last = "me";
-            report = FrDbHelper.getInstance(this).getReport();
+            Author author = FrApplication.getInstance().getAuthor();
+            report = FrDbHelper.getInstance(this).getReport(author);
         }
         if(report != null) {
             initView();
@@ -76,6 +79,7 @@ public class ReportActivity extends Activity implements View.OnClickListener{
             Toast.makeText(this, "先来做个测评吧!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, PlanTestActivity.class);
             startActivity(intent);
+            finish();
         }
     }
 
@@ -232,11 +236,6 @@ public class ReportActivity extends Activity implements View.OnClickListener{
         check_plan_btn = (TextView) findViewById(R.id.check_plan);
     }
 
-    private double round(double x) {
-        int a = (int)(x * 10);
-        if(a % 10 == 0) return a/10;
-        else return a / 10.0;
-    }
 
     @Override
     public void onClick(View v) {

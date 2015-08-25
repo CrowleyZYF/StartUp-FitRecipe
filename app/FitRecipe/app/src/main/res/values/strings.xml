@@ -106,6 +106,7 @@
     <string name="search_next">下一步</string>
     <string name="search_finish">完成</string>
     <string name="search_cancel">取消</string>
+    <string name="search_pre">上一步</string>
 
     <string name="title_activity_recipe_video">RecipeVideoActivity</string>
     <string name="dummy_button">Dummy Button</string>
@@ -197,6 +198,8 @@
     <string name="report_nutrition_info_diet">膳食结构</string>
     <string name="report_nutrition_info_nutrition">营养元素</string>
     <string name="login_tip">请登录！</string>
+    <string name="title_activity_camera">CameraActivity</string>
+    <string name="title_activity_select_recipe">SelectRecipeActivity</string>
 
     <!--计划-->
     <string name="plan_food">食材</string>

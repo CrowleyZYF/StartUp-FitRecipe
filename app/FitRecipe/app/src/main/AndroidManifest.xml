@@ -19,6 +19,7 @@
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- 允许程序录制音频 -->
 
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <!-- 可选 -->
     <uses-permission android:name="android.permission.READ_LOGS" />
@@ -166,9 +167,17 @@
 
         <activity
             android:name=".CustomViewTestActivtiy"
-            android:windowSoftInputMode="adjustPan"
-            android:label="@string/title_activity_custom_view_test_activtiy" >
-
+            android:label="@string/title_activity_custom_view_test_activtiy"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".CameraActivity"
+            android:label="@string/title_activity_camera" >
+        </activity>
+        <activity
+            android:name=".SelectRecipeActivity"
+            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar"
+            android:label="@string/title_activity_select_recipe" >
         </activity>
     </application>
 

@@ -476,18 +476,18 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                 public void onResponse(JSONObject res) {
                     Toast.makeText(RecipeActivity.this, "收藏成功!", Toast.LENGTH_SHORT).show();
                     collect_btn.setImageResource(R.drawable.icon_like_green);
-                    if(res.has("data")) {
-                        try {
-                            Collection collection = new Gson().fromJson(res.getJSONObject("data").toString(), Collection.class);
-                            collection.setType("recipe");
-                            List<Collection> collectionList = FrApplication.getInstance().getCollections();
-                            if(collectionList == null) collectionList = new ArrayList<>();
-                            collectionList.add(collection);
-                            FrApplication.getInstance().setCollections(collectionList);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
+//                    if(res.has("data")) {
+//                        try {
+//                            Collection collection = new Gson().fromJson(res.getJSONObject("data").toString(), Collection.class);
+//                            collection.setType("recipe");
+//                            List<Collection> collectionList = FrApplication.getInstance().getCollections();
+//                            if(collectionList == null) collectionList = new ArrayList<>();
+//                            collectionList.add(collection);
+//                            FrApplication.getInstance().setCollections(collectionList);/
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
                 }
             }, new Response.ErrorListener() {
                 @Override

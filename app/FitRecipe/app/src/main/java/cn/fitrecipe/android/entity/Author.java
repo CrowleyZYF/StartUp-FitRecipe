@@ -1,5 +1,8 @@
 package cn.fitrecipe.android.entity;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -8,19 +11,30 @@ import cn.fitrecipe.android.Http.FrServerConfig;
 /**
  * Created by wk on 2015/8/6.
  */
+@DatabaseTable(tableName = "fr_author")
 public class Author implements Serializable{
 
-    private String nick_name;
+    @DatabaseField(id = true)
     private int id;
+    @DatabaseField
+    private String nick_name;
+    @DatabaseField
     private String avatar;
+    @DatabaseField
     private boolean is_official;
+    @DatabaseField
     private String phone;
+    @DatabaseField
     private String token;
+    @DatabaseField
     private boolean is_changed_nick;
     private List<External> externals;
+    @DatabaseField
     private boolean isTested;
+    @DatabaseField
+    private boolean isLogin;
 
-    public boolean isTested() {
+    public boolean getIsTested() {
         return isTested;
     }
 
@@ -28,7 +42,7 @@ public class Author implements Serializable{
         this.isTested = isTested;
     }
 
-    public boolean is_changed_nick() {
+    public boolean getIs_changed_nick() {
         return is_changed_nick;
     }
 
@@ -90,5 +104,13 @@ public class Author implements Serializable{
 
     public void setExternals(List<External> externals) {
         this.externals = externals;
+    }
+
+    public boolean getIsLogin() {
+        return isLogin;
+    }
+
+    public void setIsLogin(boolean isLogin) {
+        this.isLogin = isLogin;
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.util.List;
 
+import cn.fitrecipe.android.entity.Author;
 import cn.fitrecipe.android.entity.Component;
 import cn.fitrecipe.android.entity.Ingredient;
 import cn.fitrecipe.android.entity.Nutrition;
@@ -58,7 +59,15 @@ public class FrDbHelper {
 
     public List<Recipe> getAllRecipe() {
         RecipeDao recipeDao = new RecipeDao(context);
-        return  recipeDao.getAll();
+        List<Recipe> recipes = recipeDao.getAll();
+        if(recipes != null) {
+            for(int i = 0; i < recipes.size(); i++) {
+                Recipe recipe = recipes.get(i);
+                recipe.setNutrition_set(new NutritionDao(context).getNutritions(recipe.getId()));
+                recipe.setComponent_set(new ComponentDao(context).getComponents(recipe.getId()));
+            }
+        }
+        return  recipes;
     }
 
     public List<Ingredient> getAllIngredient() {
@@ -66,13 +75,25 @@ public class FrDbHelper {
         return ingredientDao.getAll();
     }
 
-    public Report getReport() {
+    public Report getReport(Author author) {
         ReportDao dao = new ReportDao(context);
-        return dao.getReport();
+        return dao.getReport(author);
     }
 
     public void addReport(Report report) {
         ReportDao dao = new ReportDao(context);
         dao.add(report);
+    }
+
+    public void saveAuthor(Author author) {
+        new AuthorDao(context).save(author);
+    }
+
+    public void authorLogout(Author author) {
+        new AuthorDao(context).logout(author);
+    }
+
+    public Author getLoginAuthor() {
+        return new AuthorDao(context).getAuthor();
     }
 }

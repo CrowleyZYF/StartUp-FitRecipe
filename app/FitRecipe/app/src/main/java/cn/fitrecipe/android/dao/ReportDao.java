@@ -7,6 +7,7 @@ import com.j256.ormlite.dao.Dao;
 import java.sql.SQLException;
 import java.util.List;
 
+import cn.fitrecipe.android.entity.Author;
 import cn.fitrecipe.android.entity.Report;
 
 
@@ -34,10 +35,10 @@ public class ReportDao {
         }
     }
 
-    public Report getReport() {
+    public Report getReport(Author author) {
         List<Report> reports;
         try {
-            reports = reportDaoOpe.queryForAll();
+            reports = reportDaoOpe.queryForEq("author_id", author.getId());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

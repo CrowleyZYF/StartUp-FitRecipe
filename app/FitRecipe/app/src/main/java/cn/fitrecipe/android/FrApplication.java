@@ -14,6 +14,7 @@ import cn.fitrecipe.android.ImageLoader.MyImageLoader;
 import cn.fitrecipe.android.dao.AuthorDao;
 import cn.fitrecipe.android.dao.BasketDao;
 import cn.fitrecipe.android.dao.CollectionDao;
+import cn.fitrecipe.android.dao.FrDbHelper;
 import cn.fitrecipe.android.dao.HomeDataDao;
 import cn.fitrecipe.android.entity.Author;
 import cn.fitrecipe.android.entity.Collection;
@@ -132,31 +133,31 @@ public class FrApplication extends Application {
 
     public void setAuthor(Author author) {
         this.author = author;
-        new AuthorDao(this).saveAuthor(author);
+        FrDbHelper.getInstance(this).saveAuthor(author);
     }
 
     public void setIsTested(boolean isTested) {
         if(author == null)  getAuthor();
         if(author != null) {
             author.setIsTested(isTested);
-            new AuthorDao(this).saveAuthor(author);
+            FrDbHelper.getInstance(this).saveAuthor(author);
         }
     }
 
     public void logOut() {
+        FrDbHelper.getInstance(this).authorLogout(author);
         author = null;
-        new AuthorDao(this).clear();
 //        new CollectionDao(this).clear();
     }
 
     public boolean isLogin() {
         Author author = getAuthor();
-        return author == null ? false : true;
+        return author == null ? false : author.getIsLogin();
     }
 
     public boolean isTested() {
         Author author = getAuthor();
-        return author == null ? false : author.isTested();
+        return author == null ? false : author.getIsTested();
     }
 
     public HomeData getHomeData() {
@@ -171,17 +172,17 @@ public class FrApplication extends Application {
         new HomeDataDao(this).savHomeData(homeData);
     }
 
-    public List<Collection> getCollections() {
-        if(collections == null) {
-            collections = new CollectionDao(this).getCollections();
-        }
-        return collections;
-    }
+//    public List<Collection> getCollections() {
+//        if(collections == null) {
+//            collections = new CollectionDao(this).getCollections();
+//        }
+//        return collections;
+//    }
 
-    public void setCollections(List<Collection> collections) {
-        this.collections = collections;
-        new CollectionDao(this).saveCollections(collections);
-    }
+//    public void setCollections(List<Collection> collections) {
+//        this.collections = collections;
+//        new CollectionDao(this).saveCollections(collections);
+//    }
 
 
     class MyActivityCallbacks implements ActivityLifecycleCallbacks {

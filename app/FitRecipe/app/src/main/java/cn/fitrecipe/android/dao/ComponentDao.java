@@ -5,6 +5,7 @@ import android.content.Context;
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import cn.fitrecipe.android.entity.Component;
 
@@ -34,6 +35,16 @@ public class ComponentDao {
             throw new RuntimeException(e);
         }
         return id;
+    }
+
+    public List<Component> getComponents(int recipe_id) {
+        List<Component> components = null;
+        try {
+            components = componentDaoOpe.queryForEq("recipe_id", recipe_id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return components;
     }
 
     public Component get(int id) {

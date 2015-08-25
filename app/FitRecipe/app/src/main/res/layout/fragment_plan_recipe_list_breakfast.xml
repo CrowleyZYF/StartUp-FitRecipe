@@ -32,7 +32,7 @@
 
         <ImageView
             android:layout_width="1dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginLeft="25dp"
             android:background="@drawable/line_v_base_color"/>
 
@@ -463,6 +463,11 @@
                 android:paddingRight="10dp">
 
             </cn.fitrecipe.android.UI.LinearLayoutForListView>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@drawable/theme_line"/>
 
             <RelativeLayout
                 android:id="@+id/add_breakfast"

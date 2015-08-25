@@ -3,11 +3,13 @@ package cn.fitrecipe.android.entity;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.io.Serializable;
+
 /**
  * Created by wk on 2015/8/6.
  */
 @DatabaseTable(tableName = "fr_nutrition")
-public class Nutrition {
+public class Nutrition implements Serializable{
 
     @DatabaseField
     private String name;
@@ -15,7 +17,7 @@ public class Nutrition {
     private double amount;
     @DatabaseField
     private String unit;
-    @DatabaseField(canBeNull = true, foreign = true, foreignAutoRefresh = true)
+    @DatabaseField(canBeNull = true, foreign = true)
     private Recipe recipe;
 
     public void setName(String name) {
