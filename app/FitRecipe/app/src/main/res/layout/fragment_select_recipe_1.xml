@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/search_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@color/base_color"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="36dp"
+                android:background="@drawable/search_input"
+                android:orientation="horizontal"
+                android:layout_marginLeft="10dp">
+
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:padding="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/icon_search_black" />
+
+                <EditText
+                    android:id="@+id/search_input"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="36dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_gravity="center_vertical"
+                    android:hint="@string/search_food"
+                    android:textColor="@color/login_input_text_color"
+                    android:textSize="12sp"
+                    android:layout_marginRight="5dp"
+                    android:singleLine="true"
+                    android:background="@drawable/login_input" />
+
+                <ImageView
+                    android:id="@+id/clear_btn"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:padding="10dp"
+                    android:clickable="true"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/icon_delete"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/search_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:gravity="center_vertical"
+                android:text="@string/search"
+                android:textColor="#ffffff"
+                android:background="@drawable/icon_selector"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    
+    <LinearLayout
+        android:id="@+id/search_options"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="right">
+
+            <TextView
+                android:id="@+id/search_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:layout_marginRight="20dp"
+                android:gravity="center_vertical"
+                android:text="@string/search_cancel"
+                android:textColor="@color/base_color"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_below="@id/search_header"
+        android:layout_above="@id/search_options"
+        android:scrollbars="none"
+        android:layout_height="match_parent">
+
+        <cn.fitrecipe.android.UI.LinearLayoutForListView
+            android:id="@+id/search_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </ScrollView>
+</RelativeLayout>
