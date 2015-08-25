@@ -198,5 +198,9 @@
     <string name="report_nutrition_info_nutrition">营养元素</string>
     <string name="login_tip">请登录！</string>
 
+    <!--计划-->
+    <string name="plan_food">食材</string>
+    <string name="plan_recipe">食谱</string>
+
 
 </resources>

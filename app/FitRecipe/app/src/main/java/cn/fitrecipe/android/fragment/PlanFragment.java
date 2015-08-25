@@ -10,9 +10,6 @@ import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-import com.rey.material.app.Dialog;
-import com.rey.material.app.SimpleDialog;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -134,14 +131,14 @@ public class PlanFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initEvent() {
-        prev_btn.setOnClickListener(this);
-        next_btn.setOnClickListener(this);
+        /*prev_btn.setOnClickListener(this);
+        next_btn.setOnClickListener(this);*/
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.add_breakfast:
+            case R.id.add_breakfast:/*
                 Dialog.Builder builder = null;
                 builder = new SimpleDialog.Builder( ){
 
@@ -168,7 +165,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener {
                         .positiveAction("CONNECT")
                         .negativeAction("CANCEL")
                         .contentView(R.layout.layout_dialog_custom);
-                break;
+                break;*/
 
 
         }

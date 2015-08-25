@@ -265,7 +265,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                         startActivity(new Intent(this, SearchActivity.class));
                         break;
                     case 1:
-                        startActivity(new Intent(this, IngredientActivity.class));
+                        startActivity(new Intent(this, PlanChoiceActivity.class));
                         break;
                     case 2:
                         startActivity(new Intent(this, SearchActivity.class));

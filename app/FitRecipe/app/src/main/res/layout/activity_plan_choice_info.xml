@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_color"
+        android:scrollbars="none"
+        android:fadingEdge="vertical"
+        android:padding="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/choice_info_background"
+                android:layout_width="match_parent"
+                android:layout_height="380dp"
+                android:background="@drawable/plan_temp"
+                >
+
+                <TextView
+                    android:id="@+id/choice_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="哈哈哈の低碳饮食法"
+                    android:shadowColor="@color/login_input_text_color"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:shadowRadius="4"
+                    android:textSize="22sp"
+                    android:textColor="#ffffff"
+                    android:layout_marginTop="80dp"
+                    android:layout_marginLeft="20dp"/>
+
+                <TextView
+                    android:id="@+id/choice_intro"
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="很有意思的饮食方案，让你能够在最短的时间里减肥减好多，减脂无敌了"
+                    android:shadowColor="@color/login_input_text_color"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:shadowRadius="4"
+                    android:textSize="10sp"
+                    android:textColor="#ffffff"
+                    android:layout_below="@id/choice_name"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="5dp"/>
+
+                <LinearLayout
+                    android:id="@+id/choice_rank_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal"
+                    android:layout_below="@id/choice_intro"
+                    android:layout_marginLeft="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="难度"
+                        android:shadowColor="@color/login_input_text_color"
+                        android:shadowDx="2"
+                        android:shadowDy="2"
+                        android:shadowRadius="4"
+                        android:textSize="10sp"
+                        android:textColor="#ffffff"/>
+
+                    <LinearLayout
+                        android:id="@+id/choice_hard_rank"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="20dp">
+
+                        <ImageView
+                            android:id="@+id/choice_hard_rank_01"
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:src="@drawable/icon_cook_hard"
+                            android:layout_marginRight="2dp"/>
+
+                        <ImageView
+                            android:id="@+id/choice_hard_rank_02"
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:src="@drawable/icon_cook_hard"
+                            android:layout_marginRight="2dp"/>
+
+                        <ImageView
+                            android:id="@+id/choice_hard_rank_03"
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:src="@drawable/icon_cook_hard"
+                            android:layout_marginRight="2dp"/>
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="美味"
+                        android:shadowColor="@color/login_input_text_color"
+                        android:shadowDx="2"
+                        android:shadowDy="2"
+                        android:shadowRadius="4"
+                        android:textSize="10sp"
+                        android:textColor="#ffffff"/>
+
+                    <LinearLayout
+                        android:id="@+id/choice_delicious_rank"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="5dp">
+
+                        <ImageView
+                            android:id="@+id/choice_delicious_rank_01"
+                            android:layout_width="9dp"
+                            android:layout_height="9dp"
+                            android:src="@drawable/icon_like_noshadow"
+                            android:layout_marginRight="2dp"/>
+
+                        <ImageView
+                            android:id="@+id/choice_delicious_rank_02"
+                            android:layout_width="9dp"
+                            android:layout_height="9dp"
+                            android:src="@drawable/icon_like_noshadow"
+                            android:layout_marginRight="2dp"/>
+
+                        <ImageView
+                            android:id="@+id/choice_delicious_rank_03"
+                            android:layout_width="9dp"
+                            android:layout_height="9dp"
+                            android:src="@drawable/icon_like_noshadow"
+                            android:layout_marginRight="2dp"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/choice_join_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="选用"
+                    android:textColor="@color/white"
+                    android:background="@drawable/join_button"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_alignParentBottom="true"/>
+
+                <TextView
+                    android:id="@+id/choice_join"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="12459人已采用"
+                    android:shadowColor="@color/login_input_text_color"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:shadowRadius="4"
+                    android:textSize="8sp"
+                    android:textColor="#ffffff"
+                    android:layout_above="@id/choice_join_btn"
+                    android:layout_marginTop="15dp"
+                    android:layout_centerHorizontal="true"/>
+
+                <LinearLayout
+                    android:id="@+id/choice_base_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_above="@id/choice_join"
+                    android:layout_marginTop="20dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:text="适宜"
+                            android:shadowColor="@color/login_input_text_color"
+                            android:shadowDx="2"
+                            android:shadowDy="2"
+                            android:shadowRadius="4"
+                            android:textSize="10sp"
+                            android:textColor="#ffffff"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:text="增肌"
+                            android:shadowColor="@color/login_input_text_color"
+                            android:shadowDx="2"
+                            android:shadowDy="2"
+                            android:shadowRadius="4"
+                            android:textSize="14sp"
+                            android:textColor="#ffffff"
+                            android:layout_marginTop="5dp"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:text="天数"
+                            android:shadowColor="@color/login_input_text_color"
+                            android:shadowDx="2"
+                            android:shadowDy="2"
+                            android:shadowRadius="4"
+                            android:textSize="10sp"
+                            android:textColor="#ffffff"/>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="5dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:text="7"
+                                android:shadowColor="@color/login_input_text_color"
+                                android:shadowDx="2"
+                                android:shadowDy="2"
+                                android:shadowRadius="4"
+                                android:textSize="14sp"
+                                android:textColor="#ffffff"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:text="天"
+                                android:shadowColor="@color/login_input_text_color"
+                                android:shadowDx="2"
+                                android:shadowDy="2"
+                                android:shadowRadius="4"
+                                android:textSize="10sp"
+                                android:textColor="#ffffff"
+                                android:layout_marginLeft="3dp"/>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="right">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:text="计划类型"
+                            android:shadowColor="@color/login_input_text_color"
+                            android:shadowDx="2"
+                            android:shadowDy="2"
+                            android:shadowRadius="4"
+                            android:textSize="10sp"
+                            android:textColor="#ffffff"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:text="食材"
+                            android:shadowColor="@color/login_input_text_color"
+                            android:shadowDx="2"
+                            android:shadowDy="2"
+                            android:shadowRadius="4"
+                            android:textSize="14sp"
+                            android:textColor="#ffffff"
+                            android:layout_marginTop="5dp"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+
+
+
+
+
+
+
+            </RelativeLayout>
+
+
+
+        </LinearLayout>
+
+
+
+    </ScrollView>
+
+    <include layout="@layout/framework_common_headers" />
+
+</FrameLayout>
