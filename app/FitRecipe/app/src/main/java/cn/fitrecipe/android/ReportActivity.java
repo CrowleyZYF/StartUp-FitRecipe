@@ -60,6 +60,7 @@ public class ReportActivity extends Activity implements View.OnClickListener{
 
                 @Override
                 protected Void doInBackground(Void... params) {
+                    report.setAuthor(FrApplication.getInstance().getAuthor());
                     FrDbHelper.getInstance(ReportActivity.this).addReport(report);
                     publishProgress();
                     return null;

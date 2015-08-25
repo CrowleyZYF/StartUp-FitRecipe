@@ -88,9 +88,9 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         Intent intent =getIntent();
         if (intent.hasExtra("tab")){
             tab_index = intent.getIntExtra("tab",1);
+            setSelect(tab_index);
         }
         registerReceiver(readyRececiver, intentFilter);
-        setSelect(tab_index);
     }
 
     @Override
@@ -201,15 +201,19 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     {
         if (frIndexFragment != null){
             transaction.hide(frIndexFragment);
+            frTabs.get(0).setBackgroundColor(getResources().getColor(R.color.base_color));
         }
         if (frMeFragment != null){
             transaction.hide(frMeFragment);
+            frTabs.get(1).setBackgroundColor(getResources().getColor(R.color.base_color));
         }
         if (frPlanFragment != null){
             transaction.hide(frPlanFragment);
+            frTabs.get(2).setBackgroundColor(getResources().getColor(R.color.base_color));
         }
         if (frKnowledgeFragment != null){
             transaction.hide(frKnowledgeFragment);
+            frTabs.get(3).setBackgroundColor(getResources().getColor(R.color.base_color));
         }
     }
 
@@ -237,9 +241,10 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                         startActivity(new Intent(this, CategoryActivity.class));
                         break;
                     case 1:
-                        /*SlidingPage mRightMenu;
+                        SlidingPage mRightMenu;
                         mRightMenu = (SlidingPage) findViewById(R.id.filter_menu);
                         mRightMenu.toggle();
+                        /*
                         TextView name = (TextView) findViewById(R.id.meal_name);
                         TextView nutrition = (TextView) findViewById(R.id.ingredient_title);
                         nutrition.setText(name.getText()+"营养表");

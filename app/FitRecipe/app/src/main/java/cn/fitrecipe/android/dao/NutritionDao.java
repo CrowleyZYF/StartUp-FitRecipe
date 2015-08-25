@@ -5,6 +5,7 @@ import android.content.Context;
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import cn.fitrecipe.android.entity.Nutrition;
 
@@ -33,6 +34,16 @@ public class NutritionDao {
             throw new RuntimeException(e);
         }
         return id;
+    }
+
+    public List<Nutrition> getNutritions(int recipe_id) {
+        List<Nutrition> nutritions;
+        try {
+            nutritions = nutritionDaoOpe.queryForEq("recipe_id", recipe_id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return nutritions;
     }
 
     public Nutrition get(int id) {

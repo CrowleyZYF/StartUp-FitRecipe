@@ -59,7 +59,15 @@ public class FrDbHelper {
 
     public List<Recipe> getAllRecipe() {
         RecipeDao recipeDao = new RecipeDao(context);
-        return  recipeDao.getAll();
+        List<Recipe> recipes = recipeDao.getAll();
+        if(recipes != null) {
+            for(int i = 0; i < recipes.size(); i++) {
+                Recipe recipe = recipes.get(i);
+                recipe.setNutrition_set(new NutritionDao(context).getNutritions(recipe.getId()));
+                recipe.setComponent_set(new ComponentDao(context).getComponents(recipe.getId()));
+            }
+        }
+        return  recipes;
     }
 
     public List<Ingredient> getAllIngredient() {

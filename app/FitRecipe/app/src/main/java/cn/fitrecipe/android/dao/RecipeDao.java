@@ -28,7 +28,10 @@ public class RecipeDao {
 
     public void add(Recipe recipe) {
         try {
-            recipeDaoOpe.create(recipe);
+            if(!recipeDaoOpe.idExists(recipe.getId()))
+                recipeDaoOpe.create(recipe);
+            else
+                recipeDaoOpe.update(recipe);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

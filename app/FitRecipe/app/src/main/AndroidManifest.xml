@@ -170,6 +170,11 @@
             android:name=".CameraActivity"
             android:label="@string/title_activity_camera" >
         </activity>
+        <activity
+            android:name=".SelectRecipeActivity"
+            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar"
+            android:label="@string/title_activity_select_recipe" >
+        </activity>
     </application>
 
 </manifest>
