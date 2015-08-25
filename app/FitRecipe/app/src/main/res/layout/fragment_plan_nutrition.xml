@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:layout_marginBottom="25dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/ingredient_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="营养表"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@color/active_color"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"/>
+
+        <LinearLayout
+            android:id="@+id/nutrition_punch"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_alignParentRight="true">
+
+            <ImageView
+                android:id="@+id/nutrition_breakfast_punch"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/icon_breakfast_finish"
+                android:layout_marginRight="5dp"/>
+
+            <ImageView
+                android:id="@+id/nutrition_add_meal_01_punch"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/icon_add_meal1_finish"
+                android:layout_marginRight="5dp"/>
+
+            <ImageView
+                android:id="@+id/nutrition_lunch_punch"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/icon_lunch_finish"
+                android:layout_marginRight="5dp"/>
+
+            <ImageView
+                android:id="@+id/nutrition_add_meal_02_punch"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/icon_add_meal2"
+                android:layout_marginRight="5dp"/>
+
+            <ImageView
+                android:id="@+id/nutrition_dinner_punch"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/icon_dinner"
+                android:layout_marginRight="5dp"/>
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/theme_line"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/meal_pic"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/icon_dinner_temp"
+            android:layout_margin="10dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:text="总热量"
+                    android:textSize="12sp"
+                    android:textColor="@color/login_input_text_color"/>
+
+                <TextView
+                    android:id="@+id/recipe_all_calorie"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="218kcal"
+                    android:layout_gravity="bottom"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="10dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="-6dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:text="是您每日所需摄入热量"
+                    android:textSize="12sp"
+                    android:textColor="@color/login_input_text_color"/>
+
+                <TextView
+                    android:id="@+id/user_need_calorie"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:text="(1730kcal)"
+                    android:textSize="12sp"
+                    android:textColor="@color/blue_btn_bg_color"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:text="的"
+                    android:textSize="12sp"
+                    android:textColor="@color/login_input_text_color"/>
+
+                <TextView
+                    android:id="@+id/calorie_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:text="16%"
+                    android:layout_gravity="bottom"
+                    android:textSize="25sp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/theme_line"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="宏量元素比"
+            android:textColor="#a4a4a4"
+            android:textSize="14sp"
+            android:gravity="center_vertical"
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@drawable/dash_border"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp">
+
+                <cn.fitrecipe.android.UI.PieChartView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_margin="10dp"
+                    android:layout_centerInParent="true"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="建议摄入"
+                    android:textColor="#a4a4a4"
+                    android:textSize="12sp"
+                    android:gravity="center_horizontal"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="5dp"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@drawable/dash_border"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp">
+
+                <cn.fitrecipe.android.UI.PieChartView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_margin="10dp"
+                    android:layout_centerInParent="true"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="已摄入"
+                    android:textColor="#a4a4a4"
+                    android:textSize="12sp"
+                    android:gravity="center_horizontal"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="5dp"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/theme_line"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/white"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:text="营养元素"
+            android:textColor="#a4a4a4"
+            android:textSize="14sp"
+            android:gravity="center_vertical"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:text="建议摄入范围"
+            android:textSize="14sp"
+            android:textColor="#a4a4a4"
+            android:gravity="center_vertical"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:text="已摄入"
+            android:textSize="14sp"
+            android:textColor="#a4a4a4"
+            android:gravity="center_vertical"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/theme_line"/>
+
+    <cn.fitrecipe.android.UI.LinearLayoutForListView
+        android:id="@+id/recipe_nutrition_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+    </cn.fitrecipe.android.UI.LinearLayoutForListView>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/theme_line"/>
+
+</LinearLayout>
