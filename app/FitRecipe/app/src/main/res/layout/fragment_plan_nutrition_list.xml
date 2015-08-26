@@ -5,6 +5,6 @@
     android:id="@+id/plan_nutrition"
     android:fillViewport="true">
 
-    <include layout="@layout/activity_recipe_info_nutrition" />
+    <include layout="@layout/fragment_plan_nutrition" />
 
 </ScrollView>

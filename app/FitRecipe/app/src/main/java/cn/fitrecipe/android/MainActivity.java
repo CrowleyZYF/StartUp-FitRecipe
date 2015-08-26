@@ -243,7 +243,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                     case 1:
                         SlidingPage mRightMenu;
                         mRightMenu = (SlidingPage) findViewById(R.id.filter_menu);
-                        mRightMenu.toggle();
+                        if(frPlanFragment != null) ((PlanFragment)frPlanFragment).toggle("all");
                         /*
                         TextView name = (TextView) findViewById(R.id.meal_name);
                         TextView nutrition = (TextView) findViewById(R.id.ingredient_title);

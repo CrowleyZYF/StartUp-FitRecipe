@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import cn.fitrecipe.android.Adpater.SearchRecipeAdapter;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
@@ -32,8 +33,8 @@ public class SelectRecipeActivity extends Activity implements View.OnClickListen
     Fragment[] fragments;
     FragmentTransaction transaction;
     int last = -1;
-    List<Recipe> recipes;
-    Recipe recipe_selected;
+    List<Object> objects;
+    Object obj_selected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +47,15 @@ public class SelectRecipeActivity extends Activity implements View.OnClickListen
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected void onProgressUpdate(Void... values) {
-                Toast.makeText(SelectRecipeActivity.this, "获取菜谱"+ (recipes!=null?recipes.size():-1), Toast.LENGTH_SHORT).show();
+                Toast.makeText(SelectRecipeActivity.this, "获取菜谱"+ (objects!=null?objects.size():-1), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             protected Void doInBackground(Void... params) {
-                recipes = FrDbHelper.getInstance(SelectRecipeActivity.this).getAllRecipe();
+                List<Recipe> recipes = FrDbHelper.getInstance(SelectRecipeActivity.this).getAllRecipe();
+                objects = new ArrayList<Object>();
+                for (int i =0; i < recipes.size(); i++)
+                    objects.add(recipes.get(i));
                 publishProgress();
                 return null;
             }
@@ -68,7 +72,7 @@ public class SelectRecipeActivity extends Activity implements View.OnClickListen
             transaction.add(R.id.fragment_container, fragments[i]);
         }
         if(last != -1)
-        transaction.hide(fragments[last]);
+            transaction.hide(fragments[last]);
         transaction.show(fragments[i]);
         last = i;
         transaction.commit();
@@ -111,7 +115,7 @@ public class SelectRecipeActivity extends Activity implements View.OnClickListen
         private EditText search_input;
         private ImageView clear_btn;
         private SearchRecipeAdapter adapter;
-        private List<Recipe> data;
+        private List<Object> data;
 
         @Nullable
         @Override
@@ -130,7 +134,7 @@ public class SelectRecipeActivity extends Activity implements View.OnClickListen
             search_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    recipe_selected = data.get(position);
+                    obj_selected = data.get(position);
                     setFragment(1);
                 }
             });
@@ -171,10 +175,10 @@ public class SelectRecipeActivity extends Activity implements View.OnClickListen
             else
                 data.clear();
 
-            for(int i = 0; i < recipes.size(); i++) {
-                Recipe recipe = recipes.get(i);
-                if(isMatch(text, recipe)) {
-                    data.add(recipe);
+            for(int i = 0; i < objects.size(); i++) {
+                Object o = objects.get(i);
+                if(isMatch(text, o)) {
+                    data.add(o);
                 }
             }
 
@@ -185,7 +189,7 @@ public class SelectRecipeActivity extends Activity implements View.OnClickListen
                 adapter.notifyDataSetChanged();
         }
 
-        boolean isMatch(String match, Recipe recipe) {
+        boolean isMatch(String match, Object o) {
             return true;
         }
 
@@ -221,13 +225,16 @@ public class SelectRecipeActivity extends Activity implements View.OnClickListen
                nums[i].setOnClickListener(new View.OnClickListener() {
                    @Override
                    public void onClick(View v) {
-                       if(!weight.toString().equals("0")) {
-                           if(weight.toString().length() < 4)
+                       if ((weight.toString().length() == 0 || weight.toString().equals("0")) && tmp.equals("0")) {
+                           weight.setLength(0);
+                       } else {
+                           if (weight.toString().length() < 4)
                                weight.append(tmp);
                            else
                                Toast.makeText(getActivity(), "重量不能超过10 000克!", Toast.LENGTH_SHORT).show();
+                           recipe_weight.setText(weight.toString());
                        }
-                       recipe_weight.setText(weight.toString());
+
                    }
                });
             }
@@ -242,15 +249,32 @@ public class SelectRecipeActivity extends Activity implements View.OnClickListen
             search_finish = (TextView) view.findViewById(R.id.search_finish);
             search_pre = (TextView) view.findViewById(R.id.search_pre);
             recipe_title = (TextView) view.findViewById(R.id.recipe_title);
-            recipe_title.setText(recipe_selected.getTitle());
-            recipe_weight = (TextView) view.findViewById(R.id.recipe_weight);
-            plan_num_dash = (TextView) view.findViewById(R.id.plan_num_dash);
-            plan_num_sure = (TextView)view.findViewById(R.id.plan_num_sure);
-            piechartview = (PieChartView) view.findViewById(R.id.piechartview);
-            int c = (int) Math.round(recipe_selected.getFat_ratio());
-            int b = (int) Math.round(recipe_selected.getProtein_ratio());
-            int a = 100 - c - b;
-            piechartview.setValue(new float[]{a, b, c});
+            fresh();
+        }
+
+
+        @Override
+        public void onHiddenChanged(boolean hidden) {
+            if(!hidden) {
+                fresh();
+            }
+            super.onHiddenChanged(hidden);
+        }
+
+        public void fresh() {
+            if(obj_selected instanceof Recipe) {
+                Recipe recipe = ((Recipe) obj_selected);
+                recipe_title.setText(recipe.getTitle());
+                recipe_weight = (TextView) view.findViewById(R.id.recipe_weight);
+                plan_num_dash = (TextView) view.findViewById(R.id.plan_num_dash);
+                plan_num_sure = (TextView) view.findViewById(R.id.plan_num_sure);
+                piechartview = (PieChartView) view.findViewById(R.id.piechartview);
+                double sum = recipe.getNutrition_set().get(1).getAmount() + recipe.getNutrition_set().get(2).getAmount() + recipe.getNutrition_set().get(3).getAmount();
+                int a = (int) Math.round(recipe.getNutrition_set().get(3).getAmount() * 100 / sum);
+                int b = (int) Math.round(recipe.getNutrition_set().get(1).getAmount() * 100 / sum);
+                int c = 100 - a - b;
+                piechartview.setValue(new float[]{a, b, c});
+            }
         }
 
 
@@ -263,9 +287,11 @@ public class SelectRecipeActivity extends Activity implements View.OnClickListen
                 case R.id.search_finish:
                     String w = recipe_weight.getText().toString();
                     if(!w.equals("0")) {
-                        recipe_selected.setTotal_amount(Integer.parseInt(recipe_weight.getText().toString()));
                         Intent intent = new Intent();
-                        intent.putExtra("recipe_selected", recipe_selected);
+                        if(obj_selected instanceof Recipe) {
+                            ((Recipe) obj_selected).setTotal_amount(Integer.parseInt(recipe_weight.getText().toString()));
+                            intent.putExtra("obj_selected", (Recipe)obj_selected);
+                        }
                         setResult(RESULT_OK, intent);
                         finish();
                     }else
