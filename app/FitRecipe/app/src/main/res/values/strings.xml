@@ -201,5 +201,9 @@
     <string name="title_activity_camera">CameraActivity</string>
     <string name="title_activity_select_recipe">SelectRecipeActivity</string>
 
+    <!--计划-->
+    <string name="plan_food">食材</string>
+    <string name="plan_recipe">食谱</string>
+
 
 </resources>

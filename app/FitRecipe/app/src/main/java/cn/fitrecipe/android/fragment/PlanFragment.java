@@ -538,6 +538,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener {
             return R.id.swipe;
         }
 
+
         @Override
         public View generateView(int position, ViewGroup viewGroup) {
             View v = LayoutInflater.from(context).inflate(R.layout.plan_select_recipe_item, null);
@@ -714,7 +715,8 @@ public class PlanFragment extends Fragment implements View.OnClickListener {
             holder.textView1.setText(nutrition.getName());
             holder.textView2.setText("1000");
             holder.textView3.setText("1500");
-            holder.textView4.setText();
+            holder.textView4.setText("1500g");
+            return convertView;
         }
 
         class ViewHolder {

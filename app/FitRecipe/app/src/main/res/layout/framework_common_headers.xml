@@ -4,7 +4,8 @@
     android:layout_height="45dp"
     android:background="@color/base_color"
     android:gravity="center"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:id="@+id/header">
 
     <RelativeLayout
         android:layout_width="match_parent"

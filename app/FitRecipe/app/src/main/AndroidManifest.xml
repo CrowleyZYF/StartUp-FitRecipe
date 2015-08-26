@@ -87,6 +87,10 @@
         </activity>
         <activity android:name=".PlanTestActivity" >
         </activity>
+        <activity android:name=".PlanChoiceActivity" >
+        </activity>
+        <activity android:name=".PlanChoiceInfoActivity" >
+        </activity>
         <activity android:name="com.umeng.fb.ConversationActivity" />
 
         <meta-data
