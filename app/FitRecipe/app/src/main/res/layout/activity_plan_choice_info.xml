@@ -310,25 +310,115 @@
                             android:layout_marginTop="5dp"/>
 
                     </LinearLayout>
-
                 </LinearLayout>
-
-
-
-
-
-
-
-
-
             </RelativeLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    
+                    <ImageView
+                        android:id="@+id/prev_day_btn"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:padding="10dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/icon_prev_day" />
 
+                    <ImageView
+                        android:id="@+id/next_day_btn"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:padding="10dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/icon_next_day" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_toRightOf="@id/prev_day_btn"
+                        android:layout_centerVertical="true">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="第"
+                            android:textSize="10sp"
+                            android:textColor="@color/login_input_text_color"/>
+
+                        <TextView
+                            android:id="@+id/plan_day"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1/7"
+                            android:textSize="16sp"
+                            android:textColor="@color/login_input_text_color"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="天"
+                            android:textSize="10sp"
+                            android:textColor="@color/login_input_text_color"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_toLeftOf="@id/next_day_btn"
+                        android:layout_centerVertical="true">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="卡路里："
+                            android:textSize="10sp"
+                            android:textColor="@color/login_input_text_color"/>
+
+                        <TextView
+                            android:id="@+id/plan_calories"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1200"
+                            android:textSize="16sp"
+                            android:textColor="@color/login_input_text_color"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="kcal"
+                            android:textSize="10sp"
+                            android:layout_marginLeft="3dp"
+                            android:textColor="@color/login_input_text_color"/>
+
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="2px"
+                    android:background="@drawable/theme_line"/>
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/plan_detail"
+                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content">
+                </android.support.v4.view.ViewPager>
+
+            </LinearLayout>
         </LinearLayout>
-
-
-
     </ScrollView>
 
     <include layout="@layout/framework_common_headers" />

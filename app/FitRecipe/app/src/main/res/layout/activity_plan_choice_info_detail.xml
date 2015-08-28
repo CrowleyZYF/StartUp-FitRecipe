@@ -1,0 +1,567 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color">
+
+    <LinearLayout
+        android:id="@+id/breakfast_plan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/white">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/breakfast"
+                    android:textSize="18sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="("
+                    android:textSize="10sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginTop="3dp"/>
+
+                <TextView
+                    android:id="@+id/breakfast_plan_calories"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="400"
+                    android:textSize="10sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="3dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="kcal)"
+                    android:textSize="10sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="3dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="今日打卡："
+                    android:textSize="10sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="3dp"/>
+
+                <TextView
+                    android:id="@+id/breakfast_plan_punch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="111199"
+                    android:textSize="10sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="人"
+                    android:textSize="10sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="3dp"/>
+
+            </LinearLayout>
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:background="@drawable/theme_line"/>
+
+        <cn.fitrecipe.android.UI.LinearLayoutForListView
+            android:id="@+id/breakfast_plan_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+        </cn.fitrecipe.android.UI.LinearLayoutForListView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/addmeal_01_plan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/white">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/addmeal"
+                    android:textSize="18sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="("
+                    android:textSize="10sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginTop="3dp"/>
+
+                <TextView
+                    android:id="@+id/addmeal_01_plan_calories"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="400"
+                    android:textSize="10sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="3dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="kcal)"
+                    android:textSize="10sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="3dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="今日打卡："
+                    android:textSize="10sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="3dp"/>
+
+                <TextView
+                    android:id="@+id/addmeal_01_plan_punch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="111199"
+                    android:textSize="10sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="人"
+                    android:textSize="10sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="3dp"/>
+
+            </LinearLayout>
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:background="@drawable/theme_line"/>
+
+        <cn.fitrecipe.android.UI.LinearLayoutForListView
+            android:id="@+id/addmeal_01_plan_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+        </cn.fitrecipe.android.UI.LinearLayoutForListView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lunch_plan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/white">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lunch"
+                    android:textSize="18sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="("
+                    android:textSize="10sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginTop="3dp"/>
+
+                <TextView
+                    android:id="@+id/lunch_plan_calories"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="400"
+                    android:textSize="10sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="3dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="kcal)"
+                    android:textSize="10sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="3dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="今日打卡："
+                    android:textSize="10sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="3dp"/>
+
+                <TextView
+                    android:id="@+id/lunch_plan_punch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="111199"
+                    android:textSize="10sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="人"
+                    android:textSize="10sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="3dp"/>
+
+            </LinearLayout>
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:background="@drawable/theme_line"/>
+
+        <cn.fitrecipe.android.UI.LinearLayoutForListView
+            android:id="@+id/lunch_plan_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+        </cn.fitrecipe.android.UI.LinearLayoutForListView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/addmeal_02_plan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/white">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/addmeal"
+                    android:textSize="18sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="("
+                    android:textSize="10sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginTop="3dp"/>
+
+                <TextView
+                    android:id="@+id/addmeal_02_plan_calories"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="400"
+                    android:textSize="10sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="3dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="kcal)"
+                    android:textSize="10sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="3dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="今日打卡："
+                    android:textSize="10sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="3dp"/>
+
+                <TextView
+                    android:id="@+id/addmeal_02_plan_punch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="111199"
+                    android:textSize="10sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="人"
+                    android:textSize="10sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="3dp"/>
+
+            </LinearLayout>
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:background="@drawable/theme_line"/>
+
+        <cn.fitrecipe.android.UI.LinearLayoutForListView
+            android:id="@+id/addmeal_02_plan_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+        </cn.fitrecipe.android.UI.LinearLayoutForListView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/supper_plan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/white">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/supper"
+                    android:textSize="18sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="("
+                    android:textSize="10sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginTop="3dp"/>
+
+                <TextView
+                    android:id="@+id/supper_plan_calories"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="400"
+                    android:textSize="10sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="3dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="kcal)"
+                    android:textSize="10sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="3dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="今日打卡："
+                    android:textSize="10sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="3dp"/>
+
+                <TextView
+                    android:id="@+id/supper_plan_punch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="111199"
+                    android:textSize="10sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="人"
+                    android:textSize="10sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="3dp"/>
+
+            </LinearLayout>
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:background="@drawable/theme_line"/>
+
+        <cn.fitrecipe.android.UI.LinearLayoutForListView
+            android:id="@+id/supper_plan_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+        </cn.fitrecipe.android.UI.LinearLayoutForListView>
+
+    </LinearLayout>
+
+</LinearLayout>
