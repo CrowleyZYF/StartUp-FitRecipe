@@ -114,6 +114,11 @@
 
         </cn.fitrecipe.android.UI.LinearLayoutForListView>
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:background="@drawable/theme_line"/>
+
     </LinearLayout>
 
     <LinearLayout
@@ -225,6 +230,11 @@
             android:paddingRight="10dp">
 
         </cn.fitrecipe.android.UI.LinearLayoutForListView>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:background="@drawable/theme_line"/>
 
     </LinearLayout>
 
@@ -338,6 +348,11 @@
 
         </cn.fitrecipe.android.UI.LinearLayoutForListView>
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:background="@drawable/theme_line"/>
+
     </LinearLayout>
 
     <LinearLayout
@@ -450,6 +465,11 @@
 
         </cn.fitrecipe.android.UI.LinearLayoutForListView>
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:background="@drawable/theme_line"/>
+
     </LinearLayout>
 
     <LinearLayout
@@ -561,6 +581,11 @@
             android:paddingRight="10dp">
 
         </cn.fitrecipe.android.UI.LinearLayoutForListView>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:background="@drawable/theme_line"/>
 
     </LinearLayout>
 

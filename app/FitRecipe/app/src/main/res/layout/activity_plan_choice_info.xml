@@ -3,7 +3,8 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
+    <cn.fitrecipe.android.UI.PlanScrollView
+        android:id="@+id/info_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/background_color"
@@ -411,15 +412,15 @@
                     android:layout_height="2px"
                     android:background="@drawable/theme_line"/>
 
-                <android.support.v4.view.ViewPager
+                <cn.fitrecipe.android.UI.PlanDetailViewPager
                     android:id="@+id/plan_detail"
-                    android:layout_height="match_parent"
-                    android:layout_width="wrap_content">
-                </android.support.v4.view.ViewPager>
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent">
+                </cn.fitrecipe.android.UI.PlanDetailViewPager>
 
             </LinearLayout>
         </LinearLayout>
-    </ScrollView>
+    </cn.fitrecipe.android.UI.PlanScrollView>
 
     <include layout="@layout/framework_common_headers" />
 
