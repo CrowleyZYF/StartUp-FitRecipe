@@ -14,6 +14,7 @@ public class Plan{
     private int join;
     private int background;
 
+
     public Plan(int id, String name, int hard_rank, int delicious_rank, int label, int days, int type, int join, int background){
         this.id = id;
         this.name = name;

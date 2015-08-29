@@ -13,13 +13,14 @@ import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.ImageLoader.MyImageLoader;
 import cn.fitrecipe.android.dao.AuthorDao;
 import cn.fitrecipe.android.dao.BasketDao;
-import cn.fitrecipe.android.dao.CollectionDao;
 import cn.fitrecipe.android.dao.FrDbHelper;
 import cn.fitrecipe.android.dao.HomeDataDao;
 import cn.fitrecipe.android.entity.Author;
 import cn.fitrecipe.android.entity.Collection;
 import cn.fitrecipe.android.entity.HomeData;
 import cn.fitrecipe.android.entity.Recipe;
+
+;
 
 /**
  * Created by 奕峰 on 2015/5/5.
@@ -31,7 +32,7 @@ public class FrApplication extends Application {
     public static YoukuPlayerBaseConfiguration configuration;
 
     //菜篮子缓存
-    private List<Recipe> basket;
+//    private List<Object> basket;
     //用户缓存
     private Author author;
     private String token;
@@ -104,25 +105,6 @@ public class FrApplication extends Application {
         return null;
     }
 
-    public List<Recipe> getBasket() {
-        if(basket == null) {
-            BasketDao basketDao = new BasketDao(this);
-            basket = basketDao.getBasket();
-        }
-        return basket;
-    }
-
-    public void clearBasket() {
-        basket = null;
-        BasketDao basketDao = new BasketDao(this);
-        basketDao.clearBasket();
-    }
-
-    public void saveBasket(List<Recipe> basket) {
-        this.basket = basket;
-        BasketDao basketDao = new BasketDao(this);
-        basketDao.saveBasket(basket);
-    }
 
     public Author getAuthor() {
         if(author == null) {

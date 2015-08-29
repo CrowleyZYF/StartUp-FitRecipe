@@ -1,44 +1,64 @@
 package cn.fitrecipe.android.dao;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.PreparedDelete;
+import com.j256.ormlite.stmt.PreparedQuery;
 
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.List;
 
+import cn.fitrecipe.android.entity.BasketItem;
 import cn.fitrecipe.android.entity.Recipe;
 
 /**
- * Created by wk on 2015/8/6.
+ * Created by wk on 2015/8/28.
  */
 public class BasketDao {
 
-    SharedPreferences sp;
-    Gson gson;
+    private Dao<BasketItem, Integer> basketItemDaoOpe;
+    private DatabaseHelper helper;
 
     public BasketDao(Context context) {
-        sp = context.getSharedPreferences("user", Context.MODE_PRIVATE);
-        gson = new Gson();
+        try {
+            helper = DatabaseHelper.getHelper(context);
+            basketItemDaoOpe = helper.getDao(BasketItem.class);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public void saveBasket(List<Recipe> recipes) {
-        String json = gson.toJson(recipes);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString("basket", json);
-        editor.commit();
+    public void add(BasketItem item) {
+        try {
+            basketItemDaoOpe.createOrUpdate(item);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public List<Recipe> getBasket() {
-        String json = sp.getString("basket", null);
-        if(json == null)
-            return new ArrayList<Recipe>();
-        return gson.fromJson(json, new TypeToken<List<Recipe>>(){}.getType());
+    public void remove(String type, int itemId) {
+        try {
+            PreparedQuery<BasketItem> query = basketItemDaoOpe.queryBuilder().where().eq("type", type).and().eq("itemId", itemId).prepare();
+            basketItemDaoOpe.delete(basketItemDaoOpe.query(query));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void clearBasket() {
-        saveBasket(new ArrayList<Recipe>());
+    public void clear() {
+        try {
+            basketItemDaoOpe.delete(basketItemDaoOpe.queryForAll());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<BasketItem> getAll() {
+        try {
+            return basketItemDaoOpe.queryForAll();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

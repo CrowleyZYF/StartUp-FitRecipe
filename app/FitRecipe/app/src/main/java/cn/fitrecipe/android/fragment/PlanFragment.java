@@ -3,119 +3,63 @@ package cn.fitrecipe.android.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
-import com.daimajia.swipe.SimpleSwipeListener;
-import com.daimajia.swipe.SwipeLayout;
-import com.daimajia.swipe.adapters.BaseSwipeAdapter;
-import com.daimajia.swipe.util.Attributes;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.fitrecipe.android.Adpater.PlanElementAdapter;
 import cn.fitrecipe.android.FrApplication;
+import cn.fitrecipe.android.IngredientActivity;
 import cn.fitrecipe.android.R;
-import cn.fitrecipe.android.RecipeActivity;
-import cn.fitrecipe.android.SelectRecipeActivity;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.UI.PieChartView;
 import cn.fitrecipe.android.UI.SlidingPage;
 import cn.fitrecipe.android.dao.FrDbHelper;
+import cn.fitrecipe.android.entity.Ingredient;
 import cn.fitrecipe.android.entity.Nutrition;
-import cn.fitrecipe.android.entity.Recipe;
+import cn.fitrecipe.android.entity.PlanItem;
 import cn.fitrecipe.android.entity.Report;
 
 /**
  * Created by 奕峰 on 2015/4/11.
  */
-public class PlanFragment extends Fragment implements View.OnClickListener {
+public class PlanFragment extends Fragment implements View.OnClickListener{
 
     private SlidingPage mRightMenu;
-
-    //breakfast
-    private final int BREAKFAST_CODE = 01;
-    private RelativeLayout add_breakfast;
-    private LinearLayoutForListView breakfast_content;
-    private List<Object> breakfast_recipes;
-    private RecipeAdapter breakfast_adapter;
-    private TextView breakfast_carbohydrate_intake, breakfast_protein_intake, breakfast_fat_intake, calorie_breakfast_intake;
-    private double carbohydrate_intake, protein_intake, fat_intake, calorie_intake;
-    private TextView  calorie_breakfast_need, breakfast_carbohydrate_need, breakfast_protein_need, breakfast_fat_need;
-    private TextView breakfast_carbohydrate_rate, breakfast_protein_rate, breakfast_fat_rate, calorie_breakfast_radio;
-    private ImageView breakfast_nutrition;
-
-    //add 1
-    private RelativeLayout add_meal_01;
-    private final int ADDMEAL_01_CODE = 02;
-    private LinearLayoutForListView addmeal_01_content;
-    private List<Object> add_1_recipes;
-    private RecipeAdapter add_1_adapter;
-    private TextView addmeal_01_carbohydrate_intake, addmeal_01_protein_intake, addmeal_01_fat_intake, calorie_addmeal_01_intake;
-    private double carbohydrate_intake1, protein_intake1, fat_intake1, calorie_intake1;
-    private TextView  calorie_addmeal_01_need, addmeal_01_carbohydrate_need, addmeal_01_protein_need, addmeal_01_fat_need;
-    private TextView addmeal_01_carbohydrate_rate, addmeal_01_protein_rate, addmeal_01_fat_rate, calorie_addmeal_01_radio;
-    private ImageView addmeal_01_nutrition;
-
-    //lunch
-    private final int LUNCH_CODE = 03;
-    private RelativeLayout add_lunch;
-    private LinearLayoutForListView lunch_content;
-    private List<Object> lunch_recipes;
-    private RecipeAdapter lunch_adapter;
-    private TextView lunch_carbohydrate_intake, lunch_protein_intake, lunch_fat_intake, calorie_lunch_intake;
-    private double carbohydrate_intake2, protein_intake2, fat_intake2, calorie_intake2;
-    private TextView  calorie_lunch_need, lunch_carbohydrate_need, lunch_protein_need, lunch_fat_need;
-    private TextView lunch_carbohydrate_rate, lunch_protein_rate, lunch_fat_rate, calorie_lunch_radio;
-    private ImageView lunch_nutrition;
-
-    // add 2
-    private RelativeLayout add_meal_02;
-    private final int ADDMEAL_02_CODE = 04;
-    private LinearLayoutForListView addmeal_02_content;
-    private List<Object> add_2_recipes;
-    private RecipeAdapter add_2_adapter;
-    private TextView addmeal_02_carbohydrate_intake, addmeal_02_protein_intake, addmeal_02_fat_intake, calorie_addmeal_02_intake;
-    private double carbohydrate_intake3, protein_intake3, fat_intake3, calorie_intake3;
-    private TextView  calorie_addmeal_02_need, addmeal_02_carbohydrate_need, addmeal_02_protein_need, addmeal_02_fat_need;
-    private TextView addmeal_02_carbohydrate_rate, addmeal_02_protein_rate, addmeal_02_fat_rate, calorie_addmeal_02_radio;
-    private ImageView addmeal_02_nutrition;
-
-    //supper
-    private final int SUPPER_CODE = 05;
-    private RelativeLayout add_supper;
-    private LinearLayoutForListView supper_content;
-    private List<Object> supper_recipes;
-    private RecipeAdapter supper_adapter;
-    private TextView supper_carbohydrate_intake, supper_protein_intake, supper_fat_intake, calorie_supper_intake;
-    private double carbohydrate_intake4, protein_intake4, fat_intake4, calorie_intake4;
-    private TextView  calorie_supper_need, supper_carbohydrate_need, supper_protein_need, supper_fat_need;
-    private TextView supper_carbohydrate_rate, supper_protein_rate, supper_fat_rate, calorie_supper_radio;
-    private ImageView supper_nutrition;
-
 
     //Report
     private Report report;
 
+    private LinearLayoutForListView plans;
+    private List<PlanItem> items;
+    private PlanElementAdapter adapter;
+
     //view 2
     private TextView ingredient_title, recipe_all_calorie, user_need_calorie, calorie_radio;
     private LinearLayout nutrition_punch;
-    private ImageView meal_pic;
+    private ImageView meal_pic, shopping_btn;
     private PieChartView take_already_piechart;
     private LinearLayoutForListView recipe_nutrition_list;
+    private NutritionAdapter nutritionAdapter;
+    private boolean toggleFlag = true;
+
+    public static final int BREAKFAST_CODE = 00;
+    public static final int ADDMEAL_01_CODE = 01;
+    public static final int LUNCH_CODE = 02;
+    public static final int ADDMEAL_02_CODE = 03;
+    public static final int SUPPER_CODE = 04;
+
+    private int iconIds[] = {R.drawable.icon_breakfast, R.drawable.icon_add_meal1, R.drawable.icon_lunch, R.drawable.icon_add_meal2, R.drawable.icon_dinner};
+    private int finishIconIds[] = {R.drawable.icon_breakfast_finish, R.drawable.icon_add_meal1_finish, R.drawable.icon_lunch_finish, R.drawable.icon_add_meal2_finish, R.drawable.icon_dinner_finish};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -125,113 +69,18 @@ public class PlanFragment extends Fragment implements View.OnClickListener {
 
         report = FrDbHelper.getInstance(getActivity()).getReport(FrApplication.getInstance().getAuthor());
         initView(v);
-        initView2(v);
-        initData();
         initEvent();
+        initData();
         return v;
     }
 
-    private void initView(View v) {
-
-        //breakfast
-        add_breakfast = (RelativeLayout) v.findViewById(R.id.add_breakfast);
-        breakfast_content = (LinearLayoutForListView) v.findViewById(R.id.breakfast_content);
-        breakfast_carbohydrate_intake = (TextView) v.findViewById(R.id.breakfast_carbohydrate_intake);
-        breakfast_protein_intake = (TextView) v.findViewById(R.id.breakfast_protein_intake);
-        breakfast_fat_intake = (TextView) v.findViewById(R.id.breakfast_fat_intake);
-        calorie_breakfast_intake = (TextView) v.findViewById(R.id.calorie_breakfast_intake);
-        //
-        calorie_breakfast_need = (TextView) v.findViewById(R.id.calorie_breakfast_need);
-        breakfast_carbohydrate_need = (TextView) v.findViewById(R.id.breakfast_carbohydrate_need);
-        breakfast_protein_need = (TextView) v.findViewById(R.id.breakfast_protein_need);
-        breakfast_fat_need = (TextView) v.findViewById(R.id.breakfast_fat_need);
-        breakfast_carbohydrate_rate = (TextView) v.findViewById(R.id.breakfast_carbohydrate_rate);
-        breakfast_protein_rate = (TextView) v.findViewById(R.id.breakfast_protein_rate);
-        breakfast_fat_rate = (TextView) v.findViewById(R.id.breakfast_fat_rate);
-        calorie_breakfast_radio = (TextView) v.findViewById(R.id.calorie_breakfast_radio);
-        breakfast_nutrition = (ImageView) v.findViewById(R.id.breakfast_nutrition);
-
-        //add 1
-        add_meal_01 = (RelativeLayout) v.findViewById(R.id.add_meal_01);
-        addmeal_01_content = (LinearLayoutForListView) v.findViewById(R.id.addmeal_01_content);
-        addmeal_01_carbohydrate_intake = (TextView) v.findViewById(R.id.addmeal_01_carbohydrate_intake);
-        addmeal_01_protein_intake = (TextView) v.findViewById(R.id.addmeal_01_protein_intake);
-        addmeal_01_fat_intake = (TextView) v.findViewById(R.id.addmeal_01_fat_intake);
-        calorie_addmeal_01_intake = (TextView) v.findViewById(R.id.calorie_addmeal_01_intake);
-        //
-        calorie_addmeal_01_need = (TextView) v.findViewById(R.id.calorie_addmeal_01_need);
-        addmeal_01_carbohydrate_need = (TextView) v.findViewById(R.id.addmeal_01_carbohydrate_need);
-        addmeal_01_protein_need = (TextView) v.findViewById(R.id.addmeal_01_protein_need);
-        addmeal_01_fat_need = (TextView) v.findViewById(R.id.addmeal_01_fat_need);
-        addmeal_01_carbohydrate_rate = (TextView) v.findViewById(R.id.addmeal_01_carbohydrate_rate);
-        addmeal_01_protein_rate = (TextView) v.findViewById(R.id.addmeal_01_protein_rate);
-        addmeal_01_fat_rate = (TextView) v.findViewById(R.id.addmeal_01_fat_rate);
-        calorie_addmeal_01_radio = (TextView) v.findViewById(R.id.calorie_addmeal_01_radio);
-        addmeal_01_nutrition = (ImageView) v.findViewById(R.id.addmeal_01_nutrition);
-
-        //lunch
-        add_lunch = (RelativeLayout) v.findViewById(R.id.add_lunch);
-        lunch_content = (LinearLayoutForListView) v.findViewById(R.id.lunch_content);
-        lunch_carbohydrate_intake = (TextView) v.findViewById(R.id.lunch_carbohydrate_intake);
-        lunch_protein_intake = (TextView) v.findViewById(R.id.lunch_protein_intake);
-        lunch_fat_intake = (TextView) v.findViewById(R.id.lunch_fat_intake);
-        calorie_lunch_intake = (TextView) v.findViewById(R.id.calorie_lunch_intake);
-        //
-        calorie_lunch_need = (TextView) v.findViewById(R.id.calorie_lunch_need);
-        lunch_carbohydrate_need = (TextView) v.findViewById(R.id.lunch_carbohydrate_need);
-        lunch_protein_need = (TextView) v.findViewById(R.id.lunch_protein_need);
-        lunch_fat_need = (TextView) v.findViewById(R.id.lunch_fat_need);
-        lunch_carbohydrate_rate = (TextView) v.findViewById(R.id.lunch_carbohydrate_rate);
-        lunch_protein_rate = (TextView) v.findViewById(R.id.lunch_protein_rate);
-        lunch_fat_rate = (TextView) v.findViewById(R.id.lunch_fat_rate);
-        calorie_lunch_radio = (TextView) v.findViewById(R.id.calorie_breakfast_radio);
-        lunch_nutrition = (ImageView) v.findViewById(R.id.lunch_nutrition);
-
-
-        //add 2
-        add_meal_02 = (RelativeLayout) v.findViewById(R.id.add_meal_02);
-        addmeal_02_content = (LinearLayoutForListView) v.findViewById(R.id.addmeal_02_content);
-        addmeal_02_carbohydrate_intake = (TextView) v.findViewById(R.id.addmeal_02_carbohydrate_intake);
-        addmeal_02_protein_intake = (TextView) v.findViewById(R.id.addmeal_02_protein_intake);
-        addmeal_02_fat_intake = (TextView) v.findViewById(R.id.addmeal_02_fat_intake);
-        calorie_addmeal_02_intake = (TextView) v.findViewById(R.id.calorie_addmeal_02_intake);
-
-        //
-        calorie_addmeal_02_need = (TextView) v.findViewById(R.id.calorie_addmeal_02_need);
-        addmeal_02_carbohydrate_need = (TextView) v.findViewById(R.id.addmeal_02_carbohydrate_need);
-        addmeal_02_protein_need = (TextView) v.findViewById(R.id.addmeal_02_protein_need);
-        addmeal_02_fat_need = (TextView) v.findViewById(R.id.addmeal_02_fat_need);
-        addmeal_02_carbohydrate_rate = (TextView) v.findViewById(R.id.addmeal_02_carbohydrate_rate);
-        addmeal_02_protein_rate = (TextView) v.findViewById(R.id.addmeal_02_protein_rate);
-        addmeal_02_fat_rate = (TextView) v.findViewById(R.id.addmeal_02_fat_rate);
-        calorie_addmeal_02_radio = (TextView) v.findViewById(R.id.calorie_addmeal_02_radio);
-        addmeal_02_nutrition = (ImageView) v.findViewById(R.id.addmeal_02_nutrition);
-
-        //supper
-        add_supper = (RelativeLayout) v.findViewById(R.id.add_supper);
-        supper_content = (LinearLayoutForListView) v.findViewById(R.id.supper_content);
-        supper_carbohydrate_intake = (TextView) v.findViewById(R.id.supper_carbohydrate_intake);
-        supper_protein_intake = (TextView) v.findViewById(R.id.supper_protein_intake);
-        supper_fat_intake = (TextView) v.findViewById(R.id.supper_fat_intake);
-        calorie_supper_intake = (TextView) v.findViewById(R.id.calorie_supper_intake);
-
-        //
-        calorie_supper_need = (TextView) v.findViewById(R.id.calorie_supper_need);
-        supper_carbohydrate_need = (TextView) v.findViewById(R.id.supper_carbohydrate_need);
-        supper_protein_need = (TextView) v.findViewById(R.id.supper_protein_need);
-        supper_fat_need = (TextView) v.findViewById(R.id.supper_fat_need);
-        supper_carbohydrate_rate = (TextView) v.findViewById(R.id.supper_carbohydrate_rate);
-        supper_protein_rate = (TextView) v.findViewById(R.id.supper_protein_rate);
-        supper_fat_rate = (TextView) v.findViewById(R.id.supper_fat_rate);
-        calorie_supper_radio = (TextView) v.findViewById(R.id.calorie_breakfast_radio);
-        supper_nutrition = (ImageView) v.findViewById(R.id.supper_nutrition);
-
-        mRightMenu = (SlidingPage) v.findViewById(R.id.filter_menu);
-
-
+    private void initEvent() {
+        shopping_btn.setOnClickListener(this);
     }
 
-    private void initView2(View v) {
+    private void initView(View v) {
+        plans = (LinearLayoutForListView) v.findViewById(R.id.plans);
+
         ingredient_title = (TextView) v.findViewById(R.id.ingredient_title);
         nutrition_punch = (LinearLayout) v.findViewById(R.id.nutrition_punch);
         meal_pic = (ImageView) v.findViewById(R.id.meal_pic);
@@ -240,433 +89,114 @@ public class PlanFragment extends Fragment implements View.OnClickListener {
         calorie_radio = (TextView) v.findViewById(R.id.calorie_radio);
         take_already_piechart = (PieChartView) v.findViewById(R.id.take_already_piechart);
         recipe_nutrition_list = (LinearLayoutForListView)v.findViewById(R.id.recipe_nutrition_list);
+        shopping_btn = (ImageView) v.findViewById(R.id.shopping_btn);
+
+        mRightMenu = (SlidingPage) v.findViewById(R.id.filter_menu);
+
     }
 
     private void initData() {
-        //breakfast
-        if(breakfast_recipes == null) {
-            breakfast_recipes = new ArrayList<>();
+        items = new ArrayList<>();
+        for(PlanItem.ItemType type : PlanItem.ItemType.values()) {
+            if(type == PlanItem.ItemType.ALL)   continue;
+            PlanItem item = new PlanItem();
+            item.setItemType(type);
+            items.add(item);
         }
-        breakfast_adapter = new RecipeAdapter(getActivity(), breakfast_recipes, BREAKFAST_CODE);
-        breakfast_adapter.setMode(Attributes.Mode.Single);
-        breakfast_content.setAdapter(breakfast_adapter);
-        carbohydrate_intake = 0;
-        protein_intake = 0;
-        fat_intake = 0;
-        calorie_intake = 0;
+        adapter = new PlanElementAdapter(this, items, report);
+        plans.setAdapter(adapter);
 
-        //add 1
-        if(add_1_recipes == null) {
-            add_1_recipes = new ArrayList<>();
-        }
-        add_1_adapter = new RecipeAdapter(getActivity(), add_1_recipes, ADDMEAL_01_CODE);
-        addmeal_01_content.setAdapter(add_1_adapter);
-        carbohydrate_intake1 = 0;
-        protein_intake1 = 0;
-        fat_intake1 = 0;
-        calorie_intake1 = 0;
-
-        //lunch
-        if(lunch_recipes == null) {
-            lunch_recipes = new ArrayList<>();
-        }
-        lunch_adapter = new RecipeAdapter(getActivity(), lunch_recipes, LUNCH_CODE);
-        lunch_content.setAdapter(lunch_adapter);
-        carbohydrate_intake2 = 0;
-        protein_intake2 = 0;
-        fat_intake2 = 0;
-        calorie_intake2 = 0;
-
-        //add 2
-        if(add_2_recipes == null) {
-            add_2_recipes = new ArrayList<>();
-        }
-        add_2_adapter = new RecipeAdapter(getActivity(), add_2_recipes, ADDMEAL_02_CODE);
-        addmeal_02_content.setAdapter(add_2_adapter);
-        carbohydrate_intake3 = 0;
-        protein_intake3 = 0;
-        fat_intake3 = 0;
-        calorie_intake3 = 0;
-
-        //supper
-        if(supper_recipes == null) {
-            supper_recipes = new ArrayList<>();
-        }
-        supper_adapter = new RecipeAdapter(getActivity(), supper_recipes, SUPPER_CODE);
-        supper_content.setAdapter(supper_adapter);
-        carbohydrate_intake4 = 0;
-        protein_intake4 = 0;
-        fat_intake4 = 0;
-        calorie_intake4 = 0;
+        nutritionAdapter = new NutritionAdapter(getActivity(), null);
+        recipe_nutrition_list.setAdapter(nutritionAdapter);
     }
 
-
-
-    private void initEvent() {
-        add_breakfast.setOnClickListener(this);
-        add_meal_01.setOnClickListener(this);
-        add_lunch.setOnClickListener(this);
-        add_meal_02.setOnClickListener(this);
-        add_supper.setOnClickListener(this);
-
-        breakfast_nutrition.setOnClickListener(this);
-        lunch_nutrition.setOnClickListener(this);
-        addmeal_01_nutrition.setOnClickListener(this);
-        supper_nutrition.setOnClickListener(this);
-        addmeal_02_nutrition.setOnClickListener(this);
-
-
-
-        breakfast_content.setOnItemClickListener(new MyOnItemClickListener(breakfast_recipes));
-        addmeal_01_content.setOnItemClickListener(new MyOnItemClickListener(add_1_recipes));
-        lunch_content.setOnItemClickListener(new MyOnItemClickListener(lunch_recipes));
-        addmeal_02_content.setOnItemClickListener(new MyOnItemClickListener(add_2_recipes));
-        supper_content.setOnItemClickListener(new MyOnItemClickListener(supper_recipes));
-    }
-
-    class MyOnItemClickListener implements AdapterView.OnItemClickListener {
-        List<Object> data;
-
-        public MyOnItemClickListener(List<Object> data) {
-            this.data = data;
-        }
-
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            if(data.get(position) instanceof Recipe) {
-                String recipe_id = ((Recipe)data.get(position)).getId() +"";
-                Intent intent=new Intent(getActivity(),RecipeActivity.class);
-                intent.putExtra("id", recipe_id);
-                startActivity(intent);
-            }
-        }
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case BREAKFAST_CODE:
-                if(resultCode == getActivity().RESULT_OK && data.hasExtra("obj_selected")) {
-                    Recipe recipe = (Recipe) data.getSerializableExtra("obj_selected");
-                    breakfast_recipes.add(recipe);
-                    carbohydrate_intake += recipe.getNutrition_set().get(3).getAmount();
-                    protein_intake += recipe.getNutrition_set().get(1).getAmount();
-                    fat_intake += recipe.getNutrition_set().get(2).getAmount();
-                    calorie_intake += Math.round(recipe.getTotal_amount() * recipe.getCalories() / 100);
-                    breakfast_protein_intake.setText(protein_intake + "");
-                    breakfast_fat_intake.setText(fat_intake + "");
-                    calorie_breakfast_intake.setText(Math.round(calorie_intake) + "");
-                    breakfast_carbohydrate_intake.setText(Math.round(carbohydrate_intake) + "");
-                    breakfast_adapter.notifyDataSetChanged();
-                }
-                break;
-            case ADDMEAL_01_CODE:
-                if(resultCode == getActivity().RESULT_OK && data.hasExtra("obj_selected")) {
-                    Recipe recipe = (Recipe) data.getSerializableExtra("obj_selected");
-                    add_1_recipes.add(recipe);
-                    carbohydrate_intake1 += recipe.getNutrition_set().get(3).getAmount();
-                    protein_intake1 += recipe.getNutrition_set().get(1).getAmount();
-                    fat_intake1 += recipe.getNutrition_set().get(2).getAmount();
-                    calorie_intake1 += Math.round(recipe.getTotal_amount() * recipe.getCalories() / 100);
-                    addmeal_01_protein_intake.setText(protein_intake1 + "");
-                    addmeal_01_fat_intake.setText(fat_intake1 + "");
-                    calorie_addmeal_01_intake.setText(Math.round(calorie_intake1) + "");
-                    addmeal_01_carbohydrate_intake.setText(Math.round(carbohydrate_intake1) + "");
-                    add_1_adapter.notifyDataSetChanged();
-                }
-                break;
-            case LUNCH_CODE:
-                if(resultCode == getActivity().RESULT_OK && data.hasExtra("obj_selected")) {
-                    Recipe recipe = (Recipe) data.getSerializableExtra("obj_selected");
-                    lunch_recipes.add(recipe);
-                    carbohydrate_intake2 += recipe.getNutrition_set().get(3).getAmount();
-                    protein_intake2 += recipe.getNutrition_set().get(1).getAmount();
-                    fat_intake2 += recipe.getNutrition_set().get(2).getAmount();
-                    calorie_intake2 += Math.round(recipe.getTotal_amount() * recipe.getCalories() / 100);
-                    lunch_protein_intake.setText(protein_intake2 + "");
-                    lunch_fat_intake.setText(fat_intake2 + "");
-                    calorie_lunch_intake.setText(Math.round(calorie_intake2) + "");
-                    lunch_carbohydrate_intake.setText(Math.round(carbohydrate_intake2) + "");
-                    lunch_adapter.notifyDataSetChanged();
-                }
-                break;
-            case ADDMEAL_02_CODE:
-                if(resultCode == getActivity().RESULT_OK && data.hasExtra("obj_selected")) {
-                    Recipe recipe = (Recipe) data.getSerializableExtra("obj_selected");
-                    add_2_recipes.add(recipe);
-                    carbohydrate_intake3 += recipe.getNutrition_set().get(3).getAmount();
-                    protein_intake3 += recipe.getNutrition_set().get(1).getAmount();
-                    fat_intake3 += recipe.getNutrition_set().get(2).getAmount();
-                    calorie_intake3 += Math.round(recipe.getTotal_amount() * recipe.getCalories() / 100);
-                    addmeal_02_protein_intake.setText(protein_intake3 + "");
-                    addmeal_02_fat_intake.setText(fat_intake3 + "");
-                    calorie_addmeal_02_intake.setText(Math.round(calorie_intake3) + "");
-                    addmeal_02_carbohydrate_intake.setText(Math.round(carbohydrate_intake3) + "");
-                    add_2_adapter.notifyDataSetChanged();
-                }
-                break;
-            case SUPPER_CODE:
-                if(resultCode == getActivity().RESULT_OK && data.hasExtra("obj_selected")) {
-                    Recipe recipe = (Recipe) data.getSerializableExtra("obj_selected");
-                    supper_recipes.add(recipe);
-                    carbohydrate_intake4 += recipe.getNutrition_set().get(3).getAmount();
-                    protein_intake4 += recipe.getNutrition_set().get(1).getAmount();
-                    fat_intake4 += recipe.getNutrition_set().get(2).getAmount();
-                    calorie_intake4 += Math.round(recipe.getTotal_amount() * recipe.getCalories() / 100);
-                    supper_protein_intake.setText(protein_intake4 + "");
-                    supper_fat_intake.setText(fat_intake4 + "");
-                    calorie_supper_intake.setText(Math.round(calorie_intake4) + "");
-                    supper_carbohydrate_intake.setText(Math.round(carbohydrate_intake4) + "");
-                    supper_adapter.notifyDataSetChanged();
-                }
-                break;
+        Object obj = null;
+        if(resultCode == getActivity().RESULT_OK && data.hasExtra("obj_selected")) {
+            obj = data.getSerializableExtra("obj_selected");
+            switch (requestCode) {
+                case BREAKFAST_CODE:
+                    items.get(0).addContent(obj);
+                    break;
+                case ADDMEAL_01_CODE:
+                    items.get(1).addContent(obj);
+                    break;
+                case LUNCH_CODE:
+                    items.get(2).addContent(obj);
+                    break;
+                case ADDMEAL_02_CODE:
+                    items.get(3).addContent(obj);
+                    break;
+                case SUPPER_CODE:
+                    items.get(4).addContent(obj);
+                    break;
 
+            }
+            adapter.notifyDataSetChanged();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.add_breakfast:
-                Intent intent = new Intent(getActivity(), SelectRecipeActivity.class);
-                startActivityForResult(intent, BREAKFAST_CODE);
-                break;
-            case R.id.add_meal_01:
-                Intent intent1 = new Intent(getActivity(), SelectRecipeActivity.class);
-                startActivityForResult(intent1, ADDMEAL_01_CODE);
-                break;
-            case R.id.add_lunch:
-                Intent intent2 = new Intent(getActivity(), SelectRecipeActivity.class);
-                startActivityForResult(intent2, LUNCH_CODE);
-                break;
-            case R.id.add_meal_02:
-                Intent intent4 = new Intent(getActivity(), SelectRecipeActivity.class);
-                startActivityForResult(intent4, ADDMEAL_02_CODE);
-                break;
-            case R.id.add_supper:
-                Intent intent3 = new Intent(getActivity(), SelectRecipeActivity.class);
-                startActivityForResult(intent3, SUPPER_CODE);
-                break;
-            case R.id.breakfast_nutrition:
-                toggle("breakfast");
-                break;
-            case R.id.addmeal_01_nutrition:
-                toggle("addmeal_01");
-                break;
-            case R.id.lunch_nutrition:
-                toggle("lunch");
-                break;
-            case R.id.addmeal_02_nutrition:
-                toggle("addmeal_02");
-                break;
-            case R.id.supper_nutrition:
-                toggle("supper");
-                break;
+    public void toggle(PlanItem.ItemType type) {
+//        Toast.makeText(getActivity(), type.value()+"", Toast.LENGTH_SHORT).show();
+        if(toggleFlag) {
+            ingredient_title.setText(type.value() + "营养表");
+            switch (type) {
+                case BREAKFAST:
+                case ADDMEAL_01:
+                case ADDMEAL_02:
+                case LUNCH:
+                case SUPPER:
+                    int index = type.index();
+                    PlanItem item = items.get(index);
+                    meal_pic.setImageResource(iconIds[type.index()]);
+                    recipe_all_calorie.setText(Math.round(item.gettCalories()) + "kcal");
+                    calorie_radio.setText(Math.round(item.gettCalories() * 100 / report.getCaloriesIntake()) + "%");
+                    double sum = item.getProtein() + item.getFat() + item.getCarbohydrate();
+                    int a = (int) Math.round(item.getCarbohydrate() * 100 / sum);
+                    int b = (int) Math.round(item.getProtein() * 100 / sum);
+                    int c = 100 - a - b;
+                    take_already_piechart.setValue(new float[]{a, b, c});
+                    nutrition_punch.setVisibility(View.GONE);
+                    user_need_calorie.setText(Math.round(report.getCaloriesIntake()) + "kcal");
+                    nutritionAdapter.setData(item.gettNutrition());
+                    break;
+                case ALL:
+                    PlanItem itema = PlanItem.getAllItem(items);
+                    if (itema.size() == 0) {
+                        Toast.makeText(getActivity(), "请添加食谱、食材后再查看营养表！", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    nutrition_punch.setVisibility(View.VISIBLE);
+                    meal_pic.setImageResource(R.drawable.icon_dinner_temp);
+                    long total = 0;
+                    for (int i = 0; i < items.size(); i++)
+                        total += Math.round(items.get(i).gettCalories());
+                    recipe_all_calorie.setText(total + "kcal");
+                    user_need_calorie.setText(report.getCaloriesIntake() + "kcal");
+                    calorie_radio.setText(Math.round(total * 100 / report.getCaloriesIntake()) + "%");
+                    sum = itema.getProtein() + itema.getFat() + itema.getCarbohydrate();
+                    a = (int) Math.round(itema.getCarbohydrate() * 100 / sum);
+                    b = (int) Math.round(itema.getProtein() * 100 / sum);
+                    c = 100 - a - b;
+                    take_already_piechart.setValue(new float[]{a, b, c});
+                    nutritionAdapter.setData(itema.gettNutrition());
+            }
+            nutritionAdapter.notifyDataSetChanged();
         }
-    }
-
-
-    public void toggle(String type) {
-        Toast.makeText(getActivity(), type, Toast.LENGTH_SHORT).show();
-        if (type.equals("breakfast")) {
-            ingredient_title.setText("早餐营养表");
-            meal_pic.setImageResource(R.drawable.icon_breakfast);
-            recipe_all_calorie.setText(Math.round(calorie_intake) + "kcal");
-            calorie_radio.setText(Math.round(calorie_intake * 100 / report.getCaloriesIntake())+"%");
-            double sum = protein_intake + fat_intake + carbohydrate_intake;
-            int a = (int) Math.round(carbohydrate_intake * 100 / sum);
-            int b = (int) Math.round(protein_intake * 100 / sum);
-            int c = 100 - a - b;
-            take_already_piechart.setValue(new float[]{a, b, c});
-        }
-        if(type.equals("addmeal_01")) {
-            ingredient_title.setText("加餐营养表");
-            meal_pic.setImageResource(R.drawable.icon_add_meal1);
-            recipe_all_calorie.setText(Math.round(calorie_intake1) + "kcal");
-            calorie_radio.setText(Math.round(calorie_intake1 * 100 / report.getCaloriesIntake())+"%");
-        }
-        if(type.equals("lunch")) {
-            ingredient_title.setText("午餐营养表");
-            meal_pic.setImageResource(R.drawable.icon_lunch);
-            recipe_all_calorie.setText(Math.round(calorie_intake2) + "kcal");
-            calorie_radio.setText(Math.round(calorie_intake2 * 100 / report.getCaloriesIntake())+"%");
-        }
-        if(type.equals("addmeal_02")) {
-            ingredient_title.setText("加餐营养表");
-            meal_pic.setImageResource(R.drawable.icon_add_meal2);
-            recipe_all_calorie.setText(Math.round(calorie_intake3) + "kcal");
-            calorie_radio.setText(Math.round(calorie_intake3 * 100 / report.getCaloriesIntake())+"%");
-        }
-        if(type.equals("supper")) {
-            ingredient_title.setText("晚餐营养表");
-            meal_pic.setImageResource(R.drawable.icon_dinner);
-            recipe_all_calorie.setText(Math.round(calorie_intake4) + "kcal");
-            calorie_radio.setText(Math.round(calorie_intake4 * 100 / report.getCaloriesIntake())+"%");
-        }
-        if(type.equals("all")) {
-            ingredient_title.setText("营养表");
-            nutrition_punch.setVisibility(View.VISIBLE);
-            meal_pic.setImageResource(R.drawable.icon_dinner_temp);
-            long total = Math.round(calorie_intake) + Math.round(calorie_intake1) + Math.round(calorie_intake2) + Math.round(calorie_intake3) +
-                    Math.round(calorie_intake4);
-            recipe_all_calorie.setText(total + "kcal");
-            user_need_calorie.setText(report.getCaloriesIntake() + "kcal");
-            calorie_radio.setText(Math.round(total * 100 / report.getCaloriesIntake())+"%");
-        }else {
-            nutrition_punch.setVisibility(View.GONE);
-            user_need_calorie.setText(Math.round(report.getCaloriesIntake())+"kcal");
-        }
+        toggleFlag = !toggleFlag;
         mRightMenu.toggle();
     }
 
-
-    class RecipeAdapter extends BaseSwipeAdapter {
-
-        Context context;
-        List<Object> data;
-        int code;
-
-        public RecipeAdapter(Context context, List<Object> data, int code) {
-            this.context = context;
-            this.data = data;
-            this.code = code;
-        }
-
-        @Override
-        public int getSwipeLayoutResourceId(int i) {
-            return R.id.swipe;
-        }
-
-
-        @Override
-        public View generateView(int position, ViewGroup viewGroup) {
-            View v = LayoutInflater.from(context).inflate(R.layout.plan_select_recipe_item, null);
-            final SwipeLayout swipeLayout = (SwipeLayout)v.findViewById(getSwipeLayoutResourceId(position));
-            swipeLayout.addSwipeListener(new SimpleSwipeListener() {
-                @Override
-                public void onOpen(SwipeLayout layout) {
-                    YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(layout.findViewById(R.id.trash));
-                }
-
-            });
-            return v;
-        }
-
-        @Override
-        public void fillValues(final int i, final View view) {
-            Log.v(i + "", view.toString());
-            TextView text1 = (TextView) view.findViewById(R.id.textview1);
-            TextView text2 = (TextView) view.findViewById(R.id.textview2);
-            TextView text3 = (TextView) view.findViewById(R.id.textview3);
-            Object obj = data.get(i);
-            if(obj instanceof Recipe) {
-                text1.setText(((Recipe)obj).getTitle());
-                text2.setText(((Recipe)obj).getTotal_amount() + "g");
-                text3.setText(Math.round(((Recipe)obj).getCalories() * ((Recipe)obj).getTotal_amount() / 100) + "kcal");
-            }
-
-            view.findViewById(R.id.trash).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((SwipeLayout)view).close();
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            delete(i);
-                        }
-                    }, 500);
-                    Toast.makeText(context, "click delete", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-
-        private void delete(int i) {
-            switch (code) {
-                case BREAKFAST_CODE:
-                    Recipe recipe = (Recipe) data.get(i);
-                    carbohydrate_intake -= recipe.getNutrition_set().get(3).getAmount();
-                    protein_intake -= recipe.getNutrition_set().get(1).getAmount();
-                    fat_intake -= recipe.getNutrition_set().get(2).getAmount();
-                    calorie_intake -= Math.round(recipe.getTotal_amount() * recipe.getCalories() / 100);
-                    breakfast_protein_intake.setText(protein_intake + "");
-                    breakfast_fat_intake.setText(fat_intake + "");
-                    calorie_breakfast_intake.setText(Math.round(calorie_intake) + "");
-                    breakfast_carbohydrate_intake.setText(Math.round(carbohydrate_intake) + "");
-                    data.remove(i);
-                    notifyDataSetChanged();
-                    break;
-                case ADDMEAL_01_CODE:
-                    Recipe recipe1 = (Recipe) data.get(i);
-                    carbohydrate_intake1 -= recipe1.getNutrition_set().get(3).getAmount();
-                    protein_intake1 -= recipe1.getNutrition_set().get(1).getAmount();
-                    fat_intake1 -= recipe1.getNutrition_set().get(2).getAmount();
-                    calorie_intake1 -= Math.round(recipe1.getTotal_amount() * recipe1.getCalories() / 100);
-                    addmeal_01_protein_intake.setText(protein_intake1 + "");
-                    addmeal_01_fat_intake.setText(fat_intake1 + "");
-                    calorie_addmeal_01_intake.setText(Math.round(calorie_intake1) + "");
-                    addmeal_01_carbohydrate_intake.setText(Math.round(carbohydrate_intake1) + "");
-                    data.remove(i);
-                    notifyDataSetChanged();
-                    break;
-                case LUNCH_CODE:
-                    Recipe recipe2 = (Recipe) data.get(i);
-                    carbohydrate_intake2 -= recipe2.getNutrition_set().get(3).getAmount();
-                    protein_intake2 -= recipe2.getNutrition_set().get(1).getAmount();
-                    fat_intake2 -= recipe2.getNutrition_set().get(2).getAmount();
-                    calorie_intake2 -= Math.round(recipe2.getTotal_amount() * recipe2.getCalories() / 100);
-                    lunch_protein_intake.setText(protein_intake2 + "");
-                    lunch_fat_intake.setText(fat_intake2 + "");
-                    calorie_lunch_intake.setText(Math.round(calorie_intake2) + "");
-                    lunch_carbohydrate_intake.setText(Math.round(carbohydrate_intake2) + "");
-                    data.remove(i);
-                    notifyDataSetChanged();
-                    break;
-                case ADDMEAL_02_CODE:
-                    Recipe recipe3 = (Recipe) data.get(i);
-                    carbohydrate_intake3 -= recipe3.getNutrition_set().get(3).getAmount();
-                    protein_intake3 -= recipe3.getNutrition_set().get(1).getAmount();
-                    fat_intake3 -= recipe3.getNutrition_set().get(2).getAmount();
-                    calorie_intake3 -= Math.round(recipe3.getTotal_amount() * recipe3.getCalories() / 100);
-                    addmeal_02_protein_intake.setText(protein_intake3 + "");
-                    addmeal_02_fat_intake.setText(fat_intake3 + "");
-                    calorie_addmeal_02_intake.setText(Math.round(calorie_intake3) + "");
-                    addmeal_02_carbohydrate_intake.setText(Math.round(carbohydrate_intake3) + "");
-                    data.remove(i);
-                    notifyDataSetChanged();
-                    break;
-                case SUPPER_CODE:
-                    Recipe recipe4 = (Recipe) data.get(i);
-                    carbohydrate_intake4 -= recipe4.getNutrition_set().get(3).getAmount();
-                    protein_intake4 -= recipe4.getNutrition_set().get(1).getAmount();
-                    fat_intake4 -= recipe4.getNutrition_set().get(2).getAmount();
-                    calorie_intake4 -= Math.round(recipe4.getTotal_amount() * recipe4.getCalories() / 100);
-                    supper_protein_intake.setText(protein_intake4 + "");
-                    supper_fat_intake.setText(fat_intake4 + "");
-                    calorie_supper_intake.setText(Math.round(calorie_intake4) + "");
-                    supper_carbohydrate_intake.setText(Math.round(carbohydrate_intake4) + "");
-                    data.remove(i);
-                    notifyDataSetChanged();
-                    break;
-            }
-        }
-
-
-
-
-        @Override
-        public int getCount() {
-            return data.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return data.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.shopping_btn:
+                Intent intent = new Intent(getActivity(), IngredientActivity.class);
+                startActivity(intent);
+                break;
         }
     }
 
@@ -674,16 +204,19 @@ public class PlanFragment extends Fragment implements View.OnClickListener {
 
         Context context;
         List<Nutrition> data;
-        int code;
 
-        public NutritionAdapter(Context context, List<Nutrition> data, int code) {
+        public NutritionAdapter(Context context, List<Nutrition> data) {
             this.context = context;
             this.data = data;
-            this.code = code;
+        }
+
+        public void setData(List<Nutrition> data) {
+            this.data = data;
         }
 
         @Override
         public int getCount() {
+            if(data == null)    return 0;
             return data.size();
         }
 
@@ -713,9 +246,9 @@ public class PlanFragment extends Fragment implements View.OnClickListener {
             }
             Nutrition nutrition = data.get(position);
             holder.textView1.setText(nutrition.getName());
-            holder.textView2.setText("1000");
-            holder.textView3.setText("1500");
-            holder.textView4.setText("1500g");
+            holder.textView2.setText("1300");
+            holder.textView3.setText("1500g");
+            holder.textView4.setText(Math.round(nutrition.getAmount()) + nutrition.getUnit());
             return convertView;
         }
 

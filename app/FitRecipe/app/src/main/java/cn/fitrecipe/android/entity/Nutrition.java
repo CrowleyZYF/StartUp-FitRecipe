@@ -11,13 +11,15 @@ import java.io.Serializable;
 @DatabaseTable(tableName = "fr_nutrition")
 public class Nutrition implements Serializable{
 
+    @DatabaseField(generatedId = true)
+    private int id;
     @DatabaseField
     private String name;
     @DatabaseField
     private double amount;
     @DatabaseField
     private String unit;
-    @DatabaseField(canBeNull = true, foreign = true)
+    @DatabaseField(canBeNull = true, foreign = true, foreignAutoRefresh=false)
     private Recipe recipe;
 
     public void setName(String name) {
@@ -50,5 +52,13 @@ public class Nutrition implements Serializable{
 
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

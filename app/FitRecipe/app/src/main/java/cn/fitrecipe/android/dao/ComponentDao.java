@@ -5,9 +5,12 @@ import android.content.Context;
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.fitrecipe.android.entity.Component;
+import cn.fitrecipe.android.entity.Nutrition;
 
 
 /**
@@ -28,13 +31,28 @@ public class ComponentDao {
     }
 
     public int add(Component component) {
-        int id = 0;
+        int id;
         try {
-            id = componentDaoOpe.create(component);
+            if(component.getRecipe() == null) {
+                id = componentDaoOpe.create(component);
+                return id;
+            }else {
+                Map<String, Object> map = new HashMap<>();
+                map.put("recipe_id", component.getRecipe().getId());
+                map.put("ingredient_id", component.getIngredient().getId());
+                List<Component> components = componentDaoOpe.queryForFieldValues(map);
+                if (components != null && components.size() > 0) {
+                    component.setId(components.get(0).getId());
+                    componentDaoOpe.update(component);
+                    return component.getId();
+                }else {
+                    id = componentDaoOpe.create(component);
+                    return id;
+                }
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return id;
     }
 
     public List<Component> getComponents(int recipe_id) {
@@ -57,4 +75,11 @@ public class ComponentDao {
         return component;
     }
 
+    public void remove(int id) {
+        try {
+            componentDaoOpe.deleteById(id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

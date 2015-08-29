@@ -2,8 +2,6 @@ package cn.fitrecipe.android.entity;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.j256.ormlite.dao.ForeignCollection;
-import com.j256.ormlite.dao.LazyForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -14,16 +12,17 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+
 import cn.fitrecipe.android.Http.FrServerConfig;
 
 /**
  * Created by wk on 2015/8/6.
  */
 @DatabaseTable(tableName = "fr_recipe")
-public class Recipe implements Serializable{
+public class Recipe implements Serializable, Comparable<Recipe>{
 
     @DatabaseField(id = true)
     private int id;
@@ -36,9 +35,9 @@ public class Recipe implements Serializable{
     private ArrayList<Procedure>  procedure_set;
     private ArrayList<Comment> comment_set;
 
-    @ForeignCollectionField
+    @ForeignCollectionField(eager = false)
     private Collection<Component> component_set;
-    @ForeignCollectionField
+    @ForeignCollectionField(eager = false)
     private Collection<Nutrition> nutrition_set;
     @DatabaseField
     private String macro_element_ratio;
@@ -75,7 +74,8 @@ public class Recipe implements Serializable{
     private int collection_count;
     @DatabaseField
     private String tags;
-
+    @DatabaseField
+    private boolean inBasket;
 
 
     public void addWeight(List<Integer> increment_list) {
@@ -465,6 +465,11 @@ public class Recipe implements Serializable{
         return tags.toString();
     }
 
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
+
+
     public void setComponent_set(List<Component> component_set) {
         this.component_set = component_set;
     }
@@ -475,5 +480,18 @@ public class Recipe implements Serializable{
 
     public void setNutrition_set(List<Nutrition> nutrition_set) {
         this.nutrition_set = nutrition_set;
+    }
+
+    public boolean getInBasket() {
+        return inBasket;
+    }
+
+    public void setInBasket(boolean inBasket) {
+        this.inBasket = inBasket;
+    }
+
+    @Override
+    public int compareTo(Recipe another) {
+        return -getId() + another.getId();
     }
 }

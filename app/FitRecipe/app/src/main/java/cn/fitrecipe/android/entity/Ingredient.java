@@ -14,8 +14,7 @@ public class Ingredient implements Serializable{
     private int id;
     @DatabaseField
     private String name;
-    @DatabaseField
-    private int status;
+
 
     public int getId() {
         return id;
@@ -31,13 +30,5 @@ public class Ingredient implements Serializable{
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
     }
 }

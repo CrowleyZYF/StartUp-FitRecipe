@@ -26,6 +26,8 @@ import cn.fitrecipe.android.Adpater.SearchRecipeAdapter;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.UI.PieChartView;
 import cn.fitrecipe.android.dao.FrDbHelper;
+import cn.fitrecipe.android.entity.Component;
+import cn.fitrecipe.android.entity.Ingredient;
 import cn.fitrecipe.android.entity.Recipe;
 
 public class SelectRecipeActivity extends Activity implements View.OnClickListener{
@@ -56,6 +58,14 @@ public class SelectRecipeActivity extends Activity implements View.OnClickListen
                 objects = new ArrayList<Object>();
                 for (int i =0; i < recipes.size(); i++)
                     objects.add(recipes.get(i));
+
+                Ingredient ingredient = new Ingredient();
+                ingredient.setId(13);
+                ingredient.setName("胡萝卜");
+                Component component = new Component();
+                component.setIngredient(ingredient);
+                component.setAmount(100 + "");
+                objects.add(component);
                 publishProgress();
                 return null;
             }
@@ -249,6 +259,10 @@ public class SelectRecipeActivity extends Activity implements View.OnClickListen
             search_finish = (TextView) view.findViewById(R.id.search_finish);
             search_pre = (TextView) view.findViewById(R.id.search_pre);
             recipe_title = (TextView) view.findViewById(R.id.recipe_title);
+            recipe_weight = (TextView) view.findViewById(R.id.recipe_weight);
+            plan_num_dash = (TextView) view.findViewById(R.id.plan_num_dash);
+            plan_num_sure = (TextView) view.findViewById(R.id.plan_num_sure);
+            piechartview = (PieChartView) view.findViewById(R.id.piechartview);
             fresh();
         }
 
@@ -265,15 +279,15 @@ public class SelectRecipeActivity extends Activity implements View.OnClickListen
             if(obj_selected instanceof Recipe) {
                 Recipe recipe = ((Recipe) obj_selected);
                 recipe_title.setText(recipe.getTitle());
-                recipe_weight = (TextView) view.findViewById(R.id.recipe_weight);
-                plan_num_dash = (TextView) view.findViewById(R.id.plan_num_dash);
-                plan_num_sure = (TextView) view.findViewById(R.id.plan_num_sure);
-                piechartview = (PieChartView) view.findViewById(R.id.piechartview);
                 double sum = recipe.getNutrition_set().get(1).getAmount() + recipe.getNutrition_set().get(2).getAmount() + recipe.getNutrition_set().get(3).getAmount();
                 int a = (int) Math.round(recipe.getNutrition_set().get(3).getAmount() * 100 / sum);
                 int b = (int) Math.round(recipe.getNutrition_set().get(1).getAmount() * 100 / sum);
                 int c = 100 - a - b;
                 piechartview.setValue(new float[]{a, b, c});
+            }else {
+                Component component = (Component) obj_selected;
+                recipe_title.setText(component.getIngredient().getName());
+                piechartview.setValue(new float[]{33, 33, 34});
             }
         }
 
@@ -291,6 +305,9 @@ public class SelectRecipeActivity extends Activity implements View.OnClickListen
                         if(obj_selected instanceof Recipe) {
                             ((Recipe) obj_selected).setTotal_amount(Integer.parseInt(recipe_weight.getText().toString()));
                             intent.putExtra("obj_selected", (Recipe)obj_selected);
+                        }else {
+                            ((Component) obj_selected).setAmount(recipe_weight.getText().toString());
+                            intent.putExtra("obj_selected", (Component) obj_selected);
                         }
                         setResult(RESULT_OK, intent);
                         finish();
@@ -299,6 +316,7 @@ public class SelectRecipeActivity extends Activity implements View.OnClickListen
                     break;
                 case R.id.plan_num_dash:
                     recipe_weight.setText("0");
+                    weight.setLength(0);
                     break;
                 case R.id.plan_num_sure:
                     if(weight.toString().length() > 0) {

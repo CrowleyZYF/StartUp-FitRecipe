@@ -9,6 +9,8 @@ import android.widget.TextView;
 import java.util.List;
 
 import cn.fitrecipe.android.R;
+import cn.fitrecipe.android.entity.Comment;
+import cn.fitrecipe.android.entity.Component;
 import cn.fitrecipe.android.entity.Ingredient;
 import cn.fitrecipe.android.entity.Recipe;
 
@@ -55,10 +57,10 @@ public class SearchRecipeAdapter extends BaseAdapter{
         Object obj = data.get(position);
         if(obj instanceof Recipe) {
             holder.textview1.setText(((Recipe) obj).getTitle());
-            holder.textview2.setText(((Recipe)obj).getCalories() + "kcal/100g");
-        }else if(obj instanceof Ingredient) {
-            holder.textview1.setText(((Ingredient) obj).getName());
-            holder.textview2.setText("100kcal/100g");
+            holder.textview2.setText(Math.round(((Recipe)obj).getCalories()) + "kcal/100g");
+        }else if(obj instanceof Component) {
+            holder.textview1.setText(((Component) obj).getIngredient().getName());
+            holder.textview2.setText("100 kcal/100g");
         }
         return convertView;
     }

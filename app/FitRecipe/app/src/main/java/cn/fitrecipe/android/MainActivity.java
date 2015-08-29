@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.fitrecipe.android.UI.SlidingPage;
+import cn.fitrecipe.android.entity.PlanItem;
 import cn.fitrecipe.android.fragment.IndexFragment;
 import cn.fitrecipe.android.fragment.KnowledgeFragment;
 import cn.fitrecipe.android.fragment.MeFragment;
@@ -243,7 +244,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                     case 1:
                         SlidingPage mRightMenu;
                         mRightMenu = (SlidingPage) findViewById(R.id.filter_menu);
-                        if(frPlanFragment != null) ((PlanFragment)frPlanFragment).toggle("all");
+                        //TODO @wk
+                        if(frPlanFragment != null) ((PlanFragment)frPlanFragment).toggle(PlanItem.ItemType.ALL);
                         /*
                         TextView name = (TextView) findViewById(R.id.meal_name);
                         TextView nutrition = (TextView) findViewById(R.id.ingredient_title);

@@ -204,6 +204,7 @@
     <!--计划-->
     <string name="plan_food">食材</string>
     <string name="plan_recipe">食谱</string>
+    <string name="title_activity_ingredient2">IngredientActivity2</string>
 
 
 </resources>

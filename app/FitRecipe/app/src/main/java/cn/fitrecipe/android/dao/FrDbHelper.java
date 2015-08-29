@@ -2,9 +2,11 @@ package cn.fitrecipe.android.dao;
 
 import android.content.Context;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.fitrecipe.android.entity.Author;
+import cn.fitrecipe.android.entity.BasketItem;
 import cn.fitrecipe.android.entity.Component;
 import cn.fitrecipe.android.entity.Ingredient;
 import cn.fitrecipe.android.entity.Nutrition;
@@ -39,21 +41,25 @@ public class FrDbHelper {
 
         recipeDao.add(recipe);
         List<Component> component_set = recipe.getComponent_set();
-        for(int i = 0; i < component_set.size(); i++) {
-            Component component = component_set.get(i);
-            component.setRecipe(recipe);
+        if(component_set != null) {
+            for (int i = 0; i < component_set.size(); i++) {
+                Component component = component_set.get(i);
+                component.setRecipe(recipe);
 
-            Ingredient ingredient = component.getIngredient();
-            ingredientDao.add(ingredient);
+                Ingredient ingredient = component.getIngredient();
+                ingredientDao.add(ingredient);
 
-            componentDao.add(component);
+                componentDao.add(component);
+            }
         }
 
         List<Nutrition> nutrition_set = recipe.getNutrition_set();
-        for(int i = 0; i < nutrition_set.size(); i++) {
-            Nutrition nutrition = nutrition_set.get(i);
-            nutrition.setRecipe(recipe);
-            nutritionDao.add(nutrition);
+        if(nutrition_set != null) {
+            for (int i = 0; i < nutrition_set.size(); i++) {
+                Nutrition nutrition = nutrition_set.get(i);
+                nutrition.setRecipe(recipe);
+                nutritionDao.add(nutrition);
+            }
         }
     }
 
@@ -68,6 +74,16 @@ public class FrDbHelper {
             }
         }
         return  recipes;
+    }
+
+    public Recipe getRecipe(int id) {
+        RecipeDao recipeDao = new RecipeDao(context);
+        Recipe recipe = recipeDao.get(id);
+        if(recipe != null) {
+            recipe.setNutrition_set(new NutritionDao(context).getNutritions(recipe.getId()));
+            recipe.setComponent_set(new ComponentDao(context).getComponents(recipe.getId()));
+        }
+        return  recipe;
     }
 
     public List<Ingredient> getAllIngredient() {
@@ -95,5 +111,52 @@ public class FrDbHelper {
 
     public Author getLoginAuthor() {
         return new AuthorDao(context).getAuthor();
+    }
+
+    public void addToBasket(Recipe recipe) {
+        RecipeDao dao = new RecipeDao(context);
+        if(recipe.getId() != -1) {
+            Recipe old = getRecipe(recipe.getId());
+            if (old.getInBasket()) {
+                for (int i = 0; i < recipe.getComponent_set().size(); i++) {
+                    Component component = recipe.getComponent_set().get(i);
+                    component.setMAmount(component.getMAmount() + old.getComponent_set().get(i).getMAmount());
+                }
+            }
+        }
+        recipe.setInBasket(true);
+        addRecipe(recipe);
+    }
+
+
+    public void saveBasket(List<Recipe> basket) {
+        if(basket != null) {
+            for(int i = 0; i < basket.size(); i++) {
+                Recipe recipe = basket.get(i);
+                recipe.setInBasket(true);
+                addRecipe(recipe);
+            }
+        }
+    }
+
+    public List<Recipe> getBasket() {
+        List<Recipe> basket = new ArrayList<>();
+        RecipeDao dao = new RecipeDao(context);
+        List<Recipe> recipes = dao.getInBasket();
+        for(int i = 0; i < recipes.size(); i++)
+            basket.add(getRecipe(recipes.get(i).getId()));
+        return basket;
+    }
+
+    public void clearBasket(List<Recipe> basket) {
+        if(basket != null) {
+            for(int i = 0; i < basket.size(); i++) {
+                Recipe recipe = basket.get(i);
+                for(int j = 0; j < recipe.getComponent_set().size(); j++)
+                    recipe.getComponent_set().get(j).setStatus(0);
+                recipe.setInBasket(false);
+                addRecipe(recipe);
+            }
+        }
     }
 }

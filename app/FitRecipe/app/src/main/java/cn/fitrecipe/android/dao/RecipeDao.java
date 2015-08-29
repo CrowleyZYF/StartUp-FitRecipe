@@ -26,6 +26,22 @@ public class RecipeDao {
         }
     }
 
+    public void update(Recipe recipe) {
+        try {
+            recipeDaoOpe.update(recipe);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean isExist(int id) {
+        try {
+            return recipeDaoOpe.idExists(id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void add(Recipe recipe) {
         try {
             if(!recipeDaoOpe.idExists(recipe.getId()))
@@ -45,5 +61,21 @@ public class RecipeDao {
             throw new RuntimeException(e);
         }
         return recipes;
+    }
+
+    public Recipe get(int id) {
+        try {
+            return recipeDaoOpe.queryForId(id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<Recipe> getInBasket() {
+        try {
+            return recipeDaoOpe.queryForEq("inBasket", true);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

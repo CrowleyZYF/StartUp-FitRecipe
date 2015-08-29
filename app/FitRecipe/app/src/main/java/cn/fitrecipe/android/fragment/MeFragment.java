@@ -1,7 +1,6 @@
 package cn.fitrecipe.android.fragment;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -18,7 +17,6 @@ import cn.fitrecipe.android.LoginActivity;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.RecordActivity;
 import cn.fitrecipe.android.ReportActivity;
-import cn.fitrecipe.android.entity.Author;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**

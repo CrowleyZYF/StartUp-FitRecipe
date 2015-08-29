@@ -29,10 +29,23 @@ public class IngredientDao {
         try {
             if(!ingredientDaoOpe.idExists(ingredient.getId()))
                 ingredientDaoOpe.create(ingredient);
+            else
+                ingredientDaoOpe.update(ingredient);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
+
+    public List<Ingredient> getIngredientInBasket() {
+        List<Ingredient> ingredients = null;
+        try {
+            ingredients = ingredientDaoOpe.queryForEq("inBasket", true);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return ingredients;
+    }
+
 
     public Ingredient get(int id) {
         Ingredient ingredient = null;

@@ -4,25 +4,28 @@
     android:layout_width="match_parent"
     android:layout_weight="0"
     android:gravity="center_vertical"
-    android:background="@color/background_color"
-    android:layout_height="50dp">
+    android:paddingBottom="10dp"
+    android:paddingTop="10dp"
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/textview1"
         android:layout_weight="1"
         android:layout_width="0dp"
+        android:textSize="14sp"
         android:text="蛋白质"
         android:layout_height="wrap_content" />
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="0dp"
-        android:layout_weight="2"
+        android:layout_weight="1"
         android:gravity="center"
         android:layout_height="wrap_content">
         <TextView
             android:id="@+id/textview2"
             android:layout_width="wrap_content"
+            android:textSize="14sp"
             android:text="1400"
             android:layout_height="wrap_content" />
 
@@ -30,11 +33,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="14sp"
             android:text="~"/>
 
         <TextView
             android:id="@+id/textview3"
             android:layout_width="match_parent"
+            android:textSize="14sp"
             android:text="1600g"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -43,6 +48,7 @@
         android:id="@+id/textview4"
         android:layout_weight="1"
         android:layout_width="0dp"
+        android:textSize="14sp"
         android:text="1300g"
         android:layout_height="wrap_content" />
 

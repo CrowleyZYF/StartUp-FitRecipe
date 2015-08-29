@@ -433,10 +433,8 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                 break;
             }
             case R.id.put_in_basket:
-                List<Recipe> basket = FrApplication.getInstance().getBasket();
-                basket.add(recipe);
-                FrApplication.getInstance().saveBasket(basket);
-                Toast.makeText(this, recipe.getTitle() + "加入篮子", Toast.LENGTH_SHORT).show();
+               FrDbHelper.getInstance(this).addToBasket(recipe);
+               Toast.makeText(this, recipe.getTitle() + "加入篮子", Toast.LENGTH_SHORT).show();
         }
     }
 

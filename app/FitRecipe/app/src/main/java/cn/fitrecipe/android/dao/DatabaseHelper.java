@@ -1,9 +1,11 @@
 package cn.fitrecipe.android.dao;
 
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
@@ -12,6 +14,7 @@ import com.j256.ormlite.table.TableUtils;
 import java.sql.SQLException;
 
 import cn.fitrecipe.android.entity.Author;
+import cn.fitrecipe.android.entity.BasketItem;
 import cn.fitrecipe.android.entity.Component;
 import cn.fitrecipe.android.entity.Ingredient;
 import cn.fitrecipe.android.entity.Label;
@@ -50,6 +53,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
             TableUtils.createTableIfNotExists(connectionSource, Nutrition.class);
             TableUtils.createTableIfNotExists(connectionSource, Recipe.class);
             TableUtils.createTableIfNotExists(connectionSource, Report.class);
+//            TableUtils.createTableIfNotExists(connectionSource, BasketItem.class);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -67,6 +71,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
             TableUtils.dropTable(connectionSource, Nutrition.class, true);
             TableUtils.dropTable(connectionSource, Recipe.class, true);
             TableUtils.dropTable(connectionSource, Report.class, true);
+//            TableUtils.dropTable(connectionSource, BasketItem.class, true);
         } catch (SQLException e) {
             e.printStackTrace();
         }

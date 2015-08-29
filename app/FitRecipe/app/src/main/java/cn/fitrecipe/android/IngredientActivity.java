@@ -1,37 +1,39 @@
 package cn.fitrecipe.android;
 
 import android.app.Activity;
-import android.content.Intent;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.text.BoringLayout;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import cn.fitrecipe.android.Adpater.ShoppingAdapter;
+import cn.fitrecipe.android.Adpater.BasketAdapter;
+import cn.fitrecipe.android.Adpater.IngredientAdapter;
+import cn.fitrecipe.android.UI.LinearLayoutForListView;
+import cn.fitrecipe.android.dao.FrDbHelper;
 import cn.fitrecipe.android.entity.Collection;
 import cn.fitrecipe.android.entity.Component;
 import cn.fitrecipe.android.entity.Ingredient;
 import cn.fitrecipe.android.entity.Recipe;
 
-/**
- * Created by 奕峰 on 2015/5/8.
- */
-public class IngredientActivity extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class IngredientActivity extends Activity implements View.OnClickListener{
 
-    private ListView listView;
-    private ShoppingAdapter shopping_adapter;
-    private List<Map<String, Object>> dataList;
-    private List<Recipe> recipes;
+    private Fragment fragment1, fragment2;
+    private FragmentTransaction transaction;
 
     private LinearLayout shoppingFoodBtn;
     private ImageView shoppingFoodLine1;
@@ -43,39 +45,52 @@ public class IngredientActivity extends Activity implements View.OnClickListener
     private ImageView backBtn;
     private TextView clearBtn;
 
-    private boolean isFood;
+
+    private List<Recipe> basket;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping_container);
 
-
         initView();
-        initData();
         initEvent();
+        initData();
+        setFragment(0);
+    }
+
+    private void initData() {
+        basket = FrDbHelper.getInstance(this).getBasket();
+        Collections.sort(basket);
+    }
+
+    private void setFragment(int i) {
+        transaction = getFragmentManager().beginTransaction();
+        if(fragment1 == null) {
+            fragment1 = new Fragment1();
+            transaction.add(R.id.fragment_container, fragment1);
+        }
+        if(fragment2 == null) {
+            fragment2 = new Fragment2();
+            transaction.add(R.id.fragment_container, fragment2);
+        }
+
+        if(i == 0)
+            transaction.hide(fragment2).show(fragment1);
+        if(i == 1)
+            transaction.hide(fragment1).show(fragment2);
+        transaction.commit();
     }
 
     private void initEvent() {
-        listView.setOnItemClickListener(this);
         shoppingFoodBtn.setOnClickListener(this);
         shoppingRecipeBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
         clearBtn.setOnClickListener(this);
     }
 
-    private void initData() {
-        isFood = true;
-        recipes = FrApplication.getInstance().getBasket();
-        dataList=new ArrayList<Map<String,Object>>();
-        getData();
-        shopping_adapter=new ShoppingAdapter(this, dataList, R.layout.activity_shopping_food_item, new String[]{"ingredient_id","ingredient_type","ingredient_status","ingredient_name","ingredient_weight"}, new int[]{R.id.ingredient_id,R.id.ingredient_type,R.id.ingredient_status,R.id.ingredient_name,R.id.ingredient_weight});
-        listView.setAdapter(shopping_adapter);
-    }
-
     private void initView() {
-        listView = (ListView) findViewById(R.id.shopping_list_view);
         shoppingFoodBtn = (LinearLayout) findViewById(R.id.shopping_food);
         shoppingFoodLine1 = (ImageView) findViewById(R.id.shopping_food_active_line_1);
         shoppingFoodLine2 = (ImageView) findViewById(R.id.shopping_food_active_line_2);
@@ -87,19 +102,72 @@ public class IngredientActivity extends Activity implements View.OnClickListener
         clearBtn = (TextView) findViewById(R.id.shopping_clear);
     }
 
-    public void getData() {
-        dataList.clear();
-        if(isFood){
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.shopping_food:
+                shoppingFoodLine1.setVisibility(View.VISIBLE);
+                shoppingFoodLine2.setBackground(getResources().getDrawable(R.drawable.theme_line_active));
+                shoppingRecipeLine1.setVisibility(View.INVISIBLE);
+                shoppingRecipeLine2.setBackground(getResources().getDrawable(R.drawable.theme_line));
+                setFragment(0);
+                break;
+            case R.id.shopping_recipe:
+                shoppingRecipeLine1.setVisibility(View.VISIBLE);
+                shoppingRecipeLine2.setBackground(getResources().getDrawable(R.drawable.theme_line_active));
+                shoppingFoodLine1.setVisibility(View.INVISIBLE);
+                shoppingFoodLine2.setBackground(getResources().getDrawable(R.drawable.theme_line));
+                setFragment(1);
+                break;
+            case R.id.back_btn:
+                finish();
+                break;
+            case R.id.shopping_clear:
+                ((Fragment1)fragment1).fresh();
+                ((Fragment2)fragment2).fresh();
+                FrDbHelper.getInstance(this).clearBasket(basket);
+                basket.clear();
+                break;
+        }
+    }
+
+
+    @Override
+    protected void onStop() {
+        FrDbHelper.getInstance(this).saveBasket(basket);
+        super.onStop();
+    }
+
+    class Fragment1 extends Fragment {
+
+        ListView ingredient_list;
+        IngredientAdapter ingredientAdapter;
+        List<Component> datalist;
+        @Nullable
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            View v = View.inflate(getActivity(), R.layout.fragment_ingredient_1, null);
+            getData();
+            initView(v);
+            return v;
+        }
+
+        private void getData() {
+            if(datalist == null)
+                datalist = new ArrayList<>();
+            else
+                datalist.clear();
             Map<String, Component> counter = new HashMap<String, Component>();
-            for(int i = 0; i < recipes.size(); i++) {
-                List<Component> components = recipes.get(i).getComponent_set();
+            for(int i = 0; i < basket.size(); i++) {
+                Recipe recipe = basket.get(i);
+                List<Component> components = recipe.getComponent_set();
                 for(int j = 0; j < components.size(); j++) {
                     String name = components.get(j).getIngredient().getName();
                     if (counter.containsKey(name)) {
                         Component component = counter.get(name);
                         component.setMAmount(component.getMAmount() + components.get(j).getMAmount());
-                        int status = component.getIngredient().getStatus();
-                        component.getIngredient().setStatus(status & components.get(j).getIngredient().getStatus());
+                        int status = component.getStatus();
+                        component.setStatus(status & components.get(j).getStatus());
                     }
                     else {
                         Component component = new Component();
@@ -107,7 +175,7 @@ public class IngredientActivity extends Activity implements View.OnClickListener
                         Ingredient newIngredient = new Ingredient();
                         newIngredient.setId(components.get(j).getIngredient().getId());
                         newIngredient.setName(components.get(j).getIngredient().getName());
-                        newIngredient.setStatus(components.get(j).getIngredient().getStatus());
+                        component.setStatus(components.get(j).getStatus());
                         component.setIngredient(newIngredient);
                         counter.put(name, component);
                     }
@@ -117,142 +185,57 @@ public class IngredientActivity extends Activity implements View.OnClickListener
             while(iterator.hasNext()) {
                 String name = iterator.next();
                 Component component = counter.get(name);
-                Map<String, Object> map=new HashMap<String, Object>();
-                map.put("ingredient_id", component.getIngredient().getId());
-                map.put("ingredient_type", 0);
-                map.put("ingredient_status", component.getIngredient().getStatus());
-                map.put("ingredient_name", component.getIngredient().getName());
-                map.put("ingredient_weight", component.getMAmount() + "g");
-                dataList.add(map);
-            }
-        }else{
-            for(int i = 0; i < recipes.size(); i++) {
-                Map<String, Object> recipe =new HashMap<String, Object>();
-                List<Component> components = recipes.get(i).getComponent_set();
-                recipe.put("ingredient_id", recipes.get(i).getId());
-                recipe.put("ingredient_type", 1);
-                recipe.put("ingredient_name", ""+ recipes.get(i).getTitle());
-                recipe.put("ingredient_status", 0);
-                dataList.add(recipe);
-                for(int j = 0; j < components.size(); j++) {
-                    Map<String, Object> map =new HashMap<String, Object>();
-                    Ingredient ingredient = components.get(j).getIngredient();
-                    map.put("ingredient_id", ingredient.getId());
-                    map.put("ingredient_type", 0);
-                    map.put("ingredient_name", ingredient.getName());
-                    map.put("ingredient_status",  ingredient.getStatus());
-                    map.put("ingredient_weight", components.get(j).getAmount() + "g");
-                    dataList.add(map);
-                }
+                datalist.add(component);
             }
         }
 
-    }
+        private void initView(View v) {
+            ingredient_list = (ListView) v.findViewById(R.id.ingredient_list);
+            ingredientAdapter = new IngredientAdapter(getActivity(), datalist, basket);
+            ingredient_list.setAdapter(ingredientAdapter);
+        }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.shopping_food:
-                shoppingFoodLine1.setVisibility(View.VISIBLE);
-                shoppingFoodLine2.setBackground(getResources().getDrawable(R.drawable.theme_line_active));
-                shoppingRecipeLine1.setVisibility(View.INVISIBLE);
-                shoppingRecipeLine2.setBackground(getResources().getDrawable(R.drawable.theme_line));
-                isFood = true;
-                getData();
-                shopping_adapter.notifyDataSetChanged();
-                break;
-            case R.id.shopping_recipe:
-                shoppingRecipeLine1.setVisibility(View.VISIBLE);
-                shoppingRecipeLine2.setBackground(getResources().getDrawable(R.drawable.theme_line_active));
-                shoppingFoodLine1.setVisibility(View.INVISIBLE);
-                shoppingFoodLine2.setBackground(getResources().getDrawable(R.drawable.theme_line));
-                isFood = false;
-                getData();
-                shopping_adapter.notifyDataSetChanged();
-                break;
-            case R.id.back_btn:
-                finish();
-                break;
-            case R.id.shopping_clear:
-                recipes.clear();
-                dataList.clear();
-                FrApplication.getInstance().clearBasket();
-                shopping_adapter.notifyDataSetChanged();
-                break;
+        private void fresh() {
+            getData();
+            ingredientAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onHiddenChanged(boolean hidden) {
+            if(!hidden)
+                fresh();
+            super.onHiddenChanged(hidden);
         }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        FrApplication.getInstance().saveBasket(recipes);
-    }
+    class Fragment2 extends Fragment {
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        switch (parent.getId()) {
-            case R.id.shopping_list_view:{
-                if((((TextView)view.findViewById(R.id.ingredient_type)).getText().toString()).equals("0")){
-                    if((((TextView)view.findViewById(R.id.ingredient_status)).getText().toString()).equals("0")){
-                        (view.findViewById(R.id.ingredient_line)).setVisibility(View.VISIBLE);
-                        ((TextView) view.findViewById(R.id.ingredient_name)).setTextColor(getResources().getColor(R.color.gray));
-                        ((TextView) view.findViewById(R.id.ingredient_weight)).setTextColor(getResources().getColor(R.color.gray));
-                        ((TextView) view.findViewById(R.id.ingredient_status)).setText("1");
-                        dataList.get(position).put("ingredient_status",1);
-                        shopping_adapter.notifyDataSetChanged();
-                        recordData(position, 1);
-                    }else{
-                        (view.findViewById(R.id.ingredient_line)).setVisibility(View.GONE);
-                        ((TextView) view.findViewById(R.id.ingredient_name)).setTextColor(getResources().getColor(R.color.login_input_text_color));
-                        ((TextView) view.findViewById(R.id.ingredient_weight)).setTextColor(getResources().getColor(R.color.login_input_text_color));
-                        ((TextView) view.findViewById(R.id.ingredient_status)).setText("0");
-                        dataList.get(position).put("ingredient_status",0);
-                        shopping_adapter.notifyDataSetChanged();
-                        recordData(position, 0);
-                    }
-                }else {
-                    String recipeID = ((TextView) view.findViewById(R.id.ingredient_id)).getText().toString();
-                    Intent intent=new Intent(this,RecipeActivity.class);
-                    intent.putExtra("id", recipeID);
-                    startActivity(intent);
-                }
-                break;
-            }
-            default:
-                break;
+        LinearLayoutForListView recipe_list_view;
+        BasketAdapter basketAdapter;
+
+        @Nullable
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            View v = View.inflate(getActivity(), R.layout.fragment_ingredient_2, null);
+            initView(v);
+            return v;
         }
-    }
 
-    private void recordData(int position, int status) {
-        if(isFood) {
-            for(int i = 0; i < recipes.size(); i++) {
-                for(int j = 0; j < recipes.get(i).getComponent_set().size(); j++) {
-                    Component component = recipes.get(i).getComponent_set().get(j);
-                    Ingredient ingredient = component.getIngredient();
-                    if(ingredient.getId() == (int)dataList.get(position).get("ingredient_id"))
-                        ingredient.setStatus(status);
-                }
-            }
-        }else {
-            int recipe_id = 0;
-            for(int i = position - 1; i >= 0; i--) {
-                if((int)dataList.get(i).get("ingredient_type") == 1) {
-                    recipe_id = (int) dataList.get(i).get("ingredient_id");
-                    break;
-                }
-            }
+        private void initView(View v) {
+            recipe_list_view = (LinearLayoutForListView) v.findViewById(R.id.recipe_list_view);
+            basketAdapter = new BasketAdapter(getActivity(), basket);
+            recipe_list_view.setAdapter(basketAdapter);
+        }
 
-            for(int i = 0; i <recipes.size(); i++) {
-                if (recipes.get(i).getId() == recipe_id) {
-                    for (int j = 0; j < recipes.get(i).getComponent_set().size(); j++) {
-                        Component component = recipes.get(i).getComponent_set().get(j);
-                        Ingredient ingredient = component.getIngredient();
-                        if (ingredient.getId() == (int) dataList.get(position).get("ingredient_id"))
-                            ingredient.setStatus(status);
-                    }
-                    break;
-                }
-            }
+        public void fresh() {
+            basketAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onHiddenChanged(boolean hidden) {
+            if(!hidden)
+                fresh();
+            super.onHiddenChanged(hidden);
         }
     }
 }

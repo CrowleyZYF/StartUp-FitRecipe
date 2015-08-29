@@ -19,8 +19,18 @@ public class Component implements Serializable{
     private String amount;
     @DatabaseField
     private String remark;
+    @DatabaseField
+    private int status;
     @DatabaseField(foreign = true, canBeNull = true)
     private Recipe recipe;
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
     public int getMAmount() {
         return Integer.parseInt(amount);
