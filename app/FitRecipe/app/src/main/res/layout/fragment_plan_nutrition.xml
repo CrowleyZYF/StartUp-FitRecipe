@@ -66,6 +66,64 @@
 
         </LinearLayout>
 
+        <RelativeLayout
+            android:id="@+id/nutrition_day"
+            android:layout_width="140dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true">
+
+            <ImageView
+                android:id="@+id/prev_day_btn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="8dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/icon_prev_day" />
+
+            <ImageView
+                android:id="@+id/next_day_btn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="8dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/icon_next_day" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="6dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="第"
+                    android:textSize="10sp"
+                    android:textColor="@color/login_input_text_color"/>
+
+                <TextView
+                    android:id="@+id/plan_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1/7"
+                    android:textSize="18sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="天"
+                    android:textSize="10sp"
+                    android:textColor="@color/login_input_text_color"/>
+
+            </LinearLayout>
+        </RelativeLayout>
+
 
     </RelativeLayout>
 

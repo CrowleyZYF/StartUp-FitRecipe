@@ -3,10 +3,10 @@ package cn.fitrecipe.android;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,13 +20,14 @@ import cn.fitrecipe.android.entity.PlanDetailItem;
 /**
  * Created by 奕峰 on 2015/5/8.
  */
-public class PlanChoiceInfoActivity extends Activity implements View.OnTouchListener {
+public class PlanChoiceInfoActivity extends Activity implements View.OnClickListener {
 
     private PlanScrollView info_container;
 
     private LinearLayout header;
+    private TextView header_name;
     private ImageView back_btn;
-    private ImageView author_btn;
+    private ImageView nutrition_btn;
 
     private PlanDetailViewPager planDetailViewPager;
     private PlanDetailViewPagerAdapter planDetailViewPagerAdapter;
@@ -47,12 +48,14 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnTouchList
         info_container = (PlanScrollView) findViewById(R.id.info_container);
         header = (LinearLayout) findViewById(R.id.header);
         header.setBackgroundColor(getResources().getColor(R.color.transparent));
+        header_name = (TextView) findViewById(R.id.header_name_text);
+        header_name.setText("计划详情");
         back_btn = (ImageView) findViewById(R.id.left_btn);
         back_btn.setBackgroundColor(getResources().getColor(R.color.transparent));
         back_btn.setImageResource(R.drawable.icon_back_white);
-        author_btn = (ImageView) findViewById(R.id.right_btn);
-        author_btn.setBackgroundColor(getResources().getColor(R.color.transparent));
-        author_btn.setImageResource(R.drawable.icon_user);
+        nutrition_btn = (ImageView) findViewById(R.id.right_btn);
+        nutrition_btn.setBackgroundColor(getResources().getColor(R.color.transparent));
+        nutrition_btn.setImageResource(R.drawable.icon_nutrition);
         planDetailViewPager = (PlanDetailViewPager) findViewById(R.id.plan_detail);
     }
 
@@ -133,34 +136,19 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnTouchList
                 header.setBackgroundColor(Color.argb(transparent, 73, 189, 204));
             }
         });
+        back_btn.setOnClickListener(this);
     }
 
-
-
     @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        int scrollY=v.getScrollY();
-        int mh = v.getMeasuredHeight();
-        int h = v.getHeight();
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_MOVE:
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.left_btn:{
+                finish();
+                break;
+            }
+            case R.id.right_btn:{
 
-                if(scrollY==0){
-
-                }else{
-                    int transparent = 256/40*scrollY;
-                    if(transparent>256){
-                        transparent=255;
-                    }
-                    header.setBackgroundColor(Color.argb(transparent, 73, 189, 204));
-                }
-                break;
-            case MotionEvent.ACTION_SCROLL:
-                System.out.println("y: "+ scrollY+ "  mh:" + mh + " h: " + h);
-                break;
-            default:
-                break;
+            }
         }
-        return false;
     }
 }
