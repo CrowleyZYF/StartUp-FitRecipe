@@ -3,7 +3,7 @@ package cn.fitrecipe.android.entity;
 /**
  * Created by wk on 2015/8/7.
  */
-public class Plan{
+public class Plan {
     private int id;
     private String name;
     private int hard_rank;
