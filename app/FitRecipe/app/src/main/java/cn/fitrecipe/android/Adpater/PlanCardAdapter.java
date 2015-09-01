@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ import cn.fitrecipe.android.PlanChoiceInfoActivity;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.UI.LabelView;
 import cn.fitrecipe.android.entity.Plan;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by 奕峰 on 2015/4/24.
@@ -35,7 +37,7 @@ public class PlanCardAdapter extends RecyclerView.Adapter<PlanCardAdapter.PlanCa
     public PlanCardAdapter.PlanCardViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
-                inflate(R.layout.activity_plan_choice_item, viewGroup, false);
+                inflate(R.layout.activity_plan_choice_item_2, viewGroup, false);
 
         itemView.setOnClickListener(this);
 
@@ -87,9 +89,21 @@ public class PlanCardAdapter extends RecyclerView.Adapter<PlanCardAdapter.PlanCa
         }else{
             contactViewHolder.choice_type.setText(R.string.plan_recipe);
         }
-        contactViewHolder.choice_days.setText(pc.getDays()+"");
-        contactViewHolder.choice_join.setText(pc.getJoin()+"");
+        contactViewHolder.choice_days.setText(pc.getDays()+"天");
+        contactViewHolder.choice_join.setText(pc.getJoin()+"人");
         contactViewHolder.choice_background.setBackground (this.context.getResources().getDrawable(pc.getBackground()));
+        contactViewHolder.author_name.setText(pc.getAuthor_name()+"");
+        if(pc.getType()==0){
+            contactViewHolder.author_type.setText("健身达人");
+        }else{
+            contactViewHolder.author_type.setText("营养师");
+        }
+        contactViewHolder.author_avatar.setImageResource(R.drawable.author_header);
+        if(pc.getIsUsed()){
+            contactViewHolder.isUsed.setVisibility(View.VISIBLE);
+        }else{
+            contactViewHolder.isUsed.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -124,6 +138,10 @@ public class PlanCardAdapter extends RecyclerView.Adapter<PlanCardAdapter.PlanCa
         protected TextView choice_join;
         protected RelativeLayout choice_background;
         protected LabelView choice_label;
+        protected TextView author_name;
+        protected TextView author_type;
+        protected CircleImageView author_avatar;
+        protected Button isUsed;
 
         public PlanCardViewHolder(View itemView, Context context) {
             super(itemView);
@@ -143,6 +161,10 @@ public class PlanCardAdapter extends RecyclerView.Adapter<PlanCardAdapter.PlanCa
             choice_label = new LabelView(context);
             choice_label.setBackgroundColor(0xff03a9f4);
             choice_label.setTargetView(choice_background, 5, LabelView.Gravity.RIGHT_TOP);
+            author_name = (TextView) itemView.findViewById(R.id.author_name);
+            author_type = (TextView) itemView.findViewById(R.id.author_type);
+            author_avatar = (CircleImageView) itemView.findViewById(R.id.author_avatar);
+            isUsed = (Button) itemView.findViewById(R.id.isUsed);
         }
     }
 }

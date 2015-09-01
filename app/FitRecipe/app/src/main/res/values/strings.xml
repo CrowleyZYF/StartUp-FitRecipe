@@ -7,7 +7,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="tab_index">首页</string>
+    <string name="tab_index">食谱</string>
     <string name="tab_me">我</string>
     <string name="tab_plan">计划</string>
     <string name="tab_knowledge">指南</string>

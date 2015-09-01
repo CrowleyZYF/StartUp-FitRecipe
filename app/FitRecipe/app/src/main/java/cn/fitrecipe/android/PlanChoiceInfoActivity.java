@@ -3,26 +3,35 @@ package cn.fitrecipe.android;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.fitrecipe.android.Adpater.PlanDetailViewPagerAdapter;
+import cn.fitrecipe.android.Adpater.PlanInfoViewPagerAdapter;
 import cn.fitrecipe.android.UI.PlanDetailViewPager;
 import cn.fitrecipe.android.UI.PlanScrollView;
 import cn.fitrecipe.android.entity.PlanDetail;
 import cn.fitrecipe.android.entity.PlanDetailItem;
+import me.relex.circleindicator.CircleIndicator;
 
 /**
  * Created by 奕峰 on 2015/5/8.
  */
-public class PlanChoiceInfoActivity extends Activity implements View.OnClickListener {
+public class PlanChoiceInfoActivity extends Activity implements View.OnClickListener, ViewPager.OnPageChangeListener {
 
     private PlanScrollView info_container;
+
+    private ViewPager planInfoViewPager;
+    private PlanInfoViewPagerAdapter planInfoViewPagerAdapter;
+    private CircleIndicator planInfoIndicator;
 
     private LinearLayout header;
     private TextView header_name;
@@ -46,6 +55,10 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
 
     private void initView() {
         info_container = (PlanScrollView) findViewById(R.id.info_container);
+
+        planInfoViewPager = (ViewPager) findViewById(R.id.choice_intro_viewpager);
+        planInfoIndicator = (CircleIndicator) findViewById(R.id.choice_intro_indicator);
+
         header = (LinearLayout) findViewById(R.id.header);
         header.setBackgroundColor(getResources().getColor(R.color.transparent));
         header_name = (TextView) findViewById(R.id.header_name_text);
@@ -110,9 +123,32 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
 
         planDetailViewPagerAdapter = new PlanDetailViewPagerAdapter(this,dataList);
         planDetailViewPager.setAdapter(planDetailViewPagerAdapter);
+
+
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("choice_name","哈哈哈の低碳饮食法1");
+        data.put("choice_intro","很有意思的饮食方案，让你能够在最短的时间里减肥减好多，减脂无敌了1");
+        data.put("choice_hard","2");
+        data.put("choice_delicious","2");
+        data.put("choice_join","741852");
+        data.put("choice_label","0");
+        data.put("choice_type","0");
+        data.put("choice_days","7");
+        data.put("author_avatar","0x7f020042");
+        data.put("author_name","喃猫");
+        data.put("author_type","0");
+        data.put("fit_year","5");
+        data.put("fit_fat","12");
+        data.put("fit_title","");
+        data.put("author_intro","作为一个酸奶重度依赖者，在写这篇文章之前，我需要先告诉大家，这篇文章，这个话题。");
+        data.put("plan_intro","1. 以低GI食物为主\n2. 以低GI食物为主\n3. 以低GI食物为主");
+        planInfoViewPagerAdapter = new PlanInfoViewPagerAdapter(this,data);
+        planInfoViewPager.setAdapter(planInfoViewPagerAdapter);
+        planInfoIndicator.setViewPager(planInfoViewPager);
     }
 
     private void initEvent() {
+        planInfoIndicator.setOnPageChangeListener(this);
 
         info_container.setOnBorderListener(new PlanScrollView.OnBorderListener(){
 
@@ -150,5 +186,20 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
 
             }
         }
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }

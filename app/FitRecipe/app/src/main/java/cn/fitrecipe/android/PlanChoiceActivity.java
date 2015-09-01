@@ -56,7 +56,7 @@ public class PlanChoiceActivity extends Activity {
         List<Plan> plans = new ArrayList<Plan>();
         int test[] = {R.drawable.plan_01, R.drawable.plan_02, R.drawable.plan_03, R.drawable.plan_04, R.drawable.plan_05, R.drawable.plan_06};
         for(int i=0; i<10; i++){
-            Plan plan = new Plan(i,"低碳减肥法"+i, i%3, (i+1)%3, i%2, i*2, i%2, i*542, test[(i%6)]);
+            Plan plan = new Plan(i,"低碳减肥法"+i, i%3, (i+1)%3, i%2, i*2, i%2, i*542, test[(i%6)], "喃猫", 0, 0, true);
             plans.add(plan);
         }
         planCardAdapter = new PlanCardAdapter(this, plans);
