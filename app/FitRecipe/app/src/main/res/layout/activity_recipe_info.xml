@@ -209,7 +209,5 @@
 
         <include layout="@layout/activity_recipe_info_nutrition" />
 
-        <include layout="@layout/activity_recipe_info_reading" />
-
     </LinearLayout>
 </ScrollView>

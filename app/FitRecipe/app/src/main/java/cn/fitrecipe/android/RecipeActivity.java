@@ -2,11 +2,8 @@ package cn.fitrecipe.android;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.TypedValue;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -19,7 +16,6 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.google.gson.Gson;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
 import com.umeng.socialize.media.UMImage;
@@ -42,10 +38,10 @@ import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.ImageLoader.ILoadingListener;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.dao.FrDbHelper;
-import cn.fitrecipe.android.entity.Collection;
 import cn.fitrecipe.android.entity.Component;
-import cn.fitrecipe.android.entity.Label;
 import cn.fitrecipe.android.entity.Recipe;
+import cn.fitrecipe.android.floatingactionbutton.FloatingActionButton;
+import cn.fitrecipe.android.floatingactionbutton.FloatingActionsMenu;
 import pl.tajchert.sample.DotsTextView;
 
 public class RecipeActivity extends Activity implements View.OnClickListener, PopupWindow.OnDismissListener {
@@ -102,15 +98,17 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
     //减少按钮
     private ImageView minus_btn;
     //菜单按钮
-    private PopupWindow popupWindow;
+    //private PopupWindow popupWindow;
     //收藏按钮
-    private ImageView collect_btn;
-    //菜篮子按钮
-    private ImageView shopping_btn;
+    private FloatingActionButton collect_btn;
+    //菜单
+    private FloatingActionsMenu float_set;
+    //查看步骤按钮
+    //private FloatingActionButton check_btn;
     //评论按钮
-    private ImageView comment_btn;
+    private FloatingActionButton comment_btn;
     //分享按钮
-    private ImageView share_btn;
+    private FloatingActionButton share_btn;
     //put recipe in basket
     private TextView put_in_basket;
     //菜单是否打开
@@ -187,7 +185,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         }, 2000);*/
 
 
-        View view = LayoutInflater.from(this).inflate(R.layout.activity_recipe_info_set, null);
+        /*View view = LayoutInflater.from(this).inflate(R.layout.activity_recipe_info_set, null);
         popupWindow = new PopupWindow(view, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics()), (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 203, getResources().getDisplayMetrics()));
         popupWindow.setFocusable(true);
         // 设置允许在外点击消失
@@ -200,6 +198,13 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         shopping_btn = (ImageView) view.findViewById(R.id.shopping_btn);
         comment_btn = (ImageView) view.findViewById(R.id.comment_btn);
         share_btn = (ImageView) view.findViewById(R.id.share_btn);
+        */
+
+        float_set = (FloatingActionsMenu) findViewById(R.id.multiple_actions);
+        collect_btn = (FloatingActionButton) findViewById(R.id.action_collect);
+        //check_btn = (FloatingActionButton) findViewById(R.id.action_check_procedure);
+        comment_btn = (FloatingActionButton) findViewById(R.id.action_comment);
+        share_btn = (FloatingActionButton) findViewById(R.id.action_share);
     }
 
     private void hideLoading(boolean isError, String errorMessage){
@@ -209,6 +214,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
             Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
         }else{
             recipeContent.setVisibility(View.VISIBLE);
+            float_set.setVisibility(View.VISIBLE);
             recipe_scrollView.smoothScrollTo(0, 0);
         }
     }
@@ -250,9 +256,9 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         nutrition_adapter=new MyNutritionAdapter();
         nutrition_listView.setAdapter(nutrition_adapter);
         if(isCollected){
-            collect_btn.setImageResource(R.drawable.icon_like_green);
+            collect_btn.setIcon(R.drawable.icon_like_green);
         }else{
-            collect_btn.setImageResource(R.drawable.icon_like_noshadow);
+            collect_btn.setIcon(R.drawable.icon_like_noshadow);
         }
 
         //Sina
@@ -374,7 +380,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         add_btn.setOnClickListener(this);
         minus_btn.setOnClickListener(this);
         collect_btn.setOnClickListener(this);
-        shopping_btn.setOnClickListener(this);
+        //check_btn.setOnClickListener(this);
         comment_btn.setOnClickListener(this);
         share_btn.setOnClickListener(this);
         put_in_basket.setOnClickListener(this);
@@ -393,7 +399,8 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                 break;
             }
             case R.id.set_btn:{
-                openSet();
+                //openSet();
+                startActivity(new Intent(this, IngredientActivity.class));
                 break;
             }
             case R.id.back_btn:{
@@ -408,28 +415,28 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                 adjustWeight(false);
                 break;
             }
-            case R.id.collect_btn:{
+            case R.id.action_collect:{
                 collect_recipe();
-                openSet();
+                //openSet();
                 break;
             }
             case R.id.shopping_btn:{
                 startActivity(new Intent(this, IngredientActivity.class));
-                openSet();
+                //openSet();
                 break;
             }
-            case R.id.comment_btn:{
+            case R.id.action_comment:{
                 Intent intent = new Intent(this, cn.fitrecipe.android.CommentActivity.class);
                 intent.putExtra("recipe_id", recipe.getId());
                 intent.putExtra("author_id", recipe.getAuthor().getId());
                 intent.putExtra("comment_set", recipe.getComment_set());
                 startActivity(intent);
-                openSet();
+                //openSet();
                 break;
             }
-            case R.id.share_btn:{
+            case R.id.action_share:{
                 mController.openShare(this, false);
-                openSet();
+                //openSet();
                 break;
             }
             case R.id.put_in_basket:
@@ -438,7 +445,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         }
     }
 
-    public void openSet(){
+    /*public void openSet(){
         if(open){
             popupWindow.dismiss();
             open=false;
@@ -448,7 +455,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
             popupWindow.showAsDropDown(set_btn,(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, getResources().getDisplayMetrics()), 0);
             open=true;
         }
-    }
+    }*/
 
     public void collect_recipe(){
         if(isCollected){

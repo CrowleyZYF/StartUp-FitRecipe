@@ -59,5 +59,4 @@ dependencies {
     compile files('libs/gson-2.3.1.jar')
     compile files('libs/ormlite-android-4.49-SNAPSHOT.jar')
     compile files('libs/AndroidSwipeLayout-v1.1.8.jar')
-    compile(name:"floatingactionbutton-1.9.0",ext:"aar")
 }

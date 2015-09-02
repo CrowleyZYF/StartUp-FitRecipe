@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -17,11 +16,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.umeng.fb.FeedbackAgent;
 
 import java.util.ArrayList;
@@ -30,7 +26,6 @@ import java.util.List;
 import cn.fitrecipe.android.UI.SlidingPage;
 import cn.fitrecipe.android.entity.PlanItem;
 import cn.fitrecipe.android.fragment.IndexFragment;
-import cn.fitrecipe.android.fragment.KnowledgeFragment;
 import cn.fitrecipe.android.fragment.MeFragment;
 import cn.fitrecipe.android.fragment.PlanFragment;
 import cn.fitrecipe.android.service.GetHomeDataService;
