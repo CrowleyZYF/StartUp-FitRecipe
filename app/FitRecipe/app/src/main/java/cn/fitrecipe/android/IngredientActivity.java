@@ -123,10 +123,10 @@ public class IngredientActivity extends Activity implements View.OnClickListener
                 finish();
                 break;
             case R.id.shopping_clear:
-                ((Fragment1)fragment1).fresh();
-                ((Fragment2)fragment2).fresh();
                 FrDbHelper.getInstance(this).clearBasket(basket);
                 basket.clear();
+                ((Fragment1)fragment1).fresh();
+                ((Fragment2)fragment2).fresh();
                 break;
         }
     }

@@ -1,6 +1,7 @@
 package cn.fitrecipe.android.Adpater;
 
 import android.content.Intent;
+import android.media.Image;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.fitrecipe.android.FrApplication;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.RecipeActivity;
 import cn.fitrecipe.android.SelectRecipeActivity;
@@ -29,6 +31,7 @@ import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.dao.FrDbHelper;
 import cn.fitrecipe.android.entity.Comment;
 import cn.fitrecipe.android.entity.Component;
+import cn.fitrecipe.android.entity.DayPlan;
 import cn.fitrecipe.android.entity.PlanItem;
 import cn.fitrecipe.android.entity.Recipe;
 import cn.fitrecipe.android.entity.Report;
@@ -49,8 +52,14 @@ public class PlanElementAdapter extends BaseAdapter{
         this.report = report;
     }
 
+    public void setData(List<PlanItem> items) {
+        this.items = items;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
+        if(items == null)   return 0;
         return items.size();
     }
 
@@ -79,32 +88,55 @@ public class PlanElementAdapter extends BaseAdapter{
         holder.plan_shopping.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<Component> components = new ArrayList<Component>();
-                for(int i = 0; i < item.getData().size(); i++) {
-                    Object obj = item.getData().get(i);
-                    if(obj instanceof Recipe) {
-                        FrDbHelper.getInstance(fragment.getActivity()).addToBasket((Recipe) obj);
-                    }else if(obj instanceof Component) {
-                        components.add((Component) obj);
-                    }
+                if (item.size() == 0) {
+                    Toast.makeText(fragment.getActivity(), "请添加食谱、食材后再加入菜篮子！", Toast.LENGTH_SHORT).show();
+                    return;
                 }
-                if(components.size() > 0) {
-                    Recipe recipe = FrDbHelper.getInstance(fragment.getActivity()).getRecipe(-1);
-                    if(recipe == null) {
-                        recipe = new Recipe();
-                        recipe.setTitle("其他");
+                if(!item.isInBasket()) {
+                    ((ImageView)v).setImageResource(R.drawable.icon_plan_shopping_active);
+                    item.setInBasket(true);
+                    FrDbHelper.getInstance(fragment.getActivity()).addPlanItem(item);
+                    List<Component> components = new ArrayList<Component>();
+                    for(int i = 0; i < item.getData().size(); i++) {
+                        Object obj = item.getData().get(i);
+                        if(obj instanceof Recipe) {
+                            FrDbHelper.getInstance(fragment.getActivity()).addToBasket((Recipe) obj);
+                        }else if(obj instanceof Component) {
+                            Component component = (Component) obj;
+                            component.setPlanItem(null);
+                            components.add(component);
+                        }
+                    }
+                    if(components.size() > 0) {
+                        Recipe recipe = new Recipe();
                         recipe.setId(-1);
-                    }
-                    List<Component> componentList = recipe.getComponent_set();
-                    if(componentList == null)
                         recipe.setComponent_set(components);
-                    else {
-                        componentList.addAll(components);
-                        recipe.setComponent_set(componentList);
+                        FrDbHelper.getInstance(fragment.getActivity()).addToBasket(recipe);
                     }
-                    FrDbHelper.getInstance(fragment.getActivity()).addToBasket(recipe);
+                    Toast.makeText(fragment.getActivity(), "加入菜篮子", Toast.LENGTH_SHORT).show();
+                }else {
+                    ((ImageView)v).setImageResource(R.drawable.icon_plan_shopping);
+                    item.setInBasket(false);
+                    FrDbHelper.getInstance(fragment.getActivity()).addPlanItem(item);
+                    List<Component> components = new ArrayList<Component>();
+                    for(int i = 0; i < item.getData().size(); i++) {
+                        Object obj = item.getData().get(i);
+                        if(obj instanceof Recipe) {
+                            FrDbHelper.getInstance(fragment.getActivity()).removeFromBasket((Recipe) obj);
+                        }else if(obj instanceof Component) {
+                            Component component = (Component) obj;
+                            component.setPlanItem(null);
+                            components.add(component);
+                        }
+                    }
+                    if(components.size() > 0) {
+                        Recipe recipe = new Recipe();
+                        recipe.setId(-1);
+                        recipe.setComponent_set(components);
+                        FrDbHelper.getInstance(fragment.getActivity()).removeFromBasket(recipe);
+                    }
+                    Toast.makeText(fragment.getActivity(), "从菜篮子取出", Toast.LENGTH_SHORT).show();
                 }
-                Toast.makeText(fragment.getActivity(), "加入菜篮子", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -112,19 +144,53 @@ public class PlanElementAdapter extends BaseAdapter{
             @Override
             public void onClick(View v) {
                 //TODO @wk
-                Toast.makeText(fragment.getActivity(), "打卡", Toast.LENGTH_SHORT).show();
+                if (item.size() == 0) {
+                    Toast.makeText(fragment.getActivity(), "请添加食谱、食材后再打卡！", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(!item.isPunched()) {
+                    ((ImageView)v).setImageResource(R.drawable.icon_plan_punch_active);
+                    item.setIsPunched(true);
+                    item.getDayPlan().setIsPunched(true);
+                    FrDbHelper.getInstance(fragment.getActivity()).punch(item);
+                    Toast.makeText(fragment.getActivity(), "打卡", Toast.LENGTH_SHORT).show();
+                }else {
+                    item.setIsPunched(false);
+                    ((ImageView)v).setImageResource(R.drawable.icon_plan_punch);
+                    DayPlan dayPlan = item.getDayPlan();
+                    List<PlanItem> planItems = dayPlan.getPlanItems();
+                    boolean flag = false;
+                    for(int i = 0; i < planItems.size(); i++) {
+                        flag = flag || planItems.get(i).isPunched();
+                    }
+                    dayPlan.setIsPunched(flag);
+                    FrDbHelper.getInstance(fragment.getActivity()).punch(item);
+                    Toast.makeText(fragment.getActivity(), "取消打卡", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         holder.plan_nutrition.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(item.size() != 0)
+                if (item.size() != 0)
                     ((PlanFragment) fragment).toggle(item.getItemType());
                 else
                     Toast.makeText(fragment.getActivity(), "请添加食谱、食材后再查看营养表！", Toast.LENGTH_SHORT).show();
             }
         });
+
+        if(item.isPunched()) {
+            holder.plan_punch.setImageResource(R.drawable.icon_plan_punch_active);
+        }else {
+            holder.plan_punch.setImageResource(R.drawable.icon_plan_punch);
+        }
+
+        if(item.isInBasket()) {
+            holder.plan_shopping.setImageResource(R.drawable.icon_plan_shopping_active);
+        }else {
+            holder.plan_shopping.setImageResource(R.drawable.icon_plan_shopping);
+        }
 
         holder.add_recipe.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,6 +236,7 @@ public class PlanElementAdapter extends BaseAdapter{
         holder.plan_carbohydrate_intake.setText(Math.round(item.getCarbohydrate())+"");
         holder.plan_protein_intake.setText(Math.round(item.getProtein())+"");
         holder.plan_fat_intake.setText(Math.round(item.getFat())+"");
+        FrApplication.getInstance().getMyImageLoader().displayImage(holder.plan_image_cover, item.getImageCover());
 
         //
         holder.plan_content.setAdapter(new ContentAdapter(item));
@@ -196,7 +263,7 @@ public class PlanElementAdapter extends BaseAdapter{
         TextView plan_carbohydrate_intake, plan_carbohydrate_need, plan_carbohydrate_rate;
         TextView plan_protein_intake, plan_protein_need, plan_protein_rate;
         TextView plan_fat_intake, plan_fat_need, plan_fat_rate;
-        RelativeLayout add_recipe;
+        RelativeLayout add_recipe, plan_image_cover;
         LinearLayoutForListView plan_content;
 
         public ViewHolder(View v) {
@@ -218,6 +285,7 @@ public class PlanElementAdapter extends BaseAdapter{
             plan_fat_rate = (TextView) v.findViewById(R.id.plan_fat_rate);
             add_recipe = (RelativeLayout) v.findViewById(R.id.add_recipe);
             plan_content = (LinearLayoutForListView) v.findViewById(R.id.plan_content);
+            plan_image_cover = (RelativeLayout) v.findViewById(R.id.plan_image_cover);
         }
     }
 
@@ -260,8 +328,8 @@ public class PlanElementAdapter extends BaseAdapter{
             if(obj instanceof Recipe) {
                 Recipe recipe = (Recipe) obj;
                 text1.setText(recipe.getTitle());
-                text2.setText(recipe.getTotal_amount() + "g");
-                text3.setText(Math.round(recipe.getCalories() * recipe.getTotal_amount() / 100) + "kcal");
+                text2.setText(recipe.getIncreWeight() + "g");
+                text3.setText(Math.round(recipe.getCalories() * recipe.getIncreWeight() / 100) + "kcal");
             }else{
                 Component component = (Component)obj;
                 text1.setText(component.getIngredient().getName());
@@ -271,6 +339,7 @@ public class PlanElementAdapter extends BaseAdapter{
             view.findViewById(R.id.trash).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    FrDbHelper.getInstance(fragment.getActivity()).deletePlanItem(item, i);
                     item.deleteContent(i);
                     notifyDataSetChanged();
                     Toast.makeText(fragment.getActivity(), "click delete", Toast.LENGTH_SHORT).show();

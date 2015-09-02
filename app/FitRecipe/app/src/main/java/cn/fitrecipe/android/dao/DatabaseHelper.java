@@ -16,11 +16,16 @@ import java.sql.SQLException;
 import cn.fitrecipe.android.entity.Author;
 import cn.fitrecipe.android.entity.BasketItem;
 import cn.fitrecipe.android.entity.Component;
+import cn.fitrecipe.android.entity.DayPlan;
 import cn.fitrecipe.android.entity.Ingredient;
 import cn.fitrecipe.android.entity.Label;
 import cn.fitrecipe.android.entity.Nutrition;
+import cn.fitrecipe.android.entity.PlanItem;
+import cn.fitrecipe.android.entity.PlanItem2Recipe;
 import cn.fitrecipe.android.entity.Recipe;
 import cn.fitrecipe.android.entity.Report;
+import cn.fitrecipe.android.entity.Series;
+import cn.fitrecipe.android.entity.SeriesPlan;
 
 /**
  * Created by wk on 2015/8/11.
@@ -53,6 +58,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
             TableUtils.createTableIfNotExists(connectionSource, Nutrition.class);
             TableUtils.createTableIfNotExists(connectionSource, Recipe.class);
             TableUtils.createTableIfNotExists(connectionSource, Report.class);
+            TableUtils.createTableIfNotExists(connectionSource, PlanItem.class);
+            TableUtils.createTableIfNotExists(connectionSource, PlanItem2Recipe.class);
+            TableUtils.createTableIfNotExists(connectionSource, DayPlan.class);
+            TableUtils.createTableIfNotExists(connectionSource, SeriesPlan.class);
 //            TableUtils.createTableIfNotExists(connectionSource, BasketItem.class);
 
         } catch (SQLException e) {
@@ -71,6 +80,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
             TableUtils.dropTable(connectionSource, Nutrition.class, true);
             TableUtils.dropTable(connectionSource, Recipe.class, true);
             TableUtils.dropTable(connectionSource, Report.class, true);
+            TableUtils.dropTable(connectionSource, PlanItem.class, true);
+            TableUtils.dropTable(connectionSource, PlanItem2Recipe.class, true);
+            TableUtils.dropTable(connectionSource, DayPlan.class, true);
+            TableUtils.dropTable(connectionSource, SeriesPlan.class, true);
 //            TableUtils.dropTable(connectionSource, BasketItem.class, true);
         } catch (SQLException e) {
             e.printStackTrace();

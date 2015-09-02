@@ -1,35 +1,39 @@
 package cn.fitrecipe.android.entity;
 
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
  * Created by wk on 2015/8/26.
  */
-@DatabaseTable(tableName = "fr_plan")
+@DatabaseTable(tableName = "fr_planitem")
 public class PlanItem implements Serializable{
 
     @DatabaseField(generatedId = true)
     private int id;
+    @DatabaseField(useGetSet = true)
+    private int type;
+    @DatabaseField
+    private String imageCover;
+    @DatabaseField(foreign = true)
+    private DayPlan dayPlan;
+    @ForeignCollectionField
+    private Collection<Component> components;
+    @DatabaseField
+    private boolean isPunched;
+    @DatabaseField
+    private boolean inBasket;
+
     private ItemType itemType;
     private List<Object> data;
-//    private List<Recipe> recipes;
-//    private List<Ingredient> ingredients;
     private List<Nutrition> tNutrition;
     private double tCalories;
-    private int imageCover;
-
-    public int getImageCover() {
-        return imageCover;
-    }
-
-    public void setImageCover(int imageCover) {
-        this.imageCover = imageCover;
-    }
 
     public int size() {
         if(data != null)
@@ -77,26 +81,20 @@ public class PlanItem implements Serializable{
                         nutrition = new Nutrition();
                         nutrition.setName(nutrition_set.get(j).getName());
                         nutrition.setUnit(nutrition_set.get(j).getUnit());
-                        nutrition.setAmount(nutrition_set.get(j).getAmount());
+                        nutrition.setAmount(nutrition_set.get(j).getAmount() * recipe.getIncreWeight() / 100);
                         tNutrition.add(nutrition);
                     }
                     else {
                         nutrition = tNutrition.get(j);
-                        nutrition.setAmount(nutrition.getAmount() + nutrition_set.get(j).getAmount() * recipe.getTotal_amount() / 100);
+                        nutrition.setAmount(nutrition.getAmount() + nutrition_set.get(j).getAmount() * recipe.getIncreWeight()/ 100);
                         tNutrition.set(j, nutrition);
                     }
 
                 }
             }
-            tCalories += recipe.getCalories() * recipe.getTotal_amount() / 100;
+            tCalories += recipe.getCalories() * recipe.getIncreWeight() / 100;
         }else {
             //TODO @wk add nutrtion from component
-            for(int i = 0; i < 10; i++) {
-                Nutrition nutrition = new Nutrition();
-                nutrition.setAmount(100);
-                nutrition.setName("水");
-                tNutrition.add(nutrition);
-            }
         }
         data.add(object);
     }
@@ -109,11 +107,11 @@ public class PlanItem implements Serializable{
             if (nutrition_set != null) {
                 for (int j = 0; j < nutrition_set.size(); j++) {
                     Nutrition nutrition = tNutrition.get(j);
-                    nutrition.setAmount(nutrition.getAmount() - nutrition_set.get(j).getAmount() * recipe.getTotal_amount() / 100);
+                    nutrition.setAmount(nutrition.getAmount() - nutrition_set.get(j).getAmount() * recipe.getIncreWeight() / 100);
                     tNutrition.set(j, nutrition);
                 }
             }
-            tCalories -= recipe.getCalories() * recipe.getTotal_amount() / 100;
+            tCalories -= recipe.getCalories() * recipe.getIncreWeight() / 100;
         }
         if (object instanceof Component) {
 
@@ -132,6 +130,7 @@ public class PlanItem implements Serializable{
 
     public void setItemType(ItemType itemType) {
         this.itemType = itemType;
+        type = this.itemType.index();
     }
 
     public List<Object> getData() {
@@ -169,6 +168,67 @@ public class PlanItem implements Serializable{
     public void setId(int id) {
         this.id = id;
     }
+
+    public String getImageCover() {
+        return imageCover;
+    }
+
+    public void setImageCover(String imageCover) {
+        this.imageCover = imageCover;
+    }
+
+    public DayPlan getDayPlan() {
+        return dayPlan;
+    }
+
+    public void setDayPlan(DayPlan dayPlan) {
+        this.dayPlan = dayPlan;
+    }
+
+    public Collection<Component> getComponents() {
+        return components;
+    }
+
+    public void setComponents(Collection<Component> components) {
+        this.components = components;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+        switch (type) {
+            case 0:
+                itemType = ItemType.BREAKFAST; break;
+            case 1:
+                itemType = ItemType.ADDMEAL_01; break;
+            case 2:
+                itemType = ItemType.LUNCH;  break;
+            case 3:
+                itemType = ItemType.ADDMEAL_02; break;
+            case 4:
+                itemType = ItemType.SUPPER; break;
+        }
+    }
+
+    public boolean isPunched() {
+        return isPunched;
+    }
+
+    public void setIsPunched(boolean isPunched) {
+        this.isPunched = isPunched;
+    }
+
+    public boolean isInBasket() {
+        return inBasket;
+    }
+
+    public void setInBasket(boolean inBasket) {
+        this.inBasket = inBasket;
+    }
+
 
     public enum ItemType {
         BREAKFAST(0, "早餐"), ADDMEAL_01(1, "加餐"), LUNCH(2, "午餐"), ADDMEAL_02(3, "加餐"), SUPPER(4, "晚餐"), ALL(5, "");

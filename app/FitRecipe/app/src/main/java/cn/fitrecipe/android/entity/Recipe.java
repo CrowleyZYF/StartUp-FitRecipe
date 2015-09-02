@@ -76,6 +76,11 @@ public class Recipe implements Serializable, Comparable<Recipe>{
     private String tags;
     @DatabaseField
     private boolean inBasket;
+    @DatabaseField (defaultValue = "0")
+    private int weightInBasket;
+    @DatabaseField
+    private int increWeight;
+
 
 
     public void addWeight(List<Integer> increment_list) {
@@ -85,7 +90,7 @@ public class Recipe implements Serializable, Comparable<Recipe>{
                 getComponent_set().get(i).setMAmount(getComponent_set().get(i).getMAmount() + increment_list.get(i));
                 total += increment_list.get(i);
             }
-            setTotal_amount(getTotal_amount() + total);
+            setIncreWeight(getTotal_amount() + total);
         }
     }
 
@@ -493,5 +498,21 @@ public class Recipe implements Serializable, Comparable<Recipe>{
     @Override
     public int compareTo(Recipe another) {
         return -getId() + another.getId();
+    }
+
+    public int getWeightInBasket() {
+        return weightInBasket;
+    }
+
+    public void setWeightInBasket(int weightInBasket) {
+        this.weightInBasket = weightInBasket;
+    }
+
+    public int getIncreWeight() {
+        return increWeight;
+    }
+
+    public void setIncreWeight(int increWeight) {
+        this.increWeight = increWeight;
     }
 }

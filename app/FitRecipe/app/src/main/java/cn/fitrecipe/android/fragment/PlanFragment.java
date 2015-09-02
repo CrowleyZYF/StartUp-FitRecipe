@@ -13,7 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import cn.fitrecipe.android.Adpater.PlanElementAdapter;
@@ -24,7 +25,7 @@ import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.UI.PieChartView;
 import cn.fitrecipe.android.UI.SlidingPage;
 import cn.fitrecipe.android.dao.FrDbHelper;
-import cn.fitrecipe.android.entity.Ingredient;
+import cn.fitrecipe.android.entity.DayPlan;
 import cn.fitrecipe.android.entity.Nutrition;
 import cn.fitrecipe.android.entity.PlanItem;
 import cn.fitrecipe.android.entity.Report;
@@ -41,12 +42,15 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
 
     private LinearLayoutForListView plans;
     private List<PlanItem> items;
+    private DayPlan dayPlan;
     private PlanElementAdapter adapter;
 
     //view 2
-    private TextView ingredient_title, recipe_all_calorie, user_need_calorie, calorie_radio;
+    private TextView ingredient_title, recipe_all_calorie, user_need_calorie, calorie_radio, plan_status_day;
     private LinearLayout nutrition_punch;
-    private ImageView meal_pic, shopping_btn;
+    private ImageView meal_pic, shopping_btn, next_btn, prev_btn;
+    private ImageView[] punchImageViews;
+    private int[] punchIds = {R.id.nutrition_breakfast_punch, R.id.nutrition_add_meal_01_punch, R.id.nutrition_lunch_punch, R.id.nutrition_add_meal_02_punch, R.id.nutrition_dinner_punch};
     private PieChartView take_already_piechart;
     private LinearLayoutForListView recipe_nutrition_list;
     private NutritionAdapter nutritionAdapter;
@@ -60,6 +64,9 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
 
     private int iconIds[] = {R.drawable.icon_breakfast, R.drawable.icon_add_meal1, R.drawable.icon_lunch, R.drawable.icon_add_meal2, R.drawable.icon_dinner};
     private int finishIconIds[] = {R.drawable.icon_breakfast_finish, R.drawable.icon_add_meal1_finish, R.drawable.icon_lunch_finish, R.drawable.icon_add_meal2_finish, R.drawable.icon_dinner_finish};
+
+    private int pointer = 0;
+    private long now;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,6 +83,8 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
 
     private void initEvent() {
         shopping_btn.setOnClickListener(this);
+        next_btn.setOnClickListener(this);
+        prev_btn.setOnClickListener(this);
     }
 
     private void initView(View v) {
@@ -90,26 +99,40 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         take_already_piechart = (PieChartView) v.findViewById(R.id.take_already_piechart);
         recipe_nutrition_list = (LinearLayoutForListView)v.findViewById(R.id.recipe_nutrition_list);
         shopping_btn = (ImageView) v.findViewById(R.id.shopping_btn);
+        plan_status_day = (TextView) v.findViewById(R.id.plan_status_day);
+        next_btn = (ImageView) v.findViewById(R.id.next_btn);
+        prev_btn = (ImageView) v.findViewById(R.id.prev_btn);
+        punchImageViews = new ImageView[5];
+        for(int i = 0; i < punchImageViews.length; i++) {
+            punchImageViews[i] = (ImageView) v.findViewById(punchIds[i]);
+        }
 
         mRightMenu = (SlidingPage) v.findViewById(R.id.filter_menu);
-
     }
 
     private void initData() {
-        items = new ArrayList<>();
-        for(PlanItem.ItemType type : PlanItem.ItemType.values()) {
-            if(type == PlanItem.ItemType.ALL)   continue;
-            PlanItem item = new PlanItem();
-            item.setItemType(type);
-            items.add(item);
-        }
+        now = System.currentTimeMillis();
         adapter = new PlanElementAdapter(this, items, report);
         plans.setAdapter(adapter);
-
         nutritionAdapter = new NutritionAdapter(getActivity(), null);
         recipe_nutrition_list.setAdapter(nutritionAdapter);
+        switchPlan(pointer);
     }
 
+    private void switchPlan(int pointer) {
+        Date date = new Date(now + pointer * 24 * 3600 * 1000);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String strDate = sdf.format(date);
+        dayPlan = FrDbHelper.getInstance(getActivity()).getDayPlan(strDate);
+        if(dayPlan == null) {
+            dayPlan = new DayPlan();
+            dayPlan.setDate(strDate);
+            dayPlan = FrDbHelper.getInstance(getActivity()).addDayPlan(dayPlan);
+        }
+        items = dayPlan.getPlanItems();
+        plan_status_day.setText(pointer+"");
+        adapter.setData(items);
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -119,18 +142,23 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             switch (requestCode) {
                 case BREAKFAST_CODE:
                     items.get(0).addContent(obj);
+                    FrDbHelper.getInstance(getActivity()).addPlanItem(dayPlan.getPlanItems().get(0));
                     break;
                 case ADDMEAL_01_CODE:
                     items.get(1).addContent(obj);
+                    FrDbHelper.getInstance(getActivity()).addPlanItem(dayPlan.getPlanItems().get(1));
                     break;
                 case LUNCH_CODE:
                     items.get(2).addContent(obj);
+                    FrDbHelper.getInstance(getActivity()).addPlanItem(dayPlan.getPlanItems().get(2));
                     break;
                 case ADDMEAL_02_CODE:
                     items.get(3).addContent(obj);
+                    FrDbHelper.getInstance(getActivity()).addPlanItem(dayPlan.getPlanItems().get(3));
                     break;
                 case SUPPER_CODE:
                     items.get(4).addContent(obj);
+                    FrDbHelper.getInstance(getActivity()).addPlanItem(dayPlan.getPlanItems().get(4));
                     break;
 
             }
@@ -170,6 +198,13 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                         return;
                     }
                     nutrition_punch.setVisibility(View.VISIBLE);
+                    for(int i = 0; i < punchImageViews.length; i++) {
+                        if(items.get(i).isPunched()) {
+                            punchImageViews[i].setImageResource(finishIconIds[i]);
+                        }else {
+                            punchImageViews[i].setImageResource(iconIds[i]);
+                        }
+                    }
                     meal_pic.setImageResource(R.drawable.icon_dinner_temp);
                     long total = 0;
                     for (int i = 0; i < items.size(); i++)
@@ -196,6 +231,14 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             case R.id.shopping_btn:
                 Intent intent = new Intent(getActivity(), IngredientActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.next_btn:
+                pointer++;
+                switchPlan(pointer);
+                break;
+            case R.id.prev_btn:
+                pointer--;
+                switchPlan(pointer);
                 break;
         }
     }

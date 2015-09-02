@@ -303,7 +303,7 @@ public class SelectRecipeActivity extends Activity implements View.OnClickListen
                     if(!w.equals("0")) {
                         Intent intent = new Intent();
                         if(obj_selected instanceof Recipe) {
-                            ((Recipe) obj_selected).setTotal_amount(Integer.parseInt(recipe_weight.getText().toString()));
+                            ((Recipe) obj_selected).setIncreWeight(Integer.parseInt(recipe_weight.getText().toString()));
                             intent.putExtra("obj_selected", (Recipe)obj_selected);
                         }else {
                             ((Component) obj_selected).setAmount(recipe_weight.getText().toString());

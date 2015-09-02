@@ -30,12 +30,11 @@ public class ComponentDao {
         }
     }
 
-    public int add(Component component) {
-        int id;
+    public int addComponentBelongToRecipe(Component component) {
         try {
             if(component.getRecipe() == null) {
-                id = componentDaoOpe.create(component);
-                return id;
+                componentDaoOpe.create(component);
+                return component.getId();
             }else {
                 Map<String, Object> map = new HashMap<>();
                 map.put("recipe_id", component.getRecipe().getId());
@@ -46,8 +45,32 @@ public class ComponentDao {
                     componentDaoOpe.update(component);
                     return component.getId();
                 }else {
-                    id = componentDaoOpe.create(component);
-                    return id;
+                    componentDaoOpe.create(component);
+                    return component.getId();
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public int addComponentBelongToPlanItem(Component component) {
+        try {
+            if(component.getPlanItem() == null) {
+                componentDaoOpe.create(component);
+                return component.getId();
+            }else {
+                Map<String, Object> map = new HashMap<>();
+                map.put("planItem_id", component.getPlanItem().getId());
+                map.put("ingredient_id", component.getIngredient().getId());
+                List<Component> components = componentDaoOpe.queryForFieldValues(map);
+                if (components != null && components.size() > 0) {
+                    component.setId(components.get(0).getId());
+                    componentDaoOpe.update(component);
+                    return component.getId();
+                }else {
+                    componentDaoOpe.create(component);
+                    return component.getId();
                 }
             }
         } catch (SQLException e) {
@@ -59,6 +82,16 @@ public class ComponentDao {
         List<Component> components = null;
         try {
             components = componentDaoOpe.queryForEq("recipe_id", recipe_id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return components;
+    }
+
+    public List<Component> getComponentsInPlanItem(int planitem_id) {
+        List<Component> components = null;
+        try {
+            components = componentDaoOpe.queryForEq("planitem_id", planitem_id);
         } catch (SQLException e) {
             e.printStackTrace();
         }

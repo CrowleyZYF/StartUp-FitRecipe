@@ -5,7 +5,8 @@
     android:background="@color/background_color">
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:scrollbars="none">
         <cn.fitrecipe.android.UI.LinearLayoutForListView
             android:id="@+id/recipe_list_view"
             android:background="@color/background_color"

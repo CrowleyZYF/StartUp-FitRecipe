@@ -21,8 +21,12 @@ public class Component implements Serializable{
     private String remark;
     @DatabaseField
     private int status;
-    @DatabaseField(foreign = true, canBeNull = true)
+    @DatabaseField(foreign = true)
     private Recipe recipe;
+    @DatabaseField(foreign = true)
+    private PlanItem planItem;
+    @DatabaseField
+    private int itemIndex;
 
     public int getStatus() {
         return status;
@@ -80,5 +84,21 @@ public class Component implements Serializable{
 
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
+    }
+
+    public PlanItem getPlanItem() {
+        return planItem;
+    }
+
+    public void setPlanItem(PlanItem planItem) {
+        this.planItem = planItem;
+    }
+
+    public int getItemIndex() {
+        return itemIndex;
+    }
+
+    public void setItemIndex(int itemIndex) {
+        this.itemIndex = itemIndex;
     }
 }
