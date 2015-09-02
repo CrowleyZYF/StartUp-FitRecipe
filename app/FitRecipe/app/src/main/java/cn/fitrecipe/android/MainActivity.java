@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -17,8 +16,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.umeng.fb.FeedbackAgent;
@@ -29,7 +26,6 @@ import java.util.List;
 import cn.fitrecipe.android.UI.SlidingPage;
 import cn.fitrecipe.android.entity.PlanItem;
 import cn.fitrecipe.android.fragment.IndexFragment;
-import cn.fitrecipe.android.fragment.KnowledgeFragment;
 import cn.fitrecipe.android.fragment.MeFragment;
 import cn.fitrecipe.android.fragment.PlanFragment;
 import cn.fitrecipe.android.service.GetHomeDataService;
@@ -39,12 +35,12 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     private LinearLayout frTabIndex;
     private LinearLayout frTabMe;
     private LinearLayout frTabPlan;
-    private LinearLayout frTabKnowledge;
+    //private LinearLayout frTabKnowledge;
 
     private Fragment frIndexFragment;
     private Fragment frMeFragment;
     private Fragment frPlanFragment;
-    private Fragment frKnowledgeFragment;
+    //private Fragment frKnowledgeFragment;
 
     private ImageView left_btn;
     private ImageView right_btn;
@@ -106,7 +102,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         frTabIndex.setOnClickListener(this);
         frTabMe.setOnClickListener(this);
         frTabPlan.setOnClickListener(this);
-        frTabKnowledge.setOnClickListener(this);
+        //frTabKnowledge.setOnClickListener(this);
 
         left_btn.setOnClickListener(this);
         right_btn.setOnClickListener(this);
@@ -117,10 +113,10 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         frTabIndex = (LinearLayout) findViewById(R.id.tab_index);
         frTabMe = (LinearLayout) findViewById(R.id.tab_me);
         frTabPlan = (LinearLayout) findViewById(R.id.tab_plan);
-        frTabKnowledge = (LinearLayout) findViewById(R.id.tab_knowledge);
+        //frTabKnowledge = (LinearLayout) findViewById(R.id.tab_knowledge);
         frTabs.add(frTabIndex);
         frTabs.add(frTabPlan);
-        frTabs.add(frTabKnowledge);
+        //frTabs.add(frTabKnowledge);
         frTabs.add(frTabMe);
 
         left_btn = (ImageView) findViewById(R.id.left_btn);
@@ -171,7 +167,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                     startActivity(intent);
                 }
                 break;
-            case 2:
+            /*case 2:
                 if (frKnowledgeFragment == null){
                     frKnowledgeFragment = new KnowledgeFragment();
                     transaction.add(R.id.content, frKnowledgeFragment);
@@ -181,8 +177,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                 left_btn.setImageResource(R.drawable.icon_knowledge);
                 right_btn.setImageResource(R.drawable.icon_search);
                 tab_index = 2;
-                break;
-            case 3:
+                break;*/
+            case 2:
                 if (frMeFragment == null){
                     frMeFragment = new MeFragment();
                     transaction.add(R.id.content, frMeFragment);
@@ -191,7 +187,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                 }
                 left_btn.setImageResource(R.drawable.icon_letter);
                 right_btn.setImageResource(R.drawable.icon_set);
-                tab_index = 3;
+                tab_index = 2;
                 break;
             default:
                 break;
@@ -207,16 +203,16 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         }
         if (frMeFragment != null){
             transaction.hide(frMeFragment);
-            frTabs.get(1).setBackgroundColor(getResources().getColor(R.color.base_color));
+            frTabs.get(2).setBackgroundColor(getResources().getColor(R.color.base_color));
         }
         if (frPlanFragment != null){
             transaction.hide(frPlanFragment);
-            frTabs.get(2).setBackgroundColor(getResources().getColor(R.color.base_color));
-        }
+            frTabs.get(1).setBackgroundColor(getResources().getColor(R.color.base_color));
+        }/*
         if (frKnowledgeFragment != null){
             transaction.hide(frKnowledgeFragment);
             frTabs.get(3).setBackgroundColor(getResources().getColor(R.color.base_color));
-        }
+        }*/
     }
 
     @Override
@@ -231,11 +227,11 @@ public class MainActivity extends FragmentActivity implements OnClickListener
             case R.id.tab_plan:
                 setSelect(1);
                 break;
-            case R.id.tab_knowledge:
+            /*case R.id.tab_knowledge:
                 setSelect(2);
-                break;
+                break;*/
             case R.id.tab_me:
-                setSelect(3);
+                setSelect(2);
                 break;
             case R.id.left_btn:
                 switch (tab_index){
@@ -256,12 +252,12 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                         ScrollView nutrition_sv = (ScrollView) findViewById(R.id.plan_nutrition);
                         nutrition_sv.smoothScrollTo(0,0);*/
                         break;
-                    case 2:
+                    /*case 2:
                         Intent intent=new Intent(this,CollectActivity.class);
                         intent.putExtra("tab", 2);
                         startActivity(intent);
-                        break;
-                    case 3:
+                        break;*/
+                    case 2:
                         startActivity(new Intent(this, LetterActivity.class));
                         break;
                 }
@@ -275,10 +271,10 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                     case 1:
                         startActivity(new Intent(this, PlanChoiceActivity.class));
                         break;
-                    case 2:
+                    /*case 2:
                         startActivity(new Intent(this, SearchActivity.class));
-                        break;
-                    case 3:
+                        break;*/
+                    case 2:
                         startActivity(new Intent(this, SetActivity.class));
                         break;
                 }
@@ -291,7 +287,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
 
     private void resetTabs()
     {
-        for(int i=0;i<4;i++){
+        for(int i=0;i<3;i++){
             frTabs.get(i).setBackgroundColor(getResources().getColor(R.color.base_color));
         }
     }

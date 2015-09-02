@@ -56,7 +56,7 @@
             android:textColor="#ffffff" />
     </LinearLayout>
 
-    <LinearLayout
+    <!--<LinearLayout
         android:id="@+id/tab_knowledge"
         android:layout_width="0dp"
         android:layout_height="fill_parent"
@@ -80,7 +80,7 @@
             android:layout_height="wrap_content"
             android:text="@string/tab_knowledge"
             android:textColor="#ffffff" />
-    </LinearLayout>
+    </LinearLayout>-->
 
     <LinearLayout
         android:id="@+id/tab_me"

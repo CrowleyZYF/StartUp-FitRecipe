@@ -13,9 +13,13 @@ public class Plan {
     private int type;
     private int join;
     private int background;
+    private String author_name;
+    private int author_type;
+    private int author_avatar;
+    private boolean isUsed;
 
 
-    public Plan(int id, String name, int hard_rank, int delicious_rank, int label, int days, int type, int join, int background){
+    public Plan(int id, String name, int hard_rank, int delicious_rank, int label, int days, int type, int join, int background, String author_name, int author_type, int author_avatar, boolean isUsed){
         this.id = id;
         this.name = name;
         this.hard_rank = hard_rank;
@@ -25,6 +29,10 @@ public class Plan {
         this.type = type;
         this.join = join;
         this.background = background;
+        this.author_name = author_name;
+        this.author_avatar = author_avatar;
+        this.author_type = author_type;
+        this.isUsed = isUsed;
     }
 
     public int getId(){
@@ -62,6 +70,14 @@ public class Plan {
     public int getBackground(){
         return this.background;
     }
+
+    public String getAuthor_name() { return this.author_name; }
+
+    public int getAuthor_type() { return this.author_type; }
+
+    public int getAuthor_avatar() { return this.author_avatar; }
+
+    public boolean getIsUsed() { return this.isUsed; }
 
 
 

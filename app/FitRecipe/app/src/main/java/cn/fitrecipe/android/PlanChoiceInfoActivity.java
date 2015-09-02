@@ -3,30 +3,40 @@ package cn.fitrecipe.android;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.MotionEvent;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.fitrecipe.android.Adpater.PlanDetailViewPagerAdapter;
+import cn.fitrecipe.android.Adpater.PlanInfoViewPagerAdapter;
 import cn.fitrecipe.android.UI.PlanDetailViewPager;
 import cn.fitrecipe.android.UI.PlanScrollView;
 import cn.fitrecipe.android.entity.PlanDetail;
 import cn.fitrecipe.android.entity.PlanDetailItem;
+import me.relex.circleindicator.CircleIndicator;
 
 /**
  * Created by 奕峰 on 2015/5/8.
  */
-public class PlanChoiceInfoActivity extends Activity implements View.OnTouchListener {
+public class PlanChoiceInfoActivity extends Activity implements View.OnClickListener, ViewPager.OnPageChangeListener {
 
     private PlanScrollView info_container;
 
+    private ViewPager planInfoViewPager;
+    private PlanInfoViewPagerAdapter planInfoViewPagerAdapter;
+    private CircleIndicator planInfoIndicator;
+
     private LinearLayout header;
+    private TextView header_name;
     private ImageView back_btn;
-    private ImageView author_btn;
+    private ImageView nutrition_btn;
 
     private PlanDetailViewPager planDetailViewPager;
     private PlanDetailViewPagerAdapter planDetailViewPagerAdapter;
@@ -45,14 +55,20 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnTouchList
 
     private void initView() {
         info_container = (PlanScrollView) findViewById(R.id.info_container);
+
+        planInfoViewPager = (ViewPager) findViewById(R.id.choice_intro_viewpager);
+        planInfoIndicator = (CircleIndicator) findViewById(R.id.choice_intro_indicator);
+
         header = (LinearLayout) findViewById(R.id.header);
         header.setBackgroundColor(getResources().getColor(R.color.transparent));
+        header_name = (TextView) findViewById(R.id.header_name_text);
+        header_name.setText("计划详情");
         back_btn = (ImageView) findViewById(R.id.left_btn);
         back_btn.setBackgroundColor(getResources().getColor(R.color.transparent));
         back_btn.setImageResource(R.drawable.icon_back_white);
-        author_btn = (ImageView) findViewById(R.id.right_btn);
-        author_btn.setBackgroundColor(getResources().getColor(R.color.transparent));
-        author_btn.setImageResource(R.drawable.icon_user);
+        nutrition_btn = (ImageView) findViewById(R.id.right_btn);
+        nutrition_btn.setBackgroundColor(getResources().getColor(R.color.transparent));
+        nutrition_btn.setImageResource(R.drawable.icon_nutrition);
         planDetailViewPager = (PlanDetailViewPager) findViewById(R.id.plan_detail);
     }
 
@@ -107,9 +123,32 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnTouchList
 
         planDetailViewPagerAdapter = new PlanDetailViewPagerAdapter(this,dataList);
         planDetailViewPager.setAdapter(planDetailViewPagerAdapter);
+
+
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("choice_name","哈哈哈の低碳饮食法1");
+        data.put("choice_intro","很有意思的饮食方案，让你能够在最短的时间里减肥减好多，减脂无敌了1");
+        data.put("choice_hard","2");
+        data.put("choice_delicious","2");
+        data.put("choice_join","741852");
+        data.put("choice_label","0");
+        data.put("choice_type","0");
+        data.put("choice_days","7");
+        data.put("author_avatar","0x7f020042");
+        data.put("author_name","喃猫");
+        data.put("author_type","0");
+        data.put("fit_year","5");
+        data.put("fit_fat","12");
+        data.put("fit_title","");
+        data.put("author_intro","作为一个酸奶重度依赖者，在写这篇文章之前，我需要先告诉大家，这篇文章，这个话题。");
+        data.put("plan_intro","1. 以低GI食物为主\n2. 以低GI食物为主\n3. 以低GI食物为主");
+        planInfoViewPagerAdapter = new PlanInfoViewPagerAdapter(this,data);
+        planInfoViewPager.setAdapter(planInfoViewPagerAdapter);
+        planInfoIndicator.setViewPager(planInfoViewPager);
     }
 
     private void initEvent() {
+        planInfoIndicator.setOnPageChangeListener(this);
 
         info_container.setOnBorderListener(new PlanScrollView.OnBorderListener(){
 
@@ -133,34 +172,34 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnTouchList
                 header.setBackgroundColor(Color.argb(transparent, 73, 189, 204));
             }
         });
+        back_btn.setOnClickListener(this);
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.left_btn:{
+                finish();
+                break;
+            }
+            case R.id.right_btn:{
 
+            }
+        }
+    }
 
     @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        int scrollY=v.getScrollY();
-        int mh = v.getMeasuredHeight();
-        int h = v.getHeight();
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_MOVE:
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-                if(scrollY==0){
+    }
 
-                }else{
-                    int transparent = 256/40*scrollY;
-                    if(transparent>256){
-                        transparent=255;
-                    }
-                    header.setBackgroundColor(Color.argb(transparent, 73, 189, 204));
-                }
-                break;
-            case MotionEvent.ACTION_SCROLL:
-                System.out.println("y: "+ scrollY+ "  mh:" + mh + " h: " + h);
-                break;
-            default:
-                break;
-        }
-        return false;
+    @Override
+    public void onPageSelected(int position) {
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }
