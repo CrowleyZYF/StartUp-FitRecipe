@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -25,7 +24,6 @@ import cn.fitrecipe.android.Adpater.BasketAdapter;
 import cn.fitrecipe.android.Adpater.IngredientAdapter;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.dao.FrDbHelper;
-import cn.fitrecipe.android.entity.Collection;
 import cn.fitrecipe.android.entity.Component;
 import cn.fitrecipe.android.entity.Ingredient;
 import cn.fitrecipe.android.entity.Recipe;
@@ -44,10 +42,7 @@ public class IngredientActivity extends Activity implements View.OnClickListener
 
     private ImageView backBtn;
     private TextView clearBtn;
-
-
     private List<Recipe> basket;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

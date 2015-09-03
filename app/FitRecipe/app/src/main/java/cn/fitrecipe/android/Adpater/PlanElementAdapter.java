@@ -85,6 +85,7 @@ public class PlanElementAdapter extends BaseAdapter{
 
         final PlanItem item = items.get(position);
         //
+        final RelativeLayout addBtn = holder.add_recipe;
         holder.plan_shopping.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,6 +94,7 @@ public class PlanElementAdapter extends BaseAdapter{
                     return;
                 }
                 if(!item.isInBasket()) {
+                    addBtn.setEnabled(false);
                     ((ImageView)v).setImageResource(R.drawable.icon_plan_shopping_active);
                     item.setInBasket(true);
                     FrDbHelper.getInstance(fragment.getActivity()).addPlanItem(item);
@@ -115,6 +117,7 @@ public class PlanElementAdapter extends BaseAdapter{
                     }
                     Toast.makeText(fragment.getActivity(), "加入菜篮子", Toast.LENGTH_SHORT).show();
                 }else {
+                    addBtn.setEnabled(true);
                     ((ImageView)v).setImageResource(R.drawable.icon_plan_shopping);
                     item.setInBasket(false);
                     FrDbHelper.getInstance(fragment.getActivity()).addPlanItem(item);
@@ -188,8 +191,10 @@ public class PlanElementAdapter extends BaseAdapter{
 
         if(item.isInBasket()) {
             holder.plan_shopping.setImageResource(R.drawable.icon_plan_shopping_active);
+            holder.add_recipe.setEnabled(false);
         }else {
             holder.plan_shopping.setImageResource(R.drawable.icon_plan_shopping);
+            holder.add_recipe.setEnabled(true);
         }
 
         holder.add_recipe.setOnClickListener(new View.OnClickListener() {

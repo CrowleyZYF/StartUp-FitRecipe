@@ -45,6 +45,12 @@ public class FrDbHelper {
     }
 
 
+
+    public List<Ingredient> getAllIngredient() {
+        IngredientDao dao = new IngredientDao(context);
+        return dao.getAll();
+    }
+
     /**
      * add Recipe
      * @param recipe
@@ -216,11 +222,17 @@ public class FrDbHelper {
      * @param basket
      */
     public void saveBasket(List<Recipe> basket) {
+        RecipeDao dao = new RecipeDao(context);
+        ComponentDao dao1 = new ComponentDao(context);
         if(basket != null) {
             for(int i = 0; i < basket.size(); i++) {
                 Recipe recipe = basket.get(i);
                 recipe.setInBasket(true);
-                addRecipe(recipe);
+                dao.add(recipe);
+                List<Component> components = recipe.getComponent_set();
+                for(int j = 0; j < components.size(); j++) {
+                    dao1.updateComponentStatus(components.get(j));
+                }
             }
         }
     }
@@ -235,8 +247,14 @@ public class FrDbHelper {
         List<Recipe> recipes = dao.getInBasket();
         for(int i = 0; i < recipes.size(); i++) {
             Recipe recipe = getRecipe(recipes.get(i).getId());
-            if(!((recipe.getComponent_set().size() == 0) && recipe.getId() == -1))
+            if(!((recipe.getComponent_set().size() == 0) && recipe.getId() == -1)) {
+                if(recipe.getId() != -1) {
+                    List<Component> components = recipe.getComponent_set();
+                    for (int j = 0; j < components.size(); j++)
+                        components.get(j).setMAmount(components.get(j).getMAmount() * recipe.getWeightInBasket() / recipe.getTotal_amount());
+                }
                 basket.add(recipe);
+            }
         }
         return basket;
     }
