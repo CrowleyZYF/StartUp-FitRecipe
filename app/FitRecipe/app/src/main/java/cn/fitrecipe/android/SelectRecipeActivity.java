@@ -59,13 +59,16 @@ public class SelectRecipeActivity extends Activity implements View.OnClickListen
                 for (int i =0; i < recipes.size(); i++)
                     objects.add(recipes.get(i));
 
-                Ingredient ingredient = new Ingredient();
-                ingredient.setId(13);
-                ingredient.setName("胡萝卜");
-                Component component = new Component();
-                component.setIngredient(ingredient);
-                component.setAmount(100 + "");
-                objects.add(component);
+               List<Ingredient> ingredients = FrDbHelper.getInstance(SelectRecipeActivity.this).getAllIngredient();
+                List<Component> components = new ArrayList<Component>();
+                if(ingredients != null) {
+                    for (int i = 0; i < ingredients.size(); i++) {
+                        Component component = new Component();
+                        component.setMAmount(100);
+                        component.setIngredient(ingredients.get(i));
+                        objects.add(component);
+                    }
+                }
                 publishProgress();
                 return null;
             }

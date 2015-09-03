@@ -149,7 +149,6 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                     break;
                 }
                 boolean isTest = FrApplication.getInstance().isTested();
-                isTest = true;
                 if(isTest){
                     if (frPlanFragment == null){
                         frPlanFragment = new PlanFragment();

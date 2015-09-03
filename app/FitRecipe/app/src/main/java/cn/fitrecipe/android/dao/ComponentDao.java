@@ -3,6 +3,7 @@ package cn.fitrecipe.android.dao;
 import android.content.Context;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.UpdateBuilder;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -111,6 +112,16 @@ public class ComponentDao {
     public void remove(int id) {
         try {
             componentDaoOpe.deleteById(id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void updateComponentStatus(Component component) {
+        try {
+            UpdateBuilder<Component, Integer> builder = componentDaoOpe.updateBuilder();
+            builder.where().eq("id", component.getId());
+            builder.updateColumnValue("status", component.getStatus()).update();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

@@ -285,6 +285,10 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
 
     private void processData(JSONObject data) throws JSONException {
         recipe = Recipe.fromJson(data.toString());
+        //
+        if(recipe != null) {
+            recipe.setIncreWeight(recipe.getTotal_amount());
+        }
 
         /**
          * 存储菜谱
@@ -354,8 +358,8 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         recipe_intro.setText(recipe.getIntroduce());
 
 
-        int total_weight = recipe.getTotal_amount();
-        init_weight = recipe.getTotal_amount();
+        int total_weight = recipe.getIncreWeight();
+        init_weight = recipe.getIncreWeight();
         recipe_weight.setText(total_weight + "克");
         ingredient_title_weight.setText("（" + total_weight + "克）");
 
@@ -509,14 +513,14 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         if(isAdd){
             recipe.addWeight(increment_list);
         }else{
-            if(recipe.getTotal_amount() >= init_weight)
+            if(recipe.getIncreWeight() >= init_weight)
                 recipe.subWeight(increment_list);
         }
-        recipe_weight.setText(recipe.getTotal_amount() + "克");
-        ingredient_title_weight.setText("（" + recipe.getTotal_amount() + "克）");
-        recipe_all_calorie.setText((int)(recipe.getTotal_amount() * recipe.getCalories() / 100) +"kcal");
+        recipe_weight.setText(recipe.getIncreWeight() + "克");
+        ingredient_title_weight.setText("（" + recipe.getIncreWeight() + "克）");
+        recipe_all_calorie.setText((int)(recipe.getIncreWeight() * recipe.getCalories() / 100) +"kcal");
         user_need_calorie.setText("（"+"1730"+"kcal）");
-        calorie_radio.setText((int) ((recipe.getTotal_amount() * recipe.getCalories() / 1730)) + "%");
+        calorie_radio.setText((int) ((recipe.getIncreWeight() * recipe.getCalories() / 1730)) + "%");
 
         component_adapter.notifyDataSetChanged();
     }
