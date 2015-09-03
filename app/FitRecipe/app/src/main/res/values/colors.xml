@@ -26,6 +26,10 @@
     <color name="lf_background">#ffb9db2d</color>
     <color name="lk_background">#ff4abccb</color>
 
+    <color name="protein_background">#ff08b3bd</color>
+    <color name="carbohydrate_background">#ffacce28</color>
+    <color name="lipids_background">#ff95948f</color>
+
     <color name="plan_add">#ff7a7a7a</color>
     <color name="plan_border">#ffdbdbdb</color>
 </resources>

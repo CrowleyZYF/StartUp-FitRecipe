@@ -46,6 +46,9 @@
     <string name="plan_nutrition_rate_prefix_01">g(</string>
     <string name="plan_nutrition_rate_prefix_02">%) : </string>
     <string name="plan_add">添加食材/食谱</string>
+    <string name="carbohydrate">碳水</string>
+    <string name="protein">蛋白质</string>
+    <string name="lipids">脂类</string>
 
     <!--指南-->
     <string name="info">贴士</string>

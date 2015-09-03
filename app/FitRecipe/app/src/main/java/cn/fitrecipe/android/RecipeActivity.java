@@ -37,6 +37,7 @@ import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.ImageLoader.ILoadingListener;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
+import cn.fitrecipe.android.UI.PieChartView;
 import cn.fitrecipe.android.dao.FrDbHelper;
 import cn.fitrecipe.android.entity.Component;
 import cn.fitrecipe.android.entity.Recipe;
@@ -85,6 +86,10 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
     private LinearLayoutForListView ingredient_listView;
     private MyComponentAdapter component_adapter;
     //营养表
+    private PieChartView piechartview;
+    private TextView protein_ratio;
+    private TextView carbohydrate_ratio;
+    private TextView lipids_ratio;
     private LinearLayoutForListView nutrition_listView;
     private MyNutritionAdapter nutrition_adapter;
     //查看步骤
@@ -172,6 +177,11 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         back_btn = (ImageView) findViewById(R.id.back_btn);
         add_btn = (ImageView) findViewById(R.id.add_btn);
         minus_btn = (ImageView) findViewById(R.id.minus_btn);
+
+        piechartview = (PieChartView) findViewById(R.id.piechartview);
+        protein_ratio = (TextView) findViewById(R.id.protein_ratio);
+        carbohydrate_ratio = (TextView) findViewById(R.id.carbohydrate_ratio);
+        lipids_ratio = (TextView) findViewById(R.id.lipids_ratio);
 
         loadingInterface = (LinearLayout) findViewById(R.id.loading_interface);
         recipeContent = (ScrollView) findViewById(R.id.recipe_scrollview);
@@ -371,6 +381,13 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
             increment_list.add(component.getMAmount()/2);
         }
         isCollected = false;
+        float[] dataRatio = {100-Float.parseFloat(recipe.getProtein_ratio()+"")-Float.parseFloat(recipe.getFat_ratio()+""),
+                Float.parseFloat(recipe.getProtein_ratio()+""),
+                Float.parseFloat(recipe.getFat_ratio()+"")};
+        piechartview.setValue(dataRatio);
+        protein_ratio.setText(recipe.getProtein_ratio()+"%");
+        carbohydrate_ratio.setText(100-Float.parseFloat(recipe.getProtein_ratio()+"")-Float.parseFloat(recipe.getFat_ratio()+"")+"%");
+        lipids_ratio.setText(recipe.getFat_ratio()+"%");
     }
 
     private void initEvent() {
@@ -459,7 +476,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
 
     public void collect_recipe(){
         if(isCollected){
-            collect_btn.setImageResource(R.drawable.icon_like_noshadow);
+            collect_btn.setIcon(R.drawable.icon_like_noshadow);
         }else{
             if(!FrApplication.getInstance().isLogin()) {
                 Toast.makeText(RecipeActivity.this, "请登录!", Toast.LENGTH_SHORT).show();
@@ -480,7 +497,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                 @Override
                 public void onResponse(JSONObject res) {
                     Toast.makeText(RecipeActivity.this, "收藏成功!", Toast.LENGTH_SHORT).show();
-                    collect_btn.setImageResource(R.drawable.icon_like_green);
+                    collect_btn.setIcon(R.drawable.icon_like_green);
 //                    if(res.has("data")) {
 //                        try {
 //                            Collection collection = new Gson().fromJson(res.getJSONObject("data").toString(), Collection.class);
