@@ -116,6 +116,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
     private FloatingActionButton share_btn;
     //put recipe in basket
     private TextView put_in_basket;
+    private LinearLayout toggle_btn;
     //菜单是否打开
     private boolean open = false;
     //食谱是否已经收藏
@@ -171,6 +172,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         ingredient_listView = (LinearLayoutForListView) findViewById(R.id.recipe_ingredient_list);
         nutrition_listView = (LinearLayoutForListView) findViewById(R.id.recipe_nutrition_list);
         put_in_basket = (TextView) findViewById(R.id.put_in_basket);
+        toggle_btn = (LinearLayout) findViewById(R.id.toggle_btn);
 
         check_procedure_btn = (TextView) findViewById(R.id.check_procedure);
         set_btn = (ImageView) findViewById(R.id.set_btn);
@@ -457,8 +459,17 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                 break;
             }
             case R.id.put_in_basket:
-               FrDbHelper.getInstance(this).addToBasket(recipe);
-               Toast.makeText(this, recipe.getTitle() + "加入篮子", Toast.LENGTH_SHORT).show();
+                FrDbHelper.getInstance(this).addToBasket(recipe);
+                Toast.makeText(this, recipe.getTitle() + "加入篮子", Toast.LENGTH_SHORT).show();
+                put_in_basket.setText("- 移除菜篮子");
+                put_in_basket.setTextColor(getResources().getColor(R.color.gray));
+                toggle_btn.setBackground(getResources().getDrawable(R.drawable.recipe_button_border_disable));
+                /*
+                put_in_basket.setText("+ 丢进菜篮子");
+                put_in_basket.setTextColor(getResources().getColor(R.color.active_color));
+                toggle_btn.setBackground(getResources().getDrawable(R.drawable.recipe_button_border));
+                */
+
         }
     }
 
