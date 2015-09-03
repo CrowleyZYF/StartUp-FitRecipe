@@ -9,8 +9,6 @@ import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-import cn.fitrecipe.android.entity.Procedure;
-
 /**
  * Created by 奕峰 on 2015/8/18.
  */
@@ -50,8 +48,8 @@ public class PieChartView extends ImageView{
 
     private void drawPieChart(Canvas canvas, float startX, float startY, float radius) {
 
-        final float BIG_TEXT_SIZE = 40;
-        final float SMALL_TEXT_SIZE = 20;
+        final float BIG_TEXT_SIZE = 60;
+        final float SMALL_TEXT_SIZE = 30;
 
         int[] colors = new int[]{0xffbadc2d, 0xff4abdcc, 0xff9f9f9f};
         String[] kinds = new String[]{"碳水", "蛋白质", "脂类"};
