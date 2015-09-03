@@ -175,7 +175,7 @@ public class FrDbHelper {
                     for (int j = 0; j < len; j++) {
                         Component com2 = components.get(j);
                         if (com1.getIngredient().getName().equals(com2.getIngredient().getName())) {
-                            com2.setMAmount(com2.getMAmount() + com1.getMAmount());
+                            com2.setAmount(com2.getAmount() + com1.getAmount());
                             flag = true;
                         }
                     }
@@ -200,8 +200,8 @@ public class FrDbHelper {
                 for(int j = 0; j < recipe.getComponent_set().size(); j++) {
                     Component com2 = recipe.getComponent_set().get(j);
                     if(com1.getIngredient().getName().equals(com2.getIngredient().getName())) {
-                        com1.setMAmount(com1.getMAmount() - com2.getMAmount());
-                        if(com1.getMAmount() == 0) {
+                        com1.setAmount(com1.getAmount() - com2.getAmount());
+                        if(com1.getAmount() == 0) {
                             dao.remove(com1.getId());
                         }
                     }
@@ -251,7 +251,7 @@ public class FrDbHelper {
                 if(recipe.getId() != -1) {
                     List<Component> components = recipe.getComponent_set();
                     for (int j = 0; j < components.size(); j++)
-                        components.get(j).setMAmount(components.get(j).getMAmount() * recipe.getWeightInBasket() / recipe.getTotal_amount());
+                        components.get(j).setAmount(components.get(j).getAmount() * recipe.getWeightInBasket() / recipe.getTotal_amount());
                 }
                 basket.add(recipe);
             }

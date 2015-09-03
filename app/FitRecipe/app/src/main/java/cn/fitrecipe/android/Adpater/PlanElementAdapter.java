@@ -338,7 +338,7 @@ public class PlanElementAdapter extends BaseAdapter{
             }else{
                 Component component = (Component)obj;
                 text1.setText(component.getIngredient().getName());
-                text2.setText(component.getMAmount() + "g");
+                text2.setText(component.getAmount() + "g");
                 text3.setText(100 + "kcal");
             }
             view.findViewById(R.id.trash).setOnClickListener(new View.OnClickListener() {

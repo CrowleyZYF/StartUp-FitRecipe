@@ -87,7 +87,7 @@ public class Recipe implements Serializable, Comparable<Recipe>{
         int total = 0;
         if(increment_list.size() == component_set.size()) {
             for (int i = 0; i < component_set.size(); i++) {
-                getComponent_set().get(i).setMAmount(getComponent_set().get(i).getMAmount() + increment_list.get(i));
+                getComponent_set().get(i).setAmount(getComponent_set().get(i).getAmount() + increment_list.get(i));
                 total += increment_list.get(i);
             }
             setIncreWeight(getIncreWeight() + total);
@@ -98,7 +98,7 @@ public class Recipe implements Serializable, Comparable<Recipe>{
         int total = 0;
         if(increment_list.size() == component_set.size()) {
             for (int i = 0; i < component_set.size(); i++) {
-                getComponent_set().get(i).setMAmount(getComponent_set().get(i).getMAmount() - increment_list.get(i));
+                getComponent_set().get(i).setAmount(getComponent_set().get(i).getAmount() - increment_list.get(i));
                 total -= increment_list.get(i);
             }
             setIncreWeight(getIncreWeight() + total);

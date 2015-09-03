@@ -16,7 +16,7 @@ public class Component implements Serializable{
     @DatabaseField(canBeNull = true, foreign = true, foreignAutoRefresh = true)
     private Ingredient ingredient;
     @DatabaseField
-    private String amount;
+    private int amount;
     @DatabaseField
     private String remark;
     @DatabaseField
@@ -36,21 +36,6 @@ public class Component implements Serializable{
         this.status = status;
     }
 
-    public int getMAmount() {
-        return Integer.parseInt(amount);
-    }
-
-    public void setMAmount(int amount) {
-        this.amount = String.valueOf(amount);
-    }
-
-    public String getAmount() {
-        return amount;
-    }
-
-    public void setAmount(String amount) {
-        this.amount = amount;
-    }
 
     public String getRemark() {
         if(remark == null || remark.length() == 0)
@@ -100,5 +85,13 @@ public class Component implements Serializable{
 
     public void setItemIndex(int itemIndex) {
         this.itemIndex = itemIndex;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 }

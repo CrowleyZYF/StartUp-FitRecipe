@@ -64,7 +64,7 @@ public class SelectRecipeActivity extends Activity implements View.OnClickListen
                 if(ingredients != null) {
                     for (int i = 0; i < ingredients.size(); i++) {
                         Component component = new Component();
-                        component.setMAmount(100);
+                        component.setAmount(100);
                         component.setIngredient(ingredients.get(i));
                         objects.add(component);
                     }
@@ -282,10 +282,14 @@ public class SelectRecipeActivity extends Activity implements View.OnClickListen
             if(obj_selected instanceof Recipe) {
                 Recipe recipe = ((Recipe) obj_selected);
                 recipe_title.setText(recipe.getTitle());
-                double sum = recipe.getNutrition_set().get(1).getAmount() + recipe.getNutrition_set().get(2).getAmount() + recipe.getNutrition_set().get(3).getAmount();
-                int a = (int) Math.round(recipe.getNutrition_set().get(3).getAmount() * 100 / sum);
-                int b = (int) Math.round(recipe.getNutrition_set().get(1).getAmount() * 100 / sum);
-                int c = 100 - a - b;
+//                double sum = recipe.getNutrition_set().get(1).getAmount() + recipe.getNutrition_set().get(2).getAmount() + recipe.getNutrition_set().get(3).getAmount();
+//                int a = (int) Math.round(recipe.getNutrition_set().get(3).getAmount() * 100 / sum);
+//                int b = (int) Math.round(recipe.getNutrition_set().get(1).getAmount() * 100 / sum);
+//                int c = 100 - a - b;
+                // a 碳水 b 蛋白质 c 脂类
+                int b = (int) Math.round(recipe.getProtein_ratio());
+                int c = (int) Math.round(recipe.getFat_ratio());
+                int a = 100 - b - c;
                 piechartview.setValue(new float[]{a, b, c});
             }else {
                 Component component = (Component) obj_selected;
@@ -309,7 +313,7 @@ public class SelectRecipeActivity extends Activity implements View.OnClickListen
                             ((Recipe) obj_selected).setIncreWeight(Integer.parseInt(recipe_weight.getText().toString()));
                             intent.putExtra("obj_selected", (Recipe)obj_selected);
                         }else {
-                            ((Component) obj_selected).setAmount(recipe_weight.getText().toString());
+                            ((Component) obj_selected).setAmount(Integer.parseInt(recipe_weight.getText().toString()));
                             intent.putExtra("obj_selected", (Component) obj_selected);
                         }
                         setResult(RESULT_OK, intent);

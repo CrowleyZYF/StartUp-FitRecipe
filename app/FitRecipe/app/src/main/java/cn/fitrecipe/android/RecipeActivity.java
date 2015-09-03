@@ -382,16 +382,16 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         increment_list = new ArrayList<Integer>();
         for(int i = 0;i < component_set.size();i++){
             Component component = component_set.get(i);
-            increment_list.add(component.getMAmount()/2);
+            increment_list.add(component.getAmount()/2);
         }
         isCollected = false;
-        float[] dataRatio = {100-Float.parseFloat(recipe.getProtein_ratio()+"")-Float.parseFloat(recipe.getFat_ratio()+""),
-                Float.parseFloat(recipe.getProtein_ratio()+""),
-                Float.parseFloat(recipe.getFat_ratio()+"")};
+        float[] dataRatio = {100-Math.round(Float.parseFloat(recipe.getProtein_ratio()+""))-Math.round(Float.parseFloat(recipe.getFat_ratio() + "")),
+                Math.round(Float.parseFloat(recipe.getProtein_ratio()+"")),
+                Math.round(Float.parseFloat(recipe.getFat_ratio() + ""))};
         piechartview.setValue(dataRatio);
-        protein_ratio.setText(recipe.getProtein_ratio()+"%");
-        carbohydrate_ratio.setText(100-Float.parseFloat(recipe.getProtein_ratio()+"")-Float.parseFloat(recipe.getFat_ratio()+"")+"%");
-        lipids_ratio.setText(recipe.getFat_ratio()+"%");
+        protein_ratio.setText(Math.round(recipe.getProtein_ratio())+"%");
+        carbohydrate_ratio.setText(100-Math.round(Float.parseFloat(recipe.getProtein_ratio()+""))-Math.round(Float.parseFloat(recipe.getFat_ratio()+""))+"%");
+        lipids_ratio.setText(Math.round(recipe.getFat_ratio())+"%");
     }
 
     private void initEvent() {
@@ -596,7 +596,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                 viewHolder.textView3 = (TextView) convertView.findViewById(R.id.ingredient_remark);
             }
             viewHolder.textView1.setText(recipe.getComponent_set().get(position).getIngredient().getName());
-            viewHolder.textView2.setText(recipe.getComponent_set().get(position).getMAmount()+"");
+            viewHolder.textView2.setText(recipe.getComponent_set().get(position).getAmount()+"g");
             viewHolder.textView3.setText(recipe.getComponent_set().get(position).getRemark());
             convertView.setTag(viewHolder);
             return convertView;
@@ -634,7 +634,8 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
             }
             viewHolder.textView1.setText(recipe.getNutrition_set().get(position).getName());
             viewHolder.textView2.setText(String.valueOf(recipe.getNutrition_set().get(position).getAmount()) + recipe.getNutrition_set().get(position).getUnit());
-            viewHolder.textView3.setText("12%");
+            viewHolder.textView3.setText(String.valueOf(recipe.getNutrition_set().get(position).getAmount() * recipe.getIncreWeight() / 100)
+                    + recipe.getNutrition_set().get(position).getUnit());
             convertView.setTag(viewHolder);
             return convertView;
         }
