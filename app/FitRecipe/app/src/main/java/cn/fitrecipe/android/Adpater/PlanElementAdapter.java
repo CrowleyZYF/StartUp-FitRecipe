@@ -1,7 +1,6 @@
 package cn.fitrecipe.android.Adpater;
 
 import android.content.Intent;
-import android.media.Image;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +29,6 @@ import cn.fitrecipe.android.RecipeActivity;
 import cn.fitrecipe.android.SelectRecipeActivity;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.dao.FrDbHelper;
-import cn.fitrecipe.android.entity.Comment;
 import cn.fitrecipe.android.entity.Component;
 import cn.fitrecipe.android.entity.DayPlan;
 import cn.fitrecipe.android.entity.PlanItem;
@@ -78,10 +77,19 @@ public class PlanElementAdapter extends BaseAdapter{
         ViewHolder holder;
         if(convertView == null) {
             convertView = View.inflate(fragment.getActivity(), R.layout.plan_list_item, null);
+
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         }else
             holder = (ViewHolder) convertView.getTag();
+
+        if (position!=0){
+            holder.first_margin_01.setVisibility(View.GONE);
+            holder.first_margin_02.setVisibility(View.GONE);
+        }else{
+            holder.first_margin_01.setVisibility(View.VISIBLE);
+            holder.first_margin_02.setVisibility(View.VISIBLE);
+        }
 
         final PlanItem item = items.get(position);
         //
@@ -256,7 +264,12 @@ public class PlanElementAdapter extends BaseAdapter{
                     fragment.startActivity(intent);
                 }
             }
-        });
+        });/*
+        if(position == 0) {
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(0, 20, 0, 0);
+            convertView.setLayoutParams(params);
+        }*/
         return convertView;
     }
 
@@ -270,6 +283,7 @@ public class PlanElementAdapter extends BaseAdapter{
         TextView plan_fat_intake, plan_fat_need, plan_fat_rate;
         RelativeLayout add_recipe, plan_image_cover;
         LinearLayoutForListView plan_content;
+        LinearLayout first_margin_01, first_margin_02;
 
         public ViewHolder(View v) {
             plan_shopping = (ImageView) v.findViewById(R.id.plan_shopping);
@@ -291,6 +305,8 @@ public class PlanElementAdapter extends BaseAdapter{
             add_recipe = (RelativeLayout) v.findViewById(R.id.add_recipe);
             plan_content = (LinearLayoutForListView) v.findViewById(R.id.plan_content);
             plan_image_cover = (RelativeLayout) v.findViewById(R.id.plan_image_cover);
+            first_margin_01 = (LinearLayout) v.findViewById(R.id.first_margin_01);
+            first_margin_02 = (LinearLayout) v.findViewById(R.id.first_margin_02);
         }
     }
 

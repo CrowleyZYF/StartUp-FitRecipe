@@ -20,6 +20,7 @@ import java.util.List;
 import cn.fitrecipe.android.Adpater.PlanElementAdapter;
 import cn.fitrecipe.android.FrApplication;
 import cn.fitrecipe.android.IngredientActivity;
+import cn.fitrecipe.android.NutritionActivity;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.UI.PieChartView;
@@ -222,7 +223,9 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             nutritionAdapter.notifyDataSetChanged();
         }
         toggleFlag = !toggleFlag;
-        mRightMenu.toggle();
+        //mRightMenu.toggle();
+        Intent intent = new Intent(getActivity(), NutritionActivity.class);
+        startActivity(intent);
     }
 
     @Override

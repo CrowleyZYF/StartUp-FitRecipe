@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
@@ -28,6 +29,9 @@ public class RecipeProcedureActivity extends Activity implements View.OnClickLis
     private ImageView left_btn;
     private ImageView right_btn;
     private String title;
+    private LinearLayout tips_area;
+    private TextView tips_content;
+    private String tips;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,7 @@ public class RecipeProcedureActivity extends Activity implements View.OnClickLis
         setContentView(R.layout.activity_recipe_procedure);
         title = getIntent().getStringExtra("recipe_title");
         procedureCards = (ArrayList<Procedure>) getIntent().getSerializableExtra("procedure_set");
+        tips = getIntent().getStringExtra("recipe_tips");
         initView();
         initData();
         initEvent();
@@ -49,6 +54,11 @@ public class RecipeProcedureActivity extends Activity implements View.OnClickLis
     private void initData() {
         procedureCardAdapter = new ProcedureCardAdapter(this, procedureCards);
         procedureRecyclerView.setAdapter(procedureCardAdapter);
+        if(tips.isEmpty()){
+            tips_area.setVisibility(View.GONE);
+        }else{
+            tips_content.setText(tips);
+        }
 
     }
 
@@ -74,6 +84,8 @@ public class RecipeProcedureActivity extends Activity implements View.OnClickLis
         procedureLayoutManager = new RecyclerViewLayoutManager(this);
         procedureLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         procedureRecyclerView.setLayoutManager(procedureLayoutManager);
+        tips_area = (LinearLayout) findViewById(R.id.tips_area);
+        tips_content = (TextView) findViewById(R.id.tips_content);
     }
 
     @Override

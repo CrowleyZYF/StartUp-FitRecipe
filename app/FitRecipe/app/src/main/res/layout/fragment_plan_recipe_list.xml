@@ -84,9 +84,20 @@
                         android:layout_marginRight="15dp"/>
 
                     <TextView
+                        android:id="@+id/other_plan_days"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="完成(0/7)天"
+                        android:textSize="12sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:layout_gravity="center"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:id="@+id/diy_days"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2015-07-28"
                         android:textSize="12sp"
                         android:textColor="@color/login_input_text_color"
                         android:layout_gravity="center"/>
@@ -125,7 +136,6 @@
         android:layout_height="match_parent"
         android:scrollbars="none"
         android:background="@color/background_color"
-        android:paddingTop="20dp"
         >
 
         <cn.fitrecipe.android.UI.LinearLayoutForListView
