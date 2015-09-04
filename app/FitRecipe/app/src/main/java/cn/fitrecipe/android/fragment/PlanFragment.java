@@ -116,8 +116,16 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         plans.setAdapter(adapter);
         nutritionAdapter = new NutritionAdapter(getActivity(), null);
         recipe_nutrition_list.setAdapter(nutritionAdapter);
+//        switchPlan(pointer);
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
         switchPlan(pointer);
     }
+
 
     private void switchPlan(int pointer) {
         Date date = new Date(now + pointer * 24 * 3600 * 1000);
@@ -160,7 +168,6 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                     items.get(4).addContent(obj);
                     FrDbHelper.getInstance(getActivity()).addPlanItem(dayPlan.getPlanItems().get(4));
                     break;
-
             }
             adapter.notifyDataSetChanged();
         }

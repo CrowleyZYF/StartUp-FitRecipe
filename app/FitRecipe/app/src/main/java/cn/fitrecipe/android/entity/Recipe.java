@@ -74,36 +74,18 @@ public class Recipe implements Serializable, Comparable<Recipe>{
     private int collection_count;
     @DatabaseField
     private String tags;
+    //if recipe in basket
     @DatabaseField
     private boolean inBasket;
+    @DatabaseField
+    private boolean inPlanItemBasket;
     @DatabaseField (defaultValue = "0")
-    private int weightInBasket;
+    private int weightInPlanBasket;
+    @DatabaseField(defaultValue = "0")
+    private int weightInRecipeBasket;
     @DatabaseField
     private int increWeight;
 
-
-
-    public void addWeight(List<Integer> increment_list) {
-        int total = 0;
-        if(increment_list.size() == component_set.size()) {
-            for (int i = 0; i < component_set.size(); i++) {
-                getComponent_set().get(i).setAmount(getComponent_set().get(i).getAmount() + increment_list.get(i));
-                total += increment_list.get(i);
-            }
-            setIncreWeight(getIncreWeight() + total);
-        }
-    }
-
-    public void subWeight(List<Integer> increment_list) {
-        int total = 0;
-        if(increment_list.size() == component_set.size()) {
-            for (int i = 0; i < component_set.size(); i++) {
-                getComponent_set().get(i).setAmount(getComponent_set().get(i).getAmount() - increment_list.get(i));
-                total -= increment_list.get(i);
-            }
-            setIncreWeight(getIncreWeight() + total);
-        }
-    }
 
     public static Recipe fromJson(String json) throws JSONException {
         JSONObject data = new JSONObject(json);
@@ -500,19 +482,35 @@ public class Recipe implements Serializable, Comparable<Recipe>{
         return -getId() + another.getId();
     }
 
-    public int getWeightInBasket() {
-        return weightInBasket;
-    }
-
-    public void setWeightInBasket(int weightInBasket) {
-        this.weightInBasket = weightInBasket;
-    }
-
     public int getIncreWeight() {
         return increWeight;
     }
 
     public void setIncreWeight(int increWeight) {
         this.increWeight = increWeight;
+    }
+
+    public int getWeightInPlanBasket() {
+        return weightInPlanBasket;
+    }
+
+    public void setWeightInPlanBasket(int weightInPlanBasket) {
+        this.weightInPlanBasket = weightInPlanBasket;
+    }
+
+    public int getWeightInRecipeBasket() {
+        return weightInRecipeBasket;
+    }
+
+    public void setWeightInRecipeBasket(int weightInRecipeBasket) {
+        this.weightInRecipeBasket = weightInRecipeBasket;
+    }
+
+    public boolean isInPlanItemBasket() {
+        return inPlanItemBasket;
+    }
+
+    public void setInPlanItemBasket(boolean inPlanItemBasket) {
+        this.inPlanItemBasket = inPlanItemBasket;
     }
 }
