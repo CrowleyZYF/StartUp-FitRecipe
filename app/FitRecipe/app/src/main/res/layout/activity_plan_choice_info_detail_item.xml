@@ -36,7 +36,8 @@
         android:text="牛奶"
         android:textColor="@color/login_input_text_color"
         android:textSize="14sp"
-        android:gravity="center_vertical"/>
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp"/>
 
     <TextView
         android:id="@+id/plan_item_weight"
@@ -46,7 +47,8 @@
         android:text="100g"
         android:textSize="14sp"
         android:textColor="#a4a4a4"
-        android:gravity="center_vertical"/>
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp"/>
 
     <TextView
         android:id="@+id/plan_item_calories"
@@ -56,6 +58,7 @@
         android:text="200kcal"
         android:textSize="14sp"
         android:textColor="#a4a4a4"
-        android:gravity="center_vertical"/>
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp"/>
 
 </LinearLayout>

@@ -2,7 +2,6 @@ package cn.fitrecipe.android.UI;
 
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -11,8 +10,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
-
-import cn.fitrecipe.android.R;
 
 public class SlidingMenu extends HorizontalScrollView {
 
@@ -50,7 +47,7 @@ public class SlidingMenu extends HorizontalScrollView {
 		wm.getDefaultDisplay().getMetrics(outMetrics);
 
 		mScreenWidth=outMetrics.widthPixels;
-        mMenuLeftPadding = mScreenWidth - (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,125,context.getResources().getDisplayMetrics());
+        mMenuLeftPadding = mScreenWidth - (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,135,context.getResources().getDisplayMetrics());
 	}
 
 

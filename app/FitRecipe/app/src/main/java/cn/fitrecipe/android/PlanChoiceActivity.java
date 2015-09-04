@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,16 +13,20 @@ import java.util.List;
 
 import cn.fitrecipe.android.Adpater.PlanCardAdapter;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
+import cn.fitrecipe.android.UI.SlidingMenu;
 import cn.fitrecipe.android.entity.Plan;
 
 /**
  * Created by 奕峰 on 2015/5/8.
  */
-public class PlanChoiceActivity extends Activity {
+public class PlanChoiceActivity extends Activity implements View.OnClickListener {
+
+    private SlidingMenu mRightMenu;
 
     private TextView header_name;
     private ImageView back_btn;
     private ImageView filter_btn;
+    private TextView sure_btn;
 
     private RecyclerView planChoiceRecyclerView;
     private PlanCardAdapter planCardAdapter;
@@ -31,7 +36,7 @@ public class PlanChoiceActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_plan_choice);
+        setContentView(R.layout.activity_plan_choice_container);
 
         initView();
         initData();
@@ -40,16 +45,20 @@ public class PlanChoiceActivity extends Activity {
 
     private void initView() {
         header_name = (TextView) findViewById(R.id.header_name_text);
+        header_name.setText(getResources().getString(R.string.recipe_plan));
         back_btn = (ImageView) findViewById(R.id.left_btn);
         back_btn.setImageResource(R.drawable.icon_back_white);
         filter_btn = (ImageView) findViewById(R.id.right_btn);
         filter_btn.setImageResource(R.drawable.icon_filter);
+        sure_btn = (TextView) findViewById(R.id.filter_sure_btn);
 
         planChoiceRecyclerView = (RecyclerView) findViewById(R.id.plan_choice);
         planChoiceRecyclerView.setHasFixedSize(true);
         planChoiceLayoutManager = new RecyclerViewLayoutManager(this);
         planChoiceLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         planChoiceRecyclerView.setLayoutManager(planChoiceLayoutManager);
+
+        mRightMenu = (SlidingMenu) findViewById(R.id.container_layout);
     }
 
     private void initData() {
@@ -64,7 +73,21 @@ public class PlanChoiceActivity extends Activity {
     }
 
     private void initEvent() {
-
+        filter_btn.setOnClickListener(this);
+        sure_btn.setOnClickListener(this);
+        back_btn.setOnClickListener(this);
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.filter_sure_btn:
+            case R.id.right_btn:
+                mRightMenu.toggle();
+                break;
+            case R.id.left_btn:
+                finish();
+                break;
+        }
+    }
 }

@@ -205,9 +205,17 @@
     <string name="title_activity_select_recipe">SelectRecipeActivity</string>
 
     <!--计划-->
+    <string name="title_activity_ingredient2">IngredientActivity2</string>
+    <string name="recipe_plan">饮食计划</string>
+    <string name="author_type">作者类型</string>
+    <string name="author_nutrition">营养师</string>
+    <string name="author_fit">健身达人</string>
+    <string name="fit_type">适宜人群</string>
+    <string name="fit_muscle">增肌</string>
+    <string name="fit_fat">减脂</string>
+    <string name="plan_type">计划类型</string>
     <string name="plan_food">食材</string>
     <string name="plan_recipe">食谱</string>
-    <string name="title_activity_ingredient2">IngredientActivity2</string>
 
 
 </resources>
