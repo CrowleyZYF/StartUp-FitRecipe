@@ -3,6 +3,7 @@ package cn.fitrecipe.android.dao;
 import android.content.Context;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.PreparedQuery;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -72,10 +73,13 @@ public class RecipeDao {
     }
 
     public List<Recipe> getInBasket() {
+        PreparedQuery<Recipe> preparedQuery = null;
         try {
-            return recipeDaoOpe.queryForEq("inBasket", true);
+            preparedQuery = recipeDaoOpe.queryBuilder().where().eq("inBasket", true).or().eq("inPlanItemBasket", true).prepare();
+            return recipeDaoOpe.query(preparedQuery);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
+        return null;
     }
 }

@@ -59,7 +59,7 @@ public class IngredientAdapter extends BaseAdapter{
             convertView.setTag(holder);
         }
         holder.textView1.setText(componentList.get(position).getIngredient().getName());
-        holder.textView2.setText(componentList.get(position).getAmount());
+        holder.textView2.setText(componentList.get(position).getAmount()+"g");
         final int status = componentList.get(position).getStatus();
         if(status == 0) {
             holder.textView1.setTextColor(this.context.getResources().getColor(R.color.login_input_text_color));

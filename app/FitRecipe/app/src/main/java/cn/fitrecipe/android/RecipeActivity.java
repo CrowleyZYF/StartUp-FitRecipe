@@ -39,8 +39,10 @@ import cn.fitrecipe.android.ImageLoader.ILoadingListener;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.UI.PieChartView;
 import cn.fitrecipe.android.dao.FrDbHelper;
+import cn.fitrecipe.android.entity.Author;
 import cn.fitrecipe.android.entity.Component;
 import cn.fitrecipe.android.entity.Recipe;
+import cn.fitrecipe.android.entity.Report;
 import cn.fitrecipe.android.floatingactionbutton.FloatingActionButton;
 import cn.fitrecipe.android.floatingactionbutton.FloatingActionsMenu;
 import pl.tajchert.sample.DotsTextView;
@@ -126,10 +128,11 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
     private Recipe recipe;
     //add weight every
     private List<Integer> increment_list;
-    private int init_weight;
+    private List<Component> dataList;
 
     // 首先在您的Activity中添加如下成员变量
     final UMSocialService mController = UMServiceFactory.getUMSocialService("com.umeng.share");
+    private Report report;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,6 +175,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         ingredient_listView = (LinearLayoutForListView) findViewById(R.id.recipe_ingredient_list);
         nutrition_listView = (LinearLayoutForListView) findViewById(R.id.recipe_nutrition_list);
         put_in_basket = (TextView) findViewById(R.id.put_in_basket);
+//        basketStateChange();
         toggle_btn = (LinearLayout) findViewById(R.id.toggle_btn);
 
         check_procedure_btn = (TextView) findViewById(R.id.check_procedure);
@@ -188,29 +192,6 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         loadingInterface = (LinearLayout) findViewById(R.id.loading_interface);
         recipeContent = (ScrollView) findViewById(R.id.recipe_scrollview);
         dotsTextView = (DotsTextView) findViewById(R.id.dots);
-
-        /*new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                hideLoading(false, "");
-            }
-        }, 2000);*/
-
-
-        /*View view = LayoutInflater.from(this).inflate(R.layout.activity_recipe_info_set, null);
-        popupWindow = new PopupWindow(view, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics()), (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 203, getResources().getDisplayMetrics()));
-        popupWindow.setFocusable(true);
-        // 设置允许在外点击消失
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.setOnDismissListener(this);
-        //刷新状态
-        popupWindow.update();
-
-        collect_btn = (ImageView) view.findViewById(R.id.collect_btn);
-        shopping_btn = (ImageView) view.findViewById(R.id.shopping_btn);
-        comment_btn = (ImageView) view.findViewById(R.id.comment_btn);
-        share_btn = (ImageView) view.findViewById(R.id.share_btn);
-        */
 
         float_set = (FloatingActionsMenu) findViewById(R.id.multiple_actions);
         collect_btn = (FloatingActionButton) findViewById(R.id.action_collect);
@@ -263,6 +244,24 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
     }
 
     private void initData() {
+        dataList = new ArrayList<>();
+        for(int i = 0; i < recipe.getComponent_set().size(); i++) {
+            Component component = recipe.getComponent_set().get(i);
+            Component newComponent = new Component();
+            if(!recipe.getInBasket())
+                newComponent.setAmount(component.getAmount());
+            else
+                newComponent.setAmount(component.getAmount() * recipe.getWeightInRecipeBasket() / recipe.getTotal_amount());
+            newComponent.setId(component.getId());
+            newComponent.setIngredient(component.getIngredient());
+            newComponent.setRecipe(component.getRecipe());
+            newComponent.setRemark(component.getRemark());
+            newComponent.setItemIndex(component.getItemIndex());
+            newComponent.setStatus(component.getStatus());
+            newComponent.setPlanItem(component.getPlanItem());
+            dataList.add(newComponent);
+        }
+//        Collections.copy(dataList, recipe.getComponent_set());
         component_adapter=new MyComponentAdapter();
         ingredient_listView.setAdapter(component_adapter);
         nutrition_adapter=new MyNutritionAdapter();
@@ -299,7 +298,23 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         recipe = Recipe.fromJson(data.toString());
         //
         if(recipe != null) {
-            recipe.setIncreWeight(recipe.getTotal_amount());
+            Recipe old = FrDbHelper.getInstance(this).getRecipe(recipe.getId());
+            if(old != null) {
+                recipe.setInPlanItemBasket(old.isInPlanItemBasket());
+                recipe.setInBasket(old.getInBasket());
+                recipe.setWeightInPlanBasket(old.getWeightInPlanBasket());
+                recipe.setWeightInRecipeBasket(old.getWeightInRecipeBasket());
+            }
+            if(recipe.getInBasket())
+                recipe.setIncreWeight(recipe.getWeightInRecipeBasket());
+            else
+                recipe.setIncreWeight(recipe.getTotal_amount());
+        }
+
+        //获取报告
+        Author author = FrApplication.getInstance().getAuthor();
+        if(author != null) {
+            report = FrDbHelper.getInstance(this).getReport(author);
         }
 
         /**
@@ -359,7 +374,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         //set duration
         recipe_time.setText("烹饪时间："+ recipe.getDuration() + "min");
         recipe_calorie.setText("热量："+ recipe.getCalories() + "kcal/100g");
-        recipe_collect.setText("收藏 " + "100");
+        recipe_collect.setText("收藏 " + recipe.getCollection_count());
         recipe_comment.setText("评论 " + "100");
 
         //set the recipe author
@@ -371,29 +386,35 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
 
 
         int total_weight = recipe.getIncreWeight();
-        init_weight = recipe.getIncreWeight();
         recipe_weight.setText(total_weight + "克");
         ingredient_title_weight.setText("（" + total_weight + "克）");
 
         double calories = recipe.getCalories();
         recipe_all_calorie.setText((int)(total_weight * calories / 100) +"kcal");
-        user_need_calorie.setText("（"+"1730"+"kcal）");
-        calorie_radio.setText((int)((total_weight * calories / 1730)) +"%");
+        if(report != null) {
+            user_need_calorie.setText("（" + Math.round(report.getCaloriesIntake()) + "kcal）");
+            calorie_radio.setText(Math.round((total_weight * calories / report.getCaloriesIntake())) +"%");
+        }else {
+            user_need_calorie.setText("（" + "----" + "kcal）");
+            calorie_radio.setText("--");
+        }
+
 
         List<Component> component_set = recipe.getComponent_set();
         increment_list = new ArrayList<Integer>();
         for(int i = 0;i < component_set.size();i++){
             Component component = component_set.get(i);
-            increment_list.add(component.getMAmount()/2);
+            increment_list.add(component.getAmount()/2);
         }
         isCollected = false;
-        float[] dataRatio = {100-Float.parseFloat(recipe.getProtein_ratio()+"")-Float.parseFloat(recipe.getFat_ratio()+""),
-                Float.parseFloat(recipe.getProtein_ratio()+""),
-                Float.parseFloat(recipe.getFat_ratio()+"")};
+        float[] dataRatio = {100-Math.round(Float.parseFloat(recipe.getProtein_ratio()+""))-Math.round(Float.parseFloat(recipe.getFat_ratio() + "")),
+                Math.round(Float.parseFloat(recipe.getProtein_ratio()+"")),
+                Math.round(Float.parseFloat(recipe.getFat_ratio() + ""))};
         piechartview.setValue(dataRatio);
-        protein_ratio.setText(recipe.getProtein_ratio()+"%");
-        carbohydrate_ratio.setText(100-Float.parseFloat(recipe.getProtein_ratio()+"")-Float.parseFloat(recipe.getFat_ratio()+"")+"%");
-        lipids_ratio.setText(recipe.getFat_ratio()+"%");
+        protein_ratio.setText(Math.round(recipe.getProtein_ratio()) + "%");
+        carbohydrate_ratio.setText(100-Math.round(Float.parseFloat(recipe.getProtein_ratio()+""))-Math.round(Float.parseFloat(recipe.getFat_ratio()+""))+"%");
+        lipids_ratio.setText(Math.round(recipe.getFat_ratio())+"%");
+        basketStateChange();
     }
 
     private void initEvent() {
@@ -409,6 +430,22 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         put_in_basket.setOnClickListener(this);
     }
 
+
+    private void adjustComponent(int weight) {
+        for(int i = 0; i < dataList.size(); i++) {
+            Component component = dataList.get(i);
+            component.setAmount(recipe.getComponent_set().get(i).getAmount() * weight / recipe.getTotal_amount());
+        }
+        recipe.setIncreWeight(weight);
+        recipe_weight.setText(recipe.getIncreWeight() + "克");
+        ingredient_title_weight.setText("（" + recipe.getIncreWeight() + "克）");
+        recipe_all_calorie.setText((int) (recipe.getIncreWeight() * recipe.getCalories() / 100) + "kcal");
+        if(report != null)
+            calorie_radio.setText(Math.round((recipe.getIncreWeight() * recipe.getCalories() / report.getCaloriesIntake())) + "%");
+        else
+            calorie_radio.setText("--");
+        component_adapter.notifyDataSetChanged();
+    }
 
     @Override
     public void onClick(View v) {
@@ -464,17 +501,39 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                 break;
             }
             case R.id.put_in_basket:
-                FrDbHelper.getInstance(this).addToBasket(recipe);
-                Toast.makeText(this, recipe.getTitle() + "加入篮子", Toast.LENGTH_SHORT).show();
-                put_in_basket.setText("- 移除菜篮子");
-                put_in_basket.setTextColor(getResources().getColor(R.color.gray));
-                toggle_btn.setBackground(getResources().getDrawable(R.drawable.recipe_button_border_disable));
+                recipe.setWeightInRecipeBasket(recipe.getIncreWeight());
+                if(!recipe.getInBasket()) {
+                    recipe.setInBasket(true);
+                    FrDbHelper.getInstance(this).addRecipeToBasket(recipe);
+                    Toast.makeText(this, recipe.getTitle() + "丢进菜篮子", Toast.LENGTH_SHORT).show();
+                }else {
+                    recipe.setInBasket(false);
+                    FrDbHelper.getInstance(this).removeRecipeFromBasket(recipe);
+                    Toast.makeText(this, recipe.getTitle() + "移除菜篮子", Toast.LENGTH_SHORT).show();
+                }
+                basketStateChange();
                 /*
                 put_in_basket.setText("+ 丢进菜篮子");
                 put_in_basket.setTextColor(getResources().getColor(R.color.active_color));
                 toggle_btn.setBackground(getResources().getDrawable(R.drawable.recipe_button_border));
                 */
 
+        }
+    }
+
+    private void basketStateChange() {
+        if(recipe.getInBasket()) {
+            put_in_basket.setText("- 移除菜篮子");
+            put_in_basket.setTextColor(getResources().getColor(R.color.gray));
+            toggle_btn.setBackground(getResources().getDrawable(R.drawable.recipe_button_border_disable));
+            add_btn.setEnabled(false);
+            minus_btn.setEnabled(false);
+        }else {
+            put_in_basket.setText("+ 丢进菜篮子");
+            put_in_basket.setTextColor(getResources().getColor(R.color.active_color));
+            toggle_btn.setBackground(getResources().getDrawable(R.drawable.recipe_button_border));
+            add_btn.setEnabled(true);
+            minus_btn.setEnabled(true);
         }
     }
 
@@ -540,18 +599,11 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
 
     public void adjustWeight(boolean isAdd){
         if(isAdd){
-            recipe.addWeight(increment_list);
+           adjustComponent(recipe.getIncreWeight() + recipe.getTotal_amount() / 2);
         }else{
-            if(recipe.getIncreWeight() >= init_weight)
-                recipe.subWeight(increment_list);
+            if(recipe.getIncreWeight() >= recipe.getTotal_amount())
+                adjustComponent(recipe.getIncreWeight() - recipe.getTotal_amount() / 2);
         }
-        recipe_weight.setText(recipe.getIncreWeight() + "克");
-        ingredient_title_weight.setText("（" + recipe.getIncreWeight() + "克）");
-        recipe_all_calorie.setText((int)(recipe.getIncreWeight() * recipe.getCalories() / 100) +"kcal");
-        user_need_calorie.setText("（"+"1730"+"kcal）");
-        calorie_radio.setText((int) ((recipe.getIncreWeight() * recipe.getCalories() / 1730)) + "%");
-
-        component_adapter.notifyDataSetChanged();
     }
 
 
@@ -582,12 +634,12 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
 
         @Override
         public int getCount() {
-            return recipe.getComponent_set().size();
+            return dataList.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return recipe.getComponent_set().get(position);
+            return dataList.get(position);
         }
 
         @Override
@@ -607,9 +659,9 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                 viewHolder.textView2 = (TextView) convertView.findViewById(R.id.ingredient_weight);
                 viewHolder.textView3 = (TextView) convertView.findViewById(R.id.ingredient_remark);
             }
-            viewHolder.textView1.setText(recipe.getComponent_set().get(position).getIngredient().getName());
-            viewHolder.textView2.setText(recipe.getComponent_set().get(position).getMAmount()+"");
-            viewHolder.textView3.setText(recipe.getComponent_set().get(position).getRemark());
+            viewHolder.textView1.setText(dataList.get(position).getIngredient().getName());
+            viewHolder.textView2.setText(dataList.get(position).getAmount()+"g");
+            viewHolder.textView3.setText(dataList.get(position).getRemark());
             convertView.setTag(viewHolder);
             return convertView;
         }
@@ -646,7 +698,8 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
             }
             viewHolder.textView1.setText(recipe.getNutrition_set().get(position).getName());
             viewHolder.textView2.setText(String.valueOf(recipe.getNutrition_set().get(position).getAmount()) + recipe.getNutrition_set().get(position).getUnit());
-            viewHolder.textView3.setText("12%");
+            viewHolder.textView3.setText(String.valueOf(Math.round(recipe.getNutrition_set().get(position).getAmount() * recipe.getIncreWeight()) * 1.0/ 100)
+                    + recipe.getNutrition_set().get(position).getUnit());
             convertView.setTag(viewHolder);
             return convertView;
         }

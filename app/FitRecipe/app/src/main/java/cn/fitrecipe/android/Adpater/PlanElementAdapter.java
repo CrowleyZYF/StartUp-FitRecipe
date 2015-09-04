@@ -104,48 +104,12 @@ public class PlanElementAdapter extends BaseAdapter{
                 if(!item.isInBasket()) {
                     addBtn.setEnabled(false);
                     ((ImageView)v).setImageResource(R.drawable.icon_plan_shopping_active);
-                    item.setInBasket(true);
-                    FrDbHelper.getInstance(fragment.getActivity()).addPlanItem(item);
-                    List<Component> components = new ArrayList<Component>();
-                    for(int i = 0; i < item.getData().size(); i++) {
-                        Object obj = item.getData().get(i);
-                        if(obj instanceof Recipe) {
-                            FrDbHelper.getInstance(fragment.getActivity()).addToBasket((Recipe) obj);
-                        }else if(obj instanceof Component) {
-                            Component component = (Component) obj;
-                            component.setPlanItem(null);
-                            components.add(component);
-                        }
-                    }
-                    if(components.size() > 0) {
-                        Recipe recipe = new Recipe();
-                        recipe.setId(-1);
-                        recipe.setComponent_set(components);
-                        FrDbHelper.getInstance(fragment.getActivity()).addToBasket(recipe);
-                    }
+                    FrDbHelper.getInstance(fragment.getActivity()).addPlanItemToBasket(item);
                     Toast.makeText(fragment.getActivity(), "加入菜篮子", Toast.LENGTH_SHORT).show();
                 }else {
                     addBtn.setEnabled(true);
                     ((ImageView)v).setImageResource(R.drawable.icon_plan_shopping);
-                    item.setInBasket(false);
-                    FrDbHelper.getInstance(fragment.getActivity()).addPlanItem(item);
-                    List<Component> components = new ArrayList<Component>();
-                    for(int i = 0; i < item.getData().size(); i++) {
-                        Object obj = item.getData().get(i);
-                        if(obj instanceof Recipe) {
-                            FrDbHelper.getInstance(fragment.getActivity()).removeFromBasket((Recipe) obj);
-                        }else if(obj instanceof Component) {
-                            Component component = (Component) obj;
-                            component.setPlanItem(null);
-                            components.add(component);
-                        }
-                    }
-                    if(components.size() > 0) {
-                        Recipe recipe = new Recipe();
-                        recipe.setId(-1);
-                        recipe.setComponent_set(components);
-                        FrDbHelper.getInstance(fragment.getActivity()).removeFromBasket(recipe);
-                    }
+                    FrDbHelper.getInstance(fragment.getActivity()).removePlanItemToBasket(item);
                     Toast.makeText(fragment.getActivity(), "从菜篮子取出", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -354,7 +318,7 @@ public class PlanElementAdapter extends BaseAdapter{
             }else{
                 Component component = (Component)obj;
                 text1.setText(component.getIngredient().getName());
-                text2.setText(component.getMAmount() + "g");
+                text2.setText(component.getAmount() + "g");
                 text3.setText(100 + "kcal");
             }
             view.findViewById(R.id.trash).setOnClickListener(new View.OnClickListener() {

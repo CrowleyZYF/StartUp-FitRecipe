@@ -160,13 +160,13 @@ public class IngredientActivity extends Activity implements View.OnClickListener
                     String name = components.get(j).getIngredient().getName();
                     if (counter.containsKey(name)) {
                         Component component = counter.get(name);
-                        component.setMAmount(component.getMAmount() + components.get(j).getMAmount());
+                        component.setAmount(component.getAmount() + components.get(j).getAmount());
                         int status = component.getStatus();
                         component.setStatus(status & components.get(j).getStatus());
                     }
                     else {
                         Component component = new Component();
-                        component.setMAmount(components.get(j).getMAmount());
+                        component.setAmount(components.get(j).getAmount());
                         Ingredient newIngredient = new Ingredient();
                         newIngredient.setId(components.get(j).getIngredient().getId());
                         newIngredient.setName(components.get(j).getIngredient().getName());
