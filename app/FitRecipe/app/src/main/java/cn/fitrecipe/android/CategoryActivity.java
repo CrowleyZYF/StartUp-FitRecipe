@@ -95,7 +95,7 @@ public class CategoryActivity extends Activity implements View.OnClickListener, 
 
     private List<Map<String, Object>> getData() {
         int[] drawable = { R.drawable.category_chicken, R.drawable.category_beef,
-                R.drawable.category_fish, R.drawable.category_egg, R.drawable.category_seafood,
+                R.drawable.category_pork, R.drawable.category_egg, R.drawable.category_seafood,
                 R.drawable.category_rice, R.drawable.category_fruit,
                 R.drawable.category_dessert, R.drawable.category_other };
         String[] iconName = { "鸡肉", "牛肉", "猪肉", "蛋/奶", "海鲜", "米面", "果蔬",

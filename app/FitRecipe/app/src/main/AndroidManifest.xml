@@ -91,6 +91,8 @@
         </activity>
         <activity android:name=".PlanChoiceInfoActivity" >
         </activity>
+        <activity android:name=".NutritionActivity" >
+        </activity>
         <activity android:name="com.umeng.fb.ConversationActivity" />
 
         <meta-data

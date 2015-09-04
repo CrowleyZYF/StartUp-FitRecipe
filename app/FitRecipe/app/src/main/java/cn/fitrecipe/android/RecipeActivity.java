@@ -455,6 +455,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                 //TODO
                 intent.putExtra("procedure_set", recipe.getProcedure_set());
                 intent.putExtra("recipe_title", recipe_name.getText().toString());
+                intent.putExtra("recipe_tips", recipe.getTips());
                 startActivity(intent);
                 break;
             }
