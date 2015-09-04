@@ -22,17 +22,17 @@ public class PlanItem implements Serializable{
     @DatabaseField
     private String imageCover;
     @DatabaseField(foreign = true)
-    private DayPlan dayPlan;
+    private transient DayPlan dayPlan;
     @ForeignCollectionField
-    private Collection<Component> components;
+    private transient Collection<Component> components;
     @DatabaseField
     private boolean isPunched;
     @DatabaseField
     private boolean inBasket;
 
     private ItemType itemType;
-    private List<Object> data;
-    private List<Nutrition> tNutrition;
+    private ArrayList<Object> data;
+    private ArrayList<Nutrition> tNutrition;
     private double tCalories;
 
     public int size() {
@@ -120,7 +120,7 @@ public class PlanItem implements Serializable{
     }
 
 
-    public List<Nutrition> gettNutrition() {
+    public ArrayList<Nutrition> gettNutrition() {
         return tNutrition;
     }
 
@@ -137,7 +137,7 @@ public class PlanItem implements Serializable{
         return data;
     }
 
-    public void setData(List<Object> data) {
+    public void setData(ArrayList<Object> data) {
         this.data = data;
     }
 

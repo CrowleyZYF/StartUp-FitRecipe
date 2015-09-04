@@ -5,6 +5,12 @@
 
     <include layout="@layout/framework_common_headers" />
 
-    <include layout="@layout/fragment_plan_nutrition" />
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:scrollbars="none"
+        android:layout_height="match_parent">
+        <include layout="@layout/fragment_plan_nutrition" />
+    </ScrollView>
 
 </LinearLayout>

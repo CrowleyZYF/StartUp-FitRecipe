@@ -356,10 +356,8 @@
         android:paddingRight="10dp">
 
     </cn.fitrecipe.android.UI.LinearLayoutForListView>
-
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@drawable/theme_line"/>
-
 </LinearLayout>
