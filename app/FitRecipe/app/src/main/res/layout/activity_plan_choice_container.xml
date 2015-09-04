@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fitrecipe="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <cn.fitrecipe.android.UI.SlidingMenu
+        android:id="@+id/container_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        fitrecipe:leftPadding="250dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <include layout="@layout/activity_plan_choice" />
+
+            <include layout="@layout/activity_plan_choice_filter" />
+        </LinearLayout>
+    </cn.fitrecipe.android.UI.SlidingMenu>
+
+</LinearLayout>

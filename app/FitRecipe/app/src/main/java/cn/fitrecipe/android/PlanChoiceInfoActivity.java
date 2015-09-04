@@ -1,6 +1,7 @@
 package cn.fitrecipe.android;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -41,6 +42,8 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
     private PlanDetailViewPager planDetailViewPager;
     private PlanDetailViewPagerAdapter planDetailViewPagerAdapter;
     private List<PlanDetail> dataList;
+    private ImageView prev_day_btn;
+    private ImageView next_day_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +73,8 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
         nutrition_btn.setBackgroundColor(getResources().getColor(R.color.transparent));
         nutrition_btn.setImageResource(R.drawable.icon_nutrition);
         planDetailViewPager = (PlanDetailViewPager) findViewById(R.id.plan_detail);
+        prev_day_btn = (ImageView) findViewById(R.id.prev_day_btn);
+        next_day_btn = (ImageView) findViewById(R.id.next_day_btn);
     }
 
     private void initData() {
@@ -173,6 +178,9 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
             }
         });
         back_btn.setOnClickListener(this);
+        nutrition_btn.setOnClickListener(this);
+        prev_day_btn.setOnClickListener(this);
+        next_day_btn.setOnClickListener(this);
     }
 
     @Override
@@ -183,9 +191,27 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
                 break;
             }
             case R.id.right_btn:{
-
+                Intent intent = new Intent(this, NutritionActivity.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.prev_day_btn:{
+                goPrev();
+                break;
+            }
+            case R.id.next_day_btn:{
+                goNext();
+                break;
             }
         }
+    }
+
+    public void goNext(){
+        planDetailViewPager.setCurrentItem(planDetailViewPager.getCurrentItem()+1, true);
+    }
+
+    public void goPrev(){
+        planDetailViewPager.setCurrentItem(planDetailViewPager.getCurrentItem()-1, true);
     }
 
     @Override
