@@ -3,6 +3,8 @@ package cn.fitrecipe.android.entity;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
+
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
@@ -10,7 +12,7 @@ import java.util.List;
  * Created by wk on 2015/8/29.
  */
 @DatabaseTable(tableName = "fr_dayplan")
-public class DayPlan {
+public class DayPlan implements Serializable{
 
     @DatabaseField(generatedId = true)
     private int id;
@@ -23,7 +25,7 @@ public class DayPlan {
     @DatabaseField
     private String date;
     @DatabaseField(foreign = true)
-    private SeriesPlan plan;
+    private transient SeriesPlan plan;
 
     public int getId() {
         return id;

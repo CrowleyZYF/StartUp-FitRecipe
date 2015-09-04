@@ -238,8 +238,6 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                         startActivity(new Intent(this, CategoryActivity.class));
                         break;
                     case 1:
-                        SlidingPage mRightMenu;
-                        mRightMenu = (SlidingPage) findViewById(R.id.filter_menu);
                         //TODO @wk
                         if(frPlanFragment != null) ((PlanFragment)frPlanFragment).toggle(PlanItem.ItemType.ALL);
                         /*
