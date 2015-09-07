@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<cn.fitrecipe.android.UI.SquareLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:padding="2dp">
+
+    <ImageView
+        android:id="@+id/punch_photo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/punch_temp"
+        android:scaleType="fitXY"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:background="@color/background_color">
-        
+        android:layout_height="match_parent">
+
         <ImageView
+<<<<<<< HEAD
             android:layout_width="16dp"
             android:layout_height="16dp" />
 
@@ -19,19 +28,119 @@
             android:text="8月6日"
             android:textSize="16sp"
             android:textColor="@color/login_input_text_color"
+=======
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/icon_logo"
+            android:layout_margin="4dp"
+>>>>>>> 616e5d6c809e5810bc4e4dd758eb640d3f119342
             android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"/>
+            android:layout_alignParentTop="true"/>
 
-        <ImageView
-            android:layout_width="35dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="35dp"
-            android:padding="8dp"
-            android:src="@drawable/icon_share_black"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="7dp"/>
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
+            android:background="#aa000000"
+            android:gravity="center_vertical">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingLeft="5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="打卡第"
+                        android:textColor="@color/white"
+                        android:textSize="8sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/punch_day"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="12"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginRight="3dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="天"
+                        android:textColor="@color/white"
+                        android:textSize="8sp"
+                        android:textStyle="bold"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    
+                    <ImageView
+                        android:layout_width="8dp"
+                        android:layout_height="8dp"
+                        android:src="@drawable/icon_bmi_white"/>
+                    
+                    <TextView
+                        android:id="@+id/punch_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="上午加餐"
+                        android:textSize="6sp"
+                        android:textColor="@color/white"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="5dp"/>
+
+                    <ImageView
+                        android:layout_width="8dp"
+                        android:layout_height="8dp"
+                        android:src="@drawable/icon_bmi_white"/>
+
+                    <TextView
+                        android:id="@+id/punch_calories"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="258kcal"
+                        android:textSize="6sp"
+                        android:textColor="@color/white"
+                        android:layout_marginLeft="2dp"/>
+
+                    
+
+                </LinearLayout>
+
+            </LinearLayout>
+            
+            <cn.fitrecipe.android.UI.PieChartView
+                android:id="@+id/punch_piechart"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="5dp"/>
+
+
+        </LinearLayout>
+
 
     </RelativeLayout>
 
-</LinearLayout>
+
+
+</cn.fitrecipe.android.UI.SquareLayout>

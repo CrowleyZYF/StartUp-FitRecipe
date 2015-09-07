@@ -15,6 +15,7 @@ import android.widget.ImageView;
 public class PieChartView extends ImageView{
 
     private float[] percents;
+    private boolean isHasText = true;
 
     public PieChartView(Context context) {
         this(context, null);
@@ -46,6 +47,12 @@ public class PieChartView extends ImageView{
         this.invalidate();
     }
 
+    public void setValue(float[] value, boolean isHasText) {
+        this.percents = value;
+        this.invalidate();
+        this.isHasText = isHasText;
+    }
+
     private void drawPieChart(Canvas canvas, float startX, float startY, float radius) {
 
         final float BIG_TEXT_SIZE = 60;
@@ -71,31 +78,37 @@ public class PieChartView extends ImageView{
             float y = (float) (ry + radius * Math.sin(start[i] * 2f * Math.PI / 360));
             p.setColor(Color.WHITE);
             p.setStyle(Paint.Style.STROKE);
-            p.setStrokeWidth(5f);
+            if (this.isHasText){
+                p.setStrokeWidth(5f);
+            }else{
+                p.setStrokeWidth(2f);
+            }
             canvas.drawLine(rx, ry, x, y, p);
         }
 
-        TextPaint textPaint = new TextPaint();
-        textPaint.setColor(Color.WHITE);
-        textPaint.setTextSize(SMALL_TEXT_SIZE);
-        float w = textPaint.measureText("%");
-        float h = textPaint.descent() - textPaint.ascent();
-
-        for(int i = 1; i < start.length; i++) {
-            textPaint.setTextSize(BIG_TEXT_SIZE);
-            String data =  String.valueOf((int)percents[i - 1]);
-            float angle = (start[i] - start[i - 1]) / 2 + start[i-1];
-            float ww = textPaint.measureText(data);
-            float R = radius;
-            if(Float.valueOf(data) < 10)
-                R = 1.5f * radius;
-            float x = (float) (rx + (R * Math.cos(angle * 2 * Math.PI / 360) / 2) - ww / 2);
-            float y = (float) (ry + (R * Math.sin(angle * 2 * Math.PI / 360) / 2) - (textPaint.descent() + textPaint.ascent())/2);
-
-
-            canvas.drawText(data, x, y, textPaint);
+        if (this.isHasText){
+            TextPaint textPaint = new TextPaint();
+            textPaint.setColor(Color.WHITE);
             textPaint.setTextSize(SMALL_TEXT_SIZE);
-            canvas.drawText("%", x + ww, y, textPaint);
+            float w = textPaint.measureText("%");
+            float h = textPaint.descent() - textPaint.ascent();
+
+            for(int i = 1; i < start.length; i++) {
+                textPaint.setTextSize(BIG_TEXT_SIZE);
+                String data =  String.valueOf((int)percents[i - 1]);
+                float angle = (start[i] - start[i - 1]) / 2 + start[i-1];
+                float ww = textPaint.measureText(data);
+                float R = radius;
+                if(Float.valueOf(data) < 10)
+                    R = 1.5f * radius;
+                float x = (float) (rx + (R * Math.cos(angle * 2 * Math.PI / 360) / 2) - ww / 2);
+                float y = (float) (ry + (R * Math.sin(angle * 2 * Math.PI / 360) / 2) - (textPaint.descent() + textPaint.ascent())/2);
+
+
+                canvas.drawText(data, x, y, textPaint);
+                textPaint.setTextSize(SMALL_TEXT_SIZE);
+                canvas.drawText("%", x + ww, y, textPaint);
+            }
         }
     }
 }
