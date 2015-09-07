@@ -19,6 +19,7 @@ import cn.fitrecipe.android.entity.Author;
 import cn.fitrecipe.android.entity.Collection;
 import cn.fitrecipe.android.entity.HomeData;
 import cn.fitrecipe.android.entity.Recipe;
+import cn.fitrecipe.android.entity.Report;
 
 ;
 
@@ -38,6 +39,9 @@ public class FrApplication extends Application {
     private String token;
     //主页数据缓存
     private HomeData homeData;
+    //报告缓存
+    private Report report;
+
     //收藏
     private List<Collection> collections;
 
@@ -152,6 +156,22 @@ public class FrApplication extends Application {
     public void setHomeData(HomeData homeData) {
         this.homeData = homeData;
         new HomeDataDao(this).savHomeData(homeData);
+    }
+
+    public Report getReport() {
+
+        if(report == null) {
+            Author author = getAuthor();
+            if(author != null)
+                report = FrDbHelper.getInstance(this).getReport(author);
+        }
+        return report;
+    }
+
+    public void saveReport(Report report) {
+        this.report = report;
+        report.setAuthor(getAuthor());
+        FrDbHelper.getInstance(this).addReport(report);
     }
 
 //    public List<Collection> getCollections() {

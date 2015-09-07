@@ -11,7 +11,7 @@
         
         <ImageView
             android:layout_width="16dp"
-            android:layout_height="16do" />
+            android:layout_height="16dp" />
 
         <TextView
             android:layout_width="wrap_content"

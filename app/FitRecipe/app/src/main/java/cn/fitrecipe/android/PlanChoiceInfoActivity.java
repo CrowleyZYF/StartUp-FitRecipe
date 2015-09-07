@@ -21,6 +21,9 @@ import cn.fitrecipe.android.UI.PlanDetailViewPager;
 import cn.fitrecipe.android.UI.PlanScrollView;
 import cn.fitrecipe.android.entity.PlanDetail;
 import cn.fitrecipe.android.entity.PlanDetailItem;
+import cn.fitrecipe.android.entity.PlanItem;
+import cn.fitrecipe.android.entity.Series;
+import cn.fitrecipe.android.entity.SeriesPlan;
 import me.relex.circleindicator.CircleIndicator;
 
 /**
@@ -35,21 +38,25 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
     private CircleIndicator planInfoIndicator;
 
     private LinearLayout header;
-    private TextView header_name;
+    private TextView header_name, plan_day, plan_calories;
     private ImageView back_btn;
     private ImageView nutrition_btn;
 
     private PlanDetailViewPager planDetailViewPager;
     private PlanDetailViewPagerAdapter planDetailViewPagerAdapter;
-    private List<PlanDetail> dataList;
     private ImageView prev_day_btn;
     private ImageView next_day_btn;
+    private SeriesPlan plan;
+
+    private int nowY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan_choice_info);
+
+        plan = (SeriesPlan) getIntent().getSerializableExtra("plan");
 
         initView();
         initData();
@@ -65,6 +72,8 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
         header = (LinearLayout) findViewById(R.id.header);
         header.setBackgroundColor(getResources().getColor(R.color.transparent));
         header_name = (TextView) findViewById(R.id.header_name_text);
+        plan_day = (TextView) findViewById(R.id.plan_day);
+        plan_calories = (TextView) findViewById(R.id.plan_calories);
         header_name.setText("计划详情");
         back_btn = (ImageView) findViewById(R.id.left_btn);
         back_btn.setBackgroundColor(getResources().getColor(R.color.transparent));
@@ -75,79 +84,14 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
         planDetailViewPager = (PlanDetailViewPager) findViewById(R.id.plan_detail);
         prev_day_btn = (ImageView) findViewById(R.id.prev_day_btn);
         next_day_btn = (ImageView) findViewById(R.id.next_day_btn);
+        plan_day.setText(1 + "/" + plan.getDays());
+        plan_calories.setText(Math.round(plan.getDayplans().get(0).getCalories())+"");
     }
 
     private void initData() {
-        PlanDetailItem item01 = new PlanDetailItem(1,1,"无糖豆浆",200,100);
-        PlanDetailItem item02 = new PlanDetailItem(2,1,"鸡蛋",50,100);
-        PlanDetailItem item03 = new PlanDetailItem(3,1,"燕麦片",40,150);
-        PlanDetailItem item04 = new PlanDetailItem(4,1,"青菜",100,50);
-        List<PlanDetailItem> list1 = new ArrayList<>();
-        list1.add(item01);
-        list1.add(item02);
-        list1.add(item03);
-        list1.add(item04);
-
-        PlanDetailItem item05 = new PlanDetailItem(5,1,"鹰嘴豆",100,200);
-        List<PlanDetailItem> list2 = new ArrayList<>();
-        list2.add(item05);
-
-        PlanDetailItem item06 = new PlanDetailItem(6,1,"牛肉",250,300);
-        PlanDetailItem item07 = new PlanDetailItem(7,1,"杂粮饭",100,100);
-        PlanDetailItem item08 = new PlanDetailItem(8,1,"蔬菜色拉",100,150);
-        List<PlanDetailItem> list3 = new ArrayList<>();
-        list3.add(item06);
-        list3.add(item07);
-        list3.add(item08);
-
-        PlanDetailItem item09 = new PlanDetailItem(9,1,"牛奶",200,100);
-        PlanDetailItem item10 = new PlanDetailItem(10,1,"杂粮粥",200,100);
-        PlanDetailItem item11 = new PlanDetailItem(10,1,"玉米片",200,100);
-        List<PlanDetailItem> list4 = new ArrayList<>();
-        list4.add(item09);
-        list4.add(item10);
-        list4.add(item11);
-
-        PlanDetailItem item12 = new PlanDetailItem(10,1,"猕猴桃",200,100);
-        List<PlanDetailItem> list5 = new ArrayList<>();
-        list5.add(item12);
-
-        PlanDetailItem item13 = new PlanDetailItem(10,1,"牛肉",200,100);
-        PlanDetailItem item14 = new PlanDetailItem(10,1,"杂豆粗粮饭",200,100);
-        PlanDetailItem item15 = new PlanDetailItem(10,1,"水果色拉",200,100);
-        List<PlanDetailItem> list6 = new ArrayList<>();
-        list6.add(item13);
-        list6.add(item14);
-        list6.add(item15);
-
-        dataList = new ArrayList<>();
-        PlanDetail day1 = new PlanDetail(1,1,1200,300,1200,list1,true,100,1300,list2,true,400,3200,list3,true,600,5600,list1,true,200,3200,list2,true);
-        PlanDetail day2 = new PlanDetail(2,2,1300,200,1100,list4,true,200,1100,list5,true,500,2200,list6,true,320,1600,list1,true,200,3200,list2,true);
-        dataList.add(day1);
-        dataList.add(day2);
-
-        planDetailViewPagerAdapter = new PlanDetailViewPagerAdapter(this,dataList);
+        planDetailViewPagerAdapter = new PlanDetailViewPagerAdapter(this, plan);
         planDetailViewPager.setAdapter(planDetailViewPagerAdapter);
-
-
-        Map<String, Object> data = new HashMap<String, Object>();
-        data.put("choice_name","哈哈哈の低碳饮食法1");
-        data.put("choice_intro","很有意思的饮食方案，让你能够在最短的时间里减肥减好多，减脂无敌了1");
-        data.put("choice_hard","2");
-        data.put("choice_delicious","2");
-        data.put("choice_join","741852");
-        data.put("choice_label","0");
-        data.put("choice_type","0");
-        data.put("choice_days","7");
-        data.put("author_avatar","0x7f020042");
-        data.put("author_name","喃猫");
-        data.put("author_type","0");
-        data.put("fit_year","5");
-        data.put("fit_fat","12");
-        data.put("fit_title","");
-        data.put("author_intro","作为一个酸奶重度依赖者，在写这篇文章之前，我需要先告诉大家，这篇文章，这个话题。");
-        data.put("plan_intro","1. 以低GI食物为主\n2. 以低GI食物为主\n3. 以低GI食物为主");
-        planInfoViewPagerAdapter = new PlanInfoViewPagerAdapter(this,data);
+        planInfoViewPagerAdapter = new PlanInfoViewPagerAdapter(this, plan);
         planInfoViewPager.setAdapter(planInfoViewPagerAdapter);
         planInfoIndicator.setViewPager(planInfoViewPager);
     }
@@ -171,7 +115,7 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
             public void onScroll() {
                 int scrollY=info_container.getScrollY();
                 int transparent = 255/80*scrollY;
-                if(transparent>255){
+                if(transparent>255) {
                     transparent=255;
                 }
                 header.setBackgroundColor(Color.argb(transparent, 73, 189, 204));
@@ -207,11 +151,18 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
     }
 
     public void goNext(){
+        nowY = info_container.getScrollY();
         planDetailViewPager.setCurrentItem(planDetailViewPager.getCurrentItem()+1, true);
+        plan_day.setText((planDetailViewPager.getCurrentItem()+1) + "/" + plan.getDays());
+        plan_calories.setText(Math.round(plan.getDayplans().get(planDetailViewPager.getCurrentItem()).getCalories())+"");
+        info_container.smoothScrollTo(0, nowY);
     }
 
     public void goPrev(){
+        nowY = info_container.getScrollY();
         planDetailViewPager.setCurrentItem(planDetailViewPager.getCurrentItem()-1, true);
+        plan_day.setText((planDetailViewPager.getCurrentItem()+1) + "/" + plan.getDays());
+        info_container.smoothScrollTo(0, nowY);
     }
 
     @Override

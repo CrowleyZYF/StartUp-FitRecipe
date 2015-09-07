@@ -14,7 +14,10 @@ import java.util.List;
 import cn.fitrecipe.android.Adpater.PlanCardAdapter;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.UI.SlidingMenu;
-import cn.fitrecipe.android.entity.Plan;
+import cn.fitrecipe.android.dao.FrDbHelper;
+import cn.fitrecipe.android.entity.DayPlan;
+import cn.fitrecipe.android.entity.PlanItem;
+import cn.fitrecipe.android.entity.SeriesPlan;
 
 /**
  * Created by 奕峰 on 2015/5/8.
@@ -62,12 +65,35 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
     }
 
     private void initData() {
-        List<Plan> plans = new ArrayList<Plan>();
-        int test[] = {R.drawable.plan_01, R.drawable.plan_02, R.drawable.plan_03, R.drawable.plan_04, R.drawable.plan_05, R.drawable.plan_06};
-        for(int i=0; i<10; i++){
-            Plan plan = new Plan(i,"低碳减肥法"+i, i%3, (i+1)%3, i%2, i*2, i%2, i*542, test[(i%6)], "喃猫", 0, 0, true);
-            plans.add(plan);
-        }
+        List<SeriesPlan> plans = new ArrayList<>();
+        SeriesPlan plan = new SeriesPlan();
+        plan.setId(1);
+        plan.setName("低碳减肥法");
+        plan.setDays(2);
+        plan.setAuthor_avatar("http://ww3.sinaimg.cn/bmiddle/473dc466jw1evlxreqkm0j20zk0k2774.jpg");
+        plan.setBackground("http://ww3.sinaimg.cn/bmiddle/473dc466jw1evlxreqkm0j20zk0k2774.jpg");
+        plan.setAuthor_type(0);
+        plan.setAuthor_name("姐姐");
+        plan.setIsUsed(false);
+        plan.setType(0);
+        plan.setJoin(100);
+        plan.setDelicious_rank(2);
+        plan.setHard_rank(1);
+        plan.setLabel(0);
+        plan.setIntro("很有意思的饮食方案，让你能够在最短的时间里减肥减好多，减脂无敌了");
+        plan.setDesc("1. 以低GI食物为主\n2. 以低GI食物为主\n3. 以低GI食物为主");
+        plan.setAuthor_intro("作为一个酸奶重度依赖者，在写这篇文章之前，我需要先告诉大家，这篇文章，这个话题。");
+        plan.setAuthor_years(3);
+        plan.setAuthor_fatratio(21);
+
+        //
+        ArrayList<DayPlan> dayPlans = new ArrayList<>();
+        DayPlan dayPlan1 = FrDbHelper.getInstance(this).getDayPlan("2015-09-06");
+        DayPlan dayPlan2 = FrDbHelper.getInstance(this).getDayPlan("2015-09-06");
+        dayPlans.add(dayPlan1);
+        dayPlans.add(dayPlan2);
+        plan.setDayplans(dayPlans);
+        plans.add(plan);
         planCardAdapter = new PlanCardAdapter(this, plans);
         planChoiceRecyclerView.setAdapter(planCardAdapter);
     }

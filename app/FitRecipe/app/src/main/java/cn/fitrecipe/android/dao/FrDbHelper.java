@@ -2,23 +2,17 @@ package cn.fitrecipe.android.dao;
 
 import android.content.Context;
 
-import com.tencent.tauth.IRequestListener;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
 
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.entity.Author;
-import cn.fitrecipe.android.entity.BasketItem;
-import cn.fitrecipe.android.entity.Collection;
 import cn.fitrecipe.android.entity.Component;
 import cn.fitrecipe.android.entity.DayPlan;
 import cn.fitrecipe.android.entity.Ingredient;
 import cn.fitrecipe.android.entity.Nutrition;
-import cn.fitrecipe.android.entity.Plan;
 import cn.fitrecipe.android.entity.PlanItem;
 import cn.fitrecipe.android.entity.PlanItem2Recipe;
 import cn.fitrecipe.android.entity.Recipe;
@@ -396,15 +390,8 @@ public class FrDbHelper {
         PlanItem2RecipeDao dao1 = new PlanItem2RecipeDao(context);
         ComponentDao dao2 = new ComponentDao(context);
         List<PlanItem2Recipe> matches = dao1.get(id);
-        int size = 0;
         List<Component> components = dao2.getComponentsInPlanItem(id);
-        if(matches != null) {
-            size += matches.size();
-        }
-        if(components != null) {
-            size += components.size();
-        }
-        TreeMap<Integer, Object> map = new TreeMap<Integer, Object>();
+        TreeMap<Integer, Object> map = new TreeMap<>();
         if(matches != null) {
             for(int i = 0; i < matches.size(); i++) {
                 PlanItem2Recipe match = matches.get(i);
@@ -471,11 +458,15 @@ public class FrDbHelper {
             }
             dayPlan.setPlanItems(items);
         }else {
+            double total = 0.0;
             for (int i = 0; i < items.size(); i++) {
                 PlanItem item = items.get(i);
+                total += item.gettCalories();
                 item.setDayPlan(dayPlan);
                 addPlanItem(item);
             }
+            dayPlan.setCalories(total);
+            dao.add(dayPlan);
         }
         return dayPlan;
     }
@@ -511,5 +502,7 @@ public class FrDbHelper {
         DayPlan dayPlan = item.getDayPlan();
         dao1.add(dayPlan);
     }
+
+
 
 }

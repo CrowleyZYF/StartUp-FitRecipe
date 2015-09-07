@@ -4,6 +4,8 @@ package cn.fitrecipe.android.function;
  *
  */
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -236,9 +238,14 @@ public class Evaluation {
 		report.setAge(age);
 		report.setHeight(height);
 		report.setWeight(weight);
+		report.setGoalType(goalType);
 
 		report.setRoughFat(roughFat);
 		report.setPreciseFat(preciseFat);
+		long now = System.currentTimeMillis();
+		Date date = new Date(now);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		report.setUpdatetime(sdf.format(date));
 
 		//BMI
 		double heightInM = (double)height / 100;

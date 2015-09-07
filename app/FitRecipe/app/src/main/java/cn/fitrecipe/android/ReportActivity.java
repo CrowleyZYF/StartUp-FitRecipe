@@ -49,28 +49,12 @@ public class ReportActivity extends Activity implements View.OnClickListener{
         if(getIntent().hasExtra("report")) {
             report = (Report) getIntent().getSerializableExtra("report");
             last = "plan";
+            FrApplication.getInstance().saveReport(report);
             FrApplication.getInstance().setIsTested(true);
-            new AsyncTask<Void, Void, Void>(){
-
-                @Override
-                protected void onProgressUpdate(Void... values) {
-                    super.onProgressUpdate(values);
-                    Toast.makeText(ReportActivity.this, "保存报告!", Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                protected Void doInBackground(Void... params) {
-                    report.setAuthor(FrApplication.getInstance().getAuthor());
-                    FrDbHelper.getInstance(ReportActivity.this).addReport(report);
-                    publishProgress();
-                    return null;
-                }
-            }.execute();
         }
         else {
             last = "me";
-            Author author = FrApplication.getInstance().getAuthor();
-            report = FrDbHelper.getInstance(this).getReport(author);
+            report = FrApplication.getInstance().getReport();
         }
         if(report != null) {
             initView();

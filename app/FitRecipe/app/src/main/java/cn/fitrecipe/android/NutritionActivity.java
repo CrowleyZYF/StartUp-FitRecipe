@@ -84,10 +84,7 @@ public class NutritionActivity extends Activity implements View.OnClickListener 
     }
 
     private void initData() {
-        Author author = FrApplication.getInstance().getAuthor();
-        Report report = null;
-        if(author != null)
-            report = FrDbHelper.getInstance(this).getReport(author);
+        Report report = FrApplication.getInstance().getReport();
         ingredient_title.setText(type.value() + "营养表");
         switch (type) {
             case BREAKFAST:
@@ -138,7 +135,7 @@ public class NutritionActivity extends Activity implements View.OnClickListener 
 
     private void initEvent() {
         back_btn.setOnClickListener(this);
-        scrollView.smoothScrollTo(0,0);
+        scrollView.smoothScrollTo(0, 0);
     }
 
     @Override

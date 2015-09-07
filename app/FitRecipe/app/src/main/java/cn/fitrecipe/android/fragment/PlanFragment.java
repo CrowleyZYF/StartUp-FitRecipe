@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -20,11 +21,11 @@ import cn.fitrecipe.android.IngredientActivity;
 import cn.fitrecipe.android.NutritionActivity;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
-import cn.fitrecipe.android.UI.SlidingPage;
 import cn.fitrecipe.android.dao.FrDbHelper;
 import cn.fitrecipe.android.entity.DayPlan;
 import cn.fitrecipe.android.entity.PlanItem;
 import cn.fitrecipe.android.entity.Report;
+import cn.fitrecipe.android.entity.SeriesPlan;
 
 /**
  * Created by 奕峰 on 2015/4/11.
@@ -39,7 +40,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     private DayPlan dayPlan;
     private PlanElementAdapter adapter;
     private ImageView shopping_btn, next_btn, prev_btn;
-    private TextView plan_status_day;
+    private TextView plan_status_day, plan_status, diy_days;
 
     public static final int BREAKFAST_CODE = 00;
     public static final int ADDMEAL_01_CODE = 01;
@@ -73,15 +74,26 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         plans = (LinearLayoutForListView) v.findViewById(R.id.plans);
 
         shopping_btn = (ImageView) v.findViewById(R.id.shopping_btn);
+        plan_status = (TextView) v.findViewById(R.id.plan_status);
         plan_status_day = (TextView) v.findViewById(R.id.plan_status_day);
         next_btn = (ImageView) v.findViewById(R.id.next_btn);
         prev_btn = (ImageView) v.findViewById(R.id.prev_btn);
+        diy_days = (TextView) v.findViewById(R.id.diy_days);
+    }
+
+    private void switchPlan(SeriesPlan plan) {
+
     }
 
     private void initData() {
         now = System.currentTimeMillis();
         adapter = new PlanElementAdapter(this, items, report);
         plans.setAdapter(adapter);
+        if(report.isGoalType()) {
+            plan_status.setText("增肌第");
+        }else{
+            plan_status.setText("减脂第");
+        }
 //        switchPlan(pointer);
     }
 
@@ -97,6 +109,17 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         Date date = new Date(now + pointer * 24 * 3600 * 1000);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String strDate = sdf.format(date);
+        int days = (int) (getDiff(strDate, report.getUpdatetime()) + 1);
+        if(days <= 0) {
+            Toast.makeText(getActivity(), "已经是最前一天了！", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(pointer >= 7) {
+            Toast.makeText(getActivity(), "只能制定7天内的计划！", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        diy_days.setText(strDate);
+        plan_status_day.setText(days +"");
         dayPlan = FrDbHelper.getInstance(getActivity()).getDayPlan(strDate);
         if(dayPlan == null) {
             dayPlan = new DayPlan();
@@ -104,8 +127,20 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             dayPlan = FrDbHelper.getInstance(getActivity()).addDayPlan(dayPlan);
         }
         items = dayPlan.getPlanItems();
-        plan_status_day.setText(pointer+"");
         adapter.setData(items);
+    }
+
+
+    private long getDiff(String str1, String str2) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date1, date2;
+        try {
+            date1 = sdf.parse(str1);
+            date2 = sdf.parse(str2);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        return (date1.getTime() - date2.getTime()) / (24 * 3600 *1000);
     }
 
     @Override
@@ -157,6 +192,8 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             intent.putExtra("itemtype", type);
             intent.putExtra("dayplan", dayPlan);
             startActivity(intent);
+        }else {
+            Toast.makeText(getActivity(), "请添加食谱和食材！", Toast.LENGTH_SHORT).show();
         }
 
     }

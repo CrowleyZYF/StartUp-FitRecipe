@@ -13,40 +13,51 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import cn.fitrecipe.android.FrApplication;
 import cn.fitrecipe.android.PlanChoiceInfoActivity;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.UI.LabelView;
-import cn.fitrecipe.android.entity.Plan;
+import cn.fitrecipe.android.entity.SeriesPlan;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by 奕峰 on 2015/4/24.
  */
-public class PlanCardAdapter extends RecyclerView.Adapter<PlanCardAdapter.PlanCardViewHolder> implements View.OnClickListener {
+public class PlanCardAdapter extends RecyclerView.Adapter<PlanCardAdapter.PlanCardViewHolder>{
 
-    private List<Plan> planCardsList;
+    private List<SeriesPlan> planCardsList;
     private Context context;
 
 
-    public PlanCardAdapter(Context context, List<Plan> planCardsList) {
+    public PlanCardAdapter(Context context, List<SeriesPlan> planCardsList) {
         this.context = context;
         this.planCardsList = planCardsList;
     }
 
     @Override
-    public PlanCardAdapter.PlanCardViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public PlanCardAdapter.PlanCardViewHolder onCreateViewHolder(ViewGroup viewGroup, final int i) {
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
                 inflate(R.layout.activity_plan_choice_item_2, viewGroup, false);
 
-        itemView.setOnClickListener(this);
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // String id = ((TextView) v.findViewById(R.id.choice_id)).getText().toString();
+                Intent intent=new Intent(context,PlanChoiceInfoActivity.class);
+                //intent.putExtra("id", id);
+                //TODO
+                intent.putExtra("plan", planCardsList.get(i));
+                context.startActivity(intent);
+            }
+        });
 
         return new PlanCardViewHolder(itemView, this.context);
     }
 
     @Override
     public void onBindViewHolder(PlanCardAdapter.PlanCardViewHolder contactViewHolder, int i) {
-        Plan pc = planCardsList.get(i);
+        SeriesPlan pc = planCardsList.get(i);
         contactViewHolder.choice_id.setText(pc.getId()+"");
         contactViewHolder.choice_name.setText(pc.getName());
         switch (pc.getHard_rank()){
@@ -90,16 +101,18 @@ public class PlanCardAdapter extends RecyclerView.Adapter<PlanCardAdapter.PlanCa
             contactViewHolder.choice_type.setText(R.string.plan_recipe);
         }
         contactViewHolder.choice_days.setText(pc.getDays()+"天");
-        contactViewHolder.choice_join.setText(pc.getJoin()+"人");
-        contactViewHolder.choice_background.setBackground (this.context.getResources().getDrawable(pc.getBackground()));
+        contactViewHolder.choice_join.setText(pc.getJoin() + "人");
+//        contactViewHolder.choice_background.setBackground(this.context.getResources().getDrawable(pc.getBackground()));
+        FrApplication.getInstance().getMyImageLoader().displayImage(contactViewHolder.choice_background, pc.getBackground());
         contactViewHolder.author_name.setText(pc.getAuthor_name()+"");
         if(pc.getType()==0){
             contactViewHolder.author_type.setText("健身达人");
         }else{
             contactViewHolder.author_type.setText("营养师");
         }
-        contactViewHolder.author_avatar.setImageResource(R.drawable.author_header);
-        if(pc.getIsUsed()){
+//        contactViewHolder.author_avatar.setImageResource(R.drawable.author_header);
+        FrApplication.getInstance().getMyImageLoader().displayImage(contactViewHolder.author_avatar, pc.getAuthor_avatar());
+        if(pc.isUsed()){
             contactViewHolder.isUsed.setVisibility(View.VISIBLE);
         }else{
             contactViewHolder.isUsed.setVisibility(View.GONE);
@@ -112,15 +125,6 @@ public class PlanCardAdapter extends RecyclerView.Adapter<PlanCardAdapter.PlanCa
             return 0;
         else
             return planCardsList.size();
-    }
-
-    @Override
-    public void onClick(View v) {
-        String id = ((TextView) v.findViewById(R.id.choice_id)).getText().toString();
-        Intent intent=new Intent(context,PlanChoiceInfoActivity.class);
-        intent.putExtra("id", id);
-        //TODO
-        context.startActivity(intent);
     }
 
     public static class PlanCardViewHolder extends RecyclerView.ViewHolder {

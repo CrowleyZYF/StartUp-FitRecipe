@@ -312,10 +312,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         }
 
         //获取报告
-        Author author = FrApplication.getInstance().getAuthor();
-        if(author != null) {
-            report = FrDbHelper.getInstance(this).getReport(author);
-        }
+        report = FrApplication.getInstance().getReport();
 
         /**
          * 存储菜谱

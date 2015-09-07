@@ -17,6 +17,7 @@ import cn.fitrecipe.android.LoginActivity;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.RecordActivity;
 import cn.fitrecipe.android.ReportActivity;
+import cn.fitrecipe.android.entity.Report;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -80,6 +81,21 @@ public class MeFragment extends Fragment implements View.OnClickListener {
             //login_platform.setText("平台：暂无");
             me_login_btn_text.setText("登陆");
             me_avatar.setImageResource(R.drawable.pic_header);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Report report = FrApplication.getInstance().getReport();
+        if(report == null) {
+            me_status.setText("无报告");
+        }else {
+            if(report.isGoalType()) {
+                me_status.setText("增肌中...");
+            }else {
+                me_status.setText("减脂中...");
+            }
         }
     }
 

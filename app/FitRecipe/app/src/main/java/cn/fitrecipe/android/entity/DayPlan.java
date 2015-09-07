@@ -23,6 +23,8 @@ public class DayPlan implements Serializable{
     @DatabaseField
     private boolean isPunched;
     @DatabaseField
+    private double calories;
+    @DatabaseField
     private String date;
     @DatabaseField(foreign = true)
     private transient SeriesPlan plan;
@@ -40,6 +42,9 @@ public class DayPlan implements Serializable{
     }
 
     public void setPlanItems(List<PlanItem> planItems) {
+        calories = 0;
+        for(int i = 0; i < planItems.size(); i++)
+            calories += planItems.get(i).gettCalories();
         this.planItems = planItems;
     }
 
@@ -73,5 +78,13 @@ public class DayPlan implements Serializable{
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public double getCalories() {
+        return calories;
+    }
+
+    public void setCalories(double calories) {
+        this.calories = calories;
     }
 }

@@ -10,6 +10,7 @@ import android.view.View;
  * Created by 奕峰 on 2015/8/29.
  */
 public class PlanDetailViewPager extends ViewPager {
+
     public PlanDetailViewPager(Context context) {
         super(context);
     }

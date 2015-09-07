@@ -62,18 +62,6 @@ public class RecipeProcedureActivity extends Activity implements View.OnClickLis
 
     }
 
-//    private List<ProcedureCard> getRecipeCards() throws JSONException {
-//        List<ProcedureCard> result = new ArrayList<ProcedureCard>();
-//        for (int i = 0; i < procedure_set.length(); i++){
-//            JSONObject procedure = procedure_set.getJSONObject(i);
-//            int num = procedure.getInt("num");
-//            String text = procedure.getString("content");
-//            String img = FrServerConfig.getImageCompressed(procedure.getString("img"));
-//            ProcedureCard pc = new ProcedureCard(num, text, img);
-//            result.add(pc);
-//        }
-//        return result;
-//    }
 
     private void initView() {
         title_view = (TextView) findViewById(R.id.recipe_title);

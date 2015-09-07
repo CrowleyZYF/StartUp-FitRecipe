@@ -4,13 +4,16 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by wk on 2015/9/1.
  */
 @DatabaseTable(tableName = "fr_seriesplan")
-public class SeriesPlan {
+public class SeriesPlan implements Serializable{
 
     @DatabaseField(id = true)
     private int id;
@@ -26,6 +29,71 @@ public class SeriesPlan {
     private int days;
     @DatabaseField
     private int type;
+    @DatabaseField
+    private int join;
+    @DatabaseField
+    private String desc;
+    @DatabaseField
+    private String intro;
+    @DatabaseField
+    private String background;
+    @DatabaseField
+    private String author_name;
+    @DatabaseField
+    private int author_type;
+    @DatabaseField
+    private String author_avatar;
+    @DatabaseField
+    private int author_years;
+    @DatabaseField
+    private int author_fatratio;
+    @DatabaseField
+    private String author_title;
+    @DatabaseField
+    private String author_intro;
+    @DatabaseField
+    private boolean isCustom;
+    @DatabaseField(foreign = true)
+    private Author author;
+
+    public boolean isUsed() {
+        return isUsed;
+    }
+
+    public void setIsUsed(boolean isUsed) {
+        this.isUsed = isUsed;
+    }
+
+    public String getAuthor_name() {
+        return author_name;
+    }
+
+    public void setAuthor_name(String author_name) {
+        this.author_name = author_name;
+    }
+
+    public int getAuthor_type() {
+        return author_type;
+    }
+
+    public void setAuthor_type(int author_type) {
+        this.author_type = author_type;
+    }
+
+    public String getAuthor_avatar() {
+        return author_avatar;
+    }
+
+    public void setAuthor_avatar(String author_avatar) {
+        this.author_avatar = author_avatar;
+    }
+
+    @DatabaseField
+
+    private boolean isUsed;
+    @ForeignCollectionField
+    private Collection<DayPlan> dayplans;
+
 
     public int getId() {
         return id;
@@ -99,18 +167,76 @@ public class SeriesPlan {
         this.background = background;
     }
 
-    public Collection<DayPlan> getDayplans() {
-        return dayplans;
+    public ArrayList<DayPlan> getDayplans() {
+        return (ArrayList<DayPlan>)dayplans;
     }
 
-    public void setDayplans(Collection<DayPlan> dayplans) {
+    public void setDayplans(ArrayList<DayPlan> dayplans) {
         this.dayplans = dayplans;
     }
 
-    @DatabaseField
 
-    private int join;
-    private String background;
-    @ForeignCollectionField
-    private Collection<DayPlan> dayplans;
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
+
+    public boolean isCustom() {
+        return isCustom;
+    }
+
+    public void setIsCustom(boolean isCustom) {
+        this.isCustom = isCustom;
+    }
+
+    public int getAuthor_fatratio() {
+        return author_fatratio;
+    }
+
+    public void setAuthor_fatratio(int author_fatratio) {
+        this.author_fatratio = author_fatratio;
+    }
+
+    public int getAuthor_years() {
+        return author_years;
+    }
+
+    public void setAuthor_years(int author_years) {
+        this.author_years = author_years;
+    }
+
+    public String getAuthor_intro() {
+        return author_intro;
+    }
+
+    public void setAuthor_intro(String author_intro) {
+        this.author_intro = author_intro;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    public String getIntro() {
+        return intro;
+    }
+
+    public void setIntro(String intro) {
+        this.intro = intro;
+    }
+
+    public String getAuthor_title() {
+        return author_title;
+    }
+
+    public void setAuthor_title(String author_title) {
+        this.author_title = author_title;
+    }
 }

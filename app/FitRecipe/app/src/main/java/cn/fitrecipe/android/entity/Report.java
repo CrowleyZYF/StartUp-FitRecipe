@@ -155,6 +155,10 @@ public class Report implements Serializable{
     private double DinnerRate;                  //晚餐摄入
     @DatabaseField(foreign = true, canBeNull = false)
     private Author author;
+    @DatabaseField
+    private String updatetime;
+    @DatabaseField
+    private boolean goalType;
 
 
     public double getBMI() {
@@ -686,5 +690,21 @@ public class Report implements Serializable{
 
     public void setAuthor(Author author) {
         this.author = author;
+    }
+
+    public String getUpdatetime() {
+        return updatetime;
+    }
+
+    public void setUpdatetime(String updatetime) {
+        this.updatetime = updatetime;
+    }
+
+    public boolean isGoalType() {
+        return goalType;
+    }
+
+    public void setGoalType(boolean goalType) {
+        this.goalType = goalType;
     }
 }
