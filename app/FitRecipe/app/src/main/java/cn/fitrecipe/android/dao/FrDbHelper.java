@@ -503,6 +503,6 @@ public class FrDbHelper {
         dao1.add(dayPlan);
     }
 
-
+    
 
 }

@@ -181,6 +181,10 @@
             android:label="@string/title_activity_select_recipe"
             android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar" >
         </activity>
+        <activity
+            android:name=".PlanNutritionActivity"
+            android:label="@string/title_activity_plan_nutrition" >
+        </activity>
     </application>
 
 </manifest>

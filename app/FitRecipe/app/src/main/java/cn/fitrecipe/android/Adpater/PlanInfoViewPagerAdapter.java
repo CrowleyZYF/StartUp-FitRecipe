@@ -12,12 +12,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import cn.fitrecipe.android.FrApplication;
 import cn.fitrecipe.android.R;
-import cn.fitrecipe.android.dao.FrDbHelper;
-import cn.fitrecipe.android.entity.Series;
 import cn.fitrecipe.android.entity.SeriesPlan;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -91,7 +88,7 @@ public class PlanInfoViewPagerAdapter extends PagerAdapter {
             choice_days.setText(plan.getDays() + "");
 
             final Button choice_join_btn = (Button) planInfoContainer.findViewById(R.id.choice_join_btn);
-            if(plan.isUsed()) {
+            if(!plan.isUsed()) {
                 choice_join_btn.setText("选用");
                 choice_join_btn.setTextColor(context.getResources().getColor(R.color.white));
                 choice_join_btn.setBackground(context.getResources().getDrawable(R.drawable.join_button));
@@ -106,7 +103,7 @@ public class PlanInfoViewPagerAdapter extends PagerAdapter {
                 @Override
                 public void onClick(View v) {
                     plan.setIsUsed(!plan.isUsed());
-                    if(plan.isUsed()) {
+                    if(!plan.isUsed()) {
                         choice_join_btn.setText("选用");
                         choice_join_btn.setTextColor(context.getResources().getColor(R.color.white));
                         choice_join_btn.setBackground(context.getResources().getDrawable(R.drawable.join_button));

@@ -55,6 +55,10 @@ public class SeriesPlan implements Serializable{
     private boolean isCustom;
     @DatabaseField(foreign = true)
     private Author author;
+    @DatabaseField
+    private boolean isUsed;
+    @ForeignCollectionField
+    private Collection<DayPlan> dayplans;
 
     public boolean isUsed() {
         return isUsed;
@@ -87,13 +91,6 @@ public class SeriesPlan implements Serializable{
     public void setAuthor_avatar(String author_avatar) {
         this.author_avatar = author_avatar;
     }
-
-    @DatabaseField
-
-    private boolean isUsed;
-    @ForeignCollectionField
-    private Collection<DayPlan> dayplans;
-
 
     public int getId() {
         return id;
@@ -174,7 +171,6 @@ public class SeriesPlan implements Serializable{
     public void setDayplans(ArrayList<DayPlan> dayplans) {
         this.dayplans = dayplans;
     }
-
 
     public Author getAuthor() {
         return author;

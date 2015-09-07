@@ -11,12 +11,12 @@ import cn.fitrecipe.android.entity.SeriesPlan;
 /**
  * Created by wk on 2015/9/4.
  */
-public class PlanSeriesDao {
+public class SeriesPlanDao {
 
     private Dao<SeriesPlan, Integer> seriesPlanDaoOpe;
     private DatabaseHelper helper;
 
-    public PlanSeriesDao(Context context) {
+    public SeriesPlanDao(Context context) {
         try {
             helper = DatabaseHelper.getHelper(context);
             seriesPlanDaoOpe = helper.getDao(SeriesPlan.class);

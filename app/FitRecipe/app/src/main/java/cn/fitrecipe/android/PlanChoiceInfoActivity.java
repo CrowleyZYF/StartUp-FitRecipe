@@ -135,7 +135,8 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
                 break;
             }
             case R.id.right_btn:{
-                Intent intent = new Intent(this, NutritionActivity.class);
+                Intent intent = new Intent(this, PlanNutritionActivity.class);
+                intent.putExtra("plan", plan);
                 startActivity(intent);
                 break;
             }
