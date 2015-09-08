@@ -25,9 +25,10 @@ public class SeriesPlanDao {
         }
     }
 
-    public void add(SeriesPlan seriesPlan) {
+    public SeriesPlan add(SeriesPlan seriesPlan) {
         try {
             seriesPlanDaoOpe.create(seriesPlan);
+            return seriesPlan;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

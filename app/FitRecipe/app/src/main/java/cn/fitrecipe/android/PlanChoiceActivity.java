@@ -8,7 +8,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import cn.fitrecipe.android.Adpater.PlanCardAdapter;
@@ -88,8 +90,12 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
 
         //
         ArrayList<DayPlan> dayPlans = new ArrayList<>();
-        DayPlan dayPlan1 = FrDbHelper.getInstance(this).getDayPlan("2015-09-06");
-        DayPlan dayPlan2 = FrDbHelper.getInstance(this).getDayPlan("2015-09-06");
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String str = sdf.format(date);
+        DayPlan dayPlan1 = FrDbHelper.getInstance(this).getDayPlan(str);
+        DayPlan dayPlan2 = FrDbHelper.getInstance(this).getDayPlan(str);
         dayPlans.add(dayPlan1);
         dayPlans.add(dayPlan2);
         plan.setDayplans(dayPlans);

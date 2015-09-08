@@ -17,6 +17,8 @@ import cn.fitrecipe.android.entity.PlanItem;
 import cn.fitrecipe.android.entity.PlanItem2Recipe;
 import cn.fitrecipe.android.entity.Recipe;
 import cn.fitrecipe.android.entity.Report;
+import cn.fitrecipe.android.entity.Series;
+import cn.fitrecipe.android.entity.SeriesPlan;
 
 /**
  * Created by wk on 2015/8/15.
@@ -503,6 +505,26 @@ public class FrDbHelper {
         dao1.add(dayPlan);
     }
 
-    
+
+    public void addOthersSeriesPlan(SeriesPlan plan) {
+        SeriesPlanDao dao = new SeriesPlanDao(context);
+        plan = dao.add(plan);
+        List<DayPlan> dayPlans= plan.getDayplans();
+        for(int i = 0; i < dayPlans.size(); i++) {
+            DayPlan dayPlan = dayPlans.get(i);
+            addDayPlan(dayPlan);
+        }
+    }
+
+
+    public void addOwnSeriesPlan(SeriesPlan plan) {
+        SeriesPlanDao dao = new SeriesPlanDao(context);
+        plan = dao.add(plan);
+        List<DayPlan> dayPlans= plan.getDayplans();
+        for(int i = 0; i < dayPlans.size(); i++) {
+            DayPlan dayPlan = dayPlans.get(i);
+        }
+
+    }
 
 }
