@@ -133,7 +133,7 @@ public class PlanItem implements Serializable{
         type = this.itemType.index();
     }
 
-    public List<Object> getData() {
+    public ArrayList<Object> getData() {
         return data;
     }
 

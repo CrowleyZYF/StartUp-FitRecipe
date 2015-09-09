@@ -13,7 +13,7 @@ import java.util.List;
  * Created by wk on 2015/9/1.
  */
 @DatabaseTable(tableName = "fr_seriesplan")
-public class SeriesPlan implements Serializable{
+public class SeriesPlan implements Serializable, Comparable<SeriesPlan> {
 
     @DatabaseField(id = true)
     private int id;
@@ -234,5 +234,10 @@ public class SeriesPlan implements Serializable{
 
     public void setAuthor_title(String author_title) {
         this.author_title = author_title;
+    }
+
+    @Override
+    public int compareTo(SeriesPlan another) {
+        return id - another.getId();
     }
 }

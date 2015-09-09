@@ -20,7 +20,7 @@ public class Nutrition implements Serializable{
     @DatabaseField
     private String unit;
     @DatabaseField(canBeNull = true, foreign = true, foreignAutoRefresh=false)
-    private Recipe recipe;
+    private transient Recipe recipe;
 
     public void setName(String name) {
         this.name = name;

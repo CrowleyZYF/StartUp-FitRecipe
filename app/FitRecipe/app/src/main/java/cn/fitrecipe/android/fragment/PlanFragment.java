@@ -14,6 +14,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import cn.fitrecipe.android.Adpater.PlanElementAdapter;
 import cn.fitrecipe.android.FrApplication;
@@ -26,6 +27,7 @@ import cn.fitrecipe.android.entity.DayPlan;
 import cn.fitrecipe.android.entity.PlanItem;
 import cn.fitrecipe.android.entity.Report;
 import cn.fitrecipe.android.entity.SeriesPlan;
+import cn.fitrecipe.android.function.Common;
 
 /**
  * Created by 奕峰 on 2015/4/11.
@@ -40,7 +42,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     private DayPlan dayPlan;
     private PlanElementAdapter adapter;
     private ImageView shopping_btn, next_btn, prev_btn;
-    private TextView plan_status_day, plan_status, diy_days;
+    private TextView plan_status_day, plan_status, diy_days, plan_name;
 
     public static final int BREAKFAST_CODE = 00;
     public static final int ADDMEAL_01_CODE = 01;
@@ -50,6 +52,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
 
     private int pointer = 0;
     private long now;
+    private Map<String, DayPlan> data;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -79,10 +82,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         next_btn = (ImageView) v.findViewById(R.id.next_btn);
         prev_btn = (ImageView) v.findViewById(R.id.prev_btn);
         diy_days = (TextView) v.findViewById(R.id.diy_days);
-    }
-
-    private void switchPlan(SeriesPlan plan) {
-
+        plan_name = (TextView) v.findViewById(R.id.plan_name);
     }
 
     private void initData() {
@@ -101,34 +101,53 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onResume() {
         super.onResume();
+        data = FrDbHelper.getInstance(getActivity()).getMyPlan();
         switchPlan(pointer);
     }
 
-
-    private void switchPlan(int pointer) {
-        Date date = new Date(now + pointer * 24 * 3600 * 1000);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String strDate = sdf.format(date);
-        int days = (int) (getDiff(strDate, report.getUpdatetime()) + 1);
-        if(days <= 0) {
-            Toast.makeText(getActivity(), "已经是最前一天了！", Toast.LENGTH_SHORT).show();
-            return;
+    private boolean switchPlan(int pointer) {
+        String str = Common.getSomeDay(Common.getDate(), pointer);
+        if (data.containsKey(str)) {
+            diy_days.setText(str);
+            int days = (int) (getDiff(str, report.getUpdatetime()) + 1);
+            plan_status_day.setText(days + "");
+            dayPlan = data.get(str);
+            plan_name.setText(dayPlan.getPlan().getName());
+            items = dayPlan.getPlanItems();
+            adapter.setData(items);
+            return true;
         }
-        if(pointer >= 7) {
-            Toast.makeText(getActivity(), "只能制定7天内的计划！", Toast.LENGTH_SHORT).show();
-            return;
+        else {
+            Toast.makeText(getActivity(), "已经无计划了!", Toast.LENGTH_SHORT).show();
+            return false;
         }
-        diy_days.setText(strDate);
-        plan_status_day.setText(days +"");
-        dayPlan = FrDbHelper.getInstance(getActivity()).getDayPlan(strDate);
-        if(dayPlan == null) {
-            dayPlan = new DayPlan();
-            dayPlan.setDate(strDate);
-            dayPlan = FrDbHelper.getInstance(getActivity()).addDayPlan(dayPlan);
-        }
-        items = dayPlan.getPlanItems();
-        adapter.setData(items);
     }
+
+
+//    private void switchPlan(int pointer) {
+//        Date date = new Date(now + pointer * 24 * 3600 * 1000);
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//        String strDate = sdf.format(date);
+//        int days = (int) (getDiff(strDate, report.getUpdatetime()) + 1);
+//        if(days <= 0) {
+//            Toast.makeText(getActivity(), "已经是最前一天了！", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        if(pointer >= 7) {
+//            Toast.makeText(getActivity(), "只能制定7天内的计划！", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        diy_days.setText(strDate);
+//        plan_status_day.setText(days +"");
+////        dayPlan = FrDbHelper.getInstance(getActivity()).getDayPlan(strDate);
+//        if(dayPlan == null) {
+//            dayPlan = new DayPlan();
+//            dayPlan.setDate(strDate);
+//            dayPlan = FrDbHelper.getInstance(getActivity()).addDayPlan(dayPlan);
+//        }
+//        items = dayPlan.getPlanItems();
+//        adapter.setData(items);
+//    }
 
 
     private long getDiff(String str1, String str2) {
@@ -206,12 +225,12 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 startActivity(intent);
                 break;
             case R.id.next_btn:
-                pointer++;
-                switchPlan(pointer);
+                if(switchPlan(pointer + 1))
+                    pointer++;
                 break;
             case R.id.prev_btn:
-                pointer--;
-                switchPlan(pointer);
+                if(switchPlan(pointer - 1))
+                    pointer--;
                 break;
         }
     }

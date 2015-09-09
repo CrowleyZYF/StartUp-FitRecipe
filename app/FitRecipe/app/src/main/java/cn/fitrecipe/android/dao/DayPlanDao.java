@@ -5,6 +5,7 @@ import android.content.Context;
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.fitrecipe.android.entity.DayPlan;
@@ -27,10 +28,10 @@ public class DayPlanDao {
 
     public int add(DayPlan dayPlan) {
         try {
-            if(dayPlanDaoOpe.idExists(dayPlan.getId())) {
+            if (dayPlan.getId() != -1 && dayPlanDaoOpe.idExists(dayPlan.getId())) {
                 dayPlanDaoOpe.update(dayPlan);
                 return dayPlan.getId();
-            }else {
+            } else {
                 dayPlanDaoOpe.create(dayPlan);
                 return dayPlan.getId();
             }
@@ -42,11 +43,37 @@ public class DayPlanDao {
     public DayPlan get(String date) {
         try {
             List<DayPlan> dayPlans = dayPlanDaoOpe.queryForEq("date", date);
-            if(dayPlans != null && dayPlans.size() > 0)
+            if (dayPlans != null && dayPlans.size() > 0)
                 return dayPlans.get(0);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         return null;
+    }
+
+    public DayPlan getById(int id) {
+        try {
+            return dayPlanDaoOpe.queryForId(id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<DayPlan> getBySeriesPlanId(int plan_id) {
+        try {
+            List<DayPlan> dayPlans = dayPlanDaoOpe.queryForEq("plan_id", plan_id);
+            return dayPlans;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<DayPlan> getAllInMyPlan() {
+        try {
+            List<DayPlan> dayPlans = dayPlanDaoOpe.queryForEq("isInMyPlan", true);
+            return dayPlans;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

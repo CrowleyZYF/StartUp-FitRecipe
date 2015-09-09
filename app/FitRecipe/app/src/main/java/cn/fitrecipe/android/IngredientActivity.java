@@ -133,7 +133,7 @@ public class IngredientActivity extends Activity implements View.OnClickListener
         super.onStop();
     }
 
-    class Fragment1 extends Fragment {
+    public class Fragment1 extends Fragment {
 
         ListView ingredient_list;
         IngredientAdapter ingredientAdapter;
@@ -203,7 +203,7 @@ public class IngredientActivity extends Activity implements View.OnClickListener
         }
     }
 
-    class Fragment2 extends Fragment {
+    public class Fragment2 extends Fragment {
 
         LinearLayoutForListView recipe_list_view;
         BasketAdapter basketAdapter;

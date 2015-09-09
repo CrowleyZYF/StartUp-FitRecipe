@@ -125,6 +125,7 @@ public class PlanDetailViewPagerAdapter extends PagerAdapter {
 
             @Override
             public int getCount() {
+                if(data == null)    return 0;
                 return data.size();
             }
 

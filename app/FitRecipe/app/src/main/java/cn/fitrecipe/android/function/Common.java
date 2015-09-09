@@ -4,6 +4,10 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import cn.fitrecipe.android.R;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -40,5 +44,25 @@ public class Common {
         if(!isOpenNetwork(context))
             error_info = context.getResources().getString(R.string.network_close);
         Toast.makeText(context, error_info, Toast.LENGTH_SHORT).show();
+    }
+
+    public static String getSomeDay(String str, int days) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date date = sdf.parse(str);
+            long after = date.getTime() + days * 24 * 3600 * 1000;
+            Date afterDate = new Date(after);
+            return sdf.format(afterDate);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public static String getDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        long now = System.currentTimeMillis();
+        Date afterDate = new Date(now);
+        return sdf.format(afterDate);
     }
 }
