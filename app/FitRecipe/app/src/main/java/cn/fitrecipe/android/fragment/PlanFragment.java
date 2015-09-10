@@ -101,8 +101,11 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onResume() {
         super.onResume();
+        long t = System.currentTimeMillis();
         data = FrDbHelper.getInstance(getActivity()).getMyPlan();
         switchPlan(pointer);
+        long tt = System.currentTimeMillis();
+        Toast.makeText(getActivity(), (tt - t)+"ms", Toast.LENGTH_SHORT).show();
     }
 
     private boolean switchPlan(int pointer) {
