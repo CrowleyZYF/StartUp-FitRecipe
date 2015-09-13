@@ -19,7 +19,7 @@ public class Procedure implements Serializable{
     @DatabaseField
     private String img;
     @DatabaseField(canBeNull = true, foreign = true, foreignAutoRefresh = true)
-    private Recipe recipe;
+    private transient Recipe recipe;
 
     public String getContent() {
         return content;

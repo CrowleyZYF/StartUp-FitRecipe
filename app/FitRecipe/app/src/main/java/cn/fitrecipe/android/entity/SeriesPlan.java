@@ -13,7 +13,7 @@ import java.util.List;
  * Created by wk on 2015/9/1.
  */
 @DatabaseTable(tableName = "fr_seriesplan")
-public class SeriesPlan implements Serializable{
+public class SeriesPlan implements Serializable, Comparable<SeriesPlan> {
 
     @DatabaseField(id = true)
     private int id;
@@ -55,6 +55,10 @@ public class SeriesPlan implements Serializable{
     private boolean isCustom;
     @DatabaseField(foreign = true)
     private Author author;
+    @DatabaseField
+    private boolean isUsed;
+    @ForeignCollectionField
+    private Collection<DayPlan> dayplans;
 
     public boolean isUsed() {
         return isUsed;
@@ -87,13 +91,6 @@ public class SeriesPlan implements Serializable{
     public void setAuthor_avatar(String author_avatar) {
         this.author_avatar = author_avatar;
     }
-
-    @DatabaseField
-
-    private boolean isUsed;
-    @ForeignCollectionField
-    private Collection<DayPlan> dayplans;
-
 
     public int getId() {
         return id;
@@ -175,7 +172,6 @@ public class SeriesPlan implements Serializable{
         this.dayplans = dayplans;
     }
 
-
     public Author getAuthor() {
         return author;
     }
@@ -238,5 +234,10 @@ public class SeriesPlan implements Serializable{
 
     public void setAuthor_title(String author_title) {
         this.author_title = author_title;
+    }
+
+    @Override
+    public int compareTo(SeriesPlan another) {
+        return id - another.getId();
     }
 }

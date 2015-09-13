@@ -22,9 +22,9 @@ public class Component implements Serializable{
     @DatabaseField
     private int status;
     @DatabaseField(foreign = true)
-    private Recipe recipe;
+    private transient Recipe recipe;
     @DatabaseField(foreign = true)
-    private PlanItem planItem;
+    private transient PlanItem planItem;
     @DatabaseField
     private int itemIndex;
 

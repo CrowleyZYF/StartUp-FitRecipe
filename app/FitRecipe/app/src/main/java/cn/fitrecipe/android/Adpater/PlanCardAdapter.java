@@ -105,7 +105,7 @@ public class PlanCardAdapter extends RecyclerView.Adapter<PlanCardAdapter.PlanCa
 //        contactViewHolder.choice_background.setBackground(this.context.getResources().getDrawable(pc.getBackground()));
         FrApplication.getInstance().getMyImageLoader().displayImage(contactViewHolder.choice_background, pc.getBackground());
         contactViewHolder.author_name.setText(pc.getAuthor_name()+"");
-        if(pc.getType()==0){
+        if(pc.getAuthor_type()==0){
             contactViewHolder.author_type.setText("健身达人");
         }else{
             contactViewHolder.author_type.setText("营养师");

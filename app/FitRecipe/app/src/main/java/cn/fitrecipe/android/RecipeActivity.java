@@ -314,23 +314,23 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         //获取报告
         report = FrApplication.getInstance().getReport();
 
-        /**
-         * 存储菜谱
-         */
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected void onProgressUpdate(Void... values) {
-                super.onProgressUpdate(values);
-                Toast.makeText(RecipeActivity.this, "添加到数据库！", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                FrDbHelper.getInstance(RecipeActivity.this).addRecipe(recipe);
-                publishProgress();
-                return null;
-            }
-        }.execute();
+//        /**
+//         * 存储菜谱
+//         */
+//        new AsyncTask<Void, Void, Void>() {
+//            @Override
+//            protected void onProgressUpdate(Void... values) {
+//                super.onProgressUpdate(values);
+//                Toast.makeText(RecipeActivity.this, "添加到数据库！", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            protected Void doInBackground(Void... params) {
+//                FrDbHelper.getInstance(RecipeActivity.this).addRecipe(recipe);
+//                publishProgress();
+//                return null;
+//            }
+//        }.execute();
     }
 
     private void display(){

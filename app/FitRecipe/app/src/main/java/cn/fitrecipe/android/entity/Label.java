@@ -3,11 +3,13 @@ package cn.fitrecipe.android.entity;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.io.Serializable;
+
 /**
  * Created by wk on 2015/8/6.
  */
 @DatabaseTable(tableName = "fr_label")
-public class Label {
+public class Label implements Serializable{
 
     @DatabaseField(id = true)
     private int id;
@@ -16,7 +18,7 @@ public class Label {
     @DatabaseField
     private String type;
     @DatabaseField(canBeNull = true, foreign = true)
-    private Recipe recipe;
+    private transient Recipe recipe;
 
     public int getId() {
         return id;

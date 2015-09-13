@@ -19,6 +19,7 @@ import cn.fitrecipe.android.Adpater.PlanDetailViewPagerAdapter;
 import cn.fitrecipe.android.Adpater.PlanInfoViewPagerAdapter;
 import cn.fitrecipe.android.UI.PlanDetailViewPager;
 import cn.fitrecipe.android.UI.PlanScrollView;
+import cn.fitrecipe.android.dao.FrDbHelper;
 import cn.fitrecipe.android.entity.PlanDetail;
 import cn.fitrecipe.android.entity.PlanDetailItem;
 import cn.fitrecipe.android.entity.PlanItem;
@@ -135,7 +136,8 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
                 break;
             }
             case R.id.right_btn:{
-                Intent intent = new Intent(this, NutritionActivity.class);
+                Intent intent = new Intent(this, PlanNutritionActivity.class);
+                intent.putExtra("plan", plan);
                 startActivity(intent);
                 break;
             }
@@ -178,5 +180,10 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 }

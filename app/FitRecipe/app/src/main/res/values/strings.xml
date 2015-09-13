@@ -217,6 +217,7 @@
     <string name="plan_type">计划类型</string>
     <string name="plan_food">食材</string>
     <string name="plan_recipe">食谱</string>
+    <string name="title_activity_plan_nutrition">PlanNutritionActivity</string>
 
     <!--打卡-->
     <string name="punch_take_photo">拍照</string>

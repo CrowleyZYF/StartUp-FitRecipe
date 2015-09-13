@@ -12,14 +12,14 @@ import java.util.List;
  * Created by wk on 2015/8/29.
  */
 @DatabaseTable(tableName = "fr_dayplan")
-public class DayPlan implements Serializable{
+public class DayPlan implements Serializable, Comparable<DayPlan>{
 
     @DatabaseField(generatedId = true)
     private int id;
     @ForeignCollectionField
     private Collection<PlanItem> planItems;
     @DatabaseField
-    private int index;
+    private boolean isInMyPlan;
     @DatabaseField
     private boolean isPunched;
     @DatabaseField
@@ -46,14 +46,6 @@ public class DayPlan implements Serializable{
         for(int i = 0; i < planItems.size(); i++)
             calories += planItems.get(i).gettCalories();
         this.planItems = planItems;
-    }
-
-    public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
     }
 
     public boolean isPunched() {
@@ -86,5 +78,18 @@ public class DayPlan implements Serializable{
 
     public void setCalories(double calories) {
         this.calories = calories;
+    }
+
+    @Override
+    public int compareTo(DayPlan another) {
+        return this.date.compareTo(another.getDate());
+    }
+
+    public boolean isInMyPlan() {
+        return isInMyPlan;
+    }
+
+    public void setIsInMyPlan(boolean isInMyPlan) {
+        this.isInMyPlan = isInMyPlan;
     }
 }

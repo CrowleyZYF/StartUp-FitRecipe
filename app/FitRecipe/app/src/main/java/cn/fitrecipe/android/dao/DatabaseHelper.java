@@ -19,6 +19,7 @@ import cn.fitrecipe.android.entity.Component;
 import cn.fitrecipe.android.entity.DayPlan;
 import cn.fitrecipe.android.entity.Ingredient;
 import cn.fitrecipe.android.entity.Label;
+import cn.fitrecipe.android.entity.MyPlan;
 import cn.fitrecipe.android.entity.Nutrition;
 import cn.fitrecipe.android.entity.PlanItem;
 import cn.fitrecipe.android.entity.PlanItem2Recipe;
@@ -62,6 +63,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
             TableUtils.createTableIfNotExists(connectionSource, PlanItem2Recipe.class);
             TableUtils.createTableIfNotExists(connectionSource, DayPlan.class);
             TableUtils.createTableIfNotExists(connectionSource, SeriesPlan.class);
+            TableUtils.createTableIfNotExists(connectionSource, MyPlan.class);
 //            TableUtils.createTableIfNotExists(connectionSource, BasketItem.class);
 
         } catch (SQLException e) {
@@ -84,6 +86,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
             TableUtils.dropTable(connectionSource, PlanItem2Recipe.class, true);
             TableUtils.dropTable(connectionSource, DayPlan.class, true);
             TableUtils.dropTable(connectionSource, SeriesPlan.class, true);
+            TableUtils.dropTable(connectionSource, MyPlan.class, true);
 //            TableUtils.dropTable(connectionSource, BasketItem.class, true);
         } catch (SQLException e) {
             e.printStackTrace();
