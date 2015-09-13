@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import *
+from .models import PlanAuthor, PersonalPlan, Plan, Dish, Routine, SingleIngredient, SingleRecipe
+
 
 class SingleIngredientInline(admin.TabularInline):
     model = SingleIngredient

@@ -27,4 +27,7 @@ urlpatterns = patterns('',
     # comment
     url(r'^api/comment/', include('comment.urls')),
     # collection
-    url(r'^api/collection/', include('collection.urls')),)
+    url(r'^api/collection/', include('collection.urls')),
+    # plan
+    url(r'^api/plan/', include('plan.urls')),
+)
