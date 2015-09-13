@@ -3,7 +3,6 @@ package cn.fitrecipe.android.Adpater;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -37,13 +36,14 @@ public class PlanDetailViewPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         DayPlan dayPlan = dataList.get(position);
-        View planDetailContainer = LayoutInflater.from(context).inflate(R.layout.plan_detail_list_item, null);
+        /*View planDetailContainer = LayoutInflater.from(context).inflate(R.layout.plan_detail_list_item, null);
 
         LinearLayoutForListView listView = (LinearLayoutForListView) planDetailContainer.findViewById(R.id.dayplan_detail);
         PlanItemAdapter adapter = new PlanItemAdapter(dayPlan.getPlanItems());
         listView.setAdapter(adapter);
         container.addView(planDetailContainer);
-        return planDetailContainer;
+        return planDetailContainer;*/
+        return null;
     }
 
     @Override

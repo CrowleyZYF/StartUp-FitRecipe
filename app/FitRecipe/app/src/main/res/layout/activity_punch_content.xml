@@ -1,0 +1,891 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:scrollbars="none"
+    android:fadingEdge="vertical"
+    android:padding="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/me_avatar"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_alignParentLeft="true"
+                android:src="@drawable/pic_header"
+                app:border_width="3dp"
+                app:border_color="#ffffff"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/me_avatar">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="庄奕峰"
+                    android:textSize="16sp"
+                    android:textColor="@color/login_input_text_color"
+                    android:gravity="center_vertical"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="5dp">
+
+                    <ImageView
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:src="@drawable/icon_time_gray"
+                        android:layout_marginRight="10dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="9月21号"
+                        android:textSize="10sp"
+                        android:textColor="@color/gray"
+                        android:gravity="center_vertical"
+                        android:layout_marginRight="3dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="12:00"
+                        android:textSize="10sp"
+                        android:textColor="@color/gray"
+                        android:gravity="center_vertical"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="增肌ing"
+                android:textColor="@color/base_color"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="8dp"
+                android:layout_marginRight="-1dp"
+                android:background="@drawable/punch_state_background"/>
+
+        </RelativeLayout>
+
+        <cn.fitrecipe.android.UI.SquareLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white">
+
+            <ImageView
+                android:id="@+id/punch_photo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/punch_temp"
+                android:scaleType="fitXY"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/logo_white"
+                    android:layout_margin="10dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:orientation="horizontal"
+                    android:layout_alignParentBottom="true"
+                    android:background="#aa000000"
+                    android:gravity="center_vertical">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingLeft="10dp"
+                        android:layout_marginTop="-8dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="3dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="打卡第"
+                                android:textColor="@color/white"
+                                android:textSize="20sp"
+                                android:textStyle="bold"/>
+
+                            <TextView
+                                android:id="@+id/punch_day"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="12"
+                                android:textColor="@color/white"
+                                android:textSize="40sp"
+                                android:textStyle="bold"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="5dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="天"
+                                android:textColor="@color/white"
+                                android:textSize="20sp"
+                                android:textStyle="bold"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <ImageView
+                                android:layout_width="14dp"
+                                android:layout_height="14dp"
+                                android:src="@drawable/icon_bmi_white"/>
+
+                            <TextView
+                                android:id="@+id/punch_type"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="上午加餐"
+                                android:textSize="12sp"
+                                android:textColor="@color/white"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="20dp"/>
+
+                            <ImageView
+                                android:layout_width="14dp"
+                                android:layout_height="14dp"
+                                android:src="@drawable/icon_calendar"/>
+
+                            <TextView
+                                android:id="@+id/punch_date"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="10月21号"
+                                android:textSize="12sp"
+                                android:textColor="@color/white"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="20dp"/>
+
+                            <ImageView
+                                android:layout_width="14dp"
+                                android:layout_height="14dp"
+                                android:src="@drawable/icon_bmi_white"/>
+
+                            <TextView
+                                android:id="@+id/punch_calories"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="258kcal"
+                                android:textSize="12sp"
+                                android:textColor="@color/white"
+                                android:layout_marginLeft="10dp"/>
+
+                        </LinearLayout>
+                    </LinearLayout>
+                    <cn.fitrecipe.android.UI.PieChartView
+                        android:id="@+id/punch_piechart"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_marginRight="5dp"/>
+
+                </LinearLayout>
+            </RelativeLayout>
+        </cn.fitrecipe.android.UI.SquareLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp">
+
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:src="@drawable/banner_food"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/punch_border_radius"
+                android:padding="2px"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="#fff8f8f8">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="西兰花鸡胸肉"
+                        android:textSize="16sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="8dp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="300kcal"
+                        android:textSize="16sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="8dp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="250g"
+                        android:textSize="16sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="8dp"/>
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#ffe5e5e5"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="西兰花"
+                        android:textSize="16sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="8dp"
+                        android:layout_marginLeft="30dp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="300kcal"
+                        android:textSize="16sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="5dp"
+                        android:layout_marginLeft="-30dp"
+                        android:visibility="invisible"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="100g"
+                        android:textSize="16sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="8dp"/>
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#ffe5e5e5"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="#fff8f8f8">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="鸡胸肉"
+                        android:textSize="16sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="8dp"
+                        android:layout_marginLeft="30dp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="300kcal"
+                        android:textSize="16sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="8dp"
+                        android:layout_marginLeft="-30dp"
+                        android:visibility="invisible"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="140g"
+                        android:textSize="16sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="8dp"/>
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#ffe5e5e5"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="低脂芝士"
+                        android:textSize="16sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="5dp"
+                        android:layout_marginLeft="30dp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="300kcal"
+                        android:textSize="16sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="8dp"
+                        android:layout_marginLeft="-30dp"
+                        android:visibility="invisible"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="10g"
+                        android:textSize="16sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="8dp"/>
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#ffe5e5e5"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="#fff8f8f8">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="红薯"
+                        android:textSize="16sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="8dp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="100kcal"
+                        android:textSize="16sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="8dp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="100g"
+                        android:textSize="16sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="8dp"/>
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#ffe5e5e5"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="牛奶"
+                        android:textSize="16sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="8dp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="50kcal"
+                        android:textSize="16sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="8dp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="200g"
+                        android:textSize="16sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="8dp"/>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp">
+
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:src="@drawable/banner_nutrition"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:layout_marginTop="5dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="5"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/icon_punch_calorie"
+                            android:layout_gravity="center_vertical"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="71.51"
+                            android:textSize="30sp"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/login_input_text_color"
+                            android:layout_marginLeft="15dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="大卡"
+                            android:textSize="16sp"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/login_input_text_color"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="4dp"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/icon_punch_ratio"
+                            android:layout_gravity="center_vertical"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="占日需热量"
+                            android:textSize="16sp"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/login_input_text_color"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginTop="4dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="20%"
+                            android:textSize="30sp"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/login_input_text_color"
+                            android:layout_marginLeft="5dp"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="10dp">
+
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/icon_punch_c"
+                            android:layout_gravity="center_vertical"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="12g"
+                            android:textSize="14sp"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/login_input_text_color"
+                            android:layout_marginLeft="10dp"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/icon_punch_p"
+                            android:layout_gravity="center_vertical"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="12g"
+                            android:textSize="14sp"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/login_input_text_color"
+                            android:layout_marginLeft="10dp"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/icon_punch_f"
+                            android:layout_gravity="center_vertical"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="12g"
+                            android:textSize="14sp"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/login_input_text_color"
+                            android:layout_marginLeft="10dp"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+                
+                <cn.fitrecipe.android.UI.SquareLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="4"
+                    android:layout_height="match_parent"
+                    android:padding="5dp">
+
+                    <cn.fitrecipe.android.UI.PieChartView
+                        android:id="@+id/piechartview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </cn.fitrecipe.android.UI.SquareLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/punch_border_radius"
+                android:padding="2px"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="30dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="#fff8f8f8">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="营养元素"
+                        android:textSize="16sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="8dp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="日均所需"
+                        android:textSize="16sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="8dp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="摄入"
+                        android:textSize="16sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="8dp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="占比"
+                        android:textSize="16sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="8dp"/>
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#ffe5e5e5"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="碳水化合物"
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="8dp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="1200~1500g"
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="8dp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="1000g"
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="8dp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="20%"
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="8dp"/>
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#ffe5e5e5"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="#fff8f8f8">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="蛋白质"
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="8dp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="120~150g"
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="8dp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="100g"
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="8dp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="20%"
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="8dp"/>
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#ffe5e5e5"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="脂肪"
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="8dp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="12~15g"
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="8dp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="10g"
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="8dp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="10%"
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:padding="8dp"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+</ScrollView>
