@@ -15,6 +15,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import com.nostra13.universalimageloader.core.display.SimpleBitmapDisplayer;
 import com.nostra13.universalimageloader.core.imageaware.ViewAware;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
@@ -53,8 +54,13 @@ public class MyImageLoader {
                 .build();
 
         options2 = new DisplayImageOptions.Builder()
-                .showImageOnFail(R.drawable.loading_pic2)
-                .showImageForEmptyUri(R.drawable.loading_pic2)
+                .showImageOnFail(R.drawable.loading_pic1)
+                .showImageForEmptyUri(R.drawable.loading_pic1)
+                .showImageOnLoading(R.drawable.loading_pic1)
+                .resetViewBeforeLoading(false)
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                .displayer(new SimpleBitmapDisplayer())
+//                .delayBeforeLoading(200)
                 .cacheInMemory(true)
                 .cacheOnDisk(true)          //permit cache image in memory and disk
 //                .displayer(new FadeInBitmapDisplayer(500)) // set image fade in

@@ -1,11 +1,9 @@
 package cn.fitrecipe.android.dao;
 
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
@@ -14,7 +12,6 @@ import com.j256.ormlite.table.TableUtils;
 import java.sql.SQLException;
 
 import cn.fitrecipe.android.entity.Author;
-import cn.fitrecipe.android.entity.BasketItem;
 import cn.fitrecipe.android.entity.Component;
 import cn.fitrecipe.android.entity.DayPlan;
 import cn.fitrecipe.android.entity.Ingredient;
@@ -25,7 +22,6 @@ import cn.fitrecipe.android.entity.PlanItem;
 import cn.fitrecipe.android.entity.PlanItem2Recipe;
 import cn.fitrecipe.android.entity.Recipe;
 import cn.fitrecipe.android.entity.Report;
-import cn.fitrecipe.android.entity.Series;
 import cn.fitrecipe.android.entity.SeriesPlan;
 
 /**
@@ -53,10 +49,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
     public void onCreate(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource) {
         try {
             TableUtils.createTableIfNotExists(connectionSource, Author.class);
-            TableUtils.createTableIfNotExists(connectionSource, Label.class);
+//            TableUtils.createTableIfNotExists(connectionSource, Label.class);
             TableUtils.createTableIfNotExists(connectionSource, Ingredient.class);
             TableUtils.createTableIfNotExists(connectionSource, Component.class);
-            TableUtils.createTableIfNotExists(connectionSource, Nutrition.class);
+//            TableUtils.createTableIfNotExists(connectionSource, Nutrition.class);
             TableUtils.createTableIfNotExists(connectionSource, Recipe.class);
             TableUtils.createTableIfNotExists(connectionSource, Report.class);
             TableUtils.createTableIfNotExists(connectionSource, PlanItem.class);

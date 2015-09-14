@@ -110,14 +110,12 @@ public class PlanInfoViewPagerAdapter extends PagerAdapter {
                         choice_join_btn.setBackground(context.getResources().getDrawable(R.drawable.join_button));
                         //
                         FrDbHelper.getInstance(context).setPlanUnUsed(plan);
-                        FrDbHelper.getInstance(context).savePlanChoice(null);
                     }
                     else {
                         choice_join_btn.setText("取消选用");
                         choice_join_btn.setTextColor(context.getResources().getColor(R.color.gray));
                         choice_join_btn.setBackground(context.getResources().getDrawable(R.drawable.join_button_disable));
                         FrDbHelper.getInstance(context).setPlanUsed(plan);
-                        FrDbHelper.getInstance(context).savePlanChoice(plan);
                     }
 //                    FrDbHelper.getInstanssce(context)
                 }

@@ -65,4 +65,16 @@ public class Common {
         Date afterDate = new Date(now);
         return sdf.format(afterDate);
     }
+
+    public static int CompareDate(String a, String b) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date date1 = sdf.parse(a);
+            Date date2 = sdf.parse(b);
+            return date1.compareTo(date2);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }

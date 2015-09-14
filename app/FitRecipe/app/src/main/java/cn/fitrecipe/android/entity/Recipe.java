@@ -34,11 +34,10 @@ public class Recipe implements Serializable, Comparable<Recipe>{
     private ArrayList<Label> other_labels;
     private ArrayList<Procedure>  procedure_set;
     private ArrayList<Comment> comment_set;
+    private List<Nutrition> nutrition_set;
 
-    @ForeignCollectionField(eager = false)
+    @ForeignCollectionField
     private Collection<Component> component_set;
-    @ForeignCollectionField(eager = false)
-    private Collection<Nutrition> nutrition_set;
     @DatabaseField
     private String macro_element_ratio;
     @DatabaseField

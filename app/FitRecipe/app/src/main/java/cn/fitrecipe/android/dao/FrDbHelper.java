@@ -1,6 +1,10 @@
 package cn.fitrecipe.android.dao;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -566,6 +570,7 @@ public class FrDbHelper {
         }
         plan.setIsUsed(true);
         dao.add(plan);
+        savePlanChoice(plan);
     }
 
     /**
@@ -576,6 +581,7 @@ public class FrDbHelper {
         SeriesPlanDao dao = new SeriesPlanDao(context);
         plan.setIsUsed(false);
         dao.add(plan);
+        savePlanChoice(null);
     }
 
     /**
@@ -679,61 +685,75 @@ public class FrDbHelper {
         SeriesPlan usedPlan = copySeriesPlan(plan);
         usedPlan = addSeriesPlan(usedPlan);
         newPlan.setPlan(usedPlan);
+        if(plan == null) {
+            plan = new SeriesPlan();
+            plan.setId(-1);
+        }
+        newPlan.setPlan(plan);
         dao.add(newPlan);
         return newPlan;
     }
 
+    /**
+     * get the plan between start and end, end is after start
+     * @return map
+     */
     public Map<String, DayPlan> getMyPlan() {
-        MyPlanDao dao = new MyPlanDao(context);
-        List<MyPlan> myPlans = dao.get();
-        if(myPlans.size() == 0) {
-            myPlans.add(savePlanChoice(null));
-        }
+        long t = System.currentTimeMillis();
+//        MyPlanDao dao = new MyPlanDao(context);
+//        List<MyPlan> myPlans = dao.get();
+//        long tt = System.currentTimeMillis();
+//        Toast.makeText(context, (tt-t) + "", Toast.LENGTH_SHORT).show();
+//        if(myPlans.size() == 0) {
+//            myPlans.add(savePlanChoice(null));
+//        }
         Map<String, DayPlan> data = new HashMap<>();
-        if(myPlans != null) {
-            for(int i = 0; i < myPlans.size(); i++) {
-                SeriesPlan plan = getSeriesPlan(myPlans.get(i).getPlan().getId());
-                myPlans.get(i).setPlan(plan);
-            }
-            Collections.sort(myPlans);
-            for(int i = 0; i < myPlans.size() - 1; i++) {
-                myPlans.get(i).setEndDate(Common.getSomeDay(myPlans.get(i + 1).getStartDate(), -1));
-            }
-            if(myPlans.size() > 0)
-                myPlans.get(myPlans.size() - 1).setEndDate(Common.getSomeDay(Common.getDate(), 6));
 
-            for(int i = 0; i < myPlans.size(); i++) {
-                SeriesPlan plan = myPlans.get(i).getPlan();
-                List<DayPlan> dayPlans = plan.getDayplans();
-                int cnt = 0;
-                int len = dayPlans.size();
-                String str = myPlans.get(i).getStartDate();
-                while (dayPlans != null) {
-                    if(cnt < len) {
-                        dayPlans.get(cnt).setDate(str);
-                        dayPlans.get(cnt).setPlan(plan);
-                        data.put(str, dayPlans.get(cnt));
-                    }
-                    else {
-                        DayPlan dayPlan;
-                        if(plan.getName().equals("自定义计划")) {
-                            dayPlan = new DayPlan();
-                        }else {
-                            dayPlan = copyDayPlan(dayPlans.get(cnt % plan.getDays()));
-                        }
-                        dayPlan.setPlan(plan);
-                        dayPlan = addDayPlan(dayPlan);
-                        dayPlan.setDate(str);
-                        dayPlans.add(dayPlan);
-                        data.put(str, dayPlan);
-                    }
-                    cnt++;
-                    if(str.equals(myPlans.get(i).getEndDate()))
-                        break;
-                    str = Common.getSomeDay(str, 1);
-                }
-            }
-        }
+//        if(myPlans != null) {
+//            for(int i = 0; i < myPlans.size(); i++) {
+//                SeriesPlan plan = getSeriesPlan(myPlans.get(i).getPlan().getId());
+//                myPlans.get(i).setPlan(plan);
+//            }
+//            Collections.sort(myPlans);
+//            Toast.makeText(context, (tt-t) + "", Toast.LENGTH_SHORT).show();
+//            for(int i = 0; i < myPlans.size() - 1; i++) {
+//                myPlans.get(i).setEndDate(Common.getSomeDay(myPlans.get(i + 1).getStartDate(), -1));
+//            }
+//            if(myPlans.size() > 0)
+//                myPlans.get(myPlans.size() - 1).setEndDate(Common.getSomeDay(Common.getDate(), 6));
+//
+//            for(int i = 0; i < myPlans.size(); i++) {
+//                SeriesPlan plan = myPlans.get(i).getPlan();
+//                List<DayPlan> dayPlans = plan.getDayplans();
+//                int cnt = 0;
+//                int len = dayPlans.size();
+//                String str = myPlans.get(i).getStartDate();
+//                while (dayPlans != null) {
+//                    if(cnt < len) {
+//                        dayPlans.get(cnt).setDate(str);
+//                        dayPlans.get(cnt).setPlan(plan);
+//                        data.put(str, dayPlans.get(cnt));
+//                    }
+//                    else {
+//                        DayPlan dayPlan;
+//                        if(plan.getName().equals("自定义计划")) {
+//                            dayPlan = new DayPlan();
+//                        }else {
+//                            dayPlan = copyDayPlan(dayPlans.get(cnt % plan.getDays()));
+//                        }
+//                        dayPlan.setPlan(plan);
+//                        dayPlan = addDayPlan(dayPlan);
+//                        dayPlan.setDate(str);
+////                        dayPlans.add(dayPlan);
+//                        data.put(str, dayPlan);
+//                    }
+//                    cnt++;
+//                    if(str.equals(myPlans.get(i).getEndDate()))
+//                        break;
+//                    str = Common.getSomeDay(str, 1);
+//                }
+//            }
+//        }
         return data;
     }
 }

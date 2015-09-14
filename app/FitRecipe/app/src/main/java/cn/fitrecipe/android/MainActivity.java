@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -86,8 +87,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         if (intent.hasExtra("tab")){
             tab_index = intent.getIntExtra("tab",0);
             intent.removeExtra("tab");
-            setSelect(tab_index);
         }
+        setSelect(tab_index);
         registerReceiver(readyRececiver, intentFilter);
     }
 
@@ -321,8 +322,15 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         @Override
         public void onReceive(Context context, Intent intent) {
             if(intent.getAction().equals(action)) {
-                ((IndexFragment)frIndexFragment).fresh();
-                stopService(new Intent(MainActivity.this, GetHomeDataService.class));
+//                new Handler() {
+//
+//                }.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+                        ((IndexFragment) frIndexFragment).fresh();
+                        stopService(new Intent(MainActivity.this, GetHomeDataService.class));
+//                    }
+//                }, 1000);
             }
         }
     }

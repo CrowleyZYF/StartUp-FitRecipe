@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import java.util.List;
 
@@ -50,6 +51,7 @@ public class ThemeCardAdapter extends RecyclerView.Adapter<ThemeCardAdapter.Them
     public void onBindViewHolder(ThemeCardAdapter.ThemeCardViewHolder contactViewHolder, int i) {
         Theme tc = themeCardsList.get(i);
 //        contactViewHolder.theme_background.setImageResource(tc.getRecipe_background());
+        System.out.println(contactViewHolder.theme_background.toString() + "   :   " + tc.getThumbnail());
         FrApplication.getInstance().getMyImageLoader().displayImage(contactViewHolder.theme_background, tc.getThumbnail());
     }
 
@@ -62,11 +64,11 @@ public class ThemeCardAdapter extends RecyclerView.Adapter<ThemeCardAdapter.Them
     }
 
     public static class ThemeCardViewHolder extends RecyclerView.ViewHolder {
-        protected ImageView theme_background;
+        protected LinearLayout theme_background;
 
         public ThemeCardViewHolder(View itemView) {
             super(itemView);
-            theme_background = (ImageView) itemView.findViewById(R.id.theme_image);
+            theme_background = (LinearLayout) itemView.findViewById(R.id.theme_image);
         }
     }
 }
