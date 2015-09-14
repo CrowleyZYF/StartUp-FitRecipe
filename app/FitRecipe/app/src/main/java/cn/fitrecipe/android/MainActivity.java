@@ -24,7 +24,6 @@ import com.umeng.fb.FeedbackAgent;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.fitrecipe.android.UI.SlidingPage;
 import cn.fitrecipe.android.entity.PlanItem;
 import cn.fitrecipe.android.fragment.IndexFragment;
 import cn.fitrecipe.android.fragment.MeFragment;
@@ -264,7 +263,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
             case R.id.right_btn:
                 switch (tab_index){
                     case 0:
-                        startActivity(new Intent(this, SearchActivity.class));
+                        //startActivity(new Intent(this, SearchActivity.class));
+                        startActivity(new Intent(this, SetActivity.class));
                         break;
                     case 1:
                         startActivity(new Intent(this, PlanChoiceActivity.class));

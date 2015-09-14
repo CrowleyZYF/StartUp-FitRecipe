@@ -93,6 +93,8 @@
         </activity>
         <activity android:name=".NutritionActivity" >
         </activity>
+        <activity android:name=".PunchContentSureActivity" >
+        </activity>
         <activity android:name="com.umeng.fb.ConversationActivity" />
 
         <meta-data
@@ -179,6 +181,11 @@
         <activity
             android:name=".SelectRecipeActivity"
             android:label="@string/title_activity_select_recipe"
+            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".PunchPhotoChoiceActivity"
+            android:label="@string/title_activity_punch_photo_choice"
             android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar" >
         </activity>
         <activity
