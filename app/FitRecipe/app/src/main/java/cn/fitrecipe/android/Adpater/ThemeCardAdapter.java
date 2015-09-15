@@ -51,7 +51,7 @@ public class ThemeCardAdapter extends RecyclerView.Adapter<ThemeCardAdapter.Them
     public void onBindViewHolder(ThemeCardAdapter.ThemeCardViewHolder contactViewHolder, int i) {
         Theme tc = themeCardsList.get(i);
 //        contactViewHolder.theme_background.setImageResource(tc.getRecipe_background());
-        System.out.println(contactViewHolder.theme_background.toString() + "   :   " + tc.getThumbnail());
+//        System.out.println(contactViewHolder.theme_background.toString() + "   :   " + tc.getThumbnail());
         FrApplication.getInstance().getMyImageLoader().displayImage(contactViewHolder.theme_background, tc.getThumbnail());
     }
 

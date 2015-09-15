@@ -117,7 +117,6 @@ public class PlanInfoViewPagerAdapter extends PagerAdapter {
                         choice_join_btn.setBackground(context.getResources().getDrawable(R.drawable.join_button_disable));
                         FrDbHelper.getInstance(context).setPlanUsed(plan);
                     }
-//                    FrDbHelper.getInstanssce(context)
                 }
             });
         }else{

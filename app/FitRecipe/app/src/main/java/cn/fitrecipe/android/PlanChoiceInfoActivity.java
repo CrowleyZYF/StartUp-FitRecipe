@@ -86,7 +86,7 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
         prev_day_btn = (ImageView) findViewById(R.id.prev_day_btn);
         next_day_btn = (ImageView) findViewById(R.id.next_day_btn);
         plan_day.setText(1 + "/" + plan.getDays());
-        plan_calories.setText(Math.round(plan.getDayplans().get(0).getCalories())+"");
+        plan_calories.setText(Math.round(plan.getDatePlans().get(0).getTotalCalories())+"");
     }
 
     private void initData() {
@@ -156,7 +156,7 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
         nowY = info_container.getScrollY();
         planDetailViewPager.setCurrentItem(planDetailViewPager.getCurrentItem()+1, true);
         plan_day.setText((planDetailViewPager.getCurrentItem()+1) + "/" + plan.getDays());
-        plan_calories.setText(Math.round(plan.getDayplans().get(planDetailViewPager.getCurrentItem()).getCalories())+"");
+        plan_calories.setText(Math.round(plan.getDatePlans().get(planDetailViewPager.getCurrentItem()).getTotalCalories())+"");
         info_container.smoothScrollTo(0, nowY);
     }
 

@@ -1,6 +1,7 @@
 package cn.fitrecipe.android.fragment;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,8 +14,10 @@ import android.widget.Toast;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import cn.fitrecipe.android.Adpater.PlanElementAdapter;
 import cn.fitrecipe.android.FrApplication;
@@ -23,7 +26,10 @@ import cn.fitrecipe.android.NutritionActivity;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.dao.FrDbHelper;
+import cn.fitrecipe.android.entity.DatePlan;
+import cn.fitrecipe.android.entity.DatePlanItem;
 import cn.fitrecipe.android.entity.DayPlan;
+import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.PlanItem;
 import cn.fitrecipe.android.entity.Report;
 import cn.fitrecipe.android.entity.SeriesPlan;
@@ -38,8 +44,8 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     private Report report;
 
     private LinearLayoutForListView plans;
-    private List<PlanItem> items;
-    private DayPlan dayPlan;
+    private List<DatePlanItem> items;
+    private DatePlan datePlan;
     private PlanElementAdapter adapter;
     private ImageView shopping_btn, next_btn, prev_btn;
     private TextView plan_status_day, plan_status, diy_days, plan_name;
@@ -49,10 +55,12 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     public static final int LUNCH_CODE = 02;
     public static final int ADDMEAL_02_CODE = 03;
     public static final int SUPPER_CODE = 04;
+    public static final int ADDMEAL_03_CODE = 05;
 
     private int pointer = 0;
     private long now;
-    private Map<String, DayPlan> data;
+    private Map<String, DatePlan> data;
+    private boolean isFresh = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -101,23 +109,71 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onResume() {
         super.onResume();
-        long t = System.currentTimeMillis();
-        data = FrDbHelper.getInstance(getActivity()).getMyPlan();
-        switchPlan(pointer);
-        long tt = System.currentTimeMillis();
-        Toast.makeText(getActivity(), (tt - t)+"ms", Toast.LENGTH_SHORT).show();
+        if(isFresh) {
+            long t = System.currentTimeMillis();
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected void onProgressUpdate(Void... values) {
+                    switchPlan(pointer, 1);
+                }
+
+                @Override
+                protected Void doInBackground(Void... params) {
+                    if (data != null)
+                        data.clear();
+                    datePlan = null;
+                    data = FrDbHelper.getInstance(getActivity()).getDatePlan(Common.getSomeDay(Common.getDate(), -2), Common.getSomeDay(Common.getDate(), 6));
+                    publishProgress();
+                    return null;
+                }
+            }.execute();
+            long tt = System.currentTimeMillis();
+            Toast.makeText(getActivity(), (tt - t) + "ms", Toast.LENGTH_SHORT).show();
+        }
+        isFresh = true;
     }
 
-    private boolean switchPlan(int pointer) {
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Set<String> keySet = data.keySet();
+        Iterator<String> iterator = keySet.iterator();
+        while (iterator.hasNext()) {
+            DatePlan update = data.get(iterator.next());
+            FrDbHelper.getInstance(getActivity()).addDatePlan(update);
+        }
+    }
+
+    private boolean switchPlan(int pointer, int dir) {
+        if(datePlan != null)
+            datePlan.setItems(items);
         String str = Common.getSomeDay(Common.getDate(), pointer);
+        int days = Common.getDiff(str, report.getUpdatetime()) + 1;
+        if(days + dir * 2 > 0 && pointer + dir * 2 < 7) {
+            final String preGet = Common.getSomeDay(str, dir * 2);
+            if (data == null || !data.containsKey(preGet)) {
+                new Thread() {
+                    @Override
+                    public void run() {
+                        Map<String, DatePlan> res = FrDbHelper.getInstance(getActivity()).getDatePlan(preGet, preGet);
+                        if (res != null && res.size() > 0) {
+                            data.putAll(res);
+                        }
+                    }
+                }.start();
+            }
+        }
         if (data.containsKey(str)) {
             diy_days.setText(str);
-            int days = (int) (getDiff(str, report.getUpdatetime()) + 1);
             plan_status_day.setText(days + "");
-            dayPlan = data.get(str);
-            plan_name.setText(dayPlan.getPlan().getName());
-            items = dayPlan.getPlanItems();
-            adapter.setData(items);
+            datePlan = data.get(str);
+            plan_name.setText(datePlan.getPlan_name());
+            items = datePlan.getItems();
+            if(pointer > 0)
+                adapter.setData(items, datePlan.getPlan_name().equals("自定义计划")?true:false, false);
+            else
+                adapter.setData(items, datePlan.getPlan_name().equals("自定义计划")?true:false, true);
             return true;
         }
         else {
@@ -126,70 +182,30 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-
-//    private void switchPlan(int pointer) {
-//        Date date = new Date(now + pointer * 24 * 3600 * 1000);
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//        String strDate = sdf.format(date);
-//        int days = (int) (getDiff(strDate, report.getUpdatetime()) + 1);
-//        if(days <= 0) {
-//            Toast.makeText(getActivity(), "已经是最前一天了！", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//        if(pointer >= 7) {
-//            Toast.makeText(getActivity(), "只能制定7天内的计划！", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//        diy_days.setText(strDate);
-//        plan_status_day.setText(days +"");
-////        dayPlan = FrDbHelper.getInstance(getActivity()).getDayPlan(strDate);
-//        if(dayPlan == null) {
-//            dayPlan = new DayPlan();
-//            dayPlan.setDate(strDate);
-//            dayPlan = FrDbHelper.getInstance(getActivity()).addDayPlan(dayPlan);
-//        }
-//        items = dayPlan.getPlanItems();
-//        adapter.setData(items);
-//    }
-
-
-    private long getDiff(String str1, String str2) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date date1, date2;
-        try {
-            date1 = sdf.parse(str1);
-            date2 = sdf.parse(str2);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-        return (date1.getTime() - date2.getTime()) / (24 * 3600 *1000);
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Object obj = null;
-        if(resultCode == getActivity().RESULT_OK && data.hasExtra("obj_selected")) {
-            obj = data.getSerializableExtra("obj_selected");
+        PlanComponent obj = null;
+        if(resultCode == getActivity().RESULT_OK && data.hasExtra("component_selected")) {
+            isFresh = false;
+            obj = (PlanComponent) data.getSerializableExtra("component_selected");
             switch (requestCode) {
                 case BREAKFAST_CODE:
                     items.get(0).addContent(obj);
-                    FrDbHelper.getInstance(getActivity()).addPlanItem(dayPlan.getPlanItems().get(0));
                     break;
                 case ADDMEAL_01_CODE:
                     items.get(1).addContent(obj);
-                    FrDbHelper.getInstance(getActivity()).addPlanItem(dayPlan.getPlanItems().get(1));
                     break;
                 case LUNCH_CODE:
                     items.get(2).addContent(obj);
-                    FrDbHelper.getInstance(getActivity()).addPlanItem(dayPlan.getPlanItems().get(2));
                     break;
                 case ADDMEAL_02_CODE:
                     items.get(3).addContent(obj);
-                    FrDbHelper.getInstance(getActivity()).addPlanItem(dayPlan.getPlanItems().get(3));
                     break;
                 case SUPPER_CODE:
                     items.get(4).addContent(obj);
-                    FrDbHelper.getInstance(getActivity()).addPlanItem(dayPlan.getPlanItems().get(4));
+                    break;
+                case ADDMEAL_03_CODE:
+                    items.get(5).addContent(obj);
                     break;
             }
             adapter.notifyDataSetChanged();
@@ -197,14 +213,14 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void toggle(PlanItem.ItemType type) {
+    public void toggle(String type) {
 //        Toast.makeText(getActivity(), type.value()+"", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getActivity(), NutritionActivity.class);
         boolean f = true;
-       if(type == PlanItem.ItemType.ALL) {
+       if(type.equals("all")) {
            f = false;
             for(int i = 0; i < items.size(); i++){
-                if(items.get(i).size() > 0) {
+                if(items.get(i).getComponents() != null && items.get(i).getComponents().size()> 0) {
                     f = true;
                     break;
                 }
@@ -212,7 +228,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
        }
         if(f) {
             intent.putExtra("itemtype", type);
-            intent.putExtra("dayplan", dayPlan);
+            intent.putExtra("dateplan", datePlan);
             startActivity(intent);
         }else {
             Toast.makeText(getActivity(), "请添加食谱和食材！", Toast.LENGTH_SHORT).show();
@@ -228,15 +244,15 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 startActivity(intent);
                 break;
             case R.id.next_btn:
-                if(switchPlan(pointer + 1))
+                if(switchPlan(pointer + 1, 1)) {
                     pointer++;
+                }
                 break;
             case R.id.prev_btn:
-                if(switchPlan(pointer - 1))
+                if(switchPlan(pointer - 1, -1)) {
                     pointer--;
+                }
                 break;
         }
     }
-
-
 }

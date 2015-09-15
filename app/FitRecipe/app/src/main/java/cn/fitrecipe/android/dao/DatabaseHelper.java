@@ -1,6 +1,7 @@
 package cn.fitrecipe.android.dao;
 
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -13,11 +14,13 @@ import java.sql.SQLException;
 
 import cn.fitrecipe.android.entity.Author;
 import cn.fitrecipe.android.entity.Component;
+import cn.fitrecipe.android.entity.DatePlan;
 import cn.fitrecipe.android.entity.DayPlan;
 import cn.fitrecipe.android.entity.Ingredient;
 import cn.fitrecipe.android.entity.Label;
 import cn.fitrecipe.android.entity.MyPlan;
 import cn.fitrecipe.android.entity.Nutrition;
+import cn.fitrecipe.android.entity.PlanInUse;
 import cn.fitrecipe.android.entity.PlanItem;
 import cn.fitrecipe.android.entity.PlanItem2Recipe;
 import cn.fitrecipe.android.entity.Recipe;
@@ -50,17 +53,19 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
         try {
             TableUtils.createTableIfNotExists(connectionSource, Author.class);
 //            TableUtils.createTableIfNotExists(connectionSource, Label.class);
-            TableUtils.createTableIfNotExists(connectionSource, Ingredient.class);
-            TableUtils.createTableIfNotExists(connectionSource, Component.class);
+//            TableUtils.createTableIfNotExists(connectionSource, Ingredient.class);
+//            TableUtils.createTableIfNotExists(connectionSource, Component.class);
 //            TableUtils.createTableIfNotExists(connectionSource, Nutrition.class);
-            TableUtils.createTableIfNotExists(connectionSource, Recipe.class);
+//            TableUtils.createTableIfNotExists(connectionSource, Recipe.class);
             TableUtils.createTableIfNotExists(connectionSource, Report.class);
-            TableUtils.createTableIfNotExists(connectionSource, PlanItem.class);
-            TableUtils.createTableIfNotExists(connectionSource, PlanItem2Recipe.class);
-            TableUtils.createTableIfNotExists(connectionSource, DayPlan.class);
-            TableUtils.createTableIfNotExists(connectionSource, SeriesPlan.class);
-            TableUtils.createTableIfNotExists(connectionSource, MyPlan.class);
+//            TableUtils.createTableIfNotExists(connectionSource, PlanItem.class);
+//            TableUtils.createTableIfNotExists(connectionSource, PlanItem2Recipe.class);
+//            TableUtils.createTableIfNotExists(connectionSource, DayPlan.class);
+//            TableUtils.createTableIfNotExists(connectionSource, SeriesPlan.class);
+//            TableUtils.createTableIfNotExists(connectionSource, MyPlan.class);
 //            TableUtils.createTableIfNotExists(connectionSource, BasketItem.class);
+            TableUtils.createTableIfNotExists(connectionSource, DatePlan.class);
+            TableUtils.createTableIfNotExists(connectionSource, PlanInUse.class);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -72,18 +77,20 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource, int i, int i1) {
         try {
             TableUtils.dropTable(connectionSource, Author.class, true);
-            TableUtils.dropTable(connectionSource, Label.class, true);
-            TableUtils.dropTable(connectionSource, Ingredient.class, true);
-            TableUtils.dropTable(connectionSource, Component.class, true);
-            TableUtils.dropTable(connectionSource, Nutrition.class, true);
-            TableUtils.dropTable(connectionSource, Recipe.class, true);
+//            TableUtils.dropTable(connectionSource, Label.class, true);
+//            TableUtils.dropTable(connectionSource, Ingredient.class, true);
+//            TableUtils.dropTable(connectionSource, Component.class, true);
+//            TableUtils.dropTable(connectionSource, Nutrition.class, true);
+//            TableUtils.dropTable(connectionSource, Recipe.class, true);
             TableUtils.dropTable(connectionSource, Report.class, true);
-            TableUtils.dropTable(connectionSource, PlanItem.class, true);
-            TableUtils.dropTable(connectionSource, PlanItem2Recipe.class, true);
-            TableUtils.dropTable(connectionSource, DayPlan.class, true);
-            TableUtils.dropTable(connectionSource, SeriesPlan.class, true);
-            TableUtils.dropTable(connectionSource, MyPlan.class, true);
+//            TableUtils.dropTable(connectionSource, PlanItem.class, true);
+//            TableUtils.dropTable(connectionSource, PlanItem2Recipe.class, true);
+//            TableUtils.dropTable(connectionSource, DayPlan.class, true);
+//            TableUtils.dropTable(connectionSource, SeriesPlan.class, true);
+//            TableUtils.dropTable(connectionSource, MyPlan.class, true);
 //            TableUtils.dropTable(connectionSource, BasketItem.class, true);
+            TableUtils.dropTable(connectionSource, DatePlan.class, true);
+            TableUtils.dropTable(connectionSource, PlanInUse.class, true);
         } catch (SQLException e) {
             e.printStackTrace();
         }

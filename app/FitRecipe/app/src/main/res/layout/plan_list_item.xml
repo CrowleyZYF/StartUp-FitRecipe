@@ -61,7 +61,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="140dp"
             android:background="@drawable/atest004"
             android:paddingTop="7dp"
             android:paddingBottom="7dp"
@@ -236,7 +236,8 @@
                     android:shadowColor="@color/login_input_text_color"
                     android:shadowDx="2"
                     android:shadowDy="2"
-                    android:shadowRadius="4" />
+                    android:shadowRadius="4"
+                    android:layout_marginBottom="2dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"

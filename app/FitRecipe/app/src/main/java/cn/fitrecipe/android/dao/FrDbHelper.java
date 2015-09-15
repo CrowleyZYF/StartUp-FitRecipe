@@ -1,10 +1,6 @@
 package cn.fitrecipe.android.dao;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Base64;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,15 +13,16 @@ import java.util.TreeMap;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.entity.Author;
 import cn.fitrecipe.android.entity.Component;
+import cn.fitrecipe.android.entity.DatePlan;
+import cn.fitrecipe.android.entity.DatePlanItem;
 import cn.fitrecipe.android.entity.DayPlan;
 import cn.fitrecipe.android.entity.Ingredient;
-import cn.fitrecipe.android.entity.MyPlan;
 import cn.fitrecipe.android.entity.Nutrition;
+import cn.fitrecipe.android.entity.PlanInUse;
 import cn.fitrecipe.android.entity.PlanItem;
 import cn.fitrecipe.android.entity.PlanItem2Recipe;
 import cn.fitrecipe.android.entity.Recipe;
 import cn.fitrecipe.android.entity.Report;
-import cn.fitrecipe.android.entity.Series;
 import cn.fitrecipe.android.entity.SeriesPlan;
 import cn.fitrecipe.android.function.Common;
 
@@ -98,7 +95,7 @@ public class FrDbHelper {
         if(recipes != null) {
             for(int i = 0; i < recipes.size(); i++) {
                 Recipe recipe = recipes.get(i);
-                recipe.setNutrition_set(new NutritionDao(context).getNutritions(recipe.getId()));
+//                recipe.setNutrition_set(new NutritionDao(context).getNutritions(recipe.getId()));
                 recipe.setComponent_set(new ComponentDao(context).getComponents(recipe.getId()));
             }
         }
@@ -114,7 +111,7 @@ public class FrDbHelper {
         RecipeDao recipeDao = new RecipeDao(context);
         Recipe recipe = recipeDao.get(id);
         if(recipe != null) {
-            recipe.setNutrition_set(new NutritionDao(context).getNutritions(recipe.getId()));
+//            recipe.setNutrition_set(new NutritionDao(context).getNutritions(recipe.getId()));
             recipe.setComponent_set(new ComponentDao(context).getComponents(recipe.getId()));
         }
         return  recipe;
@@ -391,86 +388,6 @@ public class FrDbHelper {
     }
 
     /**
-     *get a plan item by id
-     * @param id
-     * @return PlanItem
-     */
-    public PlanItem getPlanItem(int id) {
-        PlanItemDao dao = new PlanItemDao(context);
-        PlanItem item = dao.get(id);
-        if(item == null)    return null;
-        PlanItem2RecipeDao dao1 = new PlanItem2RecipeDao(context);
-        ComponentDao dao2 = new ComponentDao(context);
-        List<PlanItem2Recipe> matches = dao1.get(id);
-        List<Component> components = dao2.getComponentsInPlanItem(id);
-        TreeMap<Integer, Object> map = new TreeMap<>();
-        if(matches != null) {
-            for(int i = 0; i < matches.size(); i++) {
-                PlanItem2Recipe match = matches.get(i);
-                Recipe recipe = getRecipe(matches.get(i).getRecipe().getId());
-                recipe.setIncreWeight(match.getRecipeWeight());
-                map.put(match.getItemIndex(), recipe);
-            }
-        }
-        if(components != null) {
-            for(int i = 0; i < components.size(); i++) {
-                map.put(components.get(i).getItemIndex(), components.get(i));
-            }
-        }
-        Iterator<Integer> iterator = map.keySet().iterator();
-        while (iterator.hasNext()) {
-            item.addContent(map.get(iterator.next()));
-        }
-        return item;
-    }
-
-//    /**
-//     * get plan one day by date
-//     * @param strDate
-//     * @return DayPan
-//     */
-//    public DayPlan getDayPlan(String  strDate) {
-//        DayPlanDao dao = new DayPlanDao(context);
-//        DayPlan dayPlan = dao.get(strDate);
-//        if(dayPlan == null) return dayPlan;
-//        PlanItemDao dao1 = new PlanItemDao(context);
-//        List<PlanItem> items = dao1.getPlanItemsInDayPlan(dayPlan.getId());
-//        if(items != null) {
-//            for(int i = 0; i < items.size(); i++) {
-//                PlanItem item = items.get(i);
-//                item = getPlanItem(item.getId());
-//                item.setDayPlan(dayPlan);
-//                items.set(i, item);
-//            }
-//        }
-//        dayPlan.setPlanItems(items);
-//        return dayPlan;
-//    }
-
-    /**
-     * get plan one day by id
-     * @param id
-     * @return DayPan
-     */
-    public DayPlan getDayPlan(int id) {
-        DayPlanDao dao = new DayPlanDao(context);
-        DayPlan dayPlan = dao.getById(id);
-        if(dayPlan == null) return dayPlan;
-        PlanItemDao dao1 = new PlanItemDao(context);
-        List<PlanItem> items = dao1.getPlanItemsInDayPlan(dayPlan.getId());
-        if(items != null) {
-            for(int i = 0; i < items.size(); i++) {
-                PlanItem item = items.get(i);
-                item = getPlanItem(item.getId());
-                item.setDayPlan(dayPlan);
-                items.set(i, item);
-            }
-        }
-        dayPlan.setPlanItems(items);
-        return dayPlan;
-    }
-
-    /**
      * add and update dayplan
      * @param dayPlan
      * @return  DayPlan
@@ -538,39 +455,26 @@ public class FrDbHelper {
         dao1.add(dayPlan);
     }
 
-    /**
-     * add series plan from the internet
-     * @param plan
-     */
-    public SeriesPlan addSeriesPlan(SeriesPlan plan) {
-        SeriesPlanDao dao = new SeriesPlanDao(context);
-        plan = dao.add(plan);
-        List<DayPlan> dayPlans = plan.getDayplans();
-        for(int i = 0; i < dayPlans.size(); i++) {
-            DayPlan dayPlan = dayPlans.get(i);
-            dayPlan.setPlan(plan);
-            addDayPlan(dayPlan);
-        }
-        return plan;
-    }
 
     /**
      * set plan is using
      * @param plan
      */
     public void setPlanUsed(SeriesPlan plan) {
-        SeriesPlanDao dao = new SeriesPlanDao(context);
-        List<SeriesPlan> plans = dao.getUsedPlans();
-        if(plans != null) {
-            for (int i = 0; i < plans.size(); i++) {
-                SeriesPlan tmp = plans.get(i);
-                tmp.setIsUsed(false);
-                dao.add(tmp);
-            }
+        PlanInUseDao dao = new PlanInUseDao(context);
+        PlanInUse planInUse = new PlanInUse();
+        planInUse.setDays(plan.getDays());
+        planInUse.setName(plan.getName());
+        planInUse.setStartDate(Common.getDate());
+        planInUse.setDateplans(plan.getDatePlans());
+        dao.setPlanInUse(planInUse);
+
+        for (int i = 0; i < 7; i++) {
+            DatePlan datePlan = planInUse.getDateplans().get(i % plan.getDays());
+            datePlan.setDate(Common.getSomeDay(Common.getDate(), i));
+            datePlan.setPlan_name(plan.getName());
+            addDatePlan(datePlan);
         }
-        plan.setIsUsed(true);
-        dao.add(plan);
-        savePlanChoice(plan);
     }
 
     /**
@@ -578,182 +482,168 @@ public class FrDbHelper {
      * @param plan
      */
     public void setPlanUnUsed(SeriesPlan plan) {
-        SeriesPlanDao dao = new SeriesPlanDao(context);
-        plan.setIsUsed(false);
-        dao.add(plan);
-        savePlanChoice(null);
+        PlanInUseDao dao = new PlanInUseDao(context);
+        dao.setPlanNotInUse();
+        for (int i = 0; i < 7; i++) {
+            DatePlan datePlan = new DatePlan();
+            datePlan.setPlan_name("自定义计划");
+            datePlan.setDate(Common.getSomeDay(Common.getDate(), i));
+            datePlan.setItems(generateDatePlan());
+            addDatePlan(datePlan);
+        }
+    }
+
+
+    /**
+     * get plan in use
+     * @return PlanInUse
+     */
+    public PlanInUse getSeriesPlanNowUsed() {
+        PlanInUseDao dao = new PlanInUseDao(context);
+        return dao.getPlanInUse();
     }
 
     /**
-     * get all plans from the local database
+     *
+     * @param start
+     * @param end
+     * @return Map<String, DatePlan>
      */
-    public List<SeriesPlan> getSeriesPlans() {
-        SeriesPlanDao dao = new SeriesPlanDao(context);
-        DayPlanDao dao1 = new DayPlanDao(context);
-        List<SeriesPlan> plans = dao.getAll();
-        if(plans != null) {
-            for (int i = 0; i < plans.size(); i++) {
-                List<DayPlan> dayPlans = dao1.getBySeriesPlanId(plans.get(i).getId());
-                ArrayList<DayPlan> fullPlans = new ArrayList<>();
-                for(int j = 0; j < dayPlans.size(); j++) {
-                    DayPlan dayPlan = getDayPlan(dayPlans.get(j).getId());
-                    fullPlans.add(dayPlan);
+    public Map<String, DatePlan> getDatePlan(String start, String end) {
+        Map<String, DatePlan> data = new HashMap<>();
+        DatePlanDao dao = new DatePlanDao(context);
+        PlanInUseDao dao1 = new PlanInUseDao(context);
+        List<DatePlan> datePlans = dao.getById(start, end);
+        PlanInUse planInUse = dao1.getPlanInUse();
+        if(datePlans.size() == 0) {
+            if(planInUse == null) {
+                while (Common.CompareDate(start, end) <= 0) {
+                    DatePlan datePlan = new DatePlan();
+                    datePlan.setPlan_name("自定义计划");
+                    datePlan.setDate(start);
+                    datePlan.setItems(generateDatePlan());
+                    data.put(datePlan.getDate(), datePlan);
+                    start = Common.getSomeDay(start, 1);
                 }
-                plans.get(i).setDayplans(fullPlans);
+            }else {
+                List<DatePlan> datePlans1 = planInUse.getDateplans();
+                int index = Common.getDiff(start, planInUse.getStartDate());
+                if(index < 0)
+                    start = planInUse.getStartDate();
+                while (Common.CompareDate(start, end) <= 0) {
+                    DatePlan datePlan = new DatePlan();
+                    datePlan.setPlan_name(planInUse.getName());
+                    datePlan.setDate(start);
+                    datePlan.setItems(datePlans1.get(index % planInUse.getDays()).getItems());
+                    data.put(datePlan.getDate(), datePlan);
+                    start = Common.getSomeDay(start, 1);
+                }
             }
-        }
-        return plans;
-    }
-
-    /**
-     * get plan by id
-     */
-    public SeriesPlan getSeriesPlan(int id) {
-        SeriesPlanDao dao = new SeriesPlanDao(context);
-        DayPlanDao dao1 = new DayPlanDao(context);
-        SeriesPlan plan = dao.get(id);
-        List<DayPlan> dayPlans = dao1.getBySeriesPlanId(plan.getId());
-        ArrayList<DayPlan> fullPlans = new ArrayList<>();
-        for(int j = 0; j < dayPlans.size(); j++) {
-            DayPlan dayPlan = getDayPlan(dayPlans.get(j).getId());
-            fullPlans.add(dayPlan);
-        }
-        plan.setDayplans(fullPlans);
-        return plan;
-    }
-
-    public SeriesPlan getSeriesPlanNowUsed() {
-        SeriesPlan plan = null;
-        SeriesPlanDao dao = new SeriesPlanDao(context);
-        List<SeriesPlan> plans = dao.getUsedPlans();
-        if(plans != null && plans.size() > 0){
-           plan = plans.get(0);
-        }
-        if(plan != null)
-            plan = getSeriesPlan(plan.getId());
-        return plan;
-    }
-
-    private SeriesPlan copySeriesPlan(SeriesPlan plan) {
-        SeriesPlan newPlan = new SeriesPlan();
-        if(plan != null) {
-            newPlan.setName(plan.getName());
-            newPlan.setDays(plan.getDays());
-            List<DayPlan> dayPlans = plan.getDayplans();
-            ArrayList<DayPlan> newDayPlans = new ArrayList<>();
-            for (int i = 0; i < dayPlans.size(); i++) {
-                DayPlan dayPlan = dayPlans.get(i);
-                newDayPlans.add(copyDayPlan(dayPlan));
-            }
-            newPlan.setDayplans(newDayPlans);
         }else {
-            newPlan.setName("自定义计划");
-            ArrayList<DayPlan> dayPlans = new ArrayList<>();
-            DayPlan dayPlan = new DayPlan();
-            dayPlans.add(dayPlan);
-            newPlan.setDayplans(dayPlans);
+            for(int i = 0; i < datePlans.size(); i++) {
+                data.put(datePlans.get(i).getDate(), datePlans.get(i));
+            }
+            Collections.sort(datePlans);
+            start = Common.getSomeDay(datePlans.get(datePlans.size() - 1).getDate(), 1);
+            if(planInUse == null) {
+//                if(!datePlans.get(datePlans.size() - 1).getPlan_name().equals("自定义计划"))
+//                    start =
+                while (Common.CompareDate(start, end) <= 0) {
+                    DatePlan datePlan = new DatePlan();
+                    datePlan.setPlan_name("自定义计划");
+                    datePlan.setDate(start);
+                    datePlan.setItems(generateDatePlan());
+                    data.put(datePlan.getDate(), datePlan);
+                    start = Common.getSomeDay(start, 1);
+                }
+            }else {
+                List<DatePlan> datePlans1 = planInUse.getDateplans();
+                int index = Common.getDiff(start, planInUse.getStartDate());
+                if(index < 0)
+                    start = planInUse.getStartDate();
+                while (Common.CompareDate(start, end) <= 0) {
+                    DatePlan datePlan = new DatePlan();
+                    datePlan.setPlan_name(planInUse.getName());
+                    datePlan.setDate(start);
+                    datePlan.setItems(datePlans1.get(index % planInUse.getDays()).getItems());
+                    data.put(datePlan.getDate(), datePlan);
+                    start = Common.getSomeDay(start, 1);
+                }
+            }
         }
-        SeriesPlanDao dao = new SeriesPlanDao(context);
-        int id = dao.getMaxId();
-        if (id < 10000) id = 10000;
-        else id = id + 1;
-        newPlan.setId(id);
-        return newPlan;
-    }
-
-    private DayPlan copyDayPlan(DayPlan dayPlan) {
-        DayPlan newDayPlan = new DayPlan();
-        List<PlanItem> items = dayPlan.getPlanItems();
-        List<PlanItem> tmp = new ArrayList<>();
-        for(int j = 0; j < items.size(); j++) {
-            PlanItem item = new PlanItem();
-            for(int k = 0; k <items.get(j).getData().size(); k++)
-                item.addContent(items.get(j).getData().get(k));
-            item.setItemType(items.get(j).getItemType());
-            item.setImageCover(items.get(j).getImageCover());
-            item.settCalories(items.get(j).gettCalories());
-            tmp.add(item);
-        }
-        newDayPlan.setPlanItems(tmp);
-        return newDayPlan;
-    }
-
-    public MyPlan savePlanChoice(SeriesPlan plan) {
-        MyPlanDao dao = new MyPlanDao(context);
-        MyPlan newPlan = new MyPlan();
-        newPlan.setStartDate(Common.getDate());
-        SeriesPlan usedPlan = copySeriesPlan(plan);
-        usedPlan = addSeriesPlan(usedPlan);
-        newPlan.setPlan(usedPlan);
-        if(plan == null) {
-            plan = new SeriesPlan();
-            plan.setId(-1);
-        }
-        newPlan.setPlan(plan);
-        dao.add(newPlan);
-        return newPlan;
-    }
-
-    /**
-     * get the plan between start and end, end is after start
-     * @return map
-     */
-    public Map<String, DayPlan> getMyPlan() {
-        long t = System.currentTimeMillis();
-//        MyPlanDao dao = new MyPlanDao(context);
-//        List<MyPlan> myPlans = dao.get();
-//        long tt = System.currentTimeMillis();
-//        Toast.makeText(context, (tt-t) + "", Toast.LENGTH_SHORT).show();
-//        if(myPlans.size() == 0) {
-//            myPlans.add(savePlanChoice(null));
-//        }
-        Map<String, DayPlan> data = new HashMap<>();
-
-//        if(myPlans != null) {
-//            for(int i = 0; i < myPlans.size(); i++) {
-//                SeriesPlan plan = getSeriesPlan(myPlans.get(i).getPlan().getId());
-//                myPlans.get(i).setPlan(plan);
-//            }
-//            Collections.sort(myPlans);
-//            Toast.makeText(context, (tt-t) + "", Toast.LENGTH_SHORT).show();
-//            for(int i = 0; i < myPlans.size() - 1; i++) {
-//                myPlans.get(i).setEndDate(Common.getSomeDay(myPlans.get(i + 1).getStartDate(), -1));
-//            }
-//            if(myPlans.size() > 0)
-//                myPlans.get(myPlans.size() - 1).setEndDate(Common.getSomeDay(Common.getDate(), 6));
-//
-//            for(int i = 0; i < myPlans.size(); i++) {
-//                SeriesPlan plan = myPlans.get(i).getPlan();
-//                List<DayPlan> dayPlans = plan.getDayplans();
-//                int cnt = 0;
-//                int len = dayPlans.size();
-//                String str = myPlans.get(i).getStartDate();
-//                while (dayPlans != null) {
-//                    if(cnt < len) {
-//                        dayPlans.get(cnt).setDate(str);
-//                        dayPlans.get(cnt).setPlan(plan);
-//                        data.put(str, dayPlans.get(cnt));
-//                    }
-//                    else {
-//                        DayPlan dayPlan;
-//                        if(plan.getName().equals("自定义计划")) {
-//                            dayPlan = new DayPlan();
-//                        }else {
-//                            dayPlan = copyDayPlan(dayPlans.get(cnt % plan.getDays()));
-//                        }
-//                        dayPlan.setPlan(plan);
-//                        dayPlan = addDayPlan(dayPlan);
-//                        dayPlan.setDate(str);
-////                        dayPlans.add(dayPlan);
-//                        data.put(str, dayPlan);
-//                    }
-//                    cnt++;
-//                    if(str.equals(myPlans.get(i).getEndDate()))
-//                        break;
-//                    str = Common.getSomeDay(str, 1);
-//                }
-//            }
-//        }
         return data;
+    }
+
+    public ArrayList<DatePlanItem> generateDatePlan() {
+        ArrayList<DatePlanItem> items = new ArrayList<>();
+        DatePlanItem item1 = new DatePlanItem();
+        item1.setCalories_need(1000);
+        item1.setCarbohydrate_need(1000);
+        item1.setFat_need(1000);
+        item1.setProtein_need(1000);
+        item1.setImageCover("drawable://" + R.drawable.breakfast);
+        item1.setTime("08:30am");
+        item1.setType("breakfast");
+
+
+        DatePlanItem item2 = new DatePlanItem();
+        item2.setCalories_need(1000);
+        item2.setCarbohydrate_need(1000);
+        item2.setFat_need(1000);
+        item2.setProtein_need(1000);
+        item2.setImageCover("drawable://" + R.drawable.add_meal_01);
+        item2.setTime("10:30am");
+        item2.setType("add_meal_01");
+
+
+        DatePlanItem item3 = new DatePlanItem();
+        item3.setCalories_need(1000);
+        item3.setCarbohydrate_need(1000);
+        item3.setFat_need(1000);
+        item3.setProtein_need(1000);
+        item3.setImageCover("drawable://" + R.drawable.lunch);
+        item3.setTime("12:30am");
+        item3.setType("lunch");
+
+        DatePlanItem item4 = new DatePlanItem();
+        item4.setCalories_need(1000);
+        item4.setCarbohydrate_need(1000);
+        item4.setFat_need(1000);
+        item4.setProtein_need(1000);
+        item4.setImageCover("drawable://" + R.drawable.add_meal_02);
+        item4.setTime("15:30am");
+        item4.setType("add_meal_02");
+
+        DatePlanItem item5 = new DatePlanItem();
+        item5.setCalories_need(1000);
+        item5.setCarbohydrate_need(1000);
+        item5.setFat_need(1000);
+        item5.setProtein_need(1000);
+        item5.setImageCover("drawable://" + R.drawable.dinner);
+        item5.setTime("18:30am");
+        item5.setType("supper");
+
+
+        DatePlanItem item6 = new DatePlanItem();
+        item6.setCalories_need(1000);
+        item6.setCarbohydrate_need(1000);
+        item6.setFat_need(1000);
+        item6.setProtein_need(1000);
+        item6.setImageCover("drawable://" + R.drawable.add_meal_03);
+        item6.setTime("22:30am");
+        item6.setType("add_meal_03");
+
+        items.add(item1);
+        items.add(item2);
+        items.add(item3);
+        items.add(item4);
+        items.add(item5);
+        items.add(item6);
+        return items;
+    }
+
+    public void addDatePlan(DatePlan datePlan) {
+        DatePlanDao dao = new DatePlanDao(context);
+        dao.addDatePlan(datePlan);
     }
 }

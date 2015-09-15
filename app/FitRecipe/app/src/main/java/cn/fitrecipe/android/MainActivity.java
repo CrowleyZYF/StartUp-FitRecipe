@@ -54,6 +54,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     private HomeDataReadyRececiver readyRececiver;
     private IntentFilter intentFilter;
 
+    private int last = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -128,7 +130,20 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        hideFragment(transaction);
+//        hideFragment(transaction);
+        if(last != -1) {
+            if(last == 0)
+                transaction.hide(frIndexFragment);
+            if(last == 1)
+                transaction.hide(frPlanFragment);
+            if(last == 2)
+                transaction.hide(frMeFragment);
+            frTabs.get(last).setBackgroundColor(getResources().getColor(R.color.base_color));
+        }else {
+            frPlanFragment = new PlanFragment();
+            transaction.add(R.id.content, frPlanFragment).hide(frPlanFragment);
+        }
+        last = i;
         frTabs.get(i).setBackgroundColor(getResources().getColor(R.color.active_color));
         switch (i)
         {
@@ -144,13 +159,15 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                 tab_index = 0;
                 break;
             case 1:
+                long t = System.currentTimeMillis();
+
                 if(!FrApplication.getInstance().isLogin()) {
                     Toast.makeText(this, getResources().getString(R.string.login_tip), Toast.LENGTH_SHORT).show();
                     break;
                 }
                 boolean isTest = FrApplication.getInstance().isTested();
-                if(isTest){
-                    if (frPlanFragment == null){
+                if(isTest) {
+                    if (frPlanFragment == null) {
                         frPlanFragment = new PlanFragment();
                         transaction.add(R.id.content, frPlanFragment);
                     } else{
@@ -165,6 +182,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                     Intent intent=new Intent(this,PlanTestActivity.class);
                     startActivity(intent);
                 }
+                long tt = System.currentTimeMillis();
+                Toast.makeText(this, "计划" + (tt-t)+"ms", Toast.LENGTH_SHORT).show();
                 break;
             /*case 2:
                 if (frKnowledgeFragment == null){
@@ -239,7 +258,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                         break;
                     case 1:
                         //TODO @wk
-                        if(frPlanFragment != null) ((PlanFragment)frPlanFragment).toggle(PlanItem.ItemType.ALL);
+                        if(frPlanFragment != null) ((PlanFragment)frPlanFragment).toggle("all");
                         /*
                         TextView name = (TextView) findViewById(R.id.meal_name);
                         TextView nutrition = (TextView) findViewById(R.id.ingredient_title);
