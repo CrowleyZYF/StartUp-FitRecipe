@@ -30,7 +30,9 @@ import cn.fitrecipe.android.SelectRecipeActivity;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.dao.FrDbHelper;
 import cn.fitrecipe.android.entity.Component;
+import cn.fitrecipe.android.entity.DatePlanItem;
 import cn.fitrecipe.android.entity.DayPlan;
+import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.PlanItem;
 import cn.fitrecipe.android.entity.Recipe;
 import cn.fitrecipe.android.entity.Report;
@@ -42,17 +44,20 @@ import cn.fitrecipe.android.fragment.PlanFragment;
 public class PlanElementAdapter extends BaseAdapter{
 
     Fragment fragment;
-    List<PlanItem> items;
+    List<DatePlanItem> items;
     Report report;
+    boolean isValid, isValid2; //isValid if can change , isValid2 is if can punch
 
-    public PlanElementAdapter(Fragment fragment, List<PlanItem> items, Report report) {
+    public PlanElementAdapter(Fragment fragment, List<DatePlanItem> items, Report report) {
         this.fragment = fragment;
         this.items = items;
         this.report = report;
     }
 
-    public void setData(List<PlanItem> items) {
+    public void setData(List<DatePlanItem> items, boolean isValid, boolean isValid2) {
         this.items = items;
+        this.isValid = isValid;
+        this.isValid2 = isValid2;
         notifyDataSetChanged();
     }
 
@@ -91,7 +96,7 @@ public class PlanElementAdapter extends BaseAdapter{
             holder.first_margin_02.setVisibility(View.VISIBLE);
         }
 
-        final PlanItem item = items.get(position);
+        final DatePlanItem item = items.get(position);
 
         //
         final ContentAdapter adapter = new ContentAdapter(item);
@@ -108,12 +113,14 @@ public class PlanElementAdapter extends BaseAdapter{
                 if(!item.isInBasket()) {
                     addBtn.setEnabled(false);
                     ((ImageView)v).setImageResource(R.drawable.icon_plan_shopping_active);
-                    FrDbHelper.getInstance(fragment.getActivity()).addPlanItemToBasket(item);
+                    item.setIsInBasket(true);
+                    FrDbHelper.getInstance(fragment.getActivity()).addToBasket(item.getComponents());
                     Toast.makeText(fragment.getActivity(), "加入菜篮子", Toast.LENGTH_SHORT).show();
                 }else {
                     addBtn.setEnabled(true);
                     ((ImageView)v).setImageResource(R.drawable.icon_plan_shopping);
-                    FrDbHelper.getInstance(fragment.getActivity()).removePlanItemToBasket(item);
+                    item.setIsInBasket(false);
+                    FrDbHelper.getInstance(fragment.getActivity()).removeFromBasket(item.getComponents());
                     Toast.makeText(fragment.getActivity(), "从菜篮子取出", Toast.LENGTH_SHORT).show();
                 }
                 adapter.notifyDataSetChanged();
@@ -128,23 +135,13 @@ public class PlanElementAdapter extends BaseAdapter{
                     Toast.makeText(fragment.getActivity(), "请添加食谱、食材后再打卡！", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(!item.isPunched()) {
+                if(!item.isPunch()) {
                     ((ImageView)v).setImageResource(R.drawable.icon_plan_punch_active);
-                    item.setIsPunched(true);
-                    item.getDayPlan().setIsPunched(true);
-                    FrDbHelper.getInstance(fragment.getActivity()).punch(item);
+                    item.setIsPunch(true);
                     Toast.makeText(fragment.getActivity(), "打卡", Toast.LENGTH_SHORT).show();
                 }else {
-                    item.setIsPunched(false);
+                    item.setIsPunch(false);
                     ((ImageView)v).setImageResource(R.drawable.icon_plan_punch);
-                    DayPlan dayPlan = item.getDayPlan();
-                    List<PlanItem> planItems = dayPlan.getPlanItems();
-                    boolean flag = false;
-                    for(int i = 0; i < planItems.size(); i++) {
-                        flag = flag || planItems.get(i).isPunched();
-                    }
-                    dayPlan.setIsPunched(flag);
-                    FrDbHelper.getInstance(fragment.getActivity()).punch(item);
                     Toast.makeText(fragment.getActivity(), "取消打卡", Toast.LENGTH_SHORT).show();
                 }
                 adapter.notifyDataSetChanged();
@@ -156,79 +153,95 @@ public class PlanElementAdapter extends BaseAdapter{
             @Override
             public void onClick(View v) {
                 if (item.size() != 0)
-                    ((PlanFragment) fragment).toggle(item.getItemType());
+                    ((PlanFragment) fragment).toggle(item.getType());
                 else
                     Toast.makeText(fragment.getActivity(), "请添加食谱、食材后再查看营养表！", Toast.LENGTH_SHORT).show();
             }
         });
 
-        if(item.isPunched()) {
-            holder.plan_punch.setImageResource(R.drawable.icon_plan_punch_active);
+        if(!isValid2) {
+            holder.plan_punch.setImageResource(R.drawable.icon_plan_punch_disable);
         }else {
-            holder.plan_punch.setImageResource(R.drawable.icon_plan_punch);
+            if (item.isPunch()) {
+                holder.plan_punch.setImageResource(R.drawable.icon_plan_punch_active);
+            } else {
+                holder.plan_punch.setImageResource(R.drawable.icon_plan_punch);
+            }
         }
-
         if(item.isInBasket()) {
             holder.plan_shopping.setImageResource(R.drawable.icon_plan_shopping_active);
 
         }else {
             holder.plan_shopping.setImageResource(R.drawable.icon_plan_shopping);
         }
-        holder.add_recipe.setEnabled((!item.isInBasket()) && (!(item.isPunched())));
 
+        if(!isValid) {
+            holder.add_recipe.setVisibility(View.GONE);
+        }
+        else {
+            holder.add_recipe.setVisibility(View.VISIBLE);
+            holder.add_recipe.setEnabled((!item.isInBasket()) && (!(item.isPunch())));
+        }
         holder.add_recipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (item.getItemType()) {
-                    case BREAKFAST:
+                switch (item.getType()) {
+                    case "breakfast":
                         Intent intent = new Intent(fragment.getActivity(), SelectRecipeActivity.class);
                         fragment.startActivityForResult(intent, PlanFragment.BREAKFAST_CODE);
                         break;
-                    case ADDMEAL_01:
+                    case "add_meal_01":
                         Intent intent1 = new Intent(fragment.getActivity(), SelectRecipeActivity.class);
                         fragment.startActivityForResult(intent1, PlanFragment.ADDMEAL_01_CODE);
                         break;
-                    case LUNCH:
+                    case "lunch":
                         Intent intent2 = new Intent(fragment.getActivity(), SelectRecipeActivity.class);
                         fragment.startActivityForResult(intent2, PlanFragment.LUNCH_CODE);
                         break;
-                    case ADDMEAL_02:
+                    case "add_meal_02":
                         Intent intent4 = new Intent(fragment.getActivity(), SelectRecipeActivity.class);
                         fragment.startActivityForResult(intent4, PlanFragment.ADDMEAL_02_CODE);
                         break;
-                    case SUPPER:
+                    case "supper":
                         Intent intent3 = new Intent(fragment.getActivity(), SelectRecipeActivity.class);
                         fragment.startActivityForResult(intent3, PlanFragment.SUPPER_CODE);
+                        break;
+                    case "add_meal_03":
+                        Intent intent5 = new Intent(fragment.getActivity(), SelectRecipeActivity.class);
+                        fragment.startActivityForResult(intent5, PlanFragment.ADDMEAL_03_CODE);
                         break;
                 }
             }
         });
 
-        switch (item.getItemType()) {
-            case BREAKFAST:
+        switch (item.getType()) {
+            case "breakfast" :
                 holder.plan_title.setText("早餐");    break;
-            case LUNCH:
+            case "lunch":
                 holder.plan_title.setText("午餐");    break;
-            case SUPPER:
+            case "supper":
                 holder.plan_title.setText("晚餐");    break;
-            case ADDMEAL_01:
-            case ADDMEAL_02:
+            case "add_meal_01":
+            case "add_meal_02":
                 holder.plan_title.setText("加餐");    break;
+            case "add_meal_03":
+                holder.plan_title.setText("夜宵");    break;
         }
 
-        holder.calorie_plan_intake.setText(Math.round(item.gettCalories())+"");
-        holder.plan_carbohydrate_intake.setText(Math.round(item.getCarbohydrate())+"");
-        holder.plan_protein_intake.setText(Math.round(item.getProtein())+"");
-        holder.plan_fat_intake.setText(Math.round(item.getFat()) + "");
+        holder.calorie_plan_intake.setText(Math.round(item.getCalories_take())+"");
+        holder.plan_carbohydrate_intake.setText(Math.round(item.getCarbohydrate_take())+"");
+        holder.plan_protein_intake.setText(Math.round(item.getProtein_take())+"");
+        holder.plan_fat_intake.setText(Math.round(item.getFat_take()) + "");
+        holder.plan_time.setText(item.getTime());
         FrApplication.getInstance().getMyImageLoader().displayImage(holder.plan_image_cover, item.getImageCover());
 
         //
         holder.plan_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Object obj = item.getData().get(position);
-                if(obj instanceof Recipe) {
-                    String recipe_id = ((Recipe)obj).getId() +"";
+                PlanComponent component = item.getComponents().get(position);
+                if(component.getType() == 1) {
+                    String recipe_id = component.getId() +"";
                     Intent intent=new Intent(fragment.getActivity(), RecipeActivity.class);
                     intent.putExtra("id", recipe_id);
                     fragment.startActivity(intent);
@@ -246,7 +259,7 @@ public class PlanElementAdapter extends BaseAdapter{
 
     class ViewHolder {
         ImageView plan_shopping, plan_punch, plan_nutrition;
-        TextView plan_title;
+        TextView plan_title, plan_time;
         TextView calorie_plan_intake, calorie_plan_need, calorie_plan_radio;
         TextView plan_carbohydrate_intake, plan_carbohydrate_need, plan_carbohydrate_rate;
         TextView plan_protein_intake, plan_protein_need, plan_protein_rate;
@@ -277,15 +290,16 @@ public class PlanElementAdapter extends BaseAdapter{
             plan_image_cover = (RelativeLayout) v.findViewById(R.id.plan_image_cover);
             first_margin_01 = (LinearLayout) v.findViewById(R.id.first_margin_01);
             first_margin_02 = (LinearLayout) v.findViewById(R.id.first_margin_02);
+            plan_time = (TextView) v.findViewById(R.id.plan_time);
         }
     }
 
 
     class ContentAdapter extends BaseSwipeAdapter {
 
-        PlanItem item;
+        DatePlanItem item;
 
-        public ContentAdapter(PlanItem item) {
+        public ContentAdapter(DatePlanItem item) {
             this.item = item;
         }
 
@@ -318,23 +332,15 @@ public class PlanElementAdapter extends BaseAdapter{
             SwipeLayout swipeLayout = (SwipeLayout)view.findViewById(getSwipeLayoutResourceId(i));
             if(swipeLayout.getOpenStatus() == SwipeLayout.Status.Open)
                 swipeLayout.close();
-            swipeLayout.setSwipeEnabled((!item.isInBasket()) && (!(item.isPunched())));
-            Object obj = item.getData().get(i);
-            if(obj instanceof Recipe) {
-                Recipe recipe = (Recipe) obj;
-                text1.setText(recipe.getTitle());
-                text2.setText(recipe.getIncreWeight() + "g");
-                text3.setText(Math.round(recipe.getCalories() * recipe.getIncreWeight() / 100) + "kcal");
-            }else{
-                Component component = (Component)obj;
-                text1.setText(component.getIngredient().getName());
-                text2.setText(component.getAmount() + "g");
-                text3.setText(100 + "kcal");
-            }
+            swipeLayout.setSwipeEnabled((!item.isInBasket()) && (!(item.isPunch())));
+            PlanComponent component = item.getComponents().get(i);
+            text1.setText(component.getName());
+            text2.setText(component.getAmount()+"g");
+            text3.setText(Math.round(component.getCalories()) + "kcal");
             view.findViewById(R.id.trash).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FrDbHelper.getInstance(fragment.getActivity()).deletePlanItem(item, i);
+//                    FrDbHelper.getInstance(fragment.getActivity()).deletePlanItem(item, i);
                     item.deleteContent(i);
                     notifyDataSetChanged();
                     Toast.makeText(fragment.getActivity(), "click delete", Toast.LENGTH_SHORT).show();
@@ -344,7 +350,8 @@ public class PlanElementAdapter extends BaseAdapter{
 
         @Override
         public int getCount() {
-            return  item.size();
+            if(item.getComponents() == null)    return 0;
+            return  item.getComponents().size();
         }
 
         @Override

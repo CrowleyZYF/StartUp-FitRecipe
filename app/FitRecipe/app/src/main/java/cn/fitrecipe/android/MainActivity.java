@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -53,6 +54,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     private HomeDataReadyRececiver readyRececiver;
     private IntentFilter intentFilter;
 
+    private int last = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -85,8 +88,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         if (intent.hasExtra("tab")){
             tab_index = intent.getIntExtra("tab",0);
             intent.removeExtra("tab");
-            setSelect(tab_index);
         }
+        setSelect(tab_index);
         registerReceiver(readyRececiver, intentFilter);
     }
 
@@ -127,7 +130,20 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        hideFragment(transaction);
+//        hideFragment(transaction);
+        if(last != -1) {
+            if(last == 0 && frIndexFragment != null)
+                transaction.hide(frIndexFragment);
+            if(last == 1 && frPlanFragment != null)
+                transaction.hide(frPlanFragment);
+            if(last == 2 && frMeFragment != null)
+                transaction.hide(frMeFragment);
+            frTabs.get(last).setBackgroundColor(getResources().getColor(R.color.base_color));
+        }else {
+//            frPlanFragment = new PlanFragment();
+//            transaction.add(R.id.content, frPlanFragment).hide(frPlanFragment);
+        }
+        last = i;
         frTabs.get(i).setBackgroundColor(getResources().getColor(R.color.active_color));
         switch (i)
         {
@@ -135,26 +151,26 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                 if (frIndexFragment == null){
                     frIndexFragment = new IndexFragment();
                     transaction.add(R.id.content, frIndexFragment);
-                } else{
-                    transaction.show(frIndexFragment);
                 }
+                transaction.show(frIndexFragment);
                 left_btn.setImageResource(R.drawable.icon_category);
                 right_btn.setImageResource(R.drawable.icon_search);
                 tab_index = 0;
                 break;
             case 1:
+                long t = System.currentTimeMillis();
+
                 if(!FrApplication.getInstance().isLogin()) {
                     Toast.makeText(this, getResources().getString(R.string.login_tip), Toast.LENGTH_SHORT).show();
                     break;
                 }
                 boolean isTest = FrApplication.getInstance().isTested();
-                if(isTest){
-                    if (frPlanFragment == null){
+                if(isTest) {
+                    if (frPlanFragment == null) {
                         frPlanFragment = new PlanFragment();
                         transaction.add(R.id.content, frPlanFragment);
-                    } else{
-                        transaction.show(frPlanFragment);
                     }
+                    transaction.show(frPlanFragment);
                     left_btn.setImageResource(R.drawable.icon_nutrition);
                     right_btn.setImageResource(R.drawable.icon_change);
                     tab_index = 1;
@@ -164,6 +180,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                     Intent intent=new Intent(this,PlanTestActivity.class);
                     startActivity(intent);
                 }
+                long tt = System.currentTimeMillis();
+                Toast.makeText(this, "计划" + (tt-t)+"ms", Toast.LENGTH_SHORT).show();
                 break;
             /*case 2:
                 if (frKnowledgeFragment == null){
@@ -180,9 +198,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                 if (frMeFragment == null){
                     frMeFragment = new MeFragment();
                     transaction.add(R.id.content, frMeFragment);
-                } else{
-                    transaction.show(frMeFragment);
                 }
+                transaction.show(frMeFragment);
                 left_btn.setImageResource(R.drawable.icon_letter);
                 right_btn.setImageResource(R.drawable.icon_set);
                 tab_index = 2;
@@ -238,7 +255,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                         break;
                     case 1:
                         //TODO @wk
-                        if(frPlanFragment != null) ((PlanFragment)frPlanFragment).toggle(PlanItem.ItemType.ALL);
+                        if(frPlanFragment != null) ((PlanFragment)frPlanFragment).toggle("all");
                         /*
                         TextView name = (TextView) findViewById(R.id.meal_name);
                         TextView nutrition = (TextView) findViewById(R.id.ingredient_title);
@@ -321,8 +338,15 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         @Override
         public void onReceive(Context context, Intent intent) {
             if(intent.getAction().equals(action)) {
-                ((IndexFragment)frIndexFragment).fresh();
-                stopService(new Intent(MainActivity.this, GetHomeDataService.class));
+//                new Handler() {
+//
+//                }.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+                        ((IndexFragment) frIndexFragment).fresh();
+                        stopService(new Intent(MainActivity.this, GetHomeDataService.class));
+//                    }
+//                }, 1000);
             }
         }
     }

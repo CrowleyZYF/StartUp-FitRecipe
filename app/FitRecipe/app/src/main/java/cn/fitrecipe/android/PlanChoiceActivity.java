@@ -6,6 +6,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,13 +29,19 @@ import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.UI.SlidingMenu;
 import cn.fitrecipe.android.dao.FrDbHelper;
+import cn.fitrecipe.android.dao.PlanInUseDao;
 import cn.fitrecipe.android.entity.Component;
+import cn.fitrecipe.android.entity.DatePlan;
+import cn.fitrecipe.android.entity.DatePlanItem;
 import cn.fitrecipe.android.entity.DayPlan;
 import cn.fitrecipe.android.entity.Ingredient;
+import cn.fitrecipe.android.entity.PlanComponent;
+import cn.fitrecipe.android.entity.PlanInUse;
 import cn.fitrecipe.android.entity.PlanItem;
 import cn.fitrecipe.android.entity.Recipe;
 import cn.fitrecipe.android.entity.Series;
 import cn.fitrecipe.android.entity.SeriesPlan;
+import pl.tajchert.sample.DotsTextView;
 
 /**
  * Created by 奕峰 on 2015/5/8.
@@ -50,6 +58,10 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
     private RecyclerView planChoiceRecyclerView;
     private PlanCardAdapter planCardAdapter;
     private RecyclerViewLayoutManager planChoiceLayoutManager;
+
+    private LinearLayout loadingInterface;
+    private DotsTextView dotsTextView;
+    private ScrollView scrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +90,10 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
         planChoiceLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         planChoiceRecyclerView.setLayoutManager(planChoiceLayoutManager);
 
+        loadingInterface = (LinearLayout)findViewById(R.id.loading_interface);
+        dotsTextView = (DotsTextView) findViewById(R.id.dots);
+        scrollView = (ScrollView) findViewById(R.id.scrollView);
+
         mRightMenu = (SlidingMenu) findViewById(R.id.container_layout);
     }
 
@@ -87,37 +103,44 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
         initData(recipe);
     }
 
-    private void getData() {
-        List<SeriesPlan> plans = FrDbHelper.getInstance(this).getSeriesPlans();
-        if(plans != null && plans.size() > 0) {
-            planCardAdapter = new PlanCardAdapter(this, plans);
-            planChoiceRecyclerView.setAdapter(planCardAdapter);
-        }else {
-            GetRequest request = new GetRequest(FrServerConfig.getRecipeDetails("8"), FrApplication.getInstance().getToken(), new JSONObject(), new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject res) {
-                    if (res != null && res.has("data")) {
-                        try {
-                            JSONObject data = res.getJSONObject("data");
-                            processData(data);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError volleyError) {
-                    if (volleyError != null && volleyError.networkResponse != null) {
-                        int statusCode = volleyError.networkResponse.statusCode;
-                        if (statusCode == 404) {
-                            Toast.makeText(PlanChoiceActivity.this, "食谱不存在！", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }
-            });
-            FrRequest.getInstance().request(request);
+    private void hideLoading(boolean isError, String errorMessage){
+        loadingInterface.setVisibility(View.GONE);
+        dotsTextView.stop();
+        if(isError){
+            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+        }else{
+            scrollView.setVisibility(View.VISIBLE);
+            scrollView.smoothScrollTo(0, 0);
         }
+    }
+
+    private void getData() {
+        GetRequest request = new GetRequest(FrServerConfig.getRecipeDetails("8"), FrApplication.getInstance().getToken(), new JSONObject(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject res) {
+                if (res != null && res.has("data")) {
+                    try {
+                        JSONObject data = res.getJSONObject("data");
+                        processData(data);
+                        hideLoading(false, "");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                if (volleyError != null && volleyError.networkResponse != null) {
+                    hideLoading(true, getResources().getString(R.string.network_error));
+                    int statusCode = volleyError.networkResponse.statusCode;
+                    if (statusCode == 404) {
+                        Toast.makeText(PlanChoiceActivity.this, "食谱不存在！", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+        FrRequest.getInstance().request(request);
     }
     private void initData(Recipe recipe) {
         List<SeriesPlan> plans = new ArrayList<>();
@@ -143,102 +166,75 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
         plan.setAuthor_type(1);
         plan.setAuthor_title("高级营养师");
         //
-        ArrayList<DayPlan> dayPlans = new ArrayList<>();
-        DayPlan dayPlan = new DayPlan();
-        List<PlanItem> items = new ArrayList<>();
-        PlanItem item= new PlanItem();
-        recipe.setIncreWeight(100);
-        item.addContent(recipe);
+        ArrayList<DatePlan> datePlans = new ArrayList<>();
+        DatePlan datePlan = new DatePlan();
+        List<DatePlanItem> items = new ArrayList<>();
+        DatePlanItem item= new DatePlanItem();
+        PlanComponent component = PlanComponent.getPlanComponentFromRecipe(recipe, 100);
+        item.addContent(component);
         item.setImageCover("http://ww1.sinaimg.cn/thumbnail/81f8b0e2gw1evwcdxbiumj20c7077q3x.jpg");
-        item.setItemType(PlanItem.ItemType.BREAKFAST);
+        item.setType("breakfast");
         items.add(item);
-//
-        PlanItem item1 = new PlanItem();
-        recipe.setIncreWeight(100);
-        item1.addContent(recipe);
-        item1.setItemType(PlanItem.ItemType.ADDMEAL_01);
+
+        DatePlanItem item1 = new DatePlanItem();
+        PlanComponent component1 = PlanComponent.getPlanComponentFromRecipe(recipe, 200);
+        item1.addContent(component1);
         item1.setImageCover("http://ww1.sinaimg.cn/thumbnail/81f8b0e2gw1evwcdxbiumj20c7077q3x.jpg");
+        item1.setType("add_meal_01");
         items.add(item1);
-        //
-        PlanItem item2 = new PlanItem();
-        recipe.setIncreWeight(100);
-        item2.addContent(recipe);
-        item2.setItemType(PlanItem.ItemType.LUNCH);
+
+
+        DatePlanItem item2= new DatePlanItem();
+        PlanComponent component2 = PlanComponent.getPlanComponentFromRecipe(recipe, 300);
+        item2.addContent(component2);
         item2.setImageCover("http://ww1.sinaimg.cn/thumbnail/81f8b0e2gw1evwcdxbiumj20c7077q3x.jpg");
+        item2.setType("lunch");
         items.add(item2);
-        //
-        PlanItem item3 = new PlanItem();
-        recipe.setIncreWeight(100);
-        item3.addContent(recipe);
-        item3.setItemType(PlanItem.ItemType.ADDMEAL_02);
+
+
+        DatePlanItem item3= new DatePlanItem();
+        PlanComponent component3 = PlanComponent.getPlanComponentFromRecipe(recipe, 400);
+        item3.addContent(component3);
         item3.setImageCover("http://ww1.sinaimg.cn/thumbnail/81f8b0e2gw1evwcdxbiumj20c7077q3x.jpg");
+        item3.setType("add_meal_02");
         items.add(item3);
-        //
-        PlanItem item4 = new PlanItem();
-        recipe.setIncreWeight(100);
-        item4.addContent(recipe);
-        item4.setItemType(PlanItem.ItemType.SUPPER);
+
+
+        DatePlanItem item4 = new DatePlanItem();
+        PlanComponent component4 = PlanComponent.getPlanComponentFromRecipe(recipe, 500);
+        item4.addContent(component4);
         item4.setImageCover("http://ww1.sinaimg.cn/thumbnail/81f8b0e2gw1evwcdxbiumj20c7077q3x.jpg");
+        item4.setType("supper");
         items.add(item4);
-        dayPlan.setPlanItems(items);
-
-//        DayPlan dayPlan1 = FrDbHelper.getInstance(this).getDayPlan(str);
-//        DayPlan dayPlan2 = FrDbHelper.getInstance(this).getDayPlan(str);
-        dayPlans.add(dayPlan);
-
-
-        DayPlan dayPlan1 = new DayPlan();
-        List<PlanItem> items11 = new ArrayList<>();
-        PlanItem item11= new PlanItem();
-        recipe.setIncreWeight(100);
-        item11.addContent(recipe);
-        item11.setImageCover("http://ww4.sinaimg.cn/bmiddle/81f8b0e2gw1evwcbveq40j20b106imxt.jpg");
-        item11.setItemType(PlanItem.ItemType.BREAKFAST);
-        items11.add(item11);
 //
-        PlanItem item111 = new PlanItem();
-        recipe.setIncreWeight(100);
-        item111.addContent(recipe);
-        item111.setImageCover("http://ww4.sinaimg.cn/bmiddle/81f8b0e2gw1evwcbveq40j20b106imxt.jpg");
-        item111.setItemType(PlanItem.ItemType.ADDMEAL_01);
-        items11.add(item111);
-        //
-        PlanItem item211 = new PlanItem();
-        recipe.setIncreWeight(100);
-        item211.addContent(recipe);
-        item211.setItemType(PlanItem.ItemType.LUNCH);
-        item211.setImageCover("http://ww4.sinaimg.cn/bmiddle/81f8b0e2gw1evwcbveq40j20b106imxt.jpg");
-        items11.add(item211);
-        //
-        PlanItem item311 = new PlanItem();
-        recipe.setIncreWeight(100);
-        item311.addContent(recipe);
-        item311.setItemType(PlanItem.ItemType.ADDMEAL_02);
-        item311.setImageCover("http://ww4.sinaimg.cn/bmiddle/81f8b0e2gw1evwcbveq40j20b106imxt.jpg");
-        items11.add(item311);
-        //
-        PlanItem item411 = new PlanItem();
-        recipe.setIncreWeight(100);
-        item411.addContent(recipe);
-        item411.setItemType(PlanItem.ItemType.SUPPER);
-        item411.setImageCover("http://ww4.sinaimg.cn/bmiddle/81f8b0e2gw1evwcbveq40j20b106imxt.jpg");
-        items11.add(item411);
-        dayPlan1.setPlanItems(items11);
+
+        DatePlanItem item5 = new DatePlanItem();
+        PlanComponent component5 = PlanComponent.getPlanComponentFromRecipe(recipe, 600);
+        item5.addContent(component5);
+        item5.setImageCover("http://ww1.sinaimg.cn/thumbnail/81f8b0e2gw1evwcdxbiumj20c7077q3x.jpg");
+        item5.setType("add_meal_03");
+        items.add(item5);
+
+        datePlan.setItems(items);
 
 //        DayPlan dayPlan1 = FrDbHelper.getInstance(this).getDayPlan(str);
 //        DayPlan dayPlan2 = FrDbHelper.getInstance(this).getDayPlan(str);
-        dayPlans.add(dayPlan1);
-        plan.setDayplans(dayPlans);
+        datePlans.add(datePlan);
+        datePlans.add(datePlan);
 
-        plan = FrDbHelper.getInstance(this).addSeriesPlan(plan);
+        //
+        PlanInUseDao dao = new PlanInUseDao(this);
+        PlanInUse planInUse = dao.getPlanInUse();
+        if(planInUse == null)
+            plan.setIsUsed(false);
+        else
+            plan.setIsUsed(planInUse.getIsUsed()==1?true:false);
 
-
+        plan.setDatePlans(datePlans);
         plans.add(plan);
         planCardAdapter = new PlanCardAdapter(this, plans);
         planChoiceRecyclerView.setAdapter(planCardAdapter);
     }
-
-
 
     private void initEvent() {
         filter_btn.setOnClickListener(this);
