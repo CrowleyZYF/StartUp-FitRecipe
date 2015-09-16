@@ -5,22 +5,19 @@ import android.content.Context;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.entity.Author;
+import cn.fitrecipe.android.entity.Basket;
 import cn.fitrecipe.android.entity.Component;
 import cn.fitrecipe.android.entity.DatePlan;
 import cn.fitrecipe.android.entity.DatePlanItem;
-import cn.fitrecipe.android.entity.DayPlan;
 import cn.fitrecipe.android.entity.Ingredient;
 import cn.fitrecipe.android.entity.Nutrition;
+import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.PlanInUse;
-import cn.fitrecipe.android.entity.PlanItem;
-import cn.fitrecipe.android.entity.PlanItem2Recipe;
 import cn.fitrecipe.android.entity.Recipe;
 import cn.fitrecipe.android.entity.Report;
 import cn.fitrecipe.android.entity.SeriesPlan;
@@ -47,12 +44,6 @@ public class FrDbHelper {
     }
 
 
-
-    public List<Ingredient> getAllIngredient() {
-        IngredientDao dao = new IngredientDao(context);
-        return dao.getAll();
-    }
-
     /**
      * add Recipe
      * @param recipe
@@ -71,7 +62,6 @@ public class FrDbHelper {
 
                 Ingredient ingredient = component.getIngredient();
                 ingredientDao.add(ingredient);
-
                 componentDao.addComponentBelongToRecipe(component);
             }
         }
@@ -86,21 +76,6 @@ public class FrDbHelper {
         }
     }
 
-    /**
-     * get All recipe
-     */
-    public List<Recipe> getAllRecipe() {
-        RecipeDao recipeDao = new RecipeDao(context);
-        List<Recipe> recipes = recipeDao.getAll();
-        if(recipes != null) {
-            for(int i = 0; i < recipes.size(); i++) {
-                Recipe recipe = recipes.get(i);
-//                recipe.setNutrition_set(new NutritionDao(context).getNutritions(recipe.getId()));
-                recipe.setComponent_set(new ComponentDao(context).getComponents(recipe.getId()));
-            }
-        }
-        return  recipes;
-    }
 
     /**
      *get Recipe by Id
@@ -119,12 +94,15 @@ public class FrDbHelper {
 
     /**
      * get Report belongs to Author
-     * @param author
      * @return Report
      */
-    public Report getReport(Author author) {
+    public Report getReport() {
         ReportDao dao = new ReportDao(context);
-        return dao.getReport(author);
+        Author author = getLoginAuthor();
+        if(author != null)
+            return dao.getReport(author);
+        else
+            return null;
     }
 
     /**
@@ -154,305 +132,6 @@ public class FrDbHelper {
 
     public Author getLoginAuthor() {
         return new AuthorDao(context).getAuthor();
-    }
-
-    /**
-     * add Recipe to basket in planitem
-     * @param recipe
-     */
-    private void addToBasket(Recipe recipe) {
-        RecipeDao dao = new RecipeDao(context);
-        Recipe old = getRecipe(recipe.getId());
-        recipe.setInPlanItemBasket(true);
-        if(recipe.getId() != -1) {
-            recipe.setWeightInPlanBasket(old.getWeightInPlanBasket() + recipe.getIncreWeight());
-            dao.add(recipe);
-        }else {
-            if(old != null) {
-                List<Component> components = old.getComponent_set();
-                int len = components.size();
-                for (int i = 0; i < recipe.getComponent_set().size(); i++) {
-                    Component com1 = recipe.getComponent_set().get(i);
-                    boolean flag = false;
-                    for (int j = 0; j < len; j++) {
-                        Component com2 = components.get(j);
-                        if (com1.getIngredient().getName().equals(com2.getIngredient().getName())) {
-                            com2.setAmount(com2.getAmount() + com1.getAmount());
-                            flag = true;
-                        }
-                    }
-                    if (flag)
-                        components.add(com1);
-                }
-                addRecipe(old);
-            }else {
-                recipe.setTitle("其他");
-                addRecipe(recipe);
-            }
-        }
-    }
-
-    /**
-     * add PlanItem to basket
-     * @param item
-     */
-    public void addPlanItemToBasket(PlanItem item) {
-        item.setInBasket(true);
-        addPlanItem(item);
-        List<Component> components = new ArrayList<Component>();
-        for(int i = 0; i < item.getData().size(); i++) {
-            Object obj = item.getData().get(i);
-            if(obj instanceof Recipe) {
-                addToBasket((Recipe) obj);
-            }else if(obj instanceof Component) {
-                Component component = (Component) obj;
-                component.setPlanItem(null);
-                components.add(component);
-            }
-        }
-        if(components.size() > 0) {
-            Recipe recipe = new Recipe();
-            recipe.setId(-1);
-            recipe.setComponent_set(components);
-            addToBasket(recipe);
-        }
-    }
-
-
-    private void removeFromBasket(Recipe recipe) {
-        if(recipe.getId() == -1) {
-            Recipe old = getRecipe(-1);
-            List<Component> components = old.getComponent_set();
-            ComponentDao dao = new ComponentDao(context);
-            for(int i = 0; i < components.size(); i++) {
-                Component com1 = components.get(i);
-                for(int j = 0; j < recipe.getComponent_set().size(); j++) {
-                    Component com2 = recipe.getComponent_set().get(j);
-                    if(com1.getIngredient().getName().equals(com2.getIngredient().getName())) {
-                        com1.setAmount(com1.getAmount() - com2.getAmount());
-                        if(com1.getAmount() == 0) {
-                            dao.remove(com1.getId());
-                        }
-                    }
-                }
-            }
-        }else {
-            RecipeDao dao = new RecipeDao(context);
-            Recipe old = dao.get(recipe.getId());
-            recipe.setWeightInPlanBasket(old.getWeightInPlanBasket() - recipe.getIncreWeight());
-            if(recipe.getWeightInPlanBasket() == 0)
-                recipe.setInPlanItemBasket(false);
-            dao.add(recipe);
-        }
-    }
-
-    /**
-     * remove plan item from basket
-     * @param item
-     */
-    public void removePlanItemToBasket(PlanItem item) {
-        item.setInBasket(false);
-        addPlanItem(item);
-        List<Component> components = new ArrayList<Component>();
-        for(int i = 0; i < item.getData().size(); i++) {
-            Object obj = item.getData().get(i);
-            if(obj instanceof Recipe) {
-                removeFromBasket((Recipe) obj);
-            }else if(obj instanceof Component) {
-                Component component = (Component) obj;
-                component.setPlanItem(null);
-                components.add(component);
-            }
-        }
-        if(components.size() > 0) {
-            Recipe recipe = new Recipe();
-            recipe.setId(-1);
-            recipe.setComponent_set(components);
-            removeFromBasket(recipe);
-        }
-    }
-
-
-    /**
-     * add recipe to basket
-     * @param recipe
-     */
-    public void addRecipeToBasket(Recipe recipe) {
-        recipe.setInBasket(true);
-        addRecipe(recipe);
-    }
-
-    /**
-     * remove recipe from basket
-     * @param recipe
-     */
-    public void removeRecipeFromBasket(Recipe recipe) {
-        recipe.setInBasket(false);
-        recipe.setWeightInRecipeBasket(0);
-        addRecipe(recipe);
-    }
-
-
-    /**
-     * save Basket status
-     * @param basket
-     */
-    public void saveBasket(List<Recipe> basket) {
-        RecipeDao dao = new RecipeDao(context);
-        ComponentDao dao1 = new ComponentDao(context);
-        if(basket != null) {
-            for(int i = 0; i < basket.size(); i++) {
-                Recipe recipe = basket.get(i);
-                recipe.setInBasket(true);
-                dao.add(recipe);
-                List<Component> components = recipe.getComponent_set();
-                for(int j = 0; j < components.size(); j++) {
-                    dao1.updateComponentStatus(components.get(j));
-                }
-            }
-        }
-    }
-
-    /**
-     * get content of Basket
-     * @return a list of Basket
-     */
-    public List<Recipe> getBasket() {
-        List<Recipe> basket = new ArrayList<>();
-        RecipeDao dao = new RecipeDao(context);
-        List<Recipe> recipes = dao.getInBasket();
-        for(int i = 0; i < recipes.size(); i++) {
-            Recipe recipe = getRecipe(recipes.get(i).getId());
-            if(!((recipe.getComponent_set().size() == 0) && recipe.getId() == -1)) {
-                if(recipe.getId() != -1) {
-                    List<Component> components = recipe.getComponent_set();
-                    for (int j = 0; j < components.size(); j++)
-                        components.get(j).setAmount(components.get(j).getAmount() * (recipe.getWeightInPlanBasket() + recipe.getWeightInRecipeBasket()) / recipe.getTotal_amount());
-                }
-                basket.add(recipe);
-            }
-        }
-        return basket;
-    }
-
-    /**
-     * clear the basket
-     * @param basket
-     */
-    public void clearBasket(List<Recipe> basket) {
-        if(basket != null) {
-            for(int i = 0; i < basket.size(); i++) {
-                Recipe recipe = basket.get(i);
-                for(int j = 0; j < recipe.getComponent_set().size(); j++)
-                    recipe.getComponent_set().get(j).setStatus(0);
-                recipe.setInBasket(false);
-                recipe.setWeightInPlanBasket(0);
-                recipe.setWeightInRecipeBasket(0);
-                addRecipe(recipe);
-            }
-        }
-    }
-
-    /**
-     * add plan item, breakfast, lunch, add_meal, supper
-     * @param item
-     */
-    public PlanItem addPlanItem(PlanItem item) {
-        PlanItemDao dao = new PlanItemDao(context);
-        int id = dao.add(item);
-        item.setId(id);
-        List<Object> data = item.getData();
-        if(data != null) {
-            PlanItem2RecipeDao dao1 = new PlanItem2RecipeDao(context);
-            ComponentDao dao2 = new ComponentDao(context);
-            for(int i = 0; i < data.size(); i++) {
-                Object obj = data.get(i);
-                if(obj instanceof Recipe) {
-                    Recipe recipe = (Recipe) obj;
-                    addRecipe(recipe);
-                    PlanItem2Recipe planItem2Recipe = new PlanItem2Recipe();
-                    planItem2Recipe.setPlanItem(item);
-                    planItem2Recipe.setRecipe(recipe);
-                    planItem2Recipe.setItemIndex(i);
-                    planItem2Recipe.setRecipeWeight(recipe.getIncreWeight());
-                    dao1.add(planItem2Recipe);
-                }else if(obj instanceof Component) {
-                    Component component = (Component) obj;
-                    component.setPlanItem(item);
-                    component.setItemIndex(i);
-                    dao2.addComponentBelongToPlanItem(component);
-                }
-            }
-        }
-        return item;
-    }
-
-    /**
-     * add and update dayplan
-     * @param dayPlan
-     * @return  DayPlan
-     */
-    public DayPlan addDayPlan(DayPlan dayPlan) {
-        DayPlanDao dao = new DayPlanDao(context);
-        int id = dao.add(dayPlan);
-        dayPlan.setId(id);
-        List<PlanItem> items = dayPlan.getPlanItems();
-        if(items == null) {
-            items = new ArrayList<>();
-            for(PlanItem.ItemType type : PlanItem.ItemType.values()) {
-                if (type == PlanItem.ItemType.ALL)  continue;
-                PlanItem item = new PlanItem();
-                item.setImageCover("drawable://" + R.drawable.plan_04);
-                item.setItemType(type);
-                item.setDayPlan(dayPlan);
-                item = addPlanItem(item);
-                items.add(item);
-            }
-            dayPlan.setPlanItems(items);
-        }else {
-            double total = 0.0;
-            for (int i = 0; i < items.size(); i++) {
-                PlanItem item = items.get(i);
-                total += item.gettCalories();
-                item.setDayPlan(dayPlan);
-                addPlanItem(item);
-            }
-            dayPlan.setCalories(total);
-            dao.add(dayPlan);
-        }
-        return dayPlan;
-    }
-
-    /**
-     * delete index recipe or component in the plan item
-     * @param item
-     */
-    public void deletePlanItem(PlanItem item, int index) {
-        Object obj = item.getData().get(index);
-        if(obj instanceof Recipe) {
-            PlanItem2RecipeDao dao = new PlanItem2RecipeDao(context);
-            PlanItem2Recipe match = new PlanItem2Recipe();
-            match.setRecipe((Recipe)(obj));
-            match.setPlanItem(item);
-            dao.delete(match);
-        }else if(obj instanceof Component) {
-            Component component = (Component) obj;
-            ComponentDao dao = new ComponentDao(context);
-            dao.remove(component.getId());
-        }
-    }
-
-
-    /**
-     *  punch plan item
-     * @param item
-     */
-    public void punch(PlanItem item) {
-        PlanItemDao dao = new PlanItemDao(context);
-        dao.add(item);
-        DayPlanDao dao1 = new DayPlanDao(context);
-        DayPlan dayPlan = item.getDayPlan();
-        dao1.add(dayPlan);
     }
 
 
@@ -495,16 +174,7 @@ public class FrDbHelper {
 
 
     /**
-     * get plan in use
-     * @return PlanInUse
-     */
-    public PlanInUse getSeriesPlanNowUsed() {
-        PlanInUseDao dao = new PlanInUseDao(context);
-        return dao.getPlanInUse();
-    }
-
-    /**
-     *
+     * get dateplans from start to end
      * @param start
      * @param end
      * @return Map<String, DatePlan>
@@ -517,6 +187,8 @@ public class FrDbHelper {
         PlanInUse planInUse = dao1.getPlanInUse();
         if(datePlans.size() == 0) {
             if(planInUse == null) {
+                if(Common.CompareDate(start, Common.getDate()) < 0)
+                    start = Common.getDate();
                 while (Common.CompareDate(start, end) <= 0) {
                     DatePlan datePlan = new DatePlan();
                     datePlan.setPlan_name("自定义计划");
@@ -574,6 +246,10 @@ public class FrDbHelper {
         return data;
     }
 
+    /**
+     *  generate a custom dateplan
+     * @return list of dateplanitem
+     */
     public ArrayList<DatePlanItem> generateDatePlan() {
         ArrayList<DatePlanItem> items = new ArrayList<>();
         DatePlanItem item1 = new DatePlanItem();
@@ -642,8 +318,119 @@ public class FrDbHelper {
         return items;
     }
 
+    /**
+     * save date plan when create or update
+     * @param datePlan
+     */
     public void addDatePlan(DatePlan datePlan) {
         DatePlanDao dao = new DatePlanDao(context);
         dao.addDatePlan(datePlan);
+    }
+
+    /**
+     * add list of plancomponent to basket
+     * @param components
+     */
+    public void addToBasket(List<PlanComponent> components) {
+        BasketDao dao = new BasketDao(context);
+        Basket basket = dao.getBasket();
+        if(basket == null)  basket = new Basket();
+        List<PlanComponent> componentList = basket.getContent();
+        if(componentList == null)
+            basket.setContent(components);
+        else {
+            if(components != null) {
+                for (int i = 0; i < components.size(); i++) {
+                    boolean flag = true;
+                    for(int j = 0; j < componentList.size(); j++)
+                        if(components.get(i).getName().equals(componentList.get(j).getName())) {
+                            componentList.get(j).setAmount(componentList.get(j).getAmount() + components.get(i).getAmount());
+                            flag = false;
+                            break;
+                        }
+                    if(flag)
+                        componentList.add(components.get(i));
+                }
+            }
+            basket.setContent(componentList);
+        }
+        dao.add(basket);
+    }
+
+    /**
+     * add a plan component to basket
+     * @param component
+     */
+    public void addToBasket(PlanComponent component) {
+        List<PlanComponent> components = new ArrayList<>();
+        components.add(component);
+        addToBasket(components);
+    }
+
+    /**
+     * remove components from basket
+     * @param components
+     */
+    public void removeFromBasket(List<PlanComponent> components) {
+        BasketDao dao = new BasketDao(context);
+        Basket basket = dao.getBasket();
+        List<PlanComponent> componentList = basket.getContent();
+        if(componentList == null)
+            basket.setContent(components);
+        else {
+            if(components != null) {
+                for (int i = 0; i < components.size(); i++) {
+                    for(int j = 0; j < componentList.size(); j++)
+                        if(components.get(i).getName().equals(componentList.get(j).getName())) {
+                            componentList.get(j).setAmount(componentList.get(j).getAmount() - components.get(i).getAmount());
+                            if(componentList.get(j).getAmount() == 0)
+                                componentList.remove(j);
+                            break;
+                        }
+                }
+            }
+            basket.setContent(componentList);
+        }
+        dao.add(basket);
+    }
+    /**
+     * clear basket
+     */
+    public void clearBasket() {
+        BasketDao dao = new BasketDao(context);
+        dao.add(new Basket());
+
+        DatePlanDao dao2 = new DatePlanDao(context);
+        List<DatePlan> list = dao2.getInBasket();
+        if(list != null && list.size() > 0) {
+            for(int i = 0; i < list.size(); i++) {
+                DatePlan datePlan = list.get(i);
+                List<DatePlanItem> items = datePlan.getItems();
+                for(int j = 0; j < items.size(); j++) {
+                    items.get(j).setIsInBasket(false);
+                }
+                datePlan.setItems(items);
+                datePlan.setInBasket(false);
+                dao2.addDatePlan(datePlan);
+            }
+        }
+    }
+
+    /**
+     * save the whole basket
+     * @param basket
+     */
+    public void saveBasket(Basket basket) {
+        BasketDao dao = new BasketDao(context);
+        dao.add(basket);
+    }
+
+    /**
+     * get content of basketN
+     * @return Basket
+     */
+    public Basket getBasket() {
+        BasketDao dao = new BasketDao(context);
+        return dao.getBasket();
     }
 }

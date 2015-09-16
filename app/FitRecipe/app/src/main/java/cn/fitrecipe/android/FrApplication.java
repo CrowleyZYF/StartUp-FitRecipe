@@ -159,11 +159,8 @@ public class FrApplication extends Application {
     }
 
     public Report getReport() {
-
         if(report == null) {
-            Author author = getAuthor();
-            if(author != null)
-                report = FrDbHelper.getInstance(this).getReport(author);
+            report = FrDbHelper.getInstance(this).getReport();
         }
         return report;
     }

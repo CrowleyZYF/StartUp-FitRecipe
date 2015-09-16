@@ -114,11 +114,13 @@ public class PlanElementAdapter extends BaseAdapter{
                     addBtn.setEnabled(false);
                     ((ImageView)v).setImageResource(R.drawable.icon_plan_shopping_active);
                     item.setIsInBasket(true);
+                    FrDbHelper.getInstance(fragment.getActivity()).addToBasket(item.getComponents());
                     Toast.makeText(fragment.getActivity(), "加入菜篮子", Toast.LENGTH_SHORT).show();
                 }else {
                     addBtn.setEnabled(true);
                     ((ImageView)v).setImageResource(R.drawable.icon_plan_shopping);
                     item.setIsInBasket(false);
+                    FrDbHelper.getInstance(fragment.getActivity()).removeFromBasket(item.getComponents());
                     Toast.makeText(fragment.getActivity(), "从菜篮子取出", Toast.LENGTH_SHORT).show();
                 }
                 adapter.notifyDataSetChanged();

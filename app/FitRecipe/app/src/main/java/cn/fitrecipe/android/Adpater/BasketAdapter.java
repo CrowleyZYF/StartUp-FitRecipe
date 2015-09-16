@@ -14,6 +14,7 @@ import java.util.List;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.RecipeActivity;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
+import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.Recipe;
 
 /**
@@ -22,22 +23,22 @@ import cn.fitrecipe.android.entity.Recipe;
 public class BasketAdapter extends BaseAdapter {
 
     private Context context;
-    private List<Recipe> recipes;
+    private List<PlanComponent> components;
 
-    public BasketAdapter(Context context, List<Recipe> recipes) {
+    public BasketAdapter(Context context, List<PlanComponent> components) {
         this.context = context;
-        this.recipes = recipes;
+        this.components = components;
     }
 
     @Override
     public int getCount() {
-        if(recipes == null) return 0;
-        return recipes.size();
+        if(components == null) return 0;
+        return components.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return recipes.get(position);
+        return components.get(position);
     }
 
     @Override
@@ -58,17 +59,21 @@ public class BasketAdapter extends BaseAdapter {
             holder.listView = (LinearLayoutForListView) convertView.findViewById(R.id.ingredient_list);
             convertView.setTag(holder);
         }
-        holder.textView.setText(recipes.get(position).getTitle());
+        holder.textView.setText(components.get(position).getName());
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String recipeID = recipes.get(position).getId() + "";
+                String recipeID = components.get(position).getId() + "";
                 Intent intent = new Intent(context, RecipeActivity.class);
                 intent.putExtra("id", recipeID);
                 context.startActivity(intent);
             }
         });
-        holder.listView.setAdapter(new IngredientAdapter(context, recipes.get(position).getComponent_set(), null));
+        int original = 0;
+        List<PlanComponent> componentList = components.get(position).getComponents();
+        for(int j = 0; j < componentList.size(); j++)  original += componentList.get(j).getAmount();
+        for(int j = 0; j < componentList.size(); j++)  componentList.get(j).setAmount(Math.round(componentList.get(j).getAmount() * components.get(position).getAmount() / original));
+        holder.listView.setAdapter(new IngredientAdapter(context, components.get(position).getComponents(), null));
         return convertView;
     }
     class ViewHolder {

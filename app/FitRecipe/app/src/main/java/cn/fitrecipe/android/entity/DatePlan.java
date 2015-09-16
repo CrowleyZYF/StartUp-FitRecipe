@@ -22,6 +22,8 @@ public class DatePlan implements Serializable, Comparable<DatePlan>{
     @DatabaseField
     private String items;
     @DatabaseField
+    private boolean inBasket;
+    @DatabaseField
     private String plan_name;
 
     public String getPlan_name() {
@@ -67,5 +69,13 @@ public class DatePlan implements Serializable, Comparable<DatePlan>{
     @Override
     public int compareTo(DatePlan another) {
         return Common.CompareDate(this.date, another.getDate());
+    }
+
+    public boolean isInBasket() {
+        return inBasket;
+    }
+
+    public void setInBasket(boolean inBasket) {
+        this.inBasket = inBasket;
     }
 }
