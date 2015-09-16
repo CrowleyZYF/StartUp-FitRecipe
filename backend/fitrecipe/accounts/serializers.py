@@ -4,7 +4,7 @@
 # @Date:   2015-05-04 15:38:57
 # @Last Modified by:   chaihaotian
 # @Last Modified time: 2015-07-11 00:11:18
-from .models import Account, External, OtherAuthor
+from .models import Account, External, OtherAuthor, Evaluation
 from base.serializers import BaseSerializer
 
 
@@ -26,3 +26,6 @@ class OtherAuthorSerializer(BaseSerializer):
     class Meta:
         model = OtherAuthor
         fields = ('id', 'nick_name', 'sex', 'avatar')
+
+
+
