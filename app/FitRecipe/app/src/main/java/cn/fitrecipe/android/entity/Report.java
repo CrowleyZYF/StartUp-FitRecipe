@@ -24,6 +24,10 @@ public class Report implements Serializable{
     private String roughFat;
     @DatabaseField
     private double preciseFat;
+    @DatabaseField
+    private int daysToGoal;
+    @DatabaseField
+    private double weightGoal;
 
     //BaseInfo
     @DatabaseField
@@ -706,5 +710,21 @@ public class Report implements Serializable{
 
     public void setGoalType(boolean goalType) {
         this.goalType = goalType;
+    }
+
+    public int getDaysToGoal() {
+        return daysToGoal;
+    }
+
+    public void setDaysToGoal(int daysToGoal) {
+        this.daysToGoal = daysToGoal;
+    }
+
+    public double getWeightGoal() {
+        return weightGoal;
+    }
+
+    public void setWeightGoal(double weightGoal) {
+        this.weightGoal = weightGoal;
     }
 }
