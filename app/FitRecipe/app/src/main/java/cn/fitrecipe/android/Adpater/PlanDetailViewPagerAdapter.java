@@ -15,7 +15,10 @@ import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.RecipeActivity;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.entity.Component;
+import cn.fitrecipe.android.entity.DatePlan;
+import cn.fitrecipe.android.entity.DatePlanItem;
 import cn.fitrecipe.android.entity.DayPlan;
+import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.PlanItem;
 import cn.fitrecipe.android.entity.Recipe;
 import cn.fitrecipe.android.entity.SeriesPlan;
@@ -26,21 +29,21 @@ import cn.fitrecipe.android.entity.SeriesPlan;
 public class PlanDetailViewPagerAdapter extends PagerAdapter {
     private Context context;
     private SeriesPlan plan;
-    private List<DayPlan> dataList;
+    private List<DatePlan> dataList;
 
     public PlanDetailViewPagerAdapter(Context context, SeriesPlan plan){
         this.context = context;
         this.plan = plan;
-        this.dataList = plan.getDayplans();
+        this.dataList = plan.getDatePlans();
     }
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        DayPlan dayPlan = dataList.get(position);
+        DatePlan datePlan = dataList.get(position);
         View planDetailContainer = LayoutInflater.from(context).inflate(R.layout.plan_detail_list_item, null);
 
         LinearLayoutForListView listView = (LinearLayoutForListView) planDetailContainer.findViewById(R.id.dayplan_detail);
-        PlanItemAdapter adapter = new PlanItemAdapter(dayPlan.getPlanItems());
+        PlanItemAdapter adapter = new PlanItemAdapter(datePlan.getItems());
         listView.setAdapter(adapter);
         container.addView(planDetailContainer);
         return planDetailContainer;
@@ -64,9 +67,9 @@ public class PlanDetailViewPagerAdapter extends PagerAdapter {
 
     class PlanItemAdapter extends BaseAdapter {
 
-        private List<PlanItem> items;
+        private List<DatePlanItem> items;
 
-        public PlanItemAdapter(List<PlanItem> items) {
+        public PlanItemAdapter(List<DatePlanItem> items) {
             this.items = items;
         }
 
@@ -95,10 +98,22 @@ public class PlanDetailViewPagerAdapter extends PagerAdapter {
                 holder = new ViewHolder(convertView);
                 convertView.setTag(holder);
             }
-            holder.plan_item_title.setText(items.get(position).getItemType().value());
-            holder.plan_item_calories.setText(Math.round(items.get(position).gettCalories()) + "");
-            holder.plan_item_punch.setText("1000");
-            ComponentAdapter componentAdapter = new ComponentAdapter(items.get(position).getData());
+            switch (items.get(position).getType()) {
+                case "breakfast" :
+                    holder.plan_item_title.setText("早餐");    break;
+                case "lunch":
+                    holder.plan_item_title.setText("午餐");    break;
+                case "supper":
+                    holder.plan_item_title.setText("晚餐");    break;
+                case "add_meal_01":
+                case "add_meal_02":
+                    holder.plan_item_title.setText("加餐");    break;
+                case "add_meal_03":
+                    holder.plan_item_title.setText("夜宵");    break;
+            }
+            holder.plan_item_calories.setText(Math.round(items.get(position).getCalories_take()) + "");
+            holder.plan_item_punch.setText(items.get(position).getPunchNums()+"");
+            ComponentAdapter componentAdapter = new ComponentAdapter(items.get(position).getComponents());
             holder.listView.setAdapter(componentAdapter);
             return convertView;
         }
@@ -117,9 +132,9 @@ public class PlanDetailViewPagerAdapter extends PagerAdapter {
         }
 
         class ComponentAdapter extends BaseAdapter {
-            private List<Object> data;
+            private List<PlanComponent> data;
 
-            public ComponentAdapter(List<Object> data) {
+            public ComponentAdapter(List<PlanComponent> data) {
                 this.data = data;
             }
 
@@ -140,7 +155,7 @@ public class PlanDetailViewPagerAdapter extends PagerAdapter {
             }
 
             @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
+            public View getView(final int position, View convertView, ViewGroup parent) {
                 ViewHolder holder;
                 if(convertView != null) {
                     holder = (ViewHolder) convertView.getTag();
@@ -149,25 +164,19 @@ public class PlanDetailViewPagerAdapter extends PagerAdapter {
                     holder = new ViewHolder(convertView);
                     convertView.setTag(holder);
                 }
-                if(data.get(position) instanceof Recipe) {
-                    final Recipe recipe = (Recipe) data.get(position);
-                    holder.plan_item_name.setText(recipe.getTitle());
-                    holder.plan_item_weight.setText(recipe.getIncreWeight()+"g");
-                    holder.plan_item_calories.setText(Math.round(recipe.getCalories() * recipe.getIncreWeight() / 100) +"kcal");
+                holder.plan_item_name.setText(data.get(position).getName());
+                holder.plan_item_weight.setText(data.get(position).getAmount()+"g");
+                holder.plan_item_calories.setText(Math.round(data.get(position).getCalories()) + "kcal");
+                if(data.get(position).getType() == 1) {
                     convertView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            String recipe_id = recipe.getId() +"";
-                            Intent intent=new Intent(context, RecipeActivity.class);
+                            String recipe_id = data.get(position).getId() + "";
+                            Intent intent = new Intent(context, RecipeActivity.class);
                             intent.putExtra("id", recipe_id);
                             context.startActivity(intent);
                         }
                     });
-                }else {
-                    Component component = (Component) data.get(position);
-                    holder.plan_item_name.setText(component.getIngredient().getName());
-                    holder.plan_item_weight.setText(component.getAmount()+"g");
-                    holder.plan_item_calories.setText(100 +"kcal");
                 }
                 return convertView;
             }

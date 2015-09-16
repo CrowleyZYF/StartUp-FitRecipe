@@ -1,64 +1,33 @@
 package cn.fitrecipe.android.entity;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.field.ForeignCollectionField;
-import com.j256.ormlite.table.DatabaseTable;
-
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
  * Created by wk on 2015/9/1.
  */
-@DatabaseTable(tableName = "fr_seriesplan")
 public class SeriesPlan implements Serializable, Comparable<SeriesPlan> {
 
-    @DatabaseField(id = true)
     private int id;
-    @DatabaseField
     private String name;
-    @DatabaseField
     private int hard_rank;
-    @DatabaseField
     private int delicious_rank;
-    @DatabaseField
     private int label;
-    @DatabaseField
     private int days;
-    @DatabaseField
     private int type;
-    @DatabaseField
     private int join;
-    @DatabaseField
     private String desc;
-    @DatabaseField
     private String intro;
-    @DatabaseField
     private String background;
-    @DatabaseField
     private String author_name;
-    @DatabaseField
     private int author_type;
-    @DatabaseField
     private String author_avatar;
-    @DatabaseField
-    private int author_years;
-    @DatabaseField
-    private int author_fatratio;
-    @DatabaseField
     private String author_title;
-    @DatabaseField
+    private int author_years;
+    private int author_fatratio;
     private String author_intro;
-    @DatabaseField
-    private boolean isCustom;
-    @DatabaseField(foreign = true)
-    private Author author;
-    @DatabaseField
     private boolean isUsed;
-    @ForeignCollectionField
-    private Collection<DayPlan> dayplans;
+    private List<DatePlan> datePlans;
 
     public boolean isUsed() {
         return isUsed;
@@ -163,31 +132,6 @@ public class SeriesPlan implements Serializable, Comparable<SeriesPlan> {
     public void setBackground(String background) {
         this.background = background;
     }
-
-    public ArrayList<DayPlan> getDayplans() {
-        return (ArrayList<DayPlan>)dayplans;
-    }
-
-    public void setDayplans(ArrayList<DayPlan> dayplans) {
-        this.dayplans = dayplans;
-    }
-
-    public Author getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(Author author) {
-        this.author = author;
-    }
-
-    public boolean isCustom() {
-        return isCustom;
-    }
-
-    public void setIsCustom(boolean isCustom) {
-        this.isCustom = isCustom;
-    }
-
     public int getAuthor_fatratio() {
         return author_fatratio;
     }
@@ -239,5 +183,13 @@ public class SeriesPlan implements Serializable, Comparable<SeriesPlan> {
     @Override
     public int compareTo(SeriesPlan another) {
         return id - another.getId();
+    }
+
+    public List<DatePlan> getDatePlans() {
+        return datePlans;
+    }
+
+    public void setDatePlans(List<DatePlan> datePlans) {
+        this.datePlans = datePlans;
     }
 }

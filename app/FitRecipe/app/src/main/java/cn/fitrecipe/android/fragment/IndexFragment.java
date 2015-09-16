@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.umeng.fb.FeedbackAgent;
 
@@ -90,7 +91,7 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
     }
 
     public void fresh() {
-        homeData= FrApplication.getInstance().getHomeData();
+        homeData = FrApplication.getInstance().getHomeData();
         if(recipeCardAdapter == null && recommendViewPagerAdapter == null && themeCardAdapter == null) {
             try {
                 initData();

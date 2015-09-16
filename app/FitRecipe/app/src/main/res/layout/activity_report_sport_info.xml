@@ -23,6 +23,83 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_marginBottom="15dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+
+            <ImageView
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:background="@drawable/icon_round"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="10dp"/>
+
+            <TextView
+                android:id="@+id/report_target_weight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textColor="@color/login_input_text_color"
+                android:layout_gravity="center_vertical"
+                android:text="目标体重：60kg"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+
+            <ImageView
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:background="@drawable/icon_round"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="10dp"/>
+
+            <TextView
+                android:id="@+id/report_target_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textColor="@color/login_input_text_color"
+                android:layout_gravity="center_vertical"
+                android:text="计划时间：40天"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+
+            <ImageView
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:background="@drawable/icon_round"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="10dp"/>
+
+            <TextView
+                android:id="@+id/report_target_weight_weekly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textColor="@color/login_input_text_color"
+                android:layout_gravity="center_vertical"
+                android:text="每周目标：+5斤"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:background="@drawable/dash_border"
         android:paddingTop="20dp"
         android:paddingBottom="20dp"
@@ -51,7 +128,7 @@
                         xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:layout_width="110dp"
                         android:layout_height="110dp"
-                        android:src="@color/hp_background"
+                        android:src="@drawable/calories_intake_bg"
                         android:layout_centerInParent="true"
                         app:border_width="5dp"
                         app:border_color="@color/base_color"
@@ -129,7 +206,7 @@
                         xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:layout_width="110dp"
                         android:layout_height="110dp"
-                        android:src="@color/hp_background"
+                        android:src="@drawable/suggest_fit_calories_bg"
                         android:layout_centerInParent="true"
                         app:border_width="5dp"
                         app:border_color="@color/base_color"
@@ -215,7 +292,7 @@
                         xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:layout_width="110dp"
                         android:layout_height="110dp"
-                        android:src="@color/hp_background"
+                        android:src="@drawable/suggest_fit_frequency_bg"
                         android:layout_centerInParent="true"
                         app:border_width="5dp"
                         app:border_color="@color/base_color"
@@ -271,7 +348,7 @@
                         xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:layout_width="110dp"
                         android:layout_height="110dp"
-                        android:src="@color/hp_background"
+                        android:src="@drawable/suggest_fit_time_bg"
                         android:layout_centerInParent="true"
                         app:border_width="5dp"
                         app:border_color="@color/base_color"

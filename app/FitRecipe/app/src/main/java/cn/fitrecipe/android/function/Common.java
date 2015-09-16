@@ -65,4 +65,28 @@ public class Common {
         Date afterDate = new Date(now);
         return sdf.format(afterDate);
     }
+
+    public static int CompareDate(String a, String b) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date date1 = sdf.parse(a);
+            Date date2 = sdf.parse(b);
+            return date1.compareTo(date2);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static int getDiff(String str1, String str2) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date1, date2;
+        try {
+            date1 = sdf.parse(str1);
+            date2 = sdf.parse(str2);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        return (int) ((date1.getTime() - date2.getTime()) / (24 * 3600 *1000));
+    }
 }

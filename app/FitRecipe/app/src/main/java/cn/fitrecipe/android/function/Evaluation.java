@@ -6,8 +6,6 @@ package cn.fitrecipe.android.function;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import cn.fitrecipe.android.entity.Report;
 
@@ -239,6 +237,8 @@ public class Evaluation {
 		report.setHeight(height);
 		report.setWeight(weight);
 		report.setGoalType(goalType);
+        report.setWeightGoal(weightGoal);
+        report.setDaysToGoal(daysToGoal);
 
 		report.setRoughFat(roughFat);
 		report.setPreciseFat(preciseFat);

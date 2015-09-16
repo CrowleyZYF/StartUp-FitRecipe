@@ -298,17 +298,17 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         recipe = Recipe.fromJson(data.toString());
         //
         if(recipe != null) {
-            Recipe old = FrDbHelper.getInstance(this).getRecipe(recipe.getId());
-            if(old != null) {
-                recipe.setInPlanItemBasket(old.isInPlanItemBasket());
-                recipe.setInBasket(old.getInBasket());
-                recipe.setWeightInPlanBasket(old.getWeightInPlanBasket());
-                recipe.setWeightInRecipeBasket(old.getWeightInRecipeBasket());
-            }
-            if(recipe.getInBasket())
-                recipe.setIncreWeight(recipe.getWeightInRecipeBasket());
-            else
-                recipe.setIncreWeight(recipe.getTotal_amount());
+//            Recipe old = FrDbHelper.getInstance(this).getRecipe(recipe.getId());
+//            if(old != null) {
+//                recipe.setInPlanItemBasket(old.isInPlanItemBasket());
+//                recipe.setInBasket(old.getInBasket());
+//                recipe.setWeightInPlanBasket(old.getWeightInPlanBasket());
+//                recipe.setWeightInRecipeBasket(old.getWeightInRecipeBasket());
+//            }
+//            if(recipe.getInBasket())
+//                recipe.setIncreWeight(recipe.getWeightInRecipeBasket());
+//            else
+//                recipe.setIncreWeight(recipe.getTotal_amount());
         }
 
         //获取报告
@@ -501,11 +501,11 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                 recipe.setWeightInRecipeBasket(recipe.getIncreWeight());
                 if(!recipe.getInBasket()) {
                     recipe.setInBasket(true);
-                    FrDbHelper.getInstance(this).addRecipeToBasket(recipe);
+//                    FrDbHelper.getInstance(this).addRecipeToBasket(recipe);
                     Toast.makeText(this, recipe.getTitle() + "丢进菜篮子", Toast.LENGTH_SHORT).show();
                 }else {
                     recipe.setInBasket(false);
-                    FrDbHelper.getInstance(this).removeRecipeFromBasket(recipe);
+//                    FrDbHelper.getInstance(this).removeRecipeFromBasket(recipe);
                     Toast.makeText(this, recipe.getTitle() + "移除菜篮子", Toast.LENGTH_SHORT).show();
                 }
                 basketStateChange();

@@ -15,20 +15,34 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import cn.fitrecipe.android.Adpater.SearchRecipeAdapter;
+import cn.fitrecipe.android.Http.FrRequest;
+import cn.fitrecipe.android.Http.FrServerConfig;
+import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.UI.PieChartView;
 import cn.fitrecipe.android.dao.FrDbHelper;
 import cn.fitrecipe.android.entity.Component;
 import cn.fitrecipe.android.entity.Ingredient;
+import cn.fitrecipe.android.entity.Nutrition;
+import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.Recipe;
+import pl.tajchert.sample.DotsTextView;
 
 public class SelectRecipeActivity extends Activity implements View.OnClickListener{
 
@@ -45,36 +59,7 @@ public class SelectRecipeActivity extends Activity implements View.OnClickListen
 
         fragments = new Fragment[2];
         setFragment(0);
-
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected void onProgressUpdate(Void... values) {
-                Toast.makeText(SelectRecipeActivity.this, "获取菜谱"+ (objects!=null?objects.size():-1), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                List<Recipe> recipes = FrDbHelper.getInstance(SelectRecipeActivity.this).getAllRecipe();
-                objects = new ArrayList<Object>();
-                for (int i =0; i < recipes.size(); i++)
-                    objects.add(recipes.get(i));
-
-               List<Ingredient> ingredients = FrDbHelper.getInstance(SelectRecipeActivity.this).getAllIngredient();
-                List<Component> components = new ArrayList<Component>();
-                if(ingredients != null) {
-                    for (int i = 0; i < ingredients.size(); i++) {
-                        Component component = new Component();
-                        component.setAmount(100);
-                        component.setIngredient(ingredients.get(i));
-                        objects.add(component);
-                    }
-                }
-                publishProgress();
-                return null;
-            }
-        }.execute();
     }
-
 
     private void setFragment(int i) {
         transaction = getFragmentManager().beginTransaction();
@@ -91,27 +76,6 @@ public class SelectRecipeActivity extends Activity implements View.OnClickListen
         transaction.commit();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_select_recipe, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void onClick(View v) {
@@ -129,6 +93,8 @@ public class SelectRecipeActivity extends Activity implements View.OnClickListen
         private ImageView clear_btn;
         private SearchRecipeAdapter adapter;
         private List<Object> data;
+        private LinearLayout loadingInterface;
+        private DotsTextView dotsTextView;
 
         @Nullable
         @Override
@@ -159,6 +125,8 @@ public class SelectRecipeActivity extends Activity implements View.OnClickListen
             search_input = (EditText) view.findViewById(R.id.search_input);
             clear_btn = (ImageView) view.findViewById(R.id.clear_btn);
             search_btn = (TextView) view.findViewById(R.id.search_btn);
+            loadingInterface = (LinearLayout) view.findViewById(R.id.loading_interface);
+            dotsTextView = (DotsTextView) view.findViewById(R.id.dots);
         }
 
 
@@ -187,14 +155,42 @@ public class SelectRecipeActivity extends Activity implements View.OnClickListen
                 data = new ArrayList<>();
             else
                 data.clear();
+            getData();
+        }
 
-            for(int i = 0; i < objects.size(); i++) {
-                Object o = objects.get(i);
-                if(isMatch(text, o)) {
-                    data.add(o);
+        private void getData() {
+            showLoading();
+            GetRequest request = new GetRequest(FrServerConfig.getRecipeDetails("8"), FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject res) {
+                    if(res != null && res.has("data")) {
+                        try {
+                            JSONObject data = res.getJSONObject("data");
+                            hideLoading(false, "");
+                            processData(data);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
-            }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    hideLoading(true, getResources().getString(R.string.network_error));
+                    if(volleyError != null && volleyError.networkResponse != null) {
+                        int statusCode = volleyError.networkResponse.statusCode;
+                        if(statusCode == 404) {
+                            Toast.makeText(SelectRecipeActivity.this, "食谱不存在！", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            });
+            FrRequest.getInstance().request(request);
+        }
 
+        private void processData(JSONObject json) throws JSONException {
+            Recipe recipe = Recipe.fromJson(json.toString());
+            data.add(recipe);
             if(adapter == null) {
                 adapter = new SearchRecipeAdapter(getActivity(), data);
                 search_content.setAdapter(adapter);
@@ -202,10 +198,21 @@ public class SelectRecipeActivity extends Activity implements View.OnClickListen
                 adapter.notifyDataSetChanged();
         }
 
-        boolean isMatch(String match, Object o) {
-            return true;
+        private void hideLoading(boolean isError, String errorMessage){
+            loadingInterface.setVisibility(View.INVISIBLE);
+            dotsTextView.stop();
+            if(isError){
+                Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+            }else{
+                search_content.setVisibility(View.VISIBLE);
+            }
         }
 
+        private void showLoading() {
+            loadingInterface.setVisibility(View.VISIBLE);
+            dotsTextView.start();
+            search_content.setVisibility(View.INVISIBLE);
+        }
     }
 
     class Fragment2 extends Fragment implements View.OnClickListener{
@@ -234,22 +241,22 @@ public class SelectRecipeActivity extends Activity implements View.OnClickListen
             search_pre.setOnClickListener(this);
             search_finish.setOnClickListener(this);
             for(int  i = 0; i < 10; i++) {
-               final String tmp = String.valueOf(i);
-               nums[i].setOnClickListener(new View.OnClickListener() {
-                   @Override
-                   public void onClick(View v) {
-                       if ((weight.toString().length() == 0 || weight.toString().equals("0")) && tmp.equals("0")) {
-                           weight.setLength(0);
-                       } else {
-                           if (weight.toString().length() < 4)
-                               weight.append(tmp);
-                           else
-                               Toast.makeText(getActivity(), "重量不能超过10 000克!", Toast.LENGTH_SHORT).show();
-                           recipe_weight.setText(weight.toString());
-                       }
+                final String tmp = String.valueOf(i);
+                nums[i].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if ((weight.toString().length() == 0 || weight.toString().equals("0")) && tmp.equals("0")) {
+                            weight.setLength(0);
+                        } else {
+                            if (weight.toString().length() < 4)
+                                weight.append(tmp);
+                            else
+                                Toast.makeText(getActivity(), "重量不能超过10 000克!", Toast.LENGTH_SHORT).show();
+                            recipe_weight.setText(weight.toString());
+                        }
 
-                   }
-               });
+                    }
+                });
             }
             plan_num_dash.setOnClickListener(this);
             plan_num_sure.setOnClickListener(this);
@@ -309,17 +316,42 @@ public class SelectRecipeActivity extends Activity implements View.OnClickListen
                     String w = recipe_weight.getText().toString();
                     if(!w.equals("0")) {
                         Intent intent = new Intent();
+                        PlanComponent component_selected = new PlanComponent();
+                        int weight = Integer.parseInt(recipe_weight.getText().toString());
                         if(obj_selected instanceof Recipe) {
-                            ((Recipe) obj_selected).setIncreWeight(Integer.parseInt(recipe_weight.getText().toString()));
-                            intent.putExtra("obj_selected", (Recipe)obj_selected);
+                            Recipe recipe = (Recipe) obj_selected;
+                            component_selected.setAmount(weight);
+                            component_selected.setName(recipe.getTitle());
+                            component_selected.setType(1);
+                            component_selected.setId(recipe.getId());
+                            for(int i = 0; i < recipe.getNutrition_set().size(); i++)
+                                recipe.getNutrition_set().get(i).setAmount(recipe.getNutrition_set().get(i).getAmount() * weight / 100);
+                            ArrayList<PlanComponent> components = new ArrayList<>();
+                            for(int i = 0; i < recipe.getComponent_set().size(); i++) {
+                                PlanComponent component = new PlanComponent();
+                                component.setName(recipe.getComponent_set().get(i).getIngredient().getName());
+                                component.setType(0);
+                                component.setAmount(Math.round(recipe.getComponent_set().get(i).getAmount() * weight * 1.0f/ recipe.getTotal_amount()));
+                                component.setCalories(100);
+                                components.add(component);
+                            }
+                            component_selected.setComponents(components);
+                            component_selected.setNutritions(recipe.getNutrition_set());
+                            component_selected.setCalories(recipe.getCalories() * weight / 100);
+
                         }else {
-                            ((Component) obj_selected).setAmount(Integer.parseInt(recipe_weight.getText().toString()));
-                            intent.putExtra("obj_selected", (Component) obj_selected);
+                            Component component = (Component) obj_selected;
+                            component_selected.setName(component.getIngredient().getName());
+                            component_selected.setType(0);
+                            component_selected.setAmount(weight);
+                            component_selected.setCalories(100);
+                            //TODO @wk
                         }
+                        intent.putExtra("component_selected", component_selected);
                         setResult(RESULT_OK, intent);
                         finish();
                     }else
-                    Toast.makeText(getActivity(), "重量不能为0", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "重量不能为0", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.plan_num_dash:
                     recipe_weight.setText("0");

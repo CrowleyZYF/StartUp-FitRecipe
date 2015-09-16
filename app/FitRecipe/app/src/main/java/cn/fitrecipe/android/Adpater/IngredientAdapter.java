@@ -10,8 +10,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import cn.fitrecipe.android.R;
-import cn.fitrecipe.android.entity.Component;
-import cn.fitrecipe.android.entity.Recipe;
+import cn.fitrecipe.android.entity.PlanComponent;
 
 /**
  * Created by wk on 2015/8/28.
@@ -19,10 +18,10 @@ import cn.fitrecipe.android.entity.Recipe;
 public class IngredientAdapter extends BaseAdapter{
 
     private Context context;
-    private List<Component> componentList;
-    private List<Recipe> basket;
+    private List<PlanComponent> componentList;
+    private List<PlanComponent> basket;
 
-    public IngredientAdapter(Context context, List<Component> componentList, List<Recipe> basket){
+    public IngredientAdapter(Context context, List<PlanComponent> componentList, List<PlanComponent> basket){
         this.context = context;
         this.componentList = componentList;
         this.basket = basket;
@@ -58,7 +57,7 @@ public class IngredientAdapter extends BaseAdapter{
             holder.imageView = (ImageView) convertView.findViewById(R.id.ingredient_line);
             convertView.setTag(holder);
         }
-        holder.textView1.setText(componentList.get(position).getIngredient().getName());
+        holder.textView1.setText(componentList.get(position).getName());
         holder.textView2.setText(componentList.get(position).getAmount()+"g");
         final int status = componentList.get(position).getStatus();
         if(status == 0) {
@@ -77,11 +76,16 @@ public class IngredientAdapter extends BaseAdapter{
                 componentList.get(position).setStatus(1 - status);
                 if(basket != null){
                     for(int i = 0; i <basket.size(); i++) {
-                        Recipe recipe = basket.get(i);
-                        for(int j = 0; j < recipe.getComponent_set().size(); j++) {
-                            Component component = recipe.getComponent_set().get(j);
-                            if(component.getIngredient().getName().equals(componentList.get(position).getIngredient().getName()))
-                                component.setStatus(1 - status);
+                        PlanComponent pcomponent = basket.get(i);
+                        if(pcomponent.getType() == 1) {
+                            for (int j = 0; j < pcomponent.getComponents().size(); j++) {
+                                PlanComponent component = pcomponent.getComponents().get(j);
+                                if (component.getName().equals(componentList.get(position).getName()))
+                                    component.setStatus(1 - status);
+                            }
+                        }else {
+                            if (pcomponent.getName().equals(componentList.get(position).getName()))
+                                pcomponent.setStatus(1 - status);
                         }
                     }
                 }
