@@ -6,13 +6,14 @@ import java.util.ArrayList;
 /**
  * Created by wk on 2015/9/14.
  */
-public class PlanComponent implements Serializable {
+public class PlanComponent implements Serializable, Comparable<PlanComponent> {
 
     private int id;
     private int type; //ingredient or recipe
     private String name;
     private int amount;
     private double calories;
+    private int status; //if drop from the basket
     private ArrayList<PlanComponent> components;
     private ArrayList<Nutrition> nutritions;
 
@@ -96,4 +97,16 @@ public class PlanComponent implements Serializable {
         return  pcomponent;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    @Override
+    public int compareTo(PlanComponent another) {
+        return -this.getType() + another.getType();
+    }
 }

@@ -132,16 +132,16 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 //        hideFragment(transaction);
         if(last != -1) {
-            if(last == 0)
+            if(last == 0 && frIndexFragment != null)
                 transaction.hide(frIndexFragment);
-            if(last == 1)
+            if(last == 1 && frPlanFragment != null)
                 transaction.hide(frPlanFragment);
-            if(last == 2)
+            if(last == 2 && frMeFragment != null)
                 transaction.hide(frMeFragment);
             frTabs.get(last).setBackgroundColor(getResources().getColor(R.color.base_color));
         }else {
-            frPlanFragment = new PlanFragment();
-            transaction.add(R.id.content, frPlanFragment).hide(frPlanFragment);
+//            frPlanFragment = new PlanFragment();
+//            transaction.add(R.id.content, frPlanFragment).hide(frPlanFragment);
         }
         last = i;
         frTabs.get(i).setBackgroundColor(getResources().getColor(R.color.active_color));
@@ -151,9 +151,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                 if (frIndexFragment == null){
                     frIndexFragment = new IndexFragment();
                     transaction.add(R.id.content, frIndexFragment);
-                } else{
-                    transaction.show(frIndexFragment);
                 }
+                transaction.show(frIndexFragment);
                 left_btn.setImageResource(R.drawable.icon_category);
                 right_btn.setImageResource(R.drawable.icon_search);
                 tab_index = 0;
@@ -170,9 +169,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                     if (frPlanFragment == null) {
                         frPlanFragment = new PlanFragment();
                         transaction.add(R.id.content, frPlanFragment);
-                    } else{
-                        transaction.show(frPlanFragment);
                     }
+                    transaction.show(frPlanFragment);
                     left_btn.setImageResource(R.drawable.icon_nutrition);
                     right_btn.setImageResource(R.drawable.icon_change);
                     tab_index = 1;
@@ -200,9 +198,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                 if (frMeFragment == null){
                     frMeFragment = new MeFragment();
                     transaction.add(R.id.content, frMeFragment);
-                } else{
-                    transaction.show(frMeFragment);
                 }
+                transaction.show(frMeFragment);
                 left_btn.setImageResource(R.drawable.icon_letter);
                 right_btn.setImageResource(R.drawable.icon_set);
                 tab_index = 2;

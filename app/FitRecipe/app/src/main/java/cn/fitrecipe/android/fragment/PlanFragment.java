@@ -60,15 +60,14 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     private int pointer = 0;
     private long now;
     private Map<String, DatePlan> data;
-    private boolean isFresh = true;
+    public static boolean isFresh = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         View v = inflater.inflate(R.layout.fragment_plan, container, false);
-
-        report = FrDbHelper.getInstance(getActivity()).getReport(FrApplication.getInstance().getAuthor());
+        report = FrDbHelper.getInstance(getActivity()).getReport();
         initView(v);
         initEvent();
         initData();
@@ -103,40 +102,52 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             plan_status.setText("减脂第");
         }
 //        switchPlan(pointer);
+        loadData();
+
     }
 
+    private void loadData() {
+        long t = System.currentTimeMillis();
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected void onProgressUpdate(Void... values) {
+                switchPlan(pointer, 1);
+            }
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                if (data != null)
+                    data.clear();
+                datePlan = null;
+                data = FrDbHelper.getInstance(getActivity()).getDatePlan(Common.getSomeDay(Common.getDate(), -2), Common.getSomeDay(Common.getDate(), 6));
+                publishProgress();
+                return null;
+            }
+        }.execute();
+        long tt = System.currentTimeMillis();
+        Toast.makeText(getActivity(), (tt - t) + "ms", Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     public void onResume() {
         super.onResume();
         if(isFresh) {
-            long t = System.currentTimeMillis();
-            new AsyncTask<Void, Void, Void>() {
-                @Override
-                protected void onProgressUpdate(Void... values) {
-                    switchPlan(pointer, 1);
-                }
-
-                @Override
-                protected Void doInBackground(Void... params) {
-                    if (data != null)
-                        data.clear();
-                    datePlan = null;
-                    data = FrDbHelper.getInstance(getActivity()).getDatePlan(Common.getSomeDay(Common.getDate(), -2), Common.getSomeDay(Common.getDate(), 6));
-                    publishProgress();
-                    return null;
-                }
-            }.execute();
-            long tt = System.currentTimeMillis();
-            Toast.makeText(getActivity(), (tt - t) + "ms", Toast.LENGTH_SHORT).show();
+            loadData();
         }
-        isFresh = true;
+        isFresh = false;
     }
 
 
     @Override
     public void onPause() {
         super.onPause();
+        if(datePlan != null) {
+            boolean flag = false;
+            for(int i = 0; i < items.size(); i++)
+                flag = flag || items.get(i).isInBasket();
+            datePlan.setInBasket(flag);
+            datePlan.setItems(items);
+        }
         Set<String> keySet = data.keySet();
         Iterator<String> iterator = keySet.iterator();
         while (iterator.hasNext()) {
@@ -146,8 +157,13 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     }
 
     private boolean switchPlan(int pointer, int dir) {
-        if(datePlan != null)
+        if(datePlan != null) {
+            boolean flag = false;
+            for(int i = 0; i < items.size(); i++)
+                flag = flag || items.get(i).isInBasket();
+            datePlan.setInBasket(flag);
             datePlan.setItems(items);
+        }
         String str = Common.getSomeDay(Common.getDate(), pointer);
         int days = Common.getDiff(str, report.getUpdatetime()) + 1;
         if(days + dir * 2 > 0 && pointer + dir * 2 < 7) {
@@ -186,7 +202,6 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         PlanComponent obj = null;
         if(resultCode == getActivity().RESULT_OK && data.hasExtra("component_selected")) {
-            isFresh = false;
             obj = (PlanComponent) data.getSerializableExtra("component_selected");
             switch (requestCode) {
                 case BREAKFAST_CODE:

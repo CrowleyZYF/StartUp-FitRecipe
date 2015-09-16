@@ -24,9 +24,12 @@ import cn.fitrecipe.android.Adpater.BasketAdapter;
 import cn.fitrecipe.android.Adpater.IngredientAdapter;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.dao.FrDbHelper;
+import cn.fitrecipe.android.entity.Basket;
 import cn.fitrecipe.android.entity.Component;
 import cn.fitrecipe.android.entity.Ingredient;
+import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.Recipe;
+import cn.fitrecipe.android.fragment.PlanFragment;
 
 public class IngredientActivity extends Activity implements View.OnClickListener{
 
@@ -42,7 +45,8 @@ public class IngredientActivity extends Activity implements View.OnClickListener
 
     private ImageView backBtn;
     private TextView clearBtn;
-    private List<Recipe> basket;
+    private List<PlanComponent> data;
+    private Basket basket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +61,10 @@ public class IngredientActivity extends Activity implements View.OnClickListener
 
     private void initData() {
         basket = FrDbHelper.getInstance(this).getBasket();
-        Collections.sort(basket);
+        if(basket == null)  basket = new Basket();
+        data = basket.getContent();
+        if(data == null) data = new ArrayList<>();
+        Collections.sort(data);
     }
 
     private void setFragment(int i) {
@@ -118,9 +125,10 @@ public class IngredientActivity extends Activity implements View.OnClickListener
                 finish();
                 break;
             case R.id.shopping_clear:
-                FrDbHelper.getInstance(this).clearBasket(basket);
-                basket.clear();
-                ((Fragment1)fragment1).fresh();
+                FrDbHelper.getInstance(this).clearBasket();
+                data.clear();
+                PlanFragment.isFresh = true;
+                ((Fragment1) fragment1).fresh();
                 ((Fragment2)fragment2).fresh();
                 break;
         }
@@ -128,16 +136,17 @@ public class IngredientActivity extends Activity implements View.OnClickListener
 
 
     @Override
-    protected void onStop() {
+    protected void onPause() {
+        basket.setContent(data);
         FrDbHelper.getInstance(this).saveBasket(basket);
-        super.onStop();
+        super.onPause();
     }
 
     public class Fragment1 extends Fragment {
 
         ListView ingredient_list;
         IngredientAdapter ingredientAdapter;
-        List<Component> datalist;
+        List<PlanComponent> datalist;
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -152,41 +161,62 @@ public class IngredientActivity extends Activity implements View.OnClickListener
                 datalist = new ArrayList<>();
             else
                 datalist.clear();
-            Map<String, Component> counter = new HashMap<String, Component>();
-            for(int i = 0; i < basket.size(); i++) {
-                Recipe recipe = basket.get(i);
-                List<Component> components = recipe.getComponent_set();
-                for(int j = 0; j < components.size(); j++) {
-                    String name = components.get(j).getIngredient().getName();
+            Map<String, PlanComponent> counter = new HashMap<>();
+            for(int i = 0; i < data.size(); i++) {
+                PlanComponent planComponent = data.get(i);
+                if(planComponent.getType() == 1) {
+                    List<PlanComponent> components = planComponent.getComponents();
+                    int original = 0;
+                    for(int j = 0; j < components.size(); j++)  original += components.get(j).getAmount();
+                    for(int j = 0; j < components.size(); j++) {
+                        String name = components.get(j).getName();
+                        if (counter.containsKey(name)) {
+                            PlanComponent component = counter.get(name);
+                            component.setType(0);
+                            component.setAmount(component.getAmount() + components.get(j).getAmount() * planComponent.getAmount() / original);
+                            int status = component.getStatus();
+                            component.setStatus(status & components.get(j).getStatus());
+                        }
+                        else {
+                            PlanComponent component = new PlanComponent();
+                            component.setName(components.get(j).getName());
+                            component.setType(0);
+                            component.setAmount(components.get(j).getAmount() * planComponent.getAmount() / original);
+                            component.setStatus(components.get(j).getStatus());
+                            counter.put(name, component);
+                        }
+                    }
+                }else {
+                    String name = planComponent.getName();
                     if (counter.containsKey(name)) {
-                        Component component = counter.get(name);
-                        component.setAmount(component.getAmount() + components.get(j).getAmount());
+                        PlanComponent component = counter.get(name);
+                        component.setType(0);
+                        component.setAmount(component.getAmount() + planComponent.getAmount());
                         int status = component.getStatus();
-                        component.setStatus(status & components.get(j).getStatus());
+                        component.setStatus(status & planComponent.getStatus());
                     }
                     else {
-                        Component component = new Component();
-                        component.setAmount(components.get(j).getAmount());
-                        Ingredient newIngredient = new Ingredient();
-                        newIngredient.setId(components.get(j).getIngredient().getId());
-                        newIngredient.setName(components.get(j).getIngredient().getName());
-                        component.setStatus(components.get(j).getStatus());
-                        component.setIngredient(newIngredient);
+                        PlanComponent component = new PlanComponent();
+                        component.setName(planComponent.getName());
+                        component.setType(0);
+                        component.setAmount(planComponent.getAmount());
+                        component.setStatus(planComponent.getStatus());
                         counter.put(name, component);
                     }
                 }
+
             }
             Iterator<String> iterator = counter.keySet().iterator();
             while(iterator.hasNext()) {
                 String name = iterator.next();
-                Component component = counter.get(name);
+                PlanComponent component = counter.get(name);
                 datalist.add(component);
             }
         }
 
         private void initView(View v) {
             ingredient_list = (ListView) v.findViewById(R.id.ingredient_list);
-            ingredientAdapter = new IngredientAdapter(getActivity(), datalist, basket);
+            ingredientAdapter = new IngredientAdapter(getActivity(), datalist, data);
             ingredient_list.setAdapter(ingredientAdapter);
         }
 
@@ -218,7 +248,7 @@ public class IngredientActivity extends Activity implements View.OnClickListener
 
         private void initView(View v) {
             recipe_list_view = (LinearLayoutForListView) v.findViewById(R.id.recipe_list_view);
-            basketAdapter = new BasketAdapter(getActivity(), basket);
+            basketAdapter = new BasketAdapter(getActivity(), data);
             recipe_list_view.setAdapter(basketAdapter);
         }
 

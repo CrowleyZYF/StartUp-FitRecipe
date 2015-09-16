@@ -1,7 +1,6 @@
 package cn.fitrecipe.android.dao;
 
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -13,19 +12,10 @@ import com.j256.ormlite.table.TableUtils;
 import java.sql.SQLException;
 
 import cn.fitrecipe.android.entity.Author;
-import cn.fitrecipe.android.entity.Component;
+import cn.fitrecipe.android.entity.Basket;
 import cn.fitrecipe.android.entity.DatePlan;
-import cn.fitrecipe.android.entity.DayPlan;
-import cn.fitrecipe.android.entity.Ingredient;
-import cn.fitrecipe.android.entity.Label;
-import cn.fitrecipe.android.entity.MyPlan;
-import cn.fitrecipe.android.entity.Nutrition;
 import cn.fitrecipe.android.entity.PlanInUse;
-import cn.fitrecipe.android.entity.PlanItem;
-import cn.fitrecipe.android.entity.PlanItem2Recipe;
-import cn.fitrecipe.android.entity.Recipe;
 import cn.fitrecipe.android.entity.Report;
-import cn.fitrecipe.android.entity.SeriesPlan;
 
 /**
  * Created by wk on 2015/8/11.
@@ -63,7 +53,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
 //            TableUtils.createTableIfNotExists(connectionSource, DayPlan.class);
 //            TableUtils.createTableIfNotExists(connectionSource, SeriesPlan.class);
 //            TableUtils.createTableIfNotExists(connectionSource, MyPlan.class);
-//            TableUtils.createTableIfNotExists(connectionSource, BasketItem.class);
+            TableUtils.createTableIfNotExists(connectionSource, Basket.class);
             TableUtils.createTableIfNotExists(connectionSource, DatePlan.class);
             TableUtils.createTableIfNotExists(connectionSource, PlanInUse.class);
 
@@ -88,7 +78,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
 //            TableUtils.dropTable(connectionSource, DayPlan.class, true);
 //            TableUtils.dropTable(connectionSource, SeriesPlan.class, true);
 //            TableUtils.dropTable(connectionSource, MyPlan.class, true);
-//            TableUtils.dropTable(connectionSource, BasketItem.class, true);
+            TableUtils.dropTable(connectionSource, Basket.class, true);
             TableUtils.dropTable(connectionSource, DatePlan.class, true);
             TableUtils.dropTable(connectionSource, PlanInUse.class, true);
         } catch (SQLException e) {
