@@ -178,7 +178,7 @@ public class ReportActivity extends Activity implements View.OnClickListener{
         int a = (int) Math.round(report.getCarbohydrateIntake() * 100 / sum);
         int b = (int) Math.round(report.getProteinIntake() * 100 / sum);
         int c = 100 - a - b;
-        piechartview.setValue(new float[]{a, b, c});
+        piechartview.setValue(new float[]{a, b, c}, true, false, true);
 
         dietStructureView = (DietStructureView) findViewById(R.id.dietStructureView);
         dietStructureView.setValue(report);

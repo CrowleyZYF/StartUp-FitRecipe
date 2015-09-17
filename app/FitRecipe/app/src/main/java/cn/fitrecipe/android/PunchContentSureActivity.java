@@ -31,7 +31,7 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
         chartView2 = (PieChartView) findViewById(R.id.piechartview);
         float[] pieData = {60.00f, 30.00f, 10.00f};
         //chartView1.setValue(pieData, false);
-        chartView2.setValue(pieData, true);
+        chartView2.setValue(pieData, true, false, true);
     }
 
     @Override

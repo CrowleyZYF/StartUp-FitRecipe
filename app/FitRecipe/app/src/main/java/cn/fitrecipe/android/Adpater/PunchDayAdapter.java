@@ -118,7 +118,7 @@ public class PunchDayAdapter extends RecyclerView.Adapter<PunchDayAdapter.PunchD
                     Float.parseFloat(punchItems.get(position).getPunch_item_protein_ratio()),
                     Float.parseFloat(punchItems.get(position).getPunch_item_lipids_ratio())
             };
-            holder.punch_piechart.setValue(pieData, false);
+            holder.punch_piechart.setValue(pieData, false, false, false);
             return convertView;
         }
 

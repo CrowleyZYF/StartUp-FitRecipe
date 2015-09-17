@@ -10,14 +10,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.UI.PieChartView;
-import cn.fitrecipe.android.dao.FrDbHelper;
-import cn.fitrecipe.android.entity.Author;
 import cn.fitrecipe.android.entity.DayPlan;
 import cn.fitrecipe.android.entity.Nutrition;
 import cn.fitrecipe.android.entity.PlanItem;
@@ -101,7 +98,7 @@ public class NutritionActivity extends Activity implements View.OnClickListener 
                 int a = (int) Math.round(item.getCarbohydrate() * 100 / sum);
                 int b = (int) Math.round(item.getProtein() * 100 / sum);
                 int c = 100 - a - b;
-                take_already_piechart.setValue(new float[]{a, b, c});
+                take_already_piechart.setValue(new float[]{a, b, c}, true, false, false);
                 nutrition_punch.setVisibility(View.GONE);
                 user_need_calorie.setText(Math.round(report.getCaloriesIntake()) + "kcal");
                 nutritionAdapter = new NutritionAdapter(this, item.gettNutrition());
@@ -127,7 +124,7 @@ public class NutritionActivity extends Activity implements View.OnClickListener 
                 a = (int) Math.round(itema.getCarbohydrate() * 100 / sum);
                 b = (int) Math.round(itema.getProtein() * 100 / sum);
                 c = 100 - a - b;
-                take_already_piechart.setValue(new float[]{a, b, c});
+                take_already_piechart.setValue(new float[]{a, b, c}, true, false, false);
                 nutritionAdapter = new NutritionAdapter(this, itema.gettNutrition());
         }
         recipe_nutrition_list.setAdapter(nutritionAdapter);
