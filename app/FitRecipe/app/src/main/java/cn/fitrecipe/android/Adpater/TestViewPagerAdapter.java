@@ -12,18 +12,27 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.rey.material.widget.RadioButton;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import cn.fitrecipe.android.Http.FrRequest;
+import cn.fitrecipe.android.Http.FrServerConfig;
+import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.PlanTestActivity;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.ReportActivity;
 import cn.fitrecipe.android.UI.TestViewPager;
 import cn.fitrecipe.android.entity.Report;
+import cn.fitrecipe.android.entity.Series;
 import cn.fitrecipe.android.function.Evaluation;
 
 /**
@@ -401,6 +410,38 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
         for(int i=0;i<this.output.length;i++){
             output += this.output[i][1] + ": " + report.get(this.output[i][0]) + "\n";
         }*/
+        JSONObject params = new JSONObject();
+        try {
+            params.put("gender", userEvaluation.getGender());
+            params.put("age", userEvaluation.getAge());
+            params.put("height", userEvaluation.getHeight());
+            params.put("weight", userEvaluation.getWeight());
+            params.put("roughFat", userEvaluation.getRoughFat());
+            params.put("goalType", userEvaluation.getGoalType());
+            params.put("weightGoal", userEvaluation.getWeightGoal());
+            params.put("daysToGoal", userEvaluation.getDaysToGoal());
+            params.put("preciseFat", userEvaluation.getPreciseFat());
+            params.put("jobType", userEvaluation.getJobType());
+            params.put("exerciseFrequency", userEvaluation.getExerciseFrequency());
+            params.put("exerciseInterval", userEvaluation.getExerciseInterval());
+            System.out.println(params.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        System.out.println(params);
+        PostRequest request = new PostRequest(FrServerConfig.getReportUrl(), null, params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject res) {
+                Toast.makeText(context, res.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Toast.makeText(context, context.getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+//        FrRequest.getInstance().request(request);
         Report report = userEvaluation.report();
         Intent intent=new Intent(context,ReportActivity.class);
         intent.putExtra("report", report);
@@ -524,8 +565,8 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
                     return num;
                 }
             }else{
-                if (!append.equals(".")){
-                    if(num.equals("0")){
+                if (!append.equals(".")) {
+                    if(num.equals("0")) {
                         return append+"";
                     }else{
                         if(num.length()>=3){

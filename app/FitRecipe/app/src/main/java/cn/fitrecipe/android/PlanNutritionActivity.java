@@ -13,7 +13,6 @@ public class PlanNutritionActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_other_plan_nutrition);
-
         plan = (SeriesPlan) getIntent().getSerializableExtra("plan");
     }
 }

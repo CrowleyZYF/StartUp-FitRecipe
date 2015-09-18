@@ -10,17 +10,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.UI.PieChartView;
-import cn.fitrecipe.android.dao.FrDbHelper;
-import cn.fitrecipe.android.entity.Author;
-import cn.fitrecipe.android.entity.DayPlan;
+import cn.fitrecipe.android.entity.DatePlan;
+import cn.fitrecipe.android.entity.DatePlanItem;
 import cn.fitrecipe.android.entity.Nutrition;
-import cn.fitrecipe.android.entity.PlanItem;
 import cn.fitrecipe.android.entity.Report;
 
 /**
@@ -46,16 +43,21 @@ public class NutritionActivity extends Activity implements View.OnClickListener 
 
 
 
-    private DayPlan dayPlan;
-    private PlanItem.ItemType type;
+    private DatePlan datePlan;
+    private List<DatePlanItem> items;
+    private String type;
+    Report report;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan_nutrition);
 
-        dayPlan = (DayPlan) getIntent().getSerializableExtra("dayplan");
-        type = (PlanItem.ItemType) getIntent().getSerializableExtra("itemtype");
+        datePlan = (DatePlan) getIntent().getSerializableExtra("dateplan");
+        items = datePlan.getItems();
+        type = (String) getIntent().getSerializableExtra("itemtype");
+        report = FrApplication.getInstance().getReport();
         initView();
         initData();
         initEvent();
@@ -84,33 +86,22 @@ public class NutritionActivity extends Activity implements View.OnClickListener 
     }
 
     private void initData() {
-        Report report = FrApplication.getInstance().getReport();
-        ingredient_title.setText(type.value() + "营养表");
         switch (type) {
-            case BREAKFAST:
-            case ADDMEAL_01:
-            case ADDMEAL_02:
-            case LUNCH:
-            case SUPPER:
-                int index = type.index();
-                PlanItem item = dayPlan.getPlanItems().get(index);
-                meal_pic.setImageResource(iconIds[type.index()]);
-                recipe_all_calorie.setText(Math.round(item.gettCalories()) + "kcal");
-                calorie_radio.setText(Math.round(item.gettCalories() * 100 / report.getCaloriesIntake()) + "%");
-                double sum = item.getProtein() + item.getFat() + item.getCarbohydrate();
-                int a = (int) Math.round(item.getCarbohydrate() * 100 / sum);
-                int b = (int) Math.round(item.getProtein() * 100 / sum);
-                int c = 100 - a - b;
-                take_already_piechart.setValue(new float[]{a, b, c});
-                nutrition_punch.setVisibility(View.GONE);
-                user_need_calorie.setText(Math.round(report.getCaloriesIntake()) + "kcal");
-                nutritionAdapter = new NutritionAdapter(this, item.gettNutrition());
-                break;
-            case ALL:
-                PlanItem itema = PlanItem.getAllItem(dayPlan.getPlanItems());
+            case "breakfast":
+                ingredient_title.setText("早餐营养表");  display(0); break;
+            case "add_meal_01":
+                ingredient_title.setText("加餐营养表");  display(1);  break;
+            case "add_meal_02":
+                ingredient_title.setText("午餐营养表");  display(2); break;
+            case "lunch":
+                ingredient_title.setText("加餐营养表");  display(3); break;
+            case "supper":
+                ingredient_title.setText("晚餐营养表");  display(4); break;
+            case "all":
+                DatePlanItem itema = DatePlanItem.getAllItem(items);
                 nutrition_punch.setVisibility(View.VISIBLE);
                 for(int i = 0; i < punchImageViews.length; i++) {
-                    if(dayPlan.getPlanItems().get(i).isPunched()) {
+                    if(items.get(i).isPunch()) {
                         punchImageViews[i].setImageResource(finishIconIds[i]);
                     }else {
                         punchImageViews[i].setImageResource(iconIds[i]);
@@ -118,19 +109,34 @@ public class NutritionActivity extends Activity implements View.OnClickListener 
                 }
                 meal_pic.setImageResource(R.drawable.icon_dinner_temp);
                 long total = 0;
-                for (int i = 0; i < dayPlan.getPlanItems().size(); i++)
-                    total += Math.round(dayPlan.getPlanItems().get(i).gettCalories());
+                for (int i = 0; i < items.size(); i++)
+                    total += Math.round(items.get(i).getCalories_take());
                 recipe_all_calorie.setText(total + "kcal");
                 user_need_calorie.setText(report.getCaloriesIntake() + "kcal");
                 calorie_radio.setText(Math.round(total * 100 / report.getCaloriesIntake()) + "%");
-                sum = itema.getProtein() + itema.getFat() + itema.getCarbohydrate();
-                a = (int) Math.round(itema.getCarbohydrate() * 100 / sum);
-                b = (int) Math.round(itema.getProtein() * 100 / sum);
-                c = 100 - a - b;
+                double sum = itema.getProtein_take() + itema.getFat_take() + itema.getCarbohydrate_take();
+                int a = (int) Math.round(itema.getCarbohydrate_take() * 100 / sum);
+                int b = (int) Math.round(itema.getProtein_take() * 100 / sum);
+                int c = 100 - a - b;
                 take_already_piechart.setValue(new float[]{a, b, c});
-                nutritionAdapter = new NutritionAdapter(this, itema.gettNutrition());
+                nutritionAdapter = new NutritionAdapter(this, itema.getNutritions());
         }
         recipe_nutrition_list.setAdapter(nutritionAdapter);
+    }
+
+    private void display(int i) {
+        DatePlanItem item = items.get(i);
+        meal_pic.setImageResource(iconIds[i]);
+        recipe_all_calorie.setText(Math.round(item.getCalories_take()) + "kcal");
+        calorie_radio.setText(Math.round(item.getCalories_take() * 100 / report.getCaloriesIntake()) + "%");
+        double sum = item.getProtein_take() + item.getFat_take() + item.getCarbohydrate_take();
+        int a = (int) Math.round(item.getCarbohydrate_take() * 100 / sum);
+        int b = (int) Math.round(item.getProtein_take() * 100 / sum);
+        int c = 100 - a - b;
+        take_already_piechart.setValue(new float[]{a, b, c});
+        nutrition_punch.setVisibility(View.GONE);
+        user_need_calorie.setText(Math.round(report.getCaloriesIntake()) + "kcal");
+        nutritionAdapter = new NutritionAdapter(this, item.getNutritions());
     }
 
     private void initEvent() {

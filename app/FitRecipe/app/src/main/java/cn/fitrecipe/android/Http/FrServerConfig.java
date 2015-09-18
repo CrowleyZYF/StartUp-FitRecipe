@@ -137,4 +137,8 @@ public class FrServerConfig {
     public static String getDeleteCollectionUrl(String type, int id) {
         return HOST + "/api/collection/delete/" + type + "/" + id + "/";
     }
+
+    public static String getReportUrl() {
+        return HOST + "/api/accounts/upload_evaluation/";
+    }
 }

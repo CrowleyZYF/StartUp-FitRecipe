@@ -212,15 +212,15 @@ public class MainActivity extends FragmentActivity implements OnClickListener
 
     private void hideFragment(FragmentTransaction transaction)
     {
-        if (frIndexFragment != null){
+        if (frIndexFragment != null) {
             transaction.hide(frIndexFragment);
             frTabs.get(0).setBackgroundColor(getResources().getColor(R.color.base_color));
         }
-        if (frMeFragment != null){
+        if (frMeFragment != null) {
             transaction.hide(frMeFragment);
             frTabs.get(2).setBackgroundColor(getResources().getColor(R.color.base_color));
         }
-        if (frPlanFragment != null){
+        if (frPlanFragment != null) {
             transaction.hide(frPlanFragment);
             frTabs.get(1).setBackgroundColor(getResources().getColor(R.color.base_color));
         }/*
@@ -254,7 +254,6 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                         startActivity(new Intent(this, CategoryActivity.class));
                         break;
                     case 1:
-                        //TODO @wk
                         if(frPlanFragment != null) ((PlanFragment)frPlanFragment).toggle("all");
                         /*
                         TextView name = (TextView) findViewById(R.id.meal_name);

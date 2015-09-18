@@ -1,6 +1,7 @@
 package cn.fitrecipe.android.fragment;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -200,31 +201,51 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        PlanComponent obj = null;
-        if(resultCode == getActivity().RESULT_OK && data.hasExtra("component_selected")) {
-            obj = (PlanComponent) data.getSerializableExtra("component_selected");
-            switch (requestCode) {
-                case BREAKFAST_CODE:
+        switch (requestCode) {
+            case BREAKFAST_CODE:
+                if(resultCode == getActivity().RESULT_OK && data.hasExtra("component_selected")) {
+                    PlanComponent obj = (PlanComponent) data.getSerializableExtra("component_selected");
                     items.get(0).addContent(obj);
-                    break;
-                case ADDMEAL_01_CODE:
+                    adapter.notifyDataSetChanged();
+                }
+                break;
+            case ADDMEAL_01_CODE:
+                if(resultCode == getActivity().RESULT_OK && data.hasExtra("component_selected")) {
+                    PlanComponent obj = (PlanComponent) data.getSerializableExtra("component_selected");
                     items.get(1).addContent(obj);
-                    break;
-                case LUNCH_CODE:
-                    items.get(2).addContent(obj);
-                    break;
-                case ADDMEAL_02_CODE:
-                    items.get(3).addContent(obj);
-                    break;
-                case SUPPER_CODE:
-                    items.get(4).addContent(obj);
-                    break;
-                case ADDMEAL_03_CODE:
-                    items.get(5).addContent(obj);
-                    break;
-            }
-            adapter.notifyDataSetChanged();
+                    adapter.notifyDataSetChanged();
+                }
+                break;
+            case LUNCH_CODE:
+                if(resultCode == getActivity().RESULT_OK && data.hasExtra("component_selected")) {
+                    PlanComponent obj = (PlanComponent) data.getSerializableExtra("component_selected");
+                    items.get(0).addContent(obj);
+                    adapter.notifyDataSetChanged();
+                }
+                break;
+            case ADDMEAL_02_CODE:
+                if(resultCode == getActivity().RESULT_OK && data.hasExtra("component_selected")) {
+                    PlanComponent obj = (PlanComponent) data.getSerializableExtra("component_selected");
+                    items.get(0).addContent(obj);
+                    adapter.notifyDataSetChanged();
+                }
+                break;
+            case SUPPER_CODE:
+                if(resultCode == getActivity().RESULT_OK && data.hasExtra("component_selected")) {
+                    PlanComponent obj = (PlanComponent) data.getSerializableExtra("component_selected");
+                    items.get(0).addContent(obj);
+                    adapter.notifyDataSetChanged();
+                }
+                break;
+            case ADDMEAL_03_CODE:
+                if(resultCode == getActivity().RESULT_OK && data.hasExtra("component_selected")) {
+                    PlanComponent obj = (PlanComponent) data.getSerializableExtra("component_selected");
+                    items.get(0).addContent(obj);
+                    adapter.notifyDataSetChanged();
+                }
+                break;
         }
+
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -242,6 +263,8 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             }
        }
         if(f) {
+            if(datePlan != null)
+                datePlan.setItems(items);
             intent.putExtra("itemtype", type);
             intent.putExtra("dateplan", datePlan);
             startActivity(intent);
