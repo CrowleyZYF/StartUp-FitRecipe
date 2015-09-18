@@ -1,7 +1,6 @@
 package cn.fitrecipe.android;
 
 import android.app.Activity;
-import android.os.AsyncTask;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,10 +8,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
+
 import cn.fitrecipe.android.UI.DietStructureView;
 import cn.fitrecipe.android.UI.PieChartView;
-import cn.fitrecipe.android.dao.FrDbHelper;
-import cn.fitrecipe.android.entity.Author;
 import cn.fitrecipe.android.entity.Report;
 
 /**
@@ -24,9 +23,10 @@ public class ReportActivity extends Activity implements View.OnClickListener{
     private Report report;
     private ImageView report_sex;
     private TextView report_age, report_height, report_weight, report_fat;
-    private TextView report_bmi_number, report_bmi_judgement, report_bmr_number, report_burning_number_min, report_burning_number_max;
+    private TextView report_bmi_number, report_bmi_judgement, report_bmr_number, report_burning_number_min, report_burning_number_max, report_exercise_type;
     private TextView report_best_weight_number, report_best_weight_judgement, report_base_info_weight_range_min, report_base_info_weight_range_max;
     private TextView calories_intake, calories_intake_range, suggest_fit_calories, suggest_fit_calories_range, suggest_fit_frequency, suggest_fit_time;
+    private TextView report_target_weight, report_target_time,report_target_weight_weekly;
     private PieChartView piechartview;
     private DietStructureView dietStructureView;
 
@@ -83,6 +83,11 @@ public class ReportActivity extends Activity implements View.OnClickListener{
         report_height.setText("身高：" + report.getHeight() + " cm");
         report_weight = (TextView) findViewById(R.id.report_weight);
         report_weight.setText("体重：" + report.getWeight() + " kg");
+        report_exercise_type = (TextView) findViewById(R.id.report_exercise_type);
+        if(report.isGoalType())
+            report_exercise_type.setText("增肌");
+        else
+            report_exercise_type.setText("减脂");
         report_fat = (TextView) findViewById(R.id.report_fat);
         if(report.getRoughFat() == null)
             report_fat.setText("体脂：" + report.getPreciseFat()*100+"%");
@@ -133,6 +138,23 @@ public class ReportActivity extends Activity implements View.OnClickListener{
         report_base_info_weight_range_max = (TextView) findViewById(R.id.report_base_info_weight_range_max);
         report_base_info_weight_range_max.setText(Math.round(report.getBestWeightMax())+"");
 
+        report_target_weight = (TextView) findViewById(R.id.report_target_weight);
+        report_target_weight.setText("目标体重：" + report.getWeightGoal()+"kg");
+
+        report_target_time = (TextView) findViewById(R.id.report_target_time);
+        report_target_time.setText("计划时间：" + report.getDaysToGoal()+"天");
+
+        report_target_weight_weekly = (TextView) findViewById(R.id.report_target_weight_weekly);
+        DecimalFormat df2 = new DecimalFormat("0.00");//这样为保持2位
+        if(report.getWeight() < report.getWeightGoal()) {
+            report_target_weight_weekly.setText("每周目标：+" + df2.format((double) (7 * (report.getWeightGoal() - report.getWeight()) / report.getDaysToGoal())) + "kg");
+        }
+            else
+            report_target_weight_weekly.setText("每周目标：" + df2.format((double) (7 * (report.getWeightGoal() - report.getWeight()) / report.getDaysToGoal())) + "kg");
+
+
+
+
         calories_intake = (TextView) findViewById(R.id.calories_intake);
         calories_intake.setText(Math.round(report.getCaloriesIntake())+"kcal");
 
@@ -156,7 +178,7 @@ public class ReportActivity extends Activity implements View.OnClickListener{
         int a = (int) Math.round(report.getCarbohydrateIntake() * 100 / sum);
         int b = (int) Math.round(report.getProteinIntake() * 100 / sum);
         int c = 100 - a - b;
-        piechartview.setValue(new float[]{a, b, c});
+        piechartview.setValue(new float[]{a, b, c}, true, false, true);
 
         dietStructureView = (DietStructureView) findViewById(R.id.dietStructureView);
         dietStructureView.setValue(report);

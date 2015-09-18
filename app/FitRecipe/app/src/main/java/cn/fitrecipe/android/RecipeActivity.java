@@ -2,7 +2,6 @@ package cn.fitrecipe.android;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,8 +37,6 @@ import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.ImageLoader.ILoadingListener;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.UI.PieChartView;
-import cn.fitrecipe.android.dao.FrDbHelper;
-import cn.fitrecipe.android.entity.Author;
 import cn.fitrecipe.android.entity.Component;
 import cn.fitrecipe.android.entity.Recipe;
 import cn.fitrecipe.android.entity.Report;
@@ -407,7 +404,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         float[] dataRatio = {100-Math.round(Float.parseFloat(recipe.getProtein_ratio()+""))-Math.round(Float.parseFloat(recipe.getFat_ratio() + "")),
                 Math.round(Float.parseFloat(recipe.getProtein_ratio()+"")),
                 Math.round(Float.parseFloat(recipe.getFat_ratio() + ""))};
-        piechartview.setValue(dataRatio);
+        piechartview.setValue(dataRatio, true, false, false);
         protein_ratio.setText(Math.round(recipe.getProtein_ratio()) + "%");
         carbohydrate_ratio.setText(100-Math.round(Float.parseFloat(recipe.getProtein_ratio()+""))-Math.round(Float.parseFloat(recipe.getFat_ratio()+""))+"%");
         lipids_ratio.setText(Math.round(recipe.getFat_ratio())+"%");

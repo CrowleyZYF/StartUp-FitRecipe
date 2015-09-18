@@ -276,7 +276,7 @@ class Ingredient(BaseModel):
         import requests
         import json
         # 先保存，不然后面外键指不到吧
-        url = u'http://52.6.174.103/usda/ndb/reports/?ndbno=%s&type=f&format=json&api_key=%s' % (self.ndbno, settings.NDB_API_KEY)
+        url = u'http://%s/usda/ndb/reports/?ndbno=%s&type=f&format=json&api_key=%s' % (settings.NDB_IP, self.ndbno, settings.NDB_API_KEY)
         resp = requests.get(url)
         if resp.status_code == 200:
             content = json.loads(resp.content)['report']['food']

@@ -16,6 +16,8 @@ public class PieChartView extends ImageView{
 
     private float[] percents;
     private boolean isHasText = true;
+    private boolean isDinner = false;
+    private boolean isHuge = false;
 
     public PieChartView(Context context) {
         this(context, null);
@@ -42,24 +44,29 @@ public class PieChartView extends ImageView{
         drawPieChart(canvas, rx - square / 2.0f, ry - square / 2.0f, square / 2.0f);
     }
 
-    public void setValue(float[] value) {
+    public void setValue(float[] value, boolean isHasText, boolean isDinner, boolean isHuge) {
         this.percents = value;
-        this.invalidate();
-    }
-
-    public void setValue(float[] value, boolean isHasText) {
-        this.percents = value;
-        this.invalidate();
         this.isHasText = isHasText;
+        this.isDinner = isDinner;
+        this.isHuge = isHuge;
+        this.invalidate();
     }
 
     private void drawPieChart(Canvas canvas, float startX, float startY, float radius) {
 
         final float BIG_TEXT_SIZE = 60;
         final float SMALL_TEXT_SIZE = 30;
-
-        int[] colors = new int[]{0xffbadc2d, 0xff4abdcc, 0xff9f9f9f};
-        String[] kinds = new String[]{"碳水", "蛋白质", "脂类"};
+        final float HUGE_BIG_TEXT_SIZE = 120;
+        final float HUGE_SMALL_TEXT_SIZE = 60;
+        int[] colors;
+        String[] kinds;
+        if(isDinner){
+            colors = new int[]{0xffF6464A, 0xff46BEBC, 0xffFBB35C};
+            kinds = new String[]{"早餐", "午餐", "晚餐"};
+        }else{
+            colors = new int[]{0xffbadc2d, 0xff4abdcc, 0xff9f9f9f};
+            kinds = new String[]{"碳水", "蛋白质", "脂类"};
+        }
         Paint p = new Paint();
         p.setStyle(Paint.Style.FILL);
         RectF rectF = new RectF(startX, startY, startX + 2 * radius, startY + 2 * radius);
@@ -89,12 +96,18 @@ public class PieChartView extends ImageView{
         if (this.isHasText){
             TextPaint textPaint = new TextPaint();
             textPaint.setColor(Color.WHITE);
-            textPaint.setTextSize(SMALL_TEXT_SIZE);
+            if (isHuge)
+                textPaint.setTextSize(HUGE_SMALL_TEXT_SIZE);
+            else
+                textPaint.setTextSize(SMALL_TEXT_SIZE);
             float w = textPaint.measureText("%");
             float h = textPaint.descent() - textPaint.ascent();
 
             for(int i = 1; i < start.length; i++) {
-                textPaint.setTextSize(BIG_TEXT_SIZE);
+                if (isHuge)
+                    textPaint.setTextSize(HUGE_BIG_TEXT_SIZE);
+                else
+                    textPaint.setTextSize(BIG_TEXT_SIZE);
                 String data =  String.valueOf((int)percents[i - 1]);
                 float angle = (start[i] - start[i - 1]) / 2 + start[i-1];
                 float ww = textPaint.measureText(data);
@@ -106,7 +119,10 @@ public class PieChartView extends ImageView{
 
 
                 canvas.drawText(data, x, y, textPaint);
-                textPaint.setTextSize(SMALL_TEXT_SIZE);
+                if (isHuge)
+                    textPaint.setTextSize(HUGE_SMALL_TEXT_SIZE);
+                else
+                    textPaint.setTextSize(SMALL_TEXT_SIZE);
                 canvas.drawText("%", x + ww, y, textPaint);
             }
         }

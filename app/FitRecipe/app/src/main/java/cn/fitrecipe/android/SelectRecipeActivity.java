@@ -4,19 +4,15 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +24,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import cn.fitrecipe.android.Adpater.SearchRecipeAdapter;
 import cn.fitrecipe.android.Http.FrRequest;
@@ -36,10 +31,7 @@ import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.UI.PieChartView;
-import cn.fitrecipe.android.dao.FrDbHelper;
 import cn.fitrecipe.android.entity.Component;
-import cn.fitrecipe.android.entity.Ingredient;
-import cn.fitrecipe.android.entity.Nutrition;
 import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.Recipe;
 import pl.tajchert.sample.DotsTextView;
@@ -297,11 +289,11 @@ public class SelectRecipeActivity extends Activity implements View.OnClickListen
                 int b = (int) Math.round(recipe.getProtein_ratio());
                 int c = (int) Math.round(recipe.getFat_ratio());
                 int a = 100 - b - c;
-                piechartview.setValue(new float[]{a, b, c});
+                piechartview.setValue(new float[]{a, b, c}, true, false, true);
             }else {
                 Component component = (Component) obj_selected;
                 recipe_title.setText(component.getIngredient().getName());
-                piechartview.setValue(new float[]{33, 33, 34});
+                piechartview.setValue(new float[]{33, 33, 34}, true, false, true);
             }
         }
 

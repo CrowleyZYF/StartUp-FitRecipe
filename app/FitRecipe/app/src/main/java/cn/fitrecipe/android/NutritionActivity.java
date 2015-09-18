@@ -118,7 +118,7 @@ public class NutritionActivity extends Activity implements View.OnClickListener 
                 int a = (int) Math.round(itema.getCarbohydrate_take() * 100 / sum);
                 int b = (int) Math.round(itema.getProtein_take() * 100 / sum);
                 int c = 100 - a - b;
-                take_already_piechart.setValue(new float[]{a, b, c});
+                take_already_piechart.setValue(new float[]{a, b, c}, true, false, true);
                 nutritionAdapter = new NutritionAdapter(this, itema.getNutritions());
         }
         recipe_nutrition_list.setAdapter(nutritionAdapter);
@@ -133,7 +133,7 @@ public class NutritionActivity extends Activity implements View.OnClickListener 
         int a = (int) Math.round(item.getCarbohydrate_take() * 100 / sum);
         int b = (int) Math.round(item.getProtein_take() * 100 / sum);
         int c = 100 - a - b;
-        take_already_piechart.setValue(new float[]{a, b, c});
+        take_already_piechart.setValue(new float[]{a, b, c}, true, false, true);
         nutrition_punch.setVisibility(View.GONE);
         user_need_calorie.setText(Math.round(report.getCaloriesIntake()) + "kcal");
         nutritionAdapter = new NutritionAdapter(this, item.getNutritions());

@@ -49,6 +49,9 @@
     <string name="carbohydrate">碳水</string>
     <string name="protein">蛋白质</string>
     <string name="lipids">脂类</string>
+    <string name="breakfast_title">早餐（含上午加餐）</string>
+    <string name="lunch_title">午餐（含下午加餐）</string>
+    <string name="dinner_title">晚餐（含夜宵）</string>
 
     <!--指南-->
     <string name="info">贴士</string>
@@ -193,7 +196,8 @@
     <string name="report_sport_info">热量及运动建议</string>
     <string name="report_nutrition_info">营养建议</string>
     <string name="report_base_info_bmi">BMI(身体质量指数)</string>
-    <string name="report_base_info_bmr">BMR(基础代谢率)</string>
+    <string name="report_base_info_bmr">BMR(静息代谢率)</string>
+    <string name="report_base_info_intake">基础代谢率</string>
     <string name="report_base_info_burning">燃脂心率</string>
     <string name="report_base_info_best_weight">最佳体重</string>
     <string name="report_base_info_weight_range">健康体重范围</string>

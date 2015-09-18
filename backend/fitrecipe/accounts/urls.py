@@ -7,10 +7,11 @@
 
 from django.conf.urls import patterns, url
 
-from .views import LoginView, RegisterView, ThirdPartyLogin
+from .views import LoginView, RegisterView, ThirdPartyLogin, UploadEvaluationData
 
 urlpatterns = patterns('',
     url(r'login/$', LoginView.as_view()),
     url(r'register/$', RegisterView.as_view()),
     url(r'thirdparty/$', ThirdPartyLogin.as_view()),
+    url(r'upload_evaluation/$', UploadEvaluationData.as_view())
 )

@@ -102,6 +102,7 @@ IMAGE_UPLOAD_ROOT = 'static/images'
 
 # http://ndb.nal.usda.gov/ndb/doc/index#
 NDB_API_KEY = 'sign-up-your-own-key'
+NDB_IP = '52.6.174.103'
 
 CALORIES_CN_NAME = u'热量（卡路里）'
 

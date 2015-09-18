@@ -10,20 +10,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import cn.fitrecipe.android.Adpater.PlanDetailViewPagerAdapter;
 import cn.fitrecipe.android.Adpater.PlanInfoViewPagerAdapter;
 import cn.fitrecipe.android.UI.PlanDetailViewPager;
 import cn.fitrecipe.android.UI.PlanScrollView;
-import cn.fitrecipe.android.dao.FrDbHelper;
-import cn.fitrecipe.android.entity.PlanDetail;
-import cn.fitrecipe.android.entity.PlanDetailItem;
-import cn.fitrecipe.android.entity.PlanItem;
-import cn.fitrecipe.android.entity.Series;
 import cn.fitrecipe.android.entity.SeriesPlan;
 import me.relex.circleindicator.CircleIndicator;
 
@@ -41,6 +31,7 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
     private LinearLayout header;
     private TextView header_name, plan_day, plan_calories;
     private ImageView back_btn;
+    private ImageView author_btn;
     private ImageView nutrition_btn;
 
     private PlanDetailViewPager planDetailViewPager;
@@ -79,13 +70,14 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
         back_btn = (ImageView) findViewById(R.id.left_btn);
         back_btn.setBackgroundColor(getResources().getColor(R.color.transparent));
         back_btn.setImageResource(R.drawable.icon_back_white);
-        nutrition_btn = (ImageView) findViewById(R.id.right_btn);
-        nutrition_btn.setBackgroundColor(getResources().getColor(R.color.transparent));
-        nutrition_btn.setImageResource(R.drawable.icon_nutrition);
+        author_btn = (ImageView) findViewById(R.id.right_btn);
+        author_btn.setBackgroundColor(getResources().getColor(R.color.transparent));
+        author_btn.setImageResource(R.drawable.icon_user);
         planDetailViewPager = (PlanDetailViewPager) findViewById(R.id.plan_detail);
         prev_day_btn = (ImageView) findViewById(R.id.prev_day_btn);
         next_day_btn = (ImageView) findViewById(R.id.next_day_btn);
         plan_day.setText(1 + "/" + plan.getDays());
+        nutrition_btn = (ImageView) findViewById(R.id.nutrition_btn);
         plan_calories.setText(Math.round(plan.getDatePlans().get(0).getTotalCalories())+"");
     }
 
@@ -123,6 +115,7 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
             }
         });
         back_btn.setOnClickListener(this);
+        author_btn.setOnClickListener(this);
         nutrition_btn.setOnClickListener(this);
         prev_day_btn.setOnClickListener(this);
         next_day_btn.setOnClickListener(this);
@@ -135,7 +128,7 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
                 finish();
                 break;
             }
-            case R.id.right_btn:{
+            case R.id.nutrition_btn:{
                 Intent intent = new Intent(this, PlanNutritionActivity.class);
                 intent.putExtra("plan", plan);
                 startActivity(intent);

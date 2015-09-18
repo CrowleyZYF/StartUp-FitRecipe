@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 
 from base.models import BaseModel
 
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Create your models here.
 class Account(User):
@@ -62,3 +63,35 @@ class OtherAuthor(BaseModel):
 
     def __unicode__(self):
         return u'Other_%s' % self.nick_name
+
+class Evaluation(BaseModel):
+    '''
+    用户评测报告
+    '''
+
+    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    #0 for male and 1 for female
+    gender = models.IntegerField(verbose_name=u'性别', validators=[MinValueValidator(0), MaxValueValidator(1)])
+    age = models.IntegerField(verbose_name=u'年龄', validators=MinValueValidator(5))
+    #身高单位为cm
+    height = models.PositiveIntegerField(verbose_name=u'身高')
+    weight = models.FloatField(verbose_name=u'体重', validators=MinValueValidator(0.0))
+    #int, 0~4
+    roughFat = models.IntegerField(verbose_name=u'粗略体脂', validators=[MinValueValidator(0), MaxValueValidator(4)])
+    preciseFat = models.FloatField(verbose_name=u'精确体脂', validators=MinValueValidator(0.0))
+    #int, 0~3
+    jobType = models.IntegerField(verbose_name=u'工作强度', validators=[MinValueValidator(0), MaxValueValidator(3)])
+    #int, 0增肌， 1减脂
+    goalType = models.IntegerField(verbose_name=u'目标', validators=[MinValueValidator(0), MaxValueValidator(1)])
+    exerciseFrequency = models.IntegerField(verbose_name=u'每周运动次数')
+    exerciseInterval = models.IntegerField(verbose_name=u'运动时长', validators=[MinValueValidator(0), MaxValueValidator(3)])
+    weightGoal = models.FloatField(verbose_name=u'目标体重', validators=MinValueValidator(0.0))
+    daysToGoal = models.PositiveIntegerField(verbose_name=u'时间')
+
+    class Meta:
+        verbose_name = u'评测报告'
+        verbose_name_plural = u'%s表' % verbose_name
+
+    def __unicode__(self):
+        return u'%s\'s evalutaion' % self.user.phone or self.user.nick_name
+

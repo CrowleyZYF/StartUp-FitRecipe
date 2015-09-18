@@ -11,7 +11,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
 from django.db import IntegrityError
 
-from .models import Account, External
+from .models import Account, External, Evaluation
 from .serializers import AccountSerializer
 from base.views import BaseView
 from fitrecipe.utils import random_str
@@ -100,3 +100,34 @@ class ThirdPartyLogin(BaseView):
         result = AccountSerializer(u).data
         result['token'] = token.key
         return self.success_response(result)
+
+class UploadEvaluationData(BaseView):
+    def post(self, request, format=None):
+        '''
+        上传评测数据
+        '''
+        evaluation = Evaluation()
+        data = json.loads(request.body)
+        evaluation.gender = int(data.get('gender'))
+        evaluation.age = int(data.get('age'))
+        evaluation.height = int(data.get('height'))
+        evaluation.weight = float(data.get('weight'))
+        evaluation.roughFat = int(data.get('roughtFat'))
+        evaluation.goalType = int(data.get('goalType'))
+        evaluation.weightGoal = float(data.get('weightGoal'))
+        evaluation.daysToGoal = int(data.get('daysToGoal'))
+        evaluation.preciseFat = float(data.get('preciseFat'))
+        evaluation.jobType = int(data.get('jobType'))
+        evaluation.exerciseFrequency = int(data.get('exerciseFrequency'))
+        evaluation.exerciseInterval = int(data.get('exerciseInterval'))
+        try:
+            e = Evaluation.objects.get(user=request.user)
+            #update evaluation
+            evaluation.pk = e.pk
+            evaluation.save()
+        except Evaluation.DoesNotExist:
+            evaluation.save()
+        except Evaluation.MultipleObjectsReturned:
+            return self.fail_response(401, 'muiltiple evaluations exist')
+        return self.success_response('added')
+
