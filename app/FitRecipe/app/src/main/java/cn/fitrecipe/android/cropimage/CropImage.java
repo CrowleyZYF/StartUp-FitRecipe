@@ -77,7 +77,7 @@ public class CropImage extends MonitoredActivity {
     // These are various options can be specified in the intent.
     private       Bitmap.CompressFormat mOutputFormat    = Bitmap.CompressFormat.JPEG;
     private       Uri                   mSaveUri         = null;
-    private       boolean               mDoFaceDetection = true;
+    private       boolean               mDoFaceDetection = false;
     private       boolean               mCircleCrop      = false;
     private final Handler               mHandler         = new Handler();
 
@@ -151,7 +151,7 @@ public class CropImage extends MonitoredActivity {
             }
             mOutputX = extras.getInt(OUTPUT_X);
             mOutputY = extras.getInt(OUTPUT_Y);
-            mScale = extras.getBoolean(SCALE, false);
+            mScale = extras.getBoolean(SCALE, true);
             mScaleUp = extras.getBoolean(SCALE_UP_IF_NEEDED, true);
         }
 
@@ -164,7 +164,7 @@ public class CropImage extends MonitoredActivity {
         }
 
         // Make UI fullscreen.
-//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         findViewById(R.id.discard).setOnClickListener(
                 new View.OnClickListener() {
@@ -473,9 +473,7 @@ public class CropImage extends MonitoredActivity {
             Rect imageRect = new Rect(0, 0, width, height);
 
             RectF faceRect = new RectF(midX, midY, midX, midY);
-//            RectF faceRect = new RectF(width, height, width, height);
-            faceRect.inset(-midX, -midX);
-
+            faceRect.inset(-r, -r);
             if (faceRect.left < 0) {
                 faceRect.inset(-faceRect.left, -faceRect.left);
             }
@@ -511,7 +509,8 @@ public class CropImage extends MonitoredActivity {
             Rect imageRect = new Rect(0, 0, width, height);
 
             // make the default size about 4/5 of the width or height
-            int cropWidth = Math.min(width, height) * 4 / 5;
+//            int cropWidth = Math.min(width, height) * 4 / 5;
+            int cropWidth = Math.min(width, height) ;
             int cropHeight = cropWidth;
 
             if (mAspectX != 0 && mAspectY != 0) {
@@ -573,7 +572,7 @@ public class CropImage extends MonitoredActivity {
 
             mHandler.post(new Runnable() {
                 public void run() {
-
+                    mNumFaces = 0;
                     mWaitingToPick = mNumFaces > 1;
                     if (mNumFaces > 0) {
                         for (int i = 0; i < mNumFaces; i++) {

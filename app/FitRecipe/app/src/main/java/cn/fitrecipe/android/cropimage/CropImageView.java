@@ -22,15 +22,15 @@ class CropImageView extends ImageViewTouchBase {
                             int right, int bottom) {
 
         super.onLayout(changed, left, top, right, bottom);
-//        if (mBitmapDisplayed.getBitmap() != null) {
-//            for (HighlightView hv : mHighlightViews) {
-//                hv.mMatrix.set(getImageMatrix());
-//                hv.invalidate();
-//                if (hv.mIsFocused) {
-//                    centerBasedOnHighlightView(hv);
-//                }
-//            }
-//        }
+        if (mBitmapDisplayed.getBitmap() != null) {
+            for (HighlightView hv : mHighlightViews) {
+                hv.mMatrix.set(getImageMatrix());
+                hv.invalidate();
+                if (hv.mIsFocused) {
+                    centerBasedOnHighlightView(hv);
+                }
+            }
+        }
     }
 
     public CropImageView(Context context, AttributeSet attrs) {
@@ -42,31 +42,31 @@ class CropImageView extends ImageViewTouchBase {
     @Override
     protected void zoomTo(float scale, float centerX, float centerY) {
 
-//        super.zoomTo(scale, centerX, centerY);
-//        for (HighlightView hv : mHighlightViews) {
-//            hv.mMatrix.set(getImageMatrix());
-//            hv.invalidate();
-//        }
+        super.zoomTo(scale, centerX, centerY);
+        for (HighlightView hv : mHighlightViews) {
+            hv.mMatrix.set(getImageMatrix());
+            hv.invalidate();
+        }
     }
 
     @Override
     protected void zoomIn() {
 
-//        super.zoomIn();
-//        for (HighlightView hv : mHighlightViews) {
-//            hv.mMatrix.set(getImageMatrix());
-//            hv.invalidate();
-//        }
+        super.zoomIn();
+        for (HighlightView hv : mHighlightViews) {
+            hv.mMatrix.set(getImageMatrix());
+            hv.invalidate();
+        }
     }
 
     @Override
     protected void zoomOut() {
 
-//        super.zoomOut();
-//        for (HighlightView hv : mHighlightViews) {
-//            hv.mMatrix.set(getImageMatrix());
-//            hv.invalidate();
-//        }
+        super.zoomOut();
+        for (HighlightView hv : mHighlightViews) {
+            hv.mMatrix.set(getImageMatrix());
+            hv.invalidate();
+        }
     }
 
     @Override

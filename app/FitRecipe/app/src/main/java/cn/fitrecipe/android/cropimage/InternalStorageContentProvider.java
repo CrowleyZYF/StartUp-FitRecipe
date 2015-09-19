@@ -10,7 +10,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 
-import cn.fitrecipe.android.PunchContentSureActivity;
 import cn.fitrecipe.android.PunchPhotoChoiceActivity;
 
 /*

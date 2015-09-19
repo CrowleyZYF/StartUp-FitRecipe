@@ -21,8 +21,6 @@ import android.graphics.*;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
-import cn.fitrecipe.android.R;
-
 // This class is used by CropImage to display a highlighted cropping rectangle
 // overlayed with the image. There are two coordinate spaces in use. One is
 // image, another is screen. computeLayout() uses mMatrix to map from image
@@ -49,11 +47,11 @@ class HighlightView {
 
         android.content.res.Resources resources = mContext.getResources();
         mResizeDrawableWidth =
-                resources.getDrawable(R.drawable.camera_crop_width);
+                resources.getDrawable(android.R.color.transparent);
         mResizeDrawableHeight =
-                resources.getDrawable(R.drawable.camera_crop_height);
+                resources.getDrawable(android.R.color.transparent);
         mResizeDrawableDiagonal =
-                resources.getDrawable(R.drawable.indicator_autocrop);
+                resources.getDrawable(android.R.color.transparent);
     }
 
     boolean mIsFocused;
@@ -71,7 +69,8 @@ class HighlightView {
 
     public void setHidden(boolean hidden) {
 
-        mHidden = hidden;
+//        mHidden = hidden;
+        mHidden = true;
     }
 
     protected void draw(Canvas canvas) {
@@ -97,7 +96,7 @@ class HighlightView {
                         mDrawRect.top + (height / 2),
                         width / 2,
                         Path.Direction.CW);
-				mOutlinePaint.setColor(0xFF49BDCC);
+				mOutlinePaint.setColor(0xFFEF04D6);
                 
 		canvas.clipPath(path, Region.Op.DIFFERENCE);
             	canvas.drawRect(viewDrawingRect,
@@ -127,7 +126,7 @@ class HighlightView {
 
                 path.addRect(new RectF(mDrawRect), Path.Direction.CW);
             
-		mOutlinePaint.setColor(0xFF49BDCC);
+		mOutlinePaint.setColor(0xFFFF8A00);    
 
             }
             
@@ -285,19 +284,19 @@ class HighlightView {
             moveBy(dx * (mCropRect.width() / r.width()),
                     dy * (mCropRect.height() / r.height()));
         } else {
-            if (((GROW_LEFT_EDGE | GROW_RIGHT_EDGE) & edge) == 0) {
-                dx = 0;
-            }
-
-            if (((GROW_TOP_EDGE | GROW_BOTTOM_EDGE) & edge) == 0) {
-                dy = 0;
-            }
+//            if (((GROW_LEFT_EDGE | GROW_RIGHT_EDGE) & edge) == 0) {
+//                dx = 0;
+//            }
+//
+//            if (((GROW_TOP_EDGE | GROW_BOTTOM_EDGE) & edge) == 0) {
+//                dy = 0;
+//            }
 
             // Convert to image space before sending to growBy().
-            float xDelta = dx * (mCropRect.width() / r.width());
-            float yDelta = dy * (mCropRect.height() / r.height());
-            growBy((((edge & GROW_LEFT_EDGE) != 0) ? -1 : 1) * xDelta,
-                    (((edge & GROW_TOP_EDGE) != 0) ? -1 : 1) * yDelta);
+//            float xDelta = dx * (mCropRect.width() / r.width());
+//            float yDelta = dy * (mCropRect.height() / r.height());
+//            growBy((((edge & GROW_LEFT_EDGE) != 0) ? -1 : 1) * xDelta,
+//                    (((edge & GROW_TOP_EDGE) != 0) ? -1 : 1) * yDelta);
         }
     }
 

@@ -268,7 +268,8 @@ public class PlanElementAdapter extends BaseAdapter{
         TextView plan_carbohydrate_intake, plan_carbohydrate_need, plan_carbohydrate_rate;
         TextView plan_protein_intake, plan_protein_need, plan_protein_rate;
         TextView plan_fat_intake, plan_fat_need, plan_fat_rate;
-        RelativeLayout add_recipe, plan_image_cover;
+        RelativeLayout add_recipe;
+        ImageView plan_image_cover;
         LinearLayoutForListView plan_content;
         LinearLayout first_margin_01, first_margin_02;
 
@@ -291,7 +292,7 @@ public class PlanElementAdapter extends BaseAdapter{
             plan_fat_rate = (TextView) v.findViewById(R.id.plan_fat_rate);
             add_recipe = (RelativeLayout) v.findViewById(R.id.add_recipe);
             plan_content = (LinearLayoutForListView) v.findViewById(R.id.plan_content);
-            plan_image_cover = (RelativeLayout) v.findViewById(R.id.plan_image_cover);
+            plan_image_cover = (ImageView) v.findViewById(R.id.plan_image_cover);
             first_margin_01 = (LinearLayout) v.findViewById(R.id.first_margin_01);
             first_margin_02 = (LinearLayout) v.findViewById(R.id.first_margin_02);
             plan_time = (TextView) v.findViewById(R.id.plan_time);
