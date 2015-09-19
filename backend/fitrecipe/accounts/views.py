@@ -112,7 +112,7 @@ class UploadEvaluationData(BaseView):
         evaluation.age = int(data.get('age'))
         evaluation.height = int(data.get('height'))
         evaluation.weight = float(data.get('weight'))
-        evaluation.roughFat = int(data.get('roughtFat'))
+        evaluation.roughFat = int(data.get('roughFat'))
         evaluation.goalType = int(data.get('goalType'))
         evaluation.weightGoal = float(data.get('weightGoal'))
         evaluation.daysToGoal = int(data.get('daysToGoal'))
