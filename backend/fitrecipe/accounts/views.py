@@ -13,7 +13,7 @@ from django.db import IntegrityError
 
 from .models import Account, External, Evaluation
 from .serializers import AccountSerializer
-from base.views import BaseView
+from base.views import BaseView, AuthView
 from fitrecipe.utils import random_str
 
 
@@ -101,7 +101,7 @@ class ThirdPartyLogin(BaseView):
         result['token'] = token.key
         return self.success_response(result)
 
-class UploadEvaluationData(BaseView):
+class UploadEvaluationData(AuthView):
     def post(self, request, format=None):
         '''
         上传评测数据
@@ -121,6 +121,7 @@ class UploadEvaluationData(BaseView):
         evaluation.exerciseFrequency = int(data.get('exerciseFrequency'))
         evaluation.exerciseInterval = int(data.get('exerciseInterval'))
         try:
+            user = Account.find_account_by_user(request.user)
             e = Evaluation.objects.get(user=request.user)
             #update evaluation
             evaluation.pk = e.pk
