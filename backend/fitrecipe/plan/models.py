@@ -22,39 +22,47 @@ class PlanAuthor(BaseModel):
         return self.name
 
 
-class Routine(BaseModel):
-    '''
-    一个计划的一天
-    '''
-    day = models.IntegerField(help_text=u'Plan 中的第几天')
-    title = models.CharField(max_length=200, help_text=u'起一个你自己看得懂的名字，搜索筛选用')
-
-    def __unicode__(self):
-        return u'%s - 第 %d 天' % (self.title, self.day)
-
-
 class Plan(BaseModel):
     '''
     计划
     '''
-    title = models.CharField(max_length=100)
-    img = models.URLField(max_length=200)
-    inrtoduce = models.TextField()
+    title = models.CharField(max_length=100, default='personal plan')
+    img = models.URLField(max_length=200, null=True, blank=True)
+    inrtoduce = models.TextField(default='')
     difficulty = models.IntegerField(default=1)
     delicious = models.IntegerField(default=3)
-    benifit = models.IntegerField()  # 适宜人群:增肌、减脂
-    total_days = models.IntegerField()
-    dish_headcount = models.IntegerField()  # 选用人数
-    author = models.ForeignKey(PlanAuthor)
-    routine = models.ManyToManyField(Routine)
+    benifit = models.IntegerField(default=0)  # 适宜人群:0-无所谓 1-减脂、2-增肌
+    total_days = models.IntegerField(default=1)
+    dish_headcount = models.IntegerField(default=1)  # 选用人数
+    author = models.ForeignKey(PlanAuthor, null=True, blank=True)
+    user = models.ForeignKey(Account, null=True, blank=True)
+    is_personal = models.BooleanField(default=True)
+    authored_date = models.DateField(auto_now_add=True)
 
     def __unicode__(self):
         return self.title
 
+    def delete(self):
+        self.routine_set.all().delete()
+        super(Plan, self).delete()
 
-class PersonalPlan(BaseModel):
-    user = models.ForeignKey(Account)
-    routine = models.ManyToManyField(Routine)
+
+class Routine(BaseModel):
+    '''
+    一个计划的一天
+    '''
+    day = models.IntegerField(default=1, help_text=u'Plan 中的第几天')
+    plan = models.ForeignKey(Plan)
+
+    def __unicode__(self):
+        try:
+            return u'%s - %s' % (self.plan.title, self.day)
+        except Plan.DoesNotExist:
+            return u'nothing'
+
+    def delete(self):
+        self.dish_set.all().delete()
+        super(Routine, self).delete()
 
 
 class Dish(BaseModel):
@@ -66,10 +74,15 @@ class Dish(BaseModel):
 
     def get_chinese_type(self):
         trans = [u'早餐', u'上午加餐', u'午餐', u'下午加餐', u'晚餐']
-        return trans[self.type] or '未定义'
+        return trans[self.type] or u'未定义'
+
+    def delete(self):
+        self.singleingredient_set.all().delete()
+        self.singlerecipe_set.all().delete()
+        super(Dish, self).delete()
 
     def __unicode__(self):
-        return u'%s 的 %s' % (self.routine.title, self.get_chinese_type())
+        return u'%s 的 %s' % (str(self.routine), self.get_chinese_type())
 
 
 class SingleIngredient(BaseModel):
@@ -96,3 +109,13 @@ class SingleRecipe(BaseModel):
         return '%dg %s' % (self.amount, self.recipe.title)
 
 
+class Calendar(BaseModel):
+    '''
+    参加 plan
+    '''
+    user = models.ForeignKey(Account)
+    plan = models.ForeignKey(Plan)
+    joined_date = models.DateField(auto_now_add=True)
+
+    class Meta:
+        unique_together = (('user', 'joined_date'),)

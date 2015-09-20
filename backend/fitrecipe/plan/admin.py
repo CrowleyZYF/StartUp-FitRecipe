@@ -1,30 +1,31 @@
 from django.contrib import admin
+import nested_admin
 
 # Register your models here.
-from .models import PlanAuthor, PersonalPlan, Plan, Dish, Routine, SingleIngredient, SingleRecipe
+from .models import PlanAuthor, Plan, Dish, Routine, SingleIngredient, SingleRecipe
 
 
-class SingleIngredientInline(admin.TabularInline):
+class SingleIngredientInline(nested_admin.NestedStackedInline):
     model = SingleIngredient
 
 
-class SingleRecipeInline(admin.TabularInline):
+class SingleRecipeInline(nested_admin.NestedStackedInline):
     model = SingleRecipe
 
 
-class DishAdmin(admin.ModelAdmin):
+class DishInline(nested_admin.NestedStackedInline):
+    model = Dish
     inlines = (SingleIngredientInline, SingleRecipeInline)
 
 
-class RoutineAdmin(admin.ModelAdmin):
-    readonly_fields = ('dish', )
+class RoutineAdmin(nested_admin.NestedAdmin):
+    model = Routine
+    inlines = (DishInline, )
 
 
 class PlanAdmin(admin.ModelAdmin):
-    filter_horizontal = ('routine',)
-
+    pass
 
 admin.site.register(PlanAuthor)
 admin.site.register(Plan, PlanAdmin)
-admin.site.register(Dish, DishAdmin)
 admin.site.register(Routine, RoutineAdmin)
