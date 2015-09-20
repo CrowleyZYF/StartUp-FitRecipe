@@ -4,4 +4,4 @@ PyMySQL
 django-ajax-selects
 Pillow
 requests
-django-nested-inlines
+django-nested-admin

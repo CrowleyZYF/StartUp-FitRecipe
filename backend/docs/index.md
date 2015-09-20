@@ -1031,6 +1031,9 @@
         }
 
 ## Plan Detail [/api/plan/{id}/]
++ Parameters
+    + id: 1 - plan id
+
 ### Get Plan Detail [GET]
 获取计划详情，不区分官方和自定义
 
@@ -1121,6 +1124,10 @@
         }
 
 ## Calendar [/api/plan/calendar?start={start}&end={end}]
++ Parameters
+    + start: 20150101 - 开始时间
+    + end: 20150202 - 结束时间
+
 ### Get my Calendar [GET]
 获取我的日历，start, end不传默认是今天
 时间格式是 `20150401` 这样的
