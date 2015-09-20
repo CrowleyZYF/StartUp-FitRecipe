@@ -11,7 +11,95 @@ import cn.fitrecipe.android.entity.Report;
 
 
 public class Evaluation {
-	
+
+	public int getGender() {
+		return gender;
+	}
+
+	public void setGender(int gender) {
+		this.gender = gender;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
+	public double getWeight() {
+		return weight;
+	}
+
+	public void setWeight(double weight) {
+		this.weight = weight;
+	}
+
+	public int getRoughFat() {
+		return roughFat;
+	}
+
+	public void setRoughFat(int roughFat) {
+		this.roughFat = roughFat;
+	}
+
+	public boolean isGoalType() {
+		return goalType;
+	}
+
+	public void setGoalType(boolean goalType) {
+		this.goalType = goalType;
+	}
+
+	public double getWeightGoal() {
+		return weightGoal;
+	}
+
+	public int getDaysToGoal() {
+		return daysToGoal;
+	}
+
+	public double getPreciseFat() {
+		return preciseFat;
+	}
+
+	public void setPreciseFat(double preciseFat) {
+		this.preciseFat = preciseFat;
+	}
+
+	public int getJobType() {
+		return jobType;
+	}
+
+	public void setJobType(int jobType) {
+		this.jobType = jobType;
+	}
+
+	public int getExerciseFrequency() {
+		return exerciseFrequency;
+	}
+
+	public void setExerciseFrequency(int exerciseFrequency) {
+		this.exerciseFrequency = exerciseFrequency;
+	}
+
+	public int getExerciseInterval() {
+		return exerciseInterval;
+	}
+
+	public void setExerciseInterval(int exerciseInterval) {
+		this.exerciseInterval = exerciseInterval;
+	}
+
 	/**
 	 * @param gender: int, use MALE and FEMALE
 	 * @param age: int, should elder than 18

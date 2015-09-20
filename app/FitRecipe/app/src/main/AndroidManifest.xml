@@ -192,6 +192,8 @@
             android:name=".PlanNutritionActivity"
             android:label="@string/title_activity_plan_nutrition" >
         </activity>
+
+        <activity android:name=".cropimage.CropImage"/>
     </application>
 
 </manifest>

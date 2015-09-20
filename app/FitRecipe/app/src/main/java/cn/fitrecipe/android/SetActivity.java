@@ -10,10 +10,11 @@ import android.widget.Button;
  * Created by 奕峰 on 2015/5/8.
  */
 public class SetActivity extends Activity implements View.OnClickListener {
+
     private Button button1;
     private Button button2;
     private Button button3;
-
+    private int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +22,7 @@ public class SetActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test);
 
+        position = getIntent().getIntExtra("position", -1);
         initView();
         initEvent();
     }
@@ -35,6 +37,11 @@ public class SetActivity extends Activity implements View.OnClickListener {
         button1 = (Button) findViewById(R.id.button1);
         button2 = (Button) findViewById(R.id.button2);
         button3 = (Button) findViewById(R.id.button3);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

@@ -27,4 +27,10 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="50dp"/>
 
+    <ImageView
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:src="@drawable/add_meal_01"
+        android:scaleType="centerCrop"/>
+
 </LinearLayout>

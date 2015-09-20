@@ -23,7 +23,9 @@ import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.fitrecipe.android.CameraActivity;
 import cn.fitrecipe.android.FrApplication;
+import cn.fitrecipe.android.PunchPhotoChoiceActivity;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.RecipeActivity;
 import cn.fitrecipe.android.SelectRecipeActivity;
@@ -78,7 +80,7 @@ public class PlanElementAdapter extends BaseAdapter{
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if(convertView == null) {
             convertView = View.inflate(fragment.getActivity(), R.layout.plan_list_item, null);
@@ -136,12 +138,14 @@ public class PlanElementAdapter extends BaseAdapter{
                     return;
                 }
                 if(!item.isPunch()) {
-                    ((ImageView)v).setImageResource(R.drawable.icon_plan_punch_active);
-                    item.setIsPunch(true);
+//                    ((ImageView)v).setImageResource(R.drawable.icon_plan_punch_active);
+//                    item.setIsPunch(true);
+                    Intent intent = new Intent(fragment.getActivity(), PunchPhotoChoiceActivity.class);
+                    fragment.startActivity(intent);
                     Toast.makeText(fragment.getActivity(), "打卡", Toast.LENGTH_SHORT).show();
                 }else {
                     item.setIsPunch(false);
-                    ((ImageView)v).setImageResource(R.drawable.icon_plan_punch);
+//                    ((ImageView)v).setImageResource(R.drawable.icon_plan_punch);
                     Toast.makeText(fragment.getActivity(), "取消打卡", Toast.LENGTH_SHORT).show();
                 }
                 adapter.notifyDataSetChanged();
@@ -264,7 +268,8 @@ public class PlanElementAdapter extends BaseAdapter{
         TextView plan_carbohydrate_intake, plan_carbohydrate_need, plan_carbohydrate_rate;
         TextView plan_protein_intake, plan_protein_need, plan_protein_rate;
         TextView plan_fat_intake, plan_fat_need, plan_fat_rate;
-        RelativeLayout add_recipe, plan_image_cover;
+        RelativeLayout add_recipe;
+        ImageView plan_image_cover;
         LinearLayoutForListView plan_content;
         LinearLayout first_margin_01, first_margin_02;
 
@@ -287,7 +292,7 @@ public class PlanElementAdapter extends BaseAdapter{
             plan_fat_rate = (TextView) v.findViewById(R.id.plan_fat_rate);
             add_recipe = (RelativeLayout) v.findViewById(R.id.add_recipe);
             plan_content = (LinearLayoutForListView) v.findViewById(R.id.plan_content);
-            plan_image_cover = (RelativeLayout) v.findViewById(R.id.plan_image_cover);
+            plan_image_cover = (ImageView) v.findViewById(R.id.plan_image_cover);
             first_margin_01 = (LinearLayout) v.findViewById(R.id.first_margin_01);
             first_margin_02 = (LinearLayout) v.findViewById(R.id.first_margin_02);
             plan_time = (TextView) v.findViewById(R.id.plan_time);

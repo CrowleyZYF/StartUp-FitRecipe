@@ -1,8 +1,11 @@
 package cn.fitrecipe.android;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 
 import cn.fitrecipe.android.UI.PieChartView;
 
@@ -12,12 +15,16 @@ import cn.fitrecipe.android.UI.PieChartView;
 public class PunchContentSureActivity extends Activity implements View.OnClickListener {
     private PieChartView chartView1;
     private PieChartView chartView2;
+    private Bitmap bitmap;
+    private ImageView punch_photo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_punch_sure);
+
+        bitmap = getIntent().getParcelableExtra("data");
 
         initView();
         initEvent();
@@ -31,6 +38,8 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
         chartView2 = (PieChartView) findViewById(R.id.piechartview);
         float[] pieData = {60.00f, 30.00f, 10.00f};
         //chartView1.setValue(pieData, false);
+        punch_photo = (ImageView) findViewById(R.id.punch_photo);
+        punch_photo.setImageBitmap(bitmap);
         chartView2.setValue(pieData, true, false, true);
     }
 

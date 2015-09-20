@@ -209,4 +209,19 @@ public class DatePlanItem {
     public void setPunchNums(int punchNums) {
         this.punchNums = punchNums;
     }
+
+    public static DatePlanItem getAllItem(List<DatePlanItem> items) {
+        DatePlanItem res = new DatePlanItem();
+        if(items != null) {
+            for (int i = 0; i < items.size(); i++) {
+                List<PlanComponent> componentList = items.get(i).getComponents();
+                if(componentList != null) {
+                    for(int j = 0; j < componentList.size(); j++) {
+                        res.addContent(componentList.get(j));
+                    }
+                }
+            }
+        }
+        return res;
+    }
 }

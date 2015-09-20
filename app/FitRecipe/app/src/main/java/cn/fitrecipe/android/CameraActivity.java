@@ -110,28 +110,6 @@ public class CameraActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode != RESULT_OK) return;
-        Uri uri;
-        switch (requestCode) {
-            case CAPTURE_CODE:
-                uri = Uri.fromFile(file);
-                if(uri != null)
-                    cropPic(uri);
-                break;
-            case CHOOSE_CODE:
-                if(data != null) {
-                    uri = data.getData();
-                    if(uri != null)
-                        cropPic(uri);
-                }
-                break;
-            case CROP_CODE:
-                Bitmap bitmap = data.getExtras().getParcelable("data");
-                if(bitmap != null)
-                    imageView.setImageBitmap(bitmap);
-                break;
-            default:
-        }
+
     }
 }

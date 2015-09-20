@@ -1,0 +1,71 @@
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_height="45dp"
+            android:background="@color/base_color"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:id="@+id/header">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                        <TextView
+                            android:id="@+id/header_name_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:text="@string/app_name"
+                            android:textColor="#ffffff"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+                </RelativeLayout>
+        </LinearLayout>
+
+        <view
+            class="cn.fitrecipe.android.cropimage.CropImageView"
+            android:id="@+id/image"
+            android:background="@color/background_color"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/header"
+            android:layout_x="0dip"
+            android:layout_y="0dip"
+            />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:paddingLeft="30dip"
+            android:paddingRight="30dip"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true">
+
+
+                <Button
+                android:layout_alignParentLeft="true"
+                android:id="@+id/discard"
+                android:layout_width="80dp"
+                android:layout_height="fill_parent"
+                style="@style/CropButton"
+                android:text="@string/cancel"
+                />
+
+                <Button
+                android:id="@+id/save"
+                android:layout_width="80dp"
+                android:layout_height="fill_parent"
+                android:layout_alignParentRight="true"
+                style="@style/CropButton"
+                android:text="@string/save"
+                />
+
+        </RelativeLayout>
+</RelativeLayout>
