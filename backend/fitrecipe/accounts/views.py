@@ -106,7 +106,9 @@ class UploadEvaluationData(AuthView):
         '''
         上传评测数据
         '''
+        user = Account.find_account_by_user(request.user)
         evaluation = Evaluation()
+        evaluation.user = user
         data = json.loads(request.body)
         evaluation.gender = int(data.get('gender'))
         evaluation.age = int(data.get('age'))
@@ -121,8 +123,7 @@ class UploadEvaluationData(AuthView):
         evaluation.exerciseFrequency = int(data.get('exerciseFrequency'))
         evaluation.exerciseInterval = int(data.get('exerciseInterval'))
         try:
-            user = Account.find_account_by_user(request.user)
-            e = Evaluation.objects.get(user=request.user)
+            e = Evaluation.objects.get(user=user)
             #update evaluation
             evaluation.pk = e.pk
             evaluation.save()
