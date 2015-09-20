@@ -12,7 +12,7 @@ from rest_framework.authtoken.models import Token
 from django.db import IntegrityError
 
 from .models import Account, External, Evaluation
-from .serializers import AccountSerializer
+from .serializers import AccountSerializer, EvaluationSerializer
 from base.views import BaseView, AuthView
 from fitrecipe.utils import random_str
 
@@ -133,3 +133,11 @@ class UploadEvaluationData(AuthView):
             return self.fail_response(401, 'muiltiple evaluations exist')
         return self.success_response('added')
 
+class DownloadEvaluationData(AuthView):
+    def get(self, request, format=None):
+        user = Account.find_account_by_user(request.user)
+        try:
+            e = Evaluation.objects.get(user=user)
+            return self.success_response(EvaluationSerializer(e).data)
+        except Evaluation.DoesNotExist:
+            return self.fail_response(404, 'Evaluation data cannot be found')
