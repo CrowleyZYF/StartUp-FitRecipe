@@ -69,7 +69,7 @@ class Evaluation(BaseModel):
     用户评测报告
     '''
 
-    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    user = models.ForeignKey(Account, on_delete=models.CASCADE, verbose_name=u'用户')
     #0 for male and 1 for female
     gender = models.IntegerField(verbose_name=u'性别', validators=[MinValueValidator(0), MaxValueValidator(1)])
     age = models.IntegerField(verbose_name=u'年龄', validators=MinValueValidator(5))

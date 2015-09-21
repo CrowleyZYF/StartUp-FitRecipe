@@ -953,3 +953,215 @@
             "token": "cdaf28dfba353a7704e9ebb2debb6f5bb2f93242"
           }
         }
+
+# Group Plan
+## Official Plan List [/api/plan/list/]
+### Get Official Plans [GET]
+获取官方的计划
+
++ Response 200 (application/json)
+
+        {
+          "status": 200,
+          "error_message": null,
+          "data": [
+            {
+              "id": 1,
+              "author": {
+                "id": 1,
+                "created_time": "2015-09-13 16:47:42",
+                "updated_time": "2015-09-13 16:47:42",
+                "name": "12",
+                "type": 123,
+                "avatar": "http://163.com",
+                "job_title": "",
+                "fit_duration": "",
+                "fat": "",
+                "introduce": ""
+              },
+              "created_time": "2015-09-13 19:56:10",
+              "updated_time": "2015-09-13 19:56:10",
+              "title": "啥玩意啊",
+              "img": "http://163.com",
+              "inrtoduce": "http://163.com",
+              "difficulty": 1,
+              "delicious": 3,
+              "benifit": 1,
+              "total_days": 1,
+              "dish_headcount": 1,
+              "is_personal": false,
+              "authored_date": "2015-09-20",
+              "user": null
+            }
+          ]
+        }
+
+### Create Personal Plan [POST]
+创建自定义计划，只有一天。创建完成后自动加入
+
++ Request (application/json)
+
+        {
+            "dish": [{
+                "type": 0,
+                "ingredient": [{
+                    "id": 1,
+                    "amount": 100
+                }],
+                "recipe": [{
+                    "id": 2,
+                    "amount": 200
+                }]
+            },{
+                "type": 1,
+                "ingredient": [],
+                "recipe": [{
+                    "id":3,
+                    "amount": 300
+                }]
+            }]
+        }
+
++ Response 200 (application/json)
+
+        {
+          "status": 200,
+          "error_message": null,
+          "data": "ok"
+        }
+
+## Plan Detail [/api/plan/{id}/]
++ Parameters
+    + id: 1 - plan id
+
+### Get Plan Detail [GET]
+获取计划详情，不区分官方和自定义
+
++ Response 200 (application/json)
+
+        {
+          "status": 200,
+          "error_message": null,
+          "data": {
+            "id": 1,
+            "routine_set": [
+              {
+                "id": 3,
+                "dish_set": [
+                  {
+                    "id": 2,
+                    "singleingredient_set": [
+                      {
+                        "id": 2,
+                        "ingredient": {
+                          "id": 4,
+                          "name": "鸡蛋1"
+                        },
+                        "created_time": "2015-09-20 17:49:43",
+                        "updated_time": "2015-09-20 17:49:43",
+                        "amount": 1,
+                        "dish": 2
+                      }
+                    ],
+                    "singlerecipe_set": [],
+                    "created_time": "2015-09-20 17:49:43",
+                    "updated_time": "2015-09-20 17:49:43",
+                    "type": 0,
+                    "routine": 3
+                  }
+                ],
+                "created_time": "2015-09-20 17:49:43",
+                "updated_time": "2015-09-20 17:49:43",
+                "day": 1,
+                "plan": 1
+              }
+            ],
+            "author": {
+              "id": 1,
+              "created_time": "2015-09-13 16:47:42",
+              "updated_time": "2015-09-13 16:47:42",
+              "name": "12",
+              "type": 123,
+              "avatar": "http://163.com",
+              "job_title": "",
+              "fit_duration": "",
+              "fat": "",
+              "introduce": ""
+            },
+            "created_time": "2015-09-13 19:56:10",
+            "updated_time": "2015-09-13 19:56:10",
+            "title": "啥玩意啊",
+            "img": "http://163.com",
+            "inrtoduce": "http://163.com",
+            "difficulty": 1,
+            "delicious": 3,
+            "benifit": 1,
+            "total_days": 1,
+            "dish_headcount": 1,
+            "is_personal": false,
+            "authored_date": "2015-09-20",
+            "user": null
+          }
+        }
+
+## Join an Official or personal plan [/api/plan/calendar]
+### Join Plan [POST]
+这里没有对自定义计划做校验（是否是自己创建的）。这个之后有时间加吧。
+一天一个人只能参加一个计划，所以再次调用参加接口会覆盖前面的。只会留最后一个
+
++ Request (application/json)
+
+        {
+            "plan": 1
+        }
+
++ Response 200 (application/json)
+
+        {
+          "status": 200,
+          "error_message": null,
+          "data": "ok"
+        }
+
+## Calendar [/api/plan/calendar?start={start}&end={end}]
++ Parameters
+    + start: 20150101 - 开始时间
+    + end: 20150202 - 结束时间
+
+### Get my Calendar [GET]
+获取我的日历，start, end不传默认是今天
+时间格式是 `20150401` 这样的
+
++ Response 200 (application/json)
+
+        {
+          "status": 200,
+          "error_message": null,
+          "data": [
+            {
+              "id": 2,
+              "plan": {
+                "id": 7,
+                "author": null,
+                "created_time": "2015-09-20 21:59:32",
+                "updated_time": "2015-09-20 21:59:32",
+                "title": "personal plan",
+                "img": null,
+                "inrtoduce": "",
+                "difficulty": 1,
+                "delicious": 3,
+                "benifit": 0,
+                "total_days": 1,
+                "dish_headcount": 1,
+                "is_personal": true,
+                "authored_date": "2015-09-20",
+                "user": 7
+              },
+              "created_time": "2015-09-20 21:59:32",
+              "updated_time": "2015-09-20 21:59:32",
+              "joined_date": "2015-09-20",
+              "user": 7
+            }
+          ]
+        }
+

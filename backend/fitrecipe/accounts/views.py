@@ -12,8 +12,8 @@ from rest_framework.authtoken.models import Token
 from django.db import IntegrityError
 
 from .models import Account, External, Evaluation
-from .serializers import AccountSerializer
-from base.views import BaseView
+from .serializers import AccountSerializer, EvaluationSerializer
+from base.views import BaseView, AuthView
 from fitrecipe.utils import random_str
 
 
@@ -101,12 +101,14 @@ class ThirdPartyLogin(BaseView):
         result['token'] = token.key
         return self.success_response(result)
 
-class UploadEvaluationData(BaseView):
+class UploadEvaluationData(AuthView):
     def post(self, request, format=None):
         '''
         上传评测数据
         '''
+        user = Account.find_account_by_user(request.user)
         evaluation = Evaluation()
+        evaluation.user = user
         data = json.loads(request.body)
         evaluation.gender = int(data.get('gender'))
         evaluation.age = int(data.get('age'))
@@ -121,7 +123,7 @@ class UploadEvaluationData(BaseView):
         evaluation.exerciseFrequency = int(data.get('exerciseFrequency'))
         evaluation.exerciseInterval = int(data.get('exerciseInterval'))
         try:
-            e = Evaluation.objects.get(user=request.user)
+            e = Evaluation.objects.get(user=user)
             #update evaluation
             evaluation.pk = e.pk
             evaluation.save()
@@ -131,3 +133,11 @@ class UploadEvaluationData(BaseView):
             return self.fail_response(401, 'muiltiple evaluations exist')
         return self.success_response('added')
 
+class DownloadEvaluationData(AuthView):
+    def get(self, request, format=None):
+        user = Account.find_account_by_user(request.user)
+        try:
+            e = Evaluation.objects.get(user=user)
+            return self.success_response(EvaluationSerializer(e).data)
+        except Evaluation.DoesNotExist:
+            return self.fail_response(404, 'Evaluation data cannot be found')

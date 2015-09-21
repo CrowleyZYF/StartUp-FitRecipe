@@ -27,5 +27,13 @@ class OtherAuthorSerializer(BaseSerializer):
         model = OtherAuthor
         fields = ('id', 'nick_name', 'sex', 'avatar')
 
+class EvaluationSerializer(BaseSerializer):
+    user = AccountSerializer(value=('id', 'avatar', 'nick_name', 'is_official'))
+
+    class Meta:
+        model = Evaluation
+        fieds = ('id', 'author', 'gender', 'age', 'height', 'weight', 'roughFat', 'preciseFat', 'jobType', 'goalType',
+                 'exerciseFrequency', 'exerciseInterval', 'weightGoal', 'daysToGoal')
+
 
 

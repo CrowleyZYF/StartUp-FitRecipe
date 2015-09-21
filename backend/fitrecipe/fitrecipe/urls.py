@@ -7,6 +7,9 @@ urlpatterns = patterns('',
     # url(r'^$', 'fitrecipe.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
+    # nested admin
+    url(r'^nested_admin/', include('nested_admin.urls')),
+    # django admin
     url(r'^admin/', include(admin.site.urls)),
     # ajax_select_urls
     url(r'^admin/lookups/', include(ajax_select_urls)),
