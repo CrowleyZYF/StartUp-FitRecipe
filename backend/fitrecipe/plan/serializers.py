@@ -3,12 +3,9 @@
 
 from rest_framework import serializers
 from base.serializers import BaseSerializer
-from .models import PlanAuthor, PersonalPlan, Plan, Dish, Routine, SingleIngredient, SingleRecipe
+from .models import PlanAuthor, Plan, Dish, Routine, SingleIngredient, SingleRecipe, Calendar
 from recipe.serializers import RecipeSerializer, IngredientSerializer
 
-class PersonalPlanSerializer(BaseSerializer):
-    class Meta:
-        model = PersonalPlan
 
 
 class PlanAuthorSerializer(BaseSerializer):
@@ -47,7 +44,7 @@ class RoutineSerializer(BaseSerializer):
 
 
 class PlanSerializer(BaseSerializer):
-    routine = RoutineSerializer(many=True)
+    routine_set = RoutineSerializer(many=True)
     author = PlanAuthorSerializer()
 
     class Meta:
@@ -61,8 +58,14 @@ class PlanSerializer(BaseSerializer):
         simple = self.context.get('simple', True)
         if simple:
             # 去掉 component_set, procedure_set, nutrition_set
-            pop_keys = ('routine',)
+            pop_keys = ('routine_set',)
             for k in pop_keys:
                 r.pop(k, None)
         return r
 
+
+class CalendarSerializer(BaseSerializer):
+    plan = PlanSerializer()
+
+    class Meta:
+        model = Calendar
