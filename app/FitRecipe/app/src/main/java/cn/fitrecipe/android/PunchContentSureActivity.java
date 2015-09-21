@@ -2,10 +2,14 @@ package cn.fitrecipe.android;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.io.File;
 
 import cn.fitrecipe.android.UI.PieChartView;
 
@@ -16,15 +20,16 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
     private PieChartView chartView1;
     private PieChartView chartView2;
     private Bitmap bitmap;
-    private ImageView punch_photo;
+    private ImageView punch_photo, left_btn;
+    private TextView right_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_punch_sure);
 
-        bitmap = getIntent().getParcelableExtra("data");
+        String path = getIntent().getStringExtra("bitmap");
+        bitmap = BitmapFactory.decodeFile(path);
 
         initView();
         initEvent();
@@ -40,7 +45,7 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
         //chartView1.setValue(pieData, false);
         punch_photo = (ImageView) findViewById(R.id.punch_photo);
         punch_photo.setImageBitmap(bitmap);
-        chartView2.setValue(pieData, true, false, true);
+        chartView2.setValue(pieData, true, false, false);
     }
 
     @Override

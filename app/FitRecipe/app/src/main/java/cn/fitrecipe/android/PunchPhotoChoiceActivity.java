@@ -150,8 +150,10 @@ public class PunchPhotoChoiceActivity extends Activity implements View.OnClickLi
                 if (path == null) {
                     return;
                 }
-                bitmap = BitmapFactory.decodeFile(mFileTemp.getPath());
-//                mImageView.setImageBitmap(bitmap);
+                Intent intent = new Intent(this, PunchContentSureActivity.class);
+                intent.putExtra("bitmap", mFileTemp.getPath());
+                startActivity(intent);
+                finish();
                 break;
         }
         super.onActivityResult(requestCode, resultCode, data);
