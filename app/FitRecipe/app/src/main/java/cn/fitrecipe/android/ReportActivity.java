@@ -253,7 +253,7 @@ public class ReportActivity extends Activity implements View.OnClickListener{
                 }
             case R.id.check_plan:
                 Intent intent=new Intent(this,MainActivity.class);
-                intent.putExtra("tab", 1);
+                intent.putExtra("from", ReportActivity.class.getSimpleName());
                 this.startActivity(intent);
                 break;
             default:

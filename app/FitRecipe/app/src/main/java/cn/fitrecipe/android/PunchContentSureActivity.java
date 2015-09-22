@@ -3,8 +3,10 @@ package cn.fitrecipe.android;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,16 +23,23 @@ import com.qiniu.util.Auth;
 
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
+import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.UI.PieChartView;
+import cn.fitrecipe.android.dao.FrDbHelper;
+import cn.fitrecipe.android.entity.DatePlan;
 import cn.fitrecipe.android.entity.DatePlanItem;
 import cn.fitrecipe.android.entity.Nutrition;
 import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.Report;
+import cn.fitrecipe.android.fragment.PlanFragment;
 import cn.fitrecipe.android.function.Common;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -47,10 +56,11 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
     private CircleImageView me_avatar;
     private LinearLayoutForListView component_list, nutrition_list;
     private ScrollView scrollView;
-
+    private ProgressDialog pd;
 
     private DatePlanItem item;
     private Report report;
+    private String pngName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,41 +191,65 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
 
     private void publish() {
 
-        final ProgressDialog pd = ProgressDialog.show(this, "", "正在发布...", true);
+        pd = ProgressDialog.show(this, "", "正在发布...", true);
         pd.setCanceledOnTouchOutside(false);
 
         UploadManager uploadManager = new UploadManager();
         Auth auth = Auth.create("LV1xTmPqkwCWd3yW4UNn90aaXyPZCGPG-MdaA3Ob", "mfMEtgpxmdRrgM7No-AwtaFCkCM6mOVr_FYbq6MR");        //get token from access key and secret key
         String token = auth.uploadToken("fitrecipe");
-        uploadManager.put(bitmap.getNinePatchChunk(), "punch-test", token, new UpCompletionHandler() {
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+
+        pngName = FrApplication.getInstance().getAuthor().getNick_name() + Common.getTime();
+        Toast.makeText(PunchContentSureActivity.this, pngName, Toast.LENGTH_SHORT).show();
+        uploadManager.put(baos.toByteArray(), pngName, token, new UpCompletionHandler() {
             @Override
             public void complete(String s, ResponseInfo responseInfo, JSONObject jsonObject) {
-                pd.dismiss();
                 Toast.makeText(PunchContentSureActivity.this, "上传完成！", Toast.LENGTH_SHORT).show();
+                saveServerPunchState();
             }
         }, null);
-
-
-
-//        new AsyncTask<Void, Void, Void>() {
-//            @Override
-//            protected void onPostExecute(Void aVoid) {
-//               pd.dismiss();
-//            }
-//
-//            @Override
-//            protected Void doInBackground(Void... params) {
-//
-//                String now = Common.getDate();
-//                Map<String, DatePlan> data = FrDbHelper.getInstance(PunchContentSureActivity.this).getDatePlan(now, now);
-//                if(data.size() > 0) {
-//                    DatePlan datePlan = data.get(now);
-//
-//                }
-//                return null;
-//            }
-//        }.execute();
     }
+
+    private void saveServerPunchState() {
+        //TODO @wk
+        saveLocalPunchState();
+    }
+
+
+    private void saveLocalPunchState() {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                PlanFragment.isFresh = true;
+                pd.dismiss();
+                Intent intent = new Intent(PunchContentSureActivity.this, RecordActivity.class);
+                startActivity(intent);
+            }
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                String now = item.getDate();
+                Map<String, DatePlan> data = FrDbHelper.getInstance(PunchContentSureActivity.this).getDatePlan(now, now);
+                if (data.size() > 0) {
+                    DatePlan datePlan = data.get(now);
+                    List<DatePlanItem> items = datePlan.getItems();
+                    for (int j = 0; j < item.size(); j++) {
+                        if (items.get(j).getType().equals(item.getType())) {
+                            items.get(j).setImageCover(FrServerConfig.getQiNiuHost() + pngName);
+                            items.get(j).setIsPunch(true);
+                            break;
+                        }
+                    }
+                    datePlan.setItems(items);
+                    FrDbHelper.getInstance(PunchContentSureActivity.this).addDatePlan(datePlan);
+                }
+                return null;
+            }
+        }.execute();
+    }
+
 
 
     class NutritionAdapter extends BaseAdapter {

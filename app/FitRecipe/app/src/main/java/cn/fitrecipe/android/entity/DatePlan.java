@@ -45,8 +45,11 @@ public class DatePlan implements Serializable, Comparable<DatePlan>{
         if(items == null)   return null;
         else {
             Gson gson = new Gson();
-            return gson.fromJson(items, new TypeToken<ArrayList<DatePlanItem>>() {
+            List<DatePlanItem> items1 = gson.fromJson(items, new TypeToken<ArrayList<DatePlanItem>>() {
             }.getType());
+            for(DatePlanItem item : items1)
+                item.setDate(date);
+            return items1;
         }
     }
 

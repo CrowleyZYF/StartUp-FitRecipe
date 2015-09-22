@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.fitrecipe.android.entity.PlanItem;
+import cn.fitrecipe.android.entity.Report;
 import cn.fitrecipe.android.fragment.IndexFragment;
 import cn.fitrecipe.android.fragment.MeFragment;
 import cn.fitrecipe.android.fragment.PlanFragment;
@@ -46,7 +47,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     private ImageView left_btn;
     private ImageView right_btn;
 
-    private int tab_index = 0;
+    private int tab_index = -1;
 
     private List<LinearLayout> frTabs = new ArrayList<LinearLayout>();
     private View layout;
@@ -54,8 +55,6 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     private final String action = "cn.fitrecipe.android.homedataready";
     private HomeDataReadyRececiver readyRececiver;
     private IntentFilter intentFilter;
-
-    private int last = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -81,18 +80,18 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     @Override
     protected void onStart() {
         super.onStart();
-        frTabs.get(tab_index).setBackgroundColor(getResources().getColor(R.color.active_color));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         Intent intent =getIntent();
-        if (intent.hasExtra("tab")){
-            tab_index = intent.getIntExtra("tab",0);
-            intent.removeExtra("tab");
+        if (intent.hasExtra("from")){
+            String from = intent.getStringExtra("from");
+            if(from.equals(ReportActivity.class.getSimpleName()))
+                setSelect(1);
         }
-        setSelect(tab_index);
+//        setSelect(tab_index);
         registerReceiver(readyRececiver, intentFilter);
     }
 
@@ -134,20 +133,18 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         FragmentTransaction transaction = fm.beginTransaction();
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 //        hideFragment(transaction);
-        if(last != -1) {
-            if(last == 0 && frIndexFragment != null)
+        if(tab_index != -1 && i != 1) {
+            if(tab_index == 0 && frIndexFragment != null)
                 transaction.hide(frIndexFragment);
-            if(last == 1 && frPlanFragment != null)
+            if(tab_index == 1 && frPlanFragment != null)
                 transaction.hide(frPlanFragment);
-            if(last == 2 && frMeFragment != null)
+            if(tab_index == 2 && frMeFragment != null)
                 transaction.hide(frMeFragment);
-            frTabs.get(last).setBackgroundColor(getResources().getColor(R.color.base_color));
+            frTabs.get(tab_index).setBackgroundColor(getResources().getColor(R.color.base_color));
         }else {
 //            frPlanFragment = new PlanFragment();
 //            transaction.add(R.id.content, frPlanFragment).hide(frPlanFragment);
         }
-        last = i;
-        frTabs.get(i).setBackgroundColor(getResources().getColor(R.color.active_color));
         switch (i)
         {
             case 0:
@@ -158,6 +155,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                 transaction.show(frIndexFragment);
                 left_btn.setImageResource(R.drawable.icon_category);
                 right_btn.setImageResource(R.drawable.icon_search);
+                frTabs.get(i).setBackgroundColor(getResources().getColor(R.color.active_color));
                 tab_index = 0;
                 break;
             case 1:
@@ -176,10 +174,18 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                     transaction.show(frPlanFragment);
                     left_btn.setImageResource(R.drawable.icon_nutrition);
                     right_btn.setImageResource(R.drawable.icon_change);
+                    if(tab_index == 0 && frIndexFragment != null)
+                        transaction.hide(frIndexFragment);
+                    if(tab_index == 1 && frPlanFragment != null)
+                        transaction.hide(frPlanFragment);
+                    if(tab_index == 2 && frMeFragment != null)
+                        transaction.hide(frMeFragment);
+                    frTabs.get(i).setBackgroundColor(getResources().getColor(R.color.active_color));
+                    frTabs.get(tab_index).setBackgroundColor(getResources().getColor(R.color.base_color));
                     tab_index = 1;
                 }else{
-                    frTabs.get(tab_index).setBackgroundColor(getResources().getColor(R.color.active_color));
-                    frTabs.get(i).setBackgroundColor(getResources().getColor(R.color.base_color));
+//                    frTabs.get(tab_index).setBackgroundColor(getResources().getColor(R.color.active_color));
+//                    frTabs.get(i).setBackgroundColor(getResources().getColor(R.color.base_color));
                     Intent intent=new Intent(this,PlanTestActivity.class);
                     startActivity(intent);
                 }
@@ -203,6 +209,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                     transaction.add(R.id.content, frMeFragment);
                 }
                 transaction.show(frMeFragment);
+                frTabs.get(i).setBackgroundColor(getResources().getColor(R.color.active_color));
                 left_btn.setImageResource(R.drawable.icon_letter);
                 right_btn.setImageResource(R.drawable.icon_set);
                 tab_index = 2;
@@ -236,7 +243,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     @Override
     public void onClick(View v)
     {
-        resetTabs();
+//        resetTabs();
         switch (v.getId())
         {
             case R.id.tab_index:

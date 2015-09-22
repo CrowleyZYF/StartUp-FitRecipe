@@ -11,6 +11,7 @@ public class DatePlanItem implements Serializable{
 
     private String type;
     private String time;
+    private String date;
     private double calories_need;
     private double calories_take;
     private double carbohydrate_need;
@@ -233,5 +234,13 @@ public class DatePlanItem implements Serializable{
 
     public void setDefaultImageCover(String defaultImageCover) {
         this.defaultImageCover = defaultImageCover;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

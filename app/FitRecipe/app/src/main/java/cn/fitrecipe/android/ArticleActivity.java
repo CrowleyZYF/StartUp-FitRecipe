@@ -70,6 +70,7 @@ public class ArticleActivity extends Activity implements View.OnClickListener{
             }
         });
         FrRequest.getInstance().request(request);
+
     }
 
     private void processData(JSONObject data) {
