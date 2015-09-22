@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -43,6 +44,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/author_name"
                     android:text="庄奕峰"
                     android:textSize="16sp"
                     android:textColor="@color/login_input_text_color"
@@ -62,6 +64,7 @@
                         android:layout_marginRight="10dp"/>
 
                     <TextView
+                        android:id="@+id/plan_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="9月21号"
@@ -71,6 +74,7 @@
                         android:layout_marginRight="3dp"/>
 
                     <TextView
+                        android:id="@+id/plan_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="12:00"
@@ -83,6 +87,7 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/goal_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="增肌ing"
@@ -226,12 +231,6 @@
 
                         </LinearLayout>
                     </LinearLayout>
-                    <cn.fitrecipe.android.UI.PieChartView
-                        android:id="@+id/punch_piechart"
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        android:layout_marginRight="5dp"/>
-
                 </LinearLayout>
             </RelativeLayout>
         </cn.fitrecipe.android.UI.SquareLayout>
@@ -247,262 +246,15 @@
                 android:layout_height="40dp"
                 android:src="@drawable/banner_food"/>
 
-            <LinearLayout
+            <cn.fitrecipe.android.UI.LinearLayoutForListView
+                android:id="@+id/component_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:background="@drawable/punch_border_radius"
                 android:padding="2px"
                 android:layout_marginTop="15dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:background="#fff8f8f8">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:text="西兰花鸡胸肉"
-                        android:textSize="16sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:padding="8dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="300kcal"
-                        android:textSize="16sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:padding="8dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="250g"
-                        android:textSize="16sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:padding="8dp"/>
-
-                </LinearLayout>
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#ffe5e5e5"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:text="西兰花"
-                        android:textSize="16sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:padding="8dp"
-                        android:layout_marginLeft="30dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="300kcal"
-                        android:textSize="16sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:padding="5dp"
-                        android:layout_marginLeft="-30dp"
-                        android:visibility="invisible"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="100g"
-                        android:textSize="16sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:padding="8dp"/>
-
-                </LinearLayout>
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#ffe5e5e5"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:background="#fff8f8f8">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:text="鸡胸肉"
-                        android:textSize="16sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:padding="8dp"
-                        android:layout_marginLeft="30dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="300kcal"
-                        android:textSize="16sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:padding="8dp"
-                        android:layout_marginLeft="-30dp"
-                        android:visibility="invisible"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="140g"
-                        android:textSize="16sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:padding="8dp"/>
-
-                </LinearLayout>
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#ffe5e5e5"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:text="低脂芝士"
-                        android:textSize="16sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:padding="5dp"
-                        android:layout_marginLeft="30dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="300kcal"
-                        android:textSize="16sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:padding="8dp"
-                        android:layout_marginLeft="-30dp"
-                        android:visibility="invisible"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="10g"
-                        android:textSize="16sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:padding="8dp"/>
-
-                </LinearLayout>
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#ffe5e5e5"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:background="#fff8f8f8">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:text="红薯"
-                        android:textSize="16sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:padding="8dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="100kcal"
-                        android:textSize="16sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:padding="8dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="100g"
-                        android:textSize="16sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:padding="8dp"/>
-
-                </LinearLayout>
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#ffe5e5e5"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:text="牛奶"
-                        android:textSize="16sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:padding="8dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="50kcal"
-                        android:textSize="16sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:padding="8dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="200g"
-                        android:textSize="16sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:padding="8dp"/>
-
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-
-
+                android:layout_marginRight="10dp" />
 
         </LinearLayout>
 
@@ -542,6 +294,7 @@
                             android:layout_gravity="center_vertical"/>
 
                         <TextView
+                            android:id="@+id/item_calories"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="71.51"
@@ -584,6 +337,7 @@
                             android:layout_marginTop="4dp"/>
 
                         <TextView
+                            android:id="@+id/caloire_ratio"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="20%"
@@ -607,6 +361,7 @@
                             android:layout_gravity="center_vertical"/>
 
                         <TextView
+                            android:id="@+id/carbohydrate_amount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="12g"
@@ -629,6 +384,7 @@
                             android:layout_gravity="center_vertical"/>
 
                         <TextView
+                            android:id="@+id/protein_amount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="12g"
@@ -651,6 +407,7 @@
                             android:layout_gravity="center_vertical"/>
 
                         <TextView
+                            android:id="@+id/fat_amount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="12g"
@@ -698,7 +455,7 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
+                        android:layout_weight="3"
                         android:text="营养元素"
                         android:textSize="16sp"
                         android:textColor="@color/login_input_text_color"
@@ -707,7 +464,7 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
+                        android:layout_weight="3"
                         android:text="日均所需"
                         android:textSize="16sp"
                         android:textColor="@color/login_input_text_color"
@@ -716,175 +473,21 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="2"
                         android:text="摄入"
                         android:textSize="16sp"
                         android:textColor="@color/login_input_text_color"
                         android:padding="8dp"/>
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="占比"
-                        android:textSize="16sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:padding="8dp"/>
-
                 </LinearLayout>
-
-                <ImageView
+                <cn.fitrecipe.android.UI.LinearLayoutForListView
+                    android:id="@+id/nutrition_list"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#ffe5e5e5"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:text="碳水化合物"
-                        android:textSize="14sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:padding="8dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:text="1200~1500g"
-                        android:textSize="14sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:padding="8dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="1000g"
-                        android:textSize="14sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:padding="8dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="20%"
-                        android:textSize="14sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:padding="8dp"/>
-
-                </LinearLayout>
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#ffe5e5e5"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:background="#fff8f8f8">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:text="蛋白质"
-                        android:textSize="14sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:padding="8dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:text="120~150g"
-                        android:textSize="14sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:padding="8dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="100g"
-                        android:textSize="14sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:padding="8dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="20%"
-                        android:textSize="14sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:padding="8dp"/>
-
-                </LinearLayout>
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#ffe5e5e5"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:text="脂肪"
-                        android:textSize="14sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:padding="8dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:text="12~15g"
-                        android:textSize="14sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:padding="8dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="10g"
-                        android:textSize="14sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:padding="8dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="10%"
-                        android:textSize="14sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:padding="8dp"/>
-
-                </LinearLayout>
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 
-
-
         </LinearLayout>
-
-
 
     </LinearLayout>
 

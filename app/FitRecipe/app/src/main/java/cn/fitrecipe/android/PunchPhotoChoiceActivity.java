@@ -20,6 +20,7 @@ import java.io.OutputStream;
 
 import cn.fitrecipe.android.cropimage.CropImage;
 import cn.fitrecipe.android.cropimage.InternalStorageContentProvider;
+import cn.fitrecipe.android.entity.DatePlanItem;
 
 /**
  * Created by 奕峰 on 2015/5/8.
@@ -33,14 +34,17 @@ public class PunchPhotoChoiceActivity extends Activity implements View.OnClickLi
     public static final int REQUEST_CODE_GALLERY      = 0x1;
     public static final int REQUEST_CODE_TAKE_PICTURE = 0x2;
     public static final int REQUEST_CODE_CROP_IMAGE   = 0x3;
-
     private File mFileTemp;
+    private DatePlanItem item;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_punch_photo_choice);
+
+        item = (DatePlanItem) getIntent().getSerializableExtra("item");
+
         initView();
         initEvent();
     }
@@ -69,6 +73,10 @@ public class PunchPhotoChoiceActivity extends Activity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.option_default:
+                Intent intent = new Intent(this, PunchContentSureActivity.class);
+                intent.putExtra("item", item);
+                startActivity(intent);
+                finish();
                 break;
             case R.id.option_select:
                 openGallery();
@@ -128,7 +136,6 @@ public class PunchPhotoChoiceActivity extends Activity implements View.OnClickLi
         if (resultCode != RESULT_OK) {
             return;
         }
-        Bitmap bitmap;
         switch (requestCode) {
             case REQUEST_CODE_GALLERY:
                 try {
@@ -152,6 +159,7 @@ public class PunchPhotoChoiceActivity extends Activity implements View.OnClickLi
                 }
                 Intent intent = new Intent(this, PunchContentSureActivity.class);
                 intent.putExtra("bitmap", mFileTemp.getPath());
+                intent.putExtra("item", item);
                 startActivity(intent);
                 finish();
                 break;

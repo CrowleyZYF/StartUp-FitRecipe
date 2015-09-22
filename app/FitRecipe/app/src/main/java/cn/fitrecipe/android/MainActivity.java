@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.qiniu.android.http.AsyncHttpClientMod;
 import com.umeng.fb.FeedbackAgent;
 
 import java.util.ArrayList;
@@ -62,6 +63,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         super.onCreate(savedInstanceState);
         layout = View.inflate(this, R.layout.framework_main_container, null);
         setContentView(layout);
+
+        AsyncHttpClientMod.create(null).setRedirectHandler(null);
 
         //init receiver
         readyRececiver = new HomeDataReadyRececiver();

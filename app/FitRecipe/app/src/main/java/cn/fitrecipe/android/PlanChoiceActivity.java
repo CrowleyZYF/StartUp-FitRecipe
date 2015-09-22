@@ -172,14 +172,14 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
         DatePlanItem item= new DatePlanItem();
         PlanComponent component = PlanComponent.getPlanComponentFromRecipe(recipe, 100);
         item.addContent(component);
-        item.setImageCover("http://ww1.sinaimg.cn/thumbnail/81f8b0e2gw1evwcdxbiumj20c7077q3x.jpg");
+        item.setDefaultImageCover("http://ww1.sinaimg.cn/thumbnail/81f8b0e2gw1evwcdxbiumj20c7077q3x.jpg");
         item.setType("breakfast");
         items.add(item);
 
         DatePlanItem item1 = new DatePlanItem();
         PlanComponent component1 = PlanComponent.getPlanComponentFromRecipe(recipe, 200);
         item1.addContent(component1);
-        item1.setImageCover("http://ww1.sinaimg.cn/thumbnail/81f8b0e2gw1evwcdxbiumj20c7077q3x.jpg");
+        item1.setDefaultImageCover("http://ww1.sinaimg.cn/thumbnail/81f8b0e2gw1evwcdxbiumj20c7077q3x.jpg");
         item1.setType("add_meal_01");
         items.add(item1);
 
@@ -187,7 +187,7 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
         DatePlanItem item2= new DatePlanItem();
         PlanComponent component2 = PlanComponent.getPlanComponentFromRecipe(recipe, 300);
         item2.addContent(component2);
-        item2.setImageCover("http://ww1.sinaimg.cn/thumbnail/81f8b0e2gw1evwcdxbiumj20c7077q3x.jpg");
+        item2.setDefaultImageCover("http://ww1.sinaimg.cn/thumbnail/81f8b0e2gw1evwcdxbiumj20c7077q3x.jpg");
         item2.setType("lunch");
         items.add(item2);
 
@@ -195,7 +195,7 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
         DatePlanItem item3= new DatePlanItem();
         PlanComponent component3 = PlanComponent.getPlanComponentFromRecipe(recipe, 400);
         item3.addContent(component3);
-        item3.setImageCover("http://ww1.sinaimg.cn/thumbnail/81f8b0e2gw1evwcdxbiumj20c7077q3x.jpg");
+        item3.setDefaultImageCover("http://ww1.sinaimg.cn/thumbnail/81f8b0e2gw1evwcdxbiumj20c7077q3x.jpg");
         item3.setType("add_meal_02");
         items.add(item3);
 
@@ -203,7 +203,7 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
         DatePlanItem item4 = new DatePlanItem();
         PlanComponent component4 = PlanComponent.getPlanComponentFromRecipe(recipe, 500);
         item4.addContent(component4);
-        item4.setImageCover("http://ww1.sinaimg.cn/thumbnail/81f8b0e2gw1evwcdxbiumj20c7077q3x.jpg");
+        item4.setDefaultImageCover("http://ww1.sinaimg.cn/thumbnail/81f8b0e2gw1evwcdxbiumj20c7077q3x.jpg");
         item4.setType("supper");
         items.add(item4);
 //
@@ -211,7 +211,7 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
         DatePlanItem item5 = new DatePlanItem();
         PlanComponent component5 = PlanComponent.getPlanComponentFromRecipe(recipe, 600);
         item5.addContent(component5);
-        item5.setImageCover("http://ww1.sinaimg.cn/thumbnail/81f8b0e2gw1evwcdxbiumj20c7077q3x.jpg");
+        item5.setDefaultImageCover("http://ww1.sinaimg.cn/thumbnail/81f8b0e2gw1evwcdxbiumj20c7077q3x.jpg");
         item5.setType("add_meal_03");
         items.add(item5);
 

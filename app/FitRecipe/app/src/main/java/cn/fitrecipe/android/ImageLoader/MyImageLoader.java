@@ -10,11 +10,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.nostra13.universalimageloader.core.DefaultConfigurationFactory;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.display.SimpleBitmapDisplayer;
 import com.nostra13.universalimageloader.core.imageaware.ViewAware;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -77,6 +77,7 @@ public class MyImageLoader {
                 .denyCacheImageMultipleSizesInMemory()
                 .threadPoolSize(3)
                 .memoryCacheSize(10 * 1024 * 1024)
+                        .imageDownloader(DefaultConfigurationFactory.createImageDownloader(context))
 //                .threadPriority(Thread.MAX_PRIORITY)
 //                .writeDebugLogs()
                 .build();

@@ -141,6 +141,7 @@ public class PlanElementAdapter extends BaseAdapter{
 //                    ((ImageView)v).setImageResource(R.drawable.icon_plan_punch_active);
 //                    item.setIsPunch(true);
                     Intent intent = new Intent(fragment.getActivity(), PunchPhotoChoiceActivity.class);
+                    intent.putExtra("item", item);
                     fragment.startActivity(intent);
                     Toast.makeText(fragment.getActivity(), "打卡", Toast.LENGTH_SHORT).show();
                 }else {
@@ -237,7 +238,7 @@ public class PlanElementAdapter extends BaseAdapter{
         holder.plan_protein_intake.setText(Math.round(item.getProtein_take())+"");
         holder.plan_fat_intake.setText(Math.round(item.getFat_take()) + "");
         holder.plan_time.setText(item.getTime());
-        FrApplication.getInstance().getMyImageLoader().displayImage(holder.plan_image_cover, item.getImageCover());
+        FrApplication.getInstance().getMyImageLoader().displayImage(holder.plan_image_cover, item.getDefaultImageCover());
 
         //
         holder.plan_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
