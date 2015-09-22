@@ -118,7 +118,7 @@ public class NutritionActivity extends Activity implements View.OnClickListener 
                 int a = (int) Math.round(itema.getCarbohydrate_take() * 100 / sum);
                 int b = (int) Math.round(itema.getProtein_take() * 100 / sum);
                 int c = 100 - a - b;
-                take_already_piechart.setValue(new float[]{a, b, c}, true, false, true);
+                take_already_piechart.setValue(new float[]{a, b, c}, true, false, false);
                 nutritionAdapter = new NutritionAdapter(this, itema.getNutritions());
         }
         recipe_nutrition_list.setAdapter(nutritionAdapter);
@@ -203,7 +203,7 @@ public class NutritionActivity extends Activity implements View.OnClickListener 
             holder.textView1.setText(nutrition.getName());
             holder.textView2.setText("1300");
             holder.textView3.setText("1500g");
-            holder.textView4.setText(Math.round(nutrition.getAmount()) + nutrition.getUnit());
+            holder.textView4.setText(String.format("%.1f", nutrition.getAmount()) + nutrition.getUnit());
             return convertView;
         }
 

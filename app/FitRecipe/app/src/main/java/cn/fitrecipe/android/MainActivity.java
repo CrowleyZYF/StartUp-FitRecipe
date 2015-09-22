@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -25,8 +24,6 @@ import com.umeng.fb.FeedbackAgent;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.fitrecipe.android.entity.PlanItem;
-import cn.fitrecipe.android.entity.Report;
 import cn.fitrecipe.android.fragment.IndexFragment;
 import cn.fitrecipe.android.fragment.MeFragment;
 import cn.fitrecipe.android.fragment.PlanFragment;

@@ -23,7 +23,6 @@ import com.qiniu.util.Auth;
 
 import org.json.JSONObject;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
