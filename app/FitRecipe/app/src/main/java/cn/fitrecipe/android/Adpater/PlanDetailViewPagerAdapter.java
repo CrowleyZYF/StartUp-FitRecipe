@@ -14,13 +14,9 @@ import java.util.List;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.RecipeActivity;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
-import cn.fitrecipe.android.entity.Component;
 import cn.fitrecipe.android.entity.DatePlan;
 import cn.fitrecipe.android.entity.DatePlanItem;
-import cn.fitrecipe.android.entity.DayPlan;
 import cn.fitrecipe.android.entity.PlanComponent;
-import cn.fitrecipe.android.entity.PlanItem;
-import cn.fitrecipe.android.entity.Recipe;
 import cn.fitrecipe.android.entity.SeriesPlan;
 
 /**
@@ -57,7 +53,7 @@ public class PlanDetailViewPagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return plan.getDays();
+        return plan.getTotal_days();
     }
 
     @Override

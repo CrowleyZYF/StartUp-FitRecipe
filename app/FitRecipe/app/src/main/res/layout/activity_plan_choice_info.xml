@@ -1,161 +1,196 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:dots="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <cn.fitrecipe.android.UI.PlanScrollView
-        android:id="@+id/info_container"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/background_color"
-        android:scrollbars="none"
-        android:fadingEdge="vertical"
-        android:padding="0dp">
+        android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/loading_interface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="-20dp">
 
-            <LinearLayout
-                android:id="@+id/choice_info_background"
-                android:layout_width="match_parent"
-                android:layout_height="380dp"
-                android:orientation="vertical"
-                android:background="@drawable/plan_temp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="拼命加载中"
+                android:textSize="14sp"
+                android:textColor="@color/base_color"
+                android:layout_gravity="bottom"/>
 
-                <android.support.v4.view.ViewPager
-                    android:id="@+id/choice_intro_viewpager"
-                    android:layout_height="match_parent"
-                    android:layout_width="match_parent">
-                </android.support.v4.view.ViewPager>
+            <pl.tajchert.sample.DotsTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/dots"
+                android:textSize="30sp"
+                android:textColor="@color/base_color"
+                dots:autoplay="true"
+                dots:period="1000"
+                android:layout_gravity="bottom"/>
+        </LinearLayout>
 
-                <me.relex.circleindicator.CircleIndicator
-                    android:id="@+id/choice_intro_indicator"
-                    android:layout_width="fill_parent"
-                    android:layout_height="30dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginTop="-30dp"/>
-
-            </LinearLayout>
+        <cn.fitrecipe.android.UI.PlanScrollView
+            android:id="@+id/info_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/background_color"
+            android:scrollbars="none"
+            android:fadingEdge="vertical"
+            android:visibility="gone"
+            android:padding="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <RelativeLayout
+                <LinearLayout
+                    android:id="@+id/choice_info_background"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="380dp"
+                    android:orientation="vertical"
+                    android:background="@drawable/plan_temp">
 
-                    <ImageView
-                        android:id="@+id/nutrition_btn"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_centerInParent="true"
-                        android:src="@drawable/icon_nutrition_gray"
-                        android:padding="10dp"/>
-                    
-                    <ImageView
-                        android:id="@+id/prev_day_btn"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:padding="10dp"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/icon_prev_day" />
-
-                    <ImageView
-                        android:id="@+id/next_day_btn"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:padding="10dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/icon_next_day" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
+                    <android.support.v4.view.ViewPager
+                        android:id="@+id/choice_intro_viewpager"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_toRightOf="@id/prev_day_btn"
-                        android:layout_centerVertical="true">
+                        android:layout_width="match_parent">
+                    </android.support.v4.view.ViewPager>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="第"
-                            android:textSize="10sp"
-                            android:textColor="@color/login_input_text_color"/>
+                    <me.relex.circleindicator.CircleIndicator
+                        android:id="@+id/choice_intro_indicator"
+                        android:layout_width="fill_parent"
+                        android:layout_height="30dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginTop="-30dp"/>
 
-                        <TextView
-                            android:id="@+id/plan_day"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="1/7"
-                            android:textSize="16sp"
-                            android:textColor="@color/login_input_text_color"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginRight="5dp"/>
+                </LinearLayout>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="天"
-                            android:textSize="10sp"
-                            android:textColor="@color/login_input_text_color"/>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_toLeftOf="@id/next_day_btn"
-                        android:layout_centerVertical="true">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="卡路里："
-                            android:textSize="10sp"
-                            android:textColor="@color/login_input_text_color"
-                            android:visibility="gone"/>
-
-                        <TextView
-                            android:id="@+id/plan_calories"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="1200"
-                            android:textSize="16sp"
-                            android:textColor="@color/login_input_text_color"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="kcal"
-                            android:textSize="10sp"
-                            android:layout_marginLeft="3dp"
-                            android:textColor="@color/login_input_text_color"/>
-
-                    </LinearLayout>
-                </RelativeLayout>
-
-                <ImageView
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="2px"
-                    android:background="@drawable/theme_line"/>
-
-                <cn.fitrecipe.android.UI.PlanDetailViewPager
-                    android:id="@+id/plan_detail"
                     android:layout_height="wrap_content"
-                    android:layout_width="match_parent">
-                </cn.fitrecipe.android.UI.PlanDetailViewPager>
+                    android:orientation="vertical">
 
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/nutrition_btn"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/icon_nutrition_gray"
+                            android:padding="10dp"/>
+
+                        <ImageView
+                            android:id="@+id/prev_day_btn"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:padding="10dp"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/icon_prev_day" />
+
+                        <ImageView
+                            android:id="@+id/next_day_btn"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:padding="10dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/icon_next_day" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:layout_toRightOf="@id/prev_day_btn"
+                            android:layout_centerVertical="true">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="第"
+                                android:textSize="10sp"
+                                android:textColor="@color/login_input_text_color"/>
+
+                            <TextView
+                                android:id="@+id/plan_day"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="1/7"
+                                android:textSize="16sp"
+                                android:textColor="@color/login_input_text_color"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="5dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="天"
+                                android:textSize="10sp"
+                                android:textColor="@color/login_input_text_color"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:layout_toLeftOf="@id/next_day_btn"
+                            android:layout_centerVertical="true">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="卡路里："
+                                android:textSize="10sp"
+                                android:textColor="@color/login_input_text_color"
+                                android:visibility="gone"/>
+
+                            <TextView
+                                android:id="@+id/plan_calories"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="1200"
+                                android:textSize="16sp"
+                                android:textColor="@color/login_input_text_color"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="kcal"
+                                android:textSize="10sp"
+                                android:layout_marginLeft="3dp"
+                                android:textColor="@color/login_input_text_color"/>
+
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="2px"
+                        android:background="@drawable/theme_line"/>
+
+                    <cn.fitrecipe.android.UI.PlanDetailViewPager
+                        android:id="@+id/plan_detail"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent">
+                    </cn.fitrecipe.android.UI.PlanDetailViewPager>
+
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
-    </cn.fitrecipe.android.UI.PlanScrollView>
-
+        </cn.fitrecipe.android.UI.PlanScrollView>
+    </FrameLayout>
     <include layout="@layout/framework_common_headers" />
 
 </FrameLayout>

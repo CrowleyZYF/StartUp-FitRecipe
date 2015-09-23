@@ -142,16 +142,16 @@ public class FrDbHelper {
     public void setPlanUsed(SeriesPlan plan) {
         PlanInUseDao dao = new PlanInUseDao(context);
         PlanInUse planInUse = new PlanInUse();
-        planInUse.setDays(plan.getDays());
-        planInUse.setName(plan.getName());
+        planInUse.setDays(plan.getTotal_days());
+        planInUse.setName(plan.getTitle());
         planInUse.setStartDate(Common.getDate());
         planInUse.setDateplans(plan.getDatePlans());
         dao.setPlanInUse(planInUse);
 
         for (int i = 0; i < 7; i++) {
-            DatePlan datePlan = planInUse.getDateplans().get(i % plan.getDays());
+            DatePlan datePlan = planInUse.getDateplans().get(i % plan.getTotal_days());
             datePlan.setDate(Common.getSomeDay(Common.getDate(), i));
-            datePlan.setPlan_name(plan.getName());
+            datePlan.setPlan_name(plan.getTitle());
             addDatePlan(datePlan);
         }
     }
