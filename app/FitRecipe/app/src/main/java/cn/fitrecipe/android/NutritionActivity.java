@@ -26,8 +26,6 @@ import cn.fitrecipe.android.entity.Report;
 public class NutritionActivity extends Activity implements View.OnClickListener {
 
     private ImageView back_btn;
-    private ImageView right_btn;
-    private TextView header_name_text;
 
     private TextView ingredient_title, recipe_all_calorie, user_need_calorie, calorie_radio;
     private LinearLayout nutrition_punch;
@@ -66,10 +64,6 @@ public class NutritionActivity extends Activity implements View.OnClickListener 
     private void initView() {
         back_btn = (ImageView) findViewById(R.id.left_btn);
         back_btn.setImageResource(R.drawable.icon_back_white);
-        right_btn = (ImageView) findViewById(R.id.right_btn);
-        right_btn.setVisibility(View.GONE);
-        header_name_text = (TextView) findViewById(R.id.header_name_text);
-        header_name_text.setText("营养分析");
         ingredient_title = (TextView) findViewById(R.id.ingredient_title);
         nutrition_punch = (LinearLayout) findViewById(R.id.nutrition_punch);
         meal_pic = (ImageView) findViewById(R.id.meal_pic);
@@ -112,7 +106,7 @@ public class NutritionActivity extends Activity implements View.OnClickListener 
                 for (int i = 0; i < items.size(); i++)
                     total += Math.round(items.get(i).getCalories_take());
                 recipe_all_calorie.setText(total + "kcal");
-                user_need_calorie.setText(report.getCaloriesIntake() + "kcal");
+                user_need_calorie.setText(Math.round(report.getCaloriesIntake()) + "kcal");
                 calorie_radio.setText(Math.round(total * 100 / report.getCaloriesIntake()) + "%");
                 double sum = itema.getProtein_take() + itema.getFat_take() + itema.getCarbohydrate_take();
                 int a = (int) Math.round(itema.getCarbohydrate_take() * 100 / sum);
@@ -133,7 +127,7 @@ public class NutritionActivity extends Activity implements View.OnClickListener 
         int a = (int) Math.round(item.getCarbohydrate_take() * 100 / sum);
         int b = (int) Math.round(item.getProtein_take() * 100 / sum);
         int c = 100 - a - b;
-        take_already_piechart.setValue(new float[]{a, b, c}, true, false, true);
+        take_already_piechart.setValue(new float[]{a, b, c}, true, false, false);
         nutrition_punch.setVisibility(View.GONE);
         user_need_calorie.setText(Math.round(report.getCaloriesIntake()) + "kcal");
         nutritionAdapter = new NutritionAdapter(this, item.getNutritions());
@@ -193,25 +187,54 @@ public class NutritionActivity extends Activity implements View.OnClickListener 
             else {
                 convertView = View.inflate(context, R.layout.nutrition_list_item, null);
                 holder = new ViewHolder();
+                holder.list_item = (LinearLayout) convertView.findViewById(R.id.list_item);
+                if(position%2==1){
+                    holder.list_item.setBackgroundColor(getResources().getColor(R.color.nutrition_gray));
+                }else{
+                    holder.list_item.setBackgroundColor(getResources().getColor(R.color.white));
+                }
                 holder.textView1 = (TextView) convertView.findViewById(R.id.textview1);
                 holder.textView2 = (TextView) convertView.findViewById(R.id.textview2);
                 holder.textView3 = (TextView) convertView.findViewById(R.id.textview3);
                 holder.textView4 = (TextView) convertView.findViewById(R.id.textview4);
+                holder.textViewDash = (TextView) convertView.findViewById(R.id.textview_dash);
                 convertView.setTag(holder);
             }
-            Nutrition nutrition = data.get(position);
-            holder.textView1.setText(nutrition.getName());
-            holder.textView2.setText("1300");
-            holder.textView3.setText("1500g");
-            holder.textView4.setText(String.format("%.1f", nutrition.getAmount()) + nutrition.getUnit());
+            if (position==0){
+                holder.textView1.setText("营养元素");
+                holder.textView2.setText("建议摄入范围");
+                holder.textView4.setText("已摄入");
+                holder.textView3.setVisibility(View.GONE);
+                holder.textViewDash.setVisibility(View.GONE);
+                holder.textView1.setTextColor(getResources().getColor(R.color.login_input_text_color));
+                holder.textView2.setTextColor(getResources().getColor(R.color.login_input_text_color));
+                holder.textView3.setTextColor(getResources().getColor(R.color.login_input_text_color));
+                holder.textView4.setTextColor(getResources().getColor(R.color.login_input_text_color));
+                holder.textViewDash.setTextColor(getResources().getColor(R.color.login_input_text_color));
+            }else {
+                Nutrition nutrition = data.get(position-1);
+                holder.textView1.setText(nutrition.getName());
+                holder.textView2.setText("1300");
+                holder.textView3.setText("1500g");
+                holder.textView4.setText(String.format("%.1f", nutrition.getAmount()) + nutrition.getUnit());
+                holder.textView3.setVisibility(View.VISIBLE);
+                holder.textViewDash.setVisibility(View.VISIBLE);
+                holder.textView1.setTextColor(getResources().getColor(R.color.nutrition_text_gray));
+                holder.textView2.setTextColor(getResources().getColor(R.color.nutrition_text_gray));
+                holder.textView3.setTextColor(getResources().getColor(R.color.nutrition_text_gray));
+                holder.textView4.setTextColor(getResources().getColor(R.color.nutrition_text_gray));
+                holder.textViewDash.setTextColor(getResources().getColor(R.color.nutrition_text_gray));
+            }
             return convertView;
         }
 
         class ViewHolder {
+            LinearLayout list_item;
             TextView textView1;
             TextView textView2;
             TextView textView3;
             TextView textView4;
+            TextView textViewDash;
         }
     }
 }

@@ -32,4 +32,6 @@
 
     <color name="plan_add">#ff7a7a7a</color>
     <color name="plan_border">#ffdbdbdb</color>
+    <color name="nutrition_gray">#f8f8f8</color>
+    <color name="nutrition_text_gray">#a4a4a4</color>
 </resources>
