@@ -954,6 +954,75 @@
           }
         }
 
+## Upload Evaluation  [/api/account/upload_evaluation/]
+### Upload Evaluation [POST]
+
++ Request (application/json)
+
+    + Headers
+        Authorization: Token "user token"
+
+    + Body
+
+        {
+            "exerciseFrequency":1,
+            "jobType":1,
+            "daysToGoal":50,
+            "weightGoal":70,
+            "weight":65,
+            "height":173,
+            "exerciseInterval":1,
+            "age":23,
+            "preciseFat":0.2,
+            "goalType":true,
+            "gender":0,
+            "roughFat":1
+        }
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "error_message": null,
+            "data": "added"
+        }
+
+## Download Evaluation [/api/account/download_evaluation/]
+### Download Evaluation [GET]
+
++ Request (application/json)
+    
+    + Header
+        Authorization: Token "user token"
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "error_message": null,
+            "data": {
+                "id": 1,
+                "user": {
+                    "nick_name": "IklsJ95379",
+                    "is_official": false,
+                    "id": 3,
+                    "avatar": "http://tp2.sinaimg.cn/1937464505/180/5708528601/1"
+                },
+                "gender": 0,
+                "age": 23,
+                "height": 173,
+                "weight": 65,
+                "roughFat": 1,
+                "preciseFat": 0.2,
+                "jobType": 1,
+                "goalType": 1,
+                "exerciseFrequency": 1,
+                "exerciseInterval": 1,
+                "weightGoal": 70,
+                "daysToGoal": 50
+            }
+        }
+
 # Group Plan
 ## Official Plan List [/api/plan/list/]
 ### Get Official Plans [GET]
