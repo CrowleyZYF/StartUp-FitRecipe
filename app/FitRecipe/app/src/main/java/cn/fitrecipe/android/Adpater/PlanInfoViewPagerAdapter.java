@@ -38,12 +38,12 @@ public class PlanInfoViewPagerAdapter extends PagerAdapter {
         if(position==0){
             planInfoContainer = LayoutInflater.from(context).inflate(R.layout.activity_plan_choice_intro_1, null);
             TextView choice_name = (TextView) planInfoContainer.findViewById(R.id.choice_name);
-            choice_name.setText(plan.getName());
+            choice_name.setText(plan.getTitle());
             TextView choice_intro = (TextView) planInfoContainer.findViewById(R.id.choice_intro);
-            choice_intro.setText(plan.getIntro());
+            choice_intro.setText(plan.getInrtoduce());
             ImageView choice_hard_rank_02 = (ImageView) planInfoContainer.findViewById(R.id.choice_hard_rank_02);
             ImageView choice_hard_rank_03 = (ImageView) planInfoContainer.findViewById(R.id.choice_hard_rank_03);
-            switch (plan.getHard_rank()){
+            switch (plan.getDifficulty()){
                 case 1:
                     choice_hard_rank_02.setVisibility(View.GONE);
                     choice_hard_rank_03.setVisibility(View.GONE);
@@ -58,7 +58,7 @@ public class PlanInfoViewPagerAdapter extends PagerAdapter {
             }
             ImageView choice_delicious_rank_02 = (ImageView) planInfoContainer.findViewById(R.id.choice_delicious_rank_02);
             ImageView choice_delicious_rank_03 = (ImageView) planInfoContainer.findViewById(R.id.choice_delicious_rank_03);
-            switch (plan.getDelicious_rank()){
+            switch (plan.getDelicious()){
                 case 1:
                     choice_delicious_rank_02.setVisibility(View.GONE);
                     choice_delicious_rank_03.setVisibility(View.GONE);
@@ -72,9 +72,9 @@ public class PlanInfoViewPagerAdapter extends PagerAdapter {
                     break;
             }
             TextView choice_join = (TextView) planInfoContainer.findViewById(R.id.choice_join);
-            choice_join.setText(plan.getJoin()+"人已采用");
+            choice_join.setText(plan.getDish_headcount()+"人已采用");
             TextView choice_label = (TextView) planInfoContainer.findViewById(R.id.choice_label);
-            if(plan.getLabel() == 0){
+            if(plan.getBenifit() == 0){
                 choice_label.setText(R.string.muscle);
             }else{
                 choice_label.setText(R.string.fat);
@@ -86,7 +86,7 @@ public class PlanInfoViewPagerAdapter extends PagerAdapter {
                 choice_type.setText(R.string.plan_recipe);
             }
             TextView choice_days = (TextView) planInfoContainer.findViewById(R.id.choice_days);
-            choice_days.setText(plan.getDays() + "");
+            choice_days.setText(plan.getTotal_days() + "");
 
             final Button choice_join_btn = (Button) planInfoContainer.findViewById(R.id.choice_join_btn);
             if(!plan.isUsed()) {
@@ -123,29 +123,29 @@ public class PlanInfoViewPagerAdapter extends PagerAdapter {
             planInfoContainer = LayoutInflater.from(context).inflate(R.layout.activity_plan_choice_intro_2, null);
             CircleImageView author_avatar = (CircleImageView) planInfoContainer.findViewById(R.id.author_avatar);
 //            author_avatar.setImageResource(R.drawable.author_header);
-            FrApplication.getInstance().getMyImageLoader().displayImage(author_avatar, plan.getAuthor_avatar());
+            FrApplication.getInstance().getMyImageLoader().displayImage(author_avatar, plan.getAuthor().getAvatar());
             TextView author_name = (TextView) planInfoContainer.findViewById(R.id.author_name);
-            author_name.setText(plan.getAuthor_name());
+            author_name.setText(plan.getAuthor().getName());
             TextView author_type = (TextView) planInfoContainer.findViewById(R.id.author_type);
             LinearLayout author_type_01 = (LinearLayout) planInfoContainer.findViewById(R.id.author_type_01);
             LinearLayout author_type_02 = (LinearLayout) planInfoContainer.findViewById(R.id.author_type_02);
-            if (plan.getAuthor_type() == 0){
+            if (plan.getAuthor().getType() == 0){
                 author_type.setText("健身达人");
                 author_type_01.setVisibility(View.VISIBLE);
                 author_type_02.setVisibility(View.GONE);
                 TextView fit_year = (TextView) planInfoContainer.findViewById(R.id.fit_year);
-                fit_year.setText(plan.getAuthor_years() + "");
+                fit_year.setText(plan.getAuthor().getFit_duration() + "");
                 TextView fit_fat = (TextView) planInfoContainer.findViewById(R.id.fit_fat);
-                fit_fat.setText(plan.getAuthor_fatratio() + "%");
+                fit_fat.setText(plan.getAuthor().getFat() + "%");
             }else {
                 author_type.setText("营养师");
                 author_type_01.setVisibility(View.GONE);
                 author_type_02.setVisibility(View.VISIBLE);
                 TextView fit_title = (TextView) planInfoContainer.findViewById(R.id.fit_title);
-                fit_title.setText(plan.getAuthor_title());
+                fit_title.setText(plan.getAuthor().getJob_title());
             }
             TextView author_intro = (TextView) planInfoContainer.findViewById(R.id.author_intro);
-            author_intro.setText("简介：" + plan.getAuthor_intro());
+            author_intro.setText("简介：" + plan.getAuthor().getIntroduce());
             TextView choice_intro = (TextView) planInfoContainer.findViewById(R.id.plan_intro);
             choice_intro.setText(plan.getDesc());
         }

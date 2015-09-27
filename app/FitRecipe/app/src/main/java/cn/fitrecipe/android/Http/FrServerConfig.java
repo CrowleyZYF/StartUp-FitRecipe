@@ -141,4 +141,16 @@ public class FrServerConfig {
     public static String getReportUrl() {
         return HOST + "/api/accounts/upload_evaluation/";
     }
+
+    public static String getQiNiuHost() {
+        return "http://7xk6xp.com1.z0.glb.clouddn.com/";
+    }
+
+    public static String getOfficalPlanUrl() {
+        return HOST + "/api/plan/list/";
+    }
+
+    public static String getPlanDetails(int id) {
+        return HOST + "/api/plan/" + id + "/";
+    }
 }

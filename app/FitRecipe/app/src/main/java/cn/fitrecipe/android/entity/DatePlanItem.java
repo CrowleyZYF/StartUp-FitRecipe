@@ -1,15 +1,17 @@
 package cn.fitrecipe.android.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by wk on 2015/9/14.
  */
-public class DatePlanItem {
+public class DatePlanItem implements Serializable{
 
     private String type;
     private String time;
+    private String date;
     private double calories_need;
     private double calories_take;
     private double carbohydrate_need;
@@ -21,6 +23,7 @@ public class DatePlanItem {
     private boolean isPunch;
     private boolean isInBasket;
     private String imageCover;
+    private String defaultImageCover;
     private int punchNums;
     private ArrayList<PlanComponent> components;
 
@@ -223,5 +226,21 @@ public class DatePlanItem {
             }
         }
         return res;
+    }
+
+    public String getDefaultImageCover() {
+        return defaultImageCover;
+    }
+
+    public void setDefaultImageCover(String defaultImageCover) {
+        this.defaultImageCover = defaultImageCover;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

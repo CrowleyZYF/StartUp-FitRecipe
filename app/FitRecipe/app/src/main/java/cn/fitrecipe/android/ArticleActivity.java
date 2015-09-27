@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
+import com.qiniu.android.http.AsyncHttpClientMod;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -69,6 +70,7 @@ public class ArticleActivity extends Activity implements View.OnClickListener{
             }
         });
         FrRequest.getInstance().request(request);
+
     }
 
     private void processData(JSONObject data) {

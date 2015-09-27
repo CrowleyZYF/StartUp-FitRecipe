@@ -9,13 +9,34 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import cn.fitrecipe.android.Adpater.PlanDetailViewPagerAdapter;
 import cn.fitrecipe.android.Adpater.PlanInfoViewPagerAdapter;
+import cn.fitrecipe.android.Http.FrRequest;
+import cn.fitrecipe.android.Http.FrServerConfig;
+import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.UI.PlanDetailViewPager;
 import cn.fitrecipe.android.UI.PlanScrollView;
+import cn.fitrecipe.android.entity.DatePlan;
+import cn.fitrecipe.android.entity.DatePlanItem;
+import cn.fitrecipe.android.entity.PlanAuthor;
+import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.SeriesPlan;
 import me.relex.circleindicator.CircleIndicator;
+import pl.tajchert.sample.DotsTextView;
 
 /**
  * Created by 奕峰 on 2015/5/8.
@@ -34,6 +55,9 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
     private ImageView author_btn;
     private ImageView nutrition_btn;
 
+    private LinearLayout loadingInterface;
+    private DotsTextView dotsTextView;
+
     private PlanDetailViewPager planDetailViewPager;
     private PlanDetailViewPagerAdapter planDetailViewPagerAdapter;
     private ImageView prev_day_btn;
@@ -48,11 +72,116 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan_choice_info);
 
-        plan = (SeriesPlan) getIntent().getSerializableExtra("plan");
-
+        int plan_id =  getIntent().getIntExtra("plan_id", 0);
         initView();
+        getData(plan_id);
         initData();
         initEvent();
+    }
+
+    private void getData(int id) {
+        String url = FrServerConfig.getPlanDetails(id);
+        GetRequest request = new GetRequest(url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject res) {
+                if (res != null && res.has("data")) {
+                    try {
+                        JSONObject data = res.getJSONObject("data");
+                        processData(data);
+                        hideLoading(false, "");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                if (volleyError != null && volleyError.networkResponse != null) {
+                    hideLoading(true, getResources().getString(R.string.network_error));
+                    int statusCode = volleyError.networkResponse.statusCode;
+                    if (statusCode == 404) {
+                        Toast.makeText(
+                                PlanChoiceInfoActivity.this, "404！", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+        FrRequest.getInstance().request(request);
+
+    }
+
+    private void processData(JSONObject data) throws JSONException{
+        SeriesPlan plan = new SeriesPlan();
+        plan.setId(data.getInt("id"));
+        plan.setImg(data.getString("img"));
+        plan.setInrtoduce(data.getString("introduce"));
+        plan.setDifficulty(data.getInt("difficulty"));
+        plan.setDelicious(data.getInt("delicious"));
+        plan.setBenifit(data.getInt("benifit"));
+        plan.setTotal_days(data.getInt("total_days"));
+        plan.setDish_headcount(data.getInt("dish_headcount"));
+
+        JSONObject author_json = data.getJSONObject("author");
+        plan.setAuthor(new Gson().fromJson(author_json.toString(), PlanAuthor.class));
+
+        ArrayList<DatePlan> datePlans = new ArrayList<>();
+
+        JSONArray routine_set = data.getJSONArray("routine_set");
+        for(int i  = 0; i < routine_set.length(); i++) {
+            JSONObject routine = routine_set.getJSONObject(i);
+            DatePlan datePlan = new DatePlan();
+            datePlan.setPlan_name(plan.getTitle());
+            JSONArray dish_set = routine.getJSONArray("dish_set");
+            List<DatePlanItem> items = new ArrayList<>();
+            for(int j = 0; j < dish_set.length(); j++) {
+                DatePlanItem item = new DatePlanItem();
+                int type = dish_set.getJSONObject(j).getInt("type");
+                switch (type) {
+                    case 0:
+                        item.setType("breakfast");  break;
+                    case 1:
+                        item.setType("add_meal_01"); break;
+                    case 2:
+                        item.setType("lunch");  break;
+                    case 3:
+                        item.setType("add_meal_02"); break;
+                    case 4:
+                        item.setType("supper");  break;
+                    case 5:
+                        item.setType("add_meal_03"); break;
+                }
+                JSONArray singleingredient_set = dish_set.getJSONObject(j).getJSONArray("singleingredient_set");
+                ArrayList<PlanComponent> componentList = new ArrayList<>();
+                for(int k = 0; k < singleingredient_set.length(); k++) {
+                    PlanComponent component = new PlanComponent();
+                    component.setType(0);
+                    component.setName(singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getString("name"));
+                    component.setAmount(singleingredient_set.getJSONObject(k).getInt("amount"));
+                    componentList.add(component);
+                }
+                JSONArray singlerecipe_set = dish_set.getJSONObject(j).getJSONArray("singlerecipe_set");
+                //TODO
+
+
+                item.setComponents(componentList);
+                items.add(item);
+            }
+            datePlan.setItems(items);
+            datePlans.add(datePlan);
+        }
+        plan.setDatePlans(datePlans);
+    }
+
+    private void hideLoading(boolean isError, String errorMessage){
+        loadingInterface.setVisibility(View.GONE);
+        dotsTextView.stop();
+        if(isError){
+            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+        }else{
+            info_container.setVisibility(View.VISIBLE);
+            info_container.smoothScrollTo(0, 0);
+        }
     }
 
     private void initView() {
@@ -76,9 +205,12 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
         planDetailViewPager = (PlanDetailViewPager) findViewById(R.id.plan_detail);
         prev_day_btn = (ImageView) findViewById(R.id.prev_day_btn);
         next_day_btn = (ImageView) findViewById(R.id.next_day_btn);
-        plan_day.setText(1 + "/" + plan.getDays());
+        plan_day.setText(1 + "/" + plan.getTotal_days());
         nutrition_btn = (ImageView) findViewById(R.id.nutrition_btn);
         plan_calories.setText(Math.round(plan.getDatePlans().get(0).getTotalCalories())+"");
+
+        loadingInterface = (LinearLayout)findViewById(R.id.loading_interface);
+        dotsTextView = (DotsTextView) findViewById(R.id.dots);
     }
 
     private void initData() {
@@ -148,7 +280,7 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
     public void goNext(){
         nowY = info_container.getScrollY();
         planDetailViewPager.setCurrentItem(planDetailViewPager.getCurrentItem()+1, true);
-        plan_day.setText((planDetailViewPager.getCurrentItem()+1) + "/" + plan.getDays());
+        plan_day.setText((planDetailViewPager.getCurrentItem()+1) + "/" + plan.getTotal_days());
         plan_calories.setText(Math.round(plan.getDatePlans().get(planDetailViewPager.getCurrentItem()).getTotalCalories())+"");
         info_container.smoothScrollTo(0, nowY);
     }
@@ -156,7 +288,7 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
     public void goPrev(){
         nowY = info_container.getScrollY();
         planDetailViewPager.setCurrentItem(planDetailViewPager.getCurrentItem()-1, true);
-        plan_day.setText((planDetailViewPager.getCurrentItem()+1) + "/" + plan.getDays());
+        plan_day.setText((planDetailViewPager.getCurrentItem()+1) + "/" + plan.getTotal_days());
         info_container.smoothScrollTo(0, nowY);
     }
 

@@ -36,7 +36,8 @@ repositories {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+
+    //    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':social_sdk_library_project')
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile project(':youkuPlayerOpenSDK')
@@ -60,7 +61,10 @@ dependencies {
     compile 'pl.tajchert:waitingdots:0.2.0'
     //    compile 'in.srain.cube:ultra-ptr:1.0.9@aar'
     compile files('libs/gson-2.3.1.jar')
+    compile files('libs/ormlite-core-4.49-SNAPSHOT.jar')
     compile files('libs/ormlite-android-4.49-SNAPSHOT.jar')
     compile files('libs/AndroidSwipeLayout-v1.1.8.jar')
-//    compile 'me.villani.lorenzo.android:android-cropimage:1.1.0'
+    compile 'com.qiniu:qiniu-android-sdk:7.0.+'
+    compile 'com.qiniu:happy-dns:0.2.3.2'
+    compile files('libs/qiniu-java-sdk.jar')
 }

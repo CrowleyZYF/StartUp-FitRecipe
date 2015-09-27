@@ -142,16 +142,16 @@ public class FrDbHelper {
     public void setPlanUsed(SeriesPlan plan) {
         PlanInUseDao dao = new PlanInUseDao(context);
         PlanInUse planInUse = new PlanInUse();
-        planInUse.setDays(plan.getDays());
-        planInUse.setName(plan.getName());
+        planInUse.setDays(plan.getTotal_days());
+        planInUse.setName(plan.getTitle());
         planInUse.setStartDate(Common.getDate());
         planInUse.setDateplans(plan.getDatePlans());
         dao.setPlanInUse(planInUse);
 
         for (int i = 0; i < 7; i++) {
-            DatePlan datePlan = planInUse.getDateplans().get(i % plan.getDays());
+            DatePlan datePlan = planInUse.getDateplans().get(i % plan.getTotal_days());
             datePlan.setDate(Common.getSomeDay(Common.getDate(), i));
-            datePlan.setPlan_name(plan.getName());
+            datePlan.setPlan_name(plan.getTitle());
             addDatePlan(datePlan);
         }
     }
@@ -257,7 +257,7 @@ public class FrDbHelper {
         item1.setCarbohydrate_need(1000);
         item1.setFat_need(1000);
         item1.setProtein_need(1000);
-        item1.setImageCover("drawable://" + R.drawable.breakfast);
+        item1.setDefaultImageCover("drawable://" + R.drawable.breakfast);
         item1.setTime("08:30am");
         item1.setType("breakfast");
 
@@ -267,7 +267,7 @@ public class FrDbHelper {
         item2.setCarbohydrate_need(1000);
         item2.setFat_need(1000);
         item2.setProtein_need(1000);
-        item2.setImageCover("drawable://" + R.drawable.add_meal_01);
+        item2.setDefaultImageCover("drawable://" + R.drawable.add_meal_01);
         item2.setTime("10:30am");
         item2.setType("add_meal_01");
 
@@ -277,7 +277,7 @@ public class FrDbHelper {
         item3.setCarbohydrate_need(1000);
         item3.setFat_need(1000);
         item3.setProtein_need(1000);
-        item3.setImageCover("drawable://" + R.drawable.lunch);
+        item3.setDefaultImageCover("drawable://" + R.drawable.lunch);
         item3.setTime("12:30am");
         item3.setType("lunch");
 
@@ -286,7 +286,7 @@ public class FrDbHelper {
         item4.setCarbohydrate_need(1000);
         item4.setFat_need(1000);
         item4.setProtein_need(1000);
-        item4.setImageCover("drawable://" + R.drawable.add_meal_02);
+        item4.setDefaultImageCover("drawable://" + R.drawable.add_meal_02);
         item4.setTime("15:30am");
         item4.setType("add_meal_02");
 
@@ -295,7 +295,7 @@ public class FrDbHelper {
         item5.setCarbohydrate_need(1000);
         item5.setFat_need(1000);
         item5.setProtein_need(1000);
-        item5.setImageCover("drawable://" + R.drawable.dinner);
+        item5.setDefaultImageCover("drawable://" + R.drawable.dinner);
         item5.setTime("18:30am");
         item5.setType("supper");
 
@@ -305,7 +305,7 @@ public class FrDbHelper {
         item6.setCarbohydrate_need(1000);
         item6.setFat_need(1000);
         item6.setProtein_need(1000);
-        item6.setImageCover("drawable://" + R.drawable.add_meal_03);
+        item6.setDefaultImageCover("drawable://" + R.drawable.add_meal_03);
         item6.setTime("22:30am");
         item6.setType("add_meal_03");
 

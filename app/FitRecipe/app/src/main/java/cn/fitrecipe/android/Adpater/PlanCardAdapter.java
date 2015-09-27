@@ -46,8 +46,7 @@ public class PlanCardAdapter extends RecyclerView.Adapter<PlanCardAdapter.PlanCa
                 // String id = ((TextView) v.findViewById(R.id.choice_id)).getText().toString();
                 Intent intent=new Intent(context,PlanChoiceInfoActivity.class);
                 //intent.putExtra("id", id);
-                //TODO
-                intent.putExtra("plan", planCardsList.get(i));
+                intent.putExtra("plan_id", planCardsList.get(i).getId());
                 context.startActivity(intent);
             }
         });
@@ -59,8 +58,8 @@ public class PlanCardAdapter extends RecyclerView.Adapter<PlanCardAdapter.PlanCa
     public void onBindViewHolder(PlanCardAdapter.PlanCardViewHolder contactViewHolder, int i) {
         SeriesPlan pc = planCardsList.get(i);
         contactViewHolder.choice_id.setText(pc.getId()+"");
-        contactViewHolder.choice_name.setText(pc.getName());
-        switch (pc.getHard_rank()){
+        contactViewHolder.choice_name.setText(pc.getTitle());
+        switch (pc.getDifficulty()){
             case 1:
                 contactViewHolder.choice_hard_rank_02.setVisibility(View.GONE);
                 contactViewHolder.choice_hard_rank_03.setVisibility(View.GONE);
@@ -73,7 +72,7 @@ public class PlanCardAdapter extends RecyclerView.Adapter<PlanCardAdapter.PlanCa
             default:
                 break;
         }
-        switch (pc.getDelicious_rank()){
+        switch (pc.getDelicious()){
             case 1:
                 contactViewHolder.choice_delicious_rank_02.setVisibility(View.GONE);
                 contactViewHolder.choice_delicious_rank_03.setVisibility(View.GONE);
@@ -86,7 +85,7 @@ public class PlanCardAdapter extends RecyclerView.Adapter<PlanCardAdapter.PlanCa
             default:
                 break;
         }
-        if (pc.getLabel()==0){//增肌
+        if (pc.getBenifit()==0){//增肌
             contactViewHolder.choice_label.setText(R.string.muscle);
             contactViewHolder.choice_label.setBackgroundColor(this.context.getResources().getColor(R.color.perfect_background));
             contactViewHolder.choice_label.setPadding(0,10,0,10);
@@ -100,18 +99,18 @@ public class PlanCardAdapter extends RecyclerView.Adapter<PlanCardAdapter.PlanCa
         }else{
             contactViewHolder.choice_type.setText(R.string.plan_recipe);
         }
-        contactViewHolder.choice_days.setText(pc.getDays()+"天");
-        contactViewHolder.choice_join.setText(pc.getJoin() + "人");
+        contactViewHolder.choice_days.setText(pc.getTotal_days()+"天");
+        contactViewHolder.choice_join.setText(pc.getDish_headcount() + "人");
 //        contactViewHolder.choice_background.setBackground(this.context.getResources().getDrawable(pc.getBackground()));
-        FrApplication.getInstance().getMyImageLoader().displayImage(contactViewHolder.choice_background, pc.getBackground());
-        contactViewHolder.author_name.setText(pc.getAuthor_name()+"");
-        if(pc.getAuthor_type()==0){
+        FrApplication.getInstance().getMyImageLoader().displayImage(contactViewHolder.choice_background, pc.getImg());
+        contactViewHolder.author_name.setText(pc.getAuthor().getName()+"");
+        if(pc.getAuthor().getType()==0){
             contactViewHolder.author_type.setText("健身达人");
         }else{
             contactViewHolder.author_type.setText("营养师");
         }
 //        contactViewHolder.author_avatar.setImageResource(R.drawable.author_header);
-        FrApplication.getInstance().getMyImageLoader().displayImage(contactViewHolder.author_avatar, pc.getAuthor_avatar());
+        FrApplication.getInstance().getMyImageLoader().displayImage(contactViewHolder.author_avatar, pc.getAuthor().getAvatar());
         if(pc.isUsed()){
             contactViewHolder.isUsed.setVisibility(View.VISIBLE);
         }else{

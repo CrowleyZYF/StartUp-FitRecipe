@@ -62,7 +62,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private String backActivity;
 
     private void loginSuccess(JSONObject data) throws JSONException {
-
+        System.out.println(data);
         Author author = new Gson().fromJson(data.toString(), Author.class);
         author.setIsLogin(true);
         FrApplication.getInstance().setAuthor(author);

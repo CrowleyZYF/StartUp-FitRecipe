@@ -13,7 +13,10 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -98,9 +101,21 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
     }
 
 
-    private void processData(JSONObject data) throws JSONException {
-        Recipe recipe = Recipe.fromJson(data.toString());
-        initData(recipe);
+    private void processData(JSONArray data) throws JSONException {
+        Gson gson = new Gson();
+        ArrayList<SeriesPlan> plans = gson.fromJson(data.toString(), new TypeToken<ArrayList<SeriesPlan>>(){}.getType());
+        if(plans != null) {
+            PlanInUseDao dao = new PlanInUseDao(this);
+            PlanInUse planInUse = dao.getPlanInUse();
+            if(planInUse != null) {
+                for (int i = 0; i < plans.size(); i++) {
+                    if (planInUse.getName().equals(plans.get(i).getTitle()))
+                        plans.get(i).setIsUsed(true);
+                }
+            }
+        }
+        planCardAdapter = new PlanCardAdapter(this, plans);
+        planChoiceRecyclerView.setAdapter(planCardAdapter);
     }
 
     private void hideLoading(boolean isError, String errorMessage){
@@ -115,12 +130,12 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
     }
 
     private void getData() {
-        GetRequest request = new GetRequest(FrServerConfig.getRecipeDetails("8"), FrApplication.getInstance().getToken(), new JSONObject(), new Response.Listener<JSONObject>() {
+        GetRequest request = new GetRequest(FrServerConfig.getOfficalPlanUrl(), null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {
                 if (res != null && res.has("data")) {
                     try {
-                        JSONObject data = res.getJSONObject("data");
+                        JSONArray data = res.getJSONArray("data");
                         processData(data);
                         hideLoading(false, "");
                     } catch (JSONException e) {
@@ -135,105 +150,12 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
                     hideLoading(true, getResources().getString(R.string.network_error));
                     int statusCode = volleyError.networkResponse.statusCode;
                     if (statusCode == 404) {
-                        Toast.makeText(PlanChoiceActivity.this, "食谱不存在！", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PlanChoiceActivity.this, "404！", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
         });
         FrRequest.getInstance().request(request);
-    }
-    private void initData(Recipe recipe) {
-        List<SeriesPlan> plans = new ArrayList<>();
-        SeriesPlan plan = new SeriesPlan();
-        plan.setId(1);
-        plan.setName("低碳减肥法");
-        plan.setDays(2);
-        plan.setAuthor_avatar("http://tp4.sinaimg.cn/1714487171/180/40036635794/1");
-        plan.setBackground("http://ww1.sinaimg.cn/bmiddle/81f8b0e2gw1evv4r7gen8j20hq08rt9s.jpg");
-        plan.setAuthor_type(0);
-        plan.setAuthor_name("Lucy");
-        plan.setIsUsed(false);
-        plan.setJoin(100);
-        plan.setDelicious_rank(2);
-        plan.setHard_rank(1);
-        plan.setLabel(0);
-        plan.setType(1);
-        plan.setIntro("很有意思的饮食方案，让你能够在最短的时间里减肥减好多，减脂无敌了");
-        plan.setDesc("1. 以低GI食物为主\n2. 以低GI食物为主\n3. 以低GI食物为主");
-        plan.setAuthor_intro("作为一个酸奶重度依赖者，在写这篇文章之前，我需要先告诉大家，这篇文章，这个话题。");
-        plan.setAuthor_years(3);
-        plan.setAuthor_fatratio(21);
-        plan.setAuthor_type(1);
-        plan.setAuthor_title("高级营养师");
-        //
-        ArrayList<DatePlan> datePlans = new ArrayList<>();
-        DatePlan datePlan = new DatePlan();
-        List<DatePlanItem> items = new ArrayList<>();
-        DatePlanItem item= new DatePlanItem();
-        PlanComponent component = PlanComponent.getPlanComponentFromRecipe(recipe, 100);
-        item.addContent(component);
-        item.setImageCover("http://ww1.sinaimg.cn/thumbnail/81f8b0e2gw1evwcdxbiumj20c7077q3x.jpg");
-        item.setType("breakfast");
-        items.add(item);
-
-        DatePlanItem item1 = new DatePlanItem();
-        PlanComponent component1 = PlanComponent.getPlanComponentFromRecipe(recipe, 200);
-        item1.addContent(component1);
-        item1.setImageCover("http://ww1.sinaimg.cn/thumbnail/81f8b0e2gw1evwcdxbiumj20c7077q3x.jpg");
-        item1.setType("add_meal_01");
-        items.add(item1);
-
-
-        DatePlanItem item2= new DatePlanItem();
-        PlanComponent component2 = PlanComponent.getPlanComponentFromRecipe(recipe, 300);
-        item2.addContent(component2);
-        item2.setImageCover("http://ww1.sinaimg.cn/thumbnail/81f8b0e2gw1evwcdxbiumj20c7077q3x.jpg");
-        item2.setType("lunch");
-        items.add(item2);
-
-
-        DatePlanItem item3= new DatePlanItem();
-        PlanComponent component3 = PlanComponent.getPlanComponentFromRecipe(recipe, 400);
-        item3.addContent(component3);
-        item3.setImageCover("http://ww1.sinaimg.cn/thumbnail/81f8b0e2gw1evwcdxbiumj20c7077q3x.jpg");
-        item3.setType("add_meal_02");
-        items.add(item3);
-
-
-        DatePlanItem item4 = new DatePlanItem();
-        PlanComponent component4 = PlanComponent.getPlanComponentFromRecipe(recipe, 500);
-        item4.addContent(component4);
-        item4.setImageCover("http://ww1.sinaimg.cn/thumbnail/81f8b0e2gw1evwcdxbiumj20c7077q3x.jpg");
-        item4.setType("supper");
-        items.add(item4);
-//
-
-        DatePlanItem item5 = new DatePlanItem();
-        PlanComponent component5 = PlanComponent.getPlanComponentFromRecipe(recipe, 600);
-        item5.addContent(component5);
-        item5.setImageCover("http://ww1.sinaimg.cn/thumbnail/81f8b0e2gw1evwcdxbiumj20c7077q3x.jpg");
-        item5.setType("add_meal_03");
-        items.add(item5);
-
-        datePlan.setItems(items);
-
-//        DayPlan dayPlan1 = FrDbHelper.getInstance(this).getDayPlan(str);
-//        DayPlan dayPlan2 = FrDbHelper.getInstance(this).getDayPlan(str);
-        datePlans.add(datePlan);
-        datePlans.add(datePlan);
-
-        //
-        PlanInUseDao dao = new PlanInUseDao(this);
-        PlanInUse planInUse = dao.getPlanInUse();
-        if(planInUse == null)
-            plan.setIsUsed(false);
-        else
-            plan.setIsUsed(planInUse.getIsUsed()==1?true:false);
-
-        plan.setDatePlans(datePlans);
-        plans.add(plan);
-        planCardAdapter = new PlanCardAdapter(this, plans);
-        planChoiceRecyclerView.setAdapter(planCardAdapter);
     }
 
     private void initEvent() {

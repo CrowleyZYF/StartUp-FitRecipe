@@ -1,6 +1,7 @@
 package cn.fitrecipe.android.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,57 +10,24 @@ import java.util.List;
 public class SeriesPlan implements Serializable, Comparable<SeriesPlan> {
 
     private int id;
-    private String name;
-    private int hard_rank;
-    private int delicious_rank;
-    private int label;
-    private int days;
-    private int type;
-    private int join;
+    private String title;
+    private int difficulty;
+    private int delicious;
+    private int benifit;
+    private int total_days;
+    private int type;       //计划类型
+    private int dish_headcount;
     private String desc;
-    private String intro;
-    private String background;
-    private String author_name;
-    private int author_type;
-    private String author_avatar;
-    private String author_title;
-    private int author_years;
-    private int author_fatratio;
-    private String author_intro;
+    private String inrtoduce;
+    private String img;
+    private String created_time;
+    private String updated_time;
+    private boolean is_personal;
+    private String user;
+    private PlanAuthor author;
+    private String authored_date;
     private boolean isUsed;
     private List<DatePlan> datePlans;
-
-    public boolean isUsed() {
-        return isUsed;
-    }
-
-    public void setIsUsed(boolean isUsed) {
-        this.isUsed = isUsed;
-    }
-
-    public String getAuthor_name() {
-        return author_name;
-    }
-
-    public void setAuthor_name(String author_name) {
-        this.author_name = author_name;
-    }
-
-    public int getAuthor_type() {
-        return author_type;
-    }
-
-    public void setAuthor_type(int author_type) {
-        this.author_type = author_type;
-    }
-
-    public String getAuthor_avatar() {
-        return author_avatar;
-    }
-
-    public void setAuthor_avatar(String author_avatar) {
-        this.author_avatar = author_avatar;
-    }
 
     public int getId() {
         return id;
@@ -69,44 +37,44 @@ public class SeriesPlan implements Serializable, Comparable<SeriesPlan> {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public int getHard_rank() {
-        return hard_rank;
+    public int getDifficulty() {
+        return difficulty;
     }
 
-    public void setHard_rank(int hard_rank) {
-        this.hard_rank = hard_rank;
+    public void setDifficulty(int difficulty) {
+        this.difficulty = difficulty;
     }
 
-    public int getDelicious_rank() {
-        return delicious_rank;
+    public int getDelicious() {
+        return delicious;
     }
 
-    public void setDelicious_rank(int delicious_rank) {
-        this.delicious_rank = delicious_rank;
+    public void setDelicious(int delicious) {
+        this.delicious = delicious;
     }
 
-    public int getLabel() {
-        return label;
+    public int getBenifit() {
+        return benifit;
     }
 
-    public void setLabel(int label) {
-        this.label = label;
+    public void setBenifit(int benifit) {
+        this.benifit = benifit;
     }
 
-    public int getDays() {
-        return days;
+    public int getTotal_days() {
+        return total_days;
     }
 
-    public void setDays(int days) {
-        this.days = days;
+    public void setTotal_days(int total_days) {
+        this.total_days = total_days;
     }
 
     public int getType() {
@@ -117,43 +85,12 @@ public class SeriesPlan implements Serializable, Comparable<SeriesPlan> {
         this.type = type;
     }
 
-    public int getJoin() {
-        return join;
+    public int getDish_headcount() {
+        return dish_headcount;
     }
 
-    public void setJoin(int join) {
-        this.join = join;
-    }
-
-    public String getBackground() {
-        return background;
-    }
-
-    public void setBackground(String background) {
-        this.background = background;
-    }
-    public int getAuthor_fatratio() {
-        return author_fatratio;
-    }
-
-    public void setAuthor_fatratio(int author_fatratio) {
-        this.author_fatratio = author_fatratio;
-    }
-
-    public int getAuthor_years() {
-        return author_years;
-    }
-
-    public void setAuthor_years(int author_years) {
-        this.author_years = author_years;
-    }
-
-    public String getAuthor_intro() {
-        return author_intro;
-    }
-
-    public void setAuthor_intro(String author_intro) {
-        this.author_intro = author_intro;
+    public void setDish_headcount(int dish_headcount) {
+        this.dish_headcount = dish_headcount;
     }
 
     public String getDesc() {
@@ -164,20 +101,68 @@ public class SeriesPlan implements Serializable, Comparable<SeriesPlan> {
         this.desc = desc;
     }
 
-    public String getIntro() {
-        return intro;
+    public String getInrtoduce() {
+        return inrtoduce;
     }
 
-    public void setIntro(String intro) {
-        this.intro = intro;
+    public void setInrtoduce(String inrtoduce) {
+        this.inrtoduce = inrtoduce;
     }
 
-    public String getAuthor_title() {
-        return author_title;
+    public String getImg() {
+        return img;
     }
 
-    public void setAuthor_title(String author_title) {
-        this.author_title = author_title;
+    public void setImg(String img) {
+        this.img = img;
+    }
+
+    public String getCreated_time() {
+        return created_time;
+    }
+
+    public void setCreated_time(String created_time) {
+        this.created_time = created_time;
+    }
+
+    public String getUpdated_time() {
+        return updated_time;
+    }
+
+    public void setUpdated_time(String updated_time) {
+        this.updated_time = updated_time;
+    }
+
+    public boolean is_personal() {
+        return is_personal;
+    }
+
+    public void setIs_personal(boolean is_personal) {
+        this.is_personal = is_personal;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public PlanAuthor getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(PlanAuthor author) {
+        this.author = author;
+    }
+
+    public String getAuthored_date() {
+        return authored_date;
+    }
+
+    public void setAuthored_date(String authored_date) {
+        this.authored_date = authored_date;
     }
 
     @Override
@@ -191,5 +176,13 @@ public class SeriesPlan implements Serializable, Comparable<SeriesPlan> {
 
     public void setDatePlans(List<DatePlan> datePlans) {
         this.datePlans = datePlans;
+    }
+
+    public boolean isUsed() {
+        return isUsed;
+    }
+
+    public void setIsUsed(boolean isUsed) {
+        this.isUsed = isUsed;
     }
 }

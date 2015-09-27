@@ -108,7 +108,7 @@ public class CropImage extends MonitoredActivity {
         super.onCreate(icicle);
         mContentResolver = getContentResolver();
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.cropimage);
 
         mImageView = (CropImageView) findViewById(R.id.image);
@@ -164,7 +164,7 @@ public class CropImage extends MonitoredActivity {
         }
 
         // Make UI fullscreen.
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         findViewById(R.id.discard).setOnClickListener(
                 new View.OnClickListener() {
@@ -234,7 +234,7 @@ public class CropImage extends MonitoredActivity {
         if (isFinishing()) {
             return;
         }
-
+        mImageView.setBackgroundColor(0xff000000);
         mImageView.setImageBitmapResetBase(mBitmap, true);
 
         Util.startBackgroundJob(this, null,

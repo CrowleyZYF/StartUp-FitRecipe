@@ -68,7 +68,6 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState)
     {
         View v = inflater.inflate(R.layout.fragment_plan, container, false);
-        report = FrDbHelper.getInstance(getActivity()).getReport();
         initView(v);
         initEvent();
         initData();
@@ -97,21 +96,21 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         now = System.currentTimeMillis();
         adapter = new PlanElementAdapter(this, items, report);
         plans.setAdapter(adapter);
-        if(report.isGoalType()) {
-            plan_status.setText("增肌第");
-        }else{
-            plan_status.setText("减脂第");
-        }
+
 //        switchPlan(pointer);
         loadData();
-
     }
 
     private void loadData() {
         long t = System.currentTimeMillis();
         new AsyncTask<Void, Void, Void>() {
             @Override
-            protected void onProgressUpdate(Void... values) {
+            protected void onPostExecute(Void aVoid) {
+                if(report.isGoalType()) {
+                    plan_status.setText("增肌第");
+                }else{
+                    plan_status.setText("减脂第");
+                }
                 switchPlan(pointer, 1);
             }
 
@@ -120,8 +119,11 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 if (data != null)
                     data.clear();
                 datePlan = null;
-                data = FrDbHelper.getInstance(getActivity()).getDatePlan(Common.getSomeDay(Common.getDate(), -2), Common.getSomeDay(Common.getDate(), 6));
-                publishProgress();
+                report = FrDbHelper.getInstance(getActivity()).getReport();
+                String start = Common.getSomeDay(Common.getDate(), -2);
+                if(Common.CompareDate(start, report.getUpdatetime()) < 0)
+                    start = report.getUpdatetime();
+                data = FrDbHelper.getInstance(getActivity()).getDatePlan(start, Common.getSomeDay(Common.getDate(), 6));
                 return null;
             }
         }.execute();

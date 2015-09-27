@@ -66,6 +66,13 @@ public class Common {
         return sdf.format(afterDate);
     }
 
+    public static String getTime() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHmmss");
+        long now = System.currentTimeMillis();
+        Date afterDate = new Date(now);
+        return sdf.format(afterDate);
+    }
+
     public static int CompareDate(String a, String b) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {

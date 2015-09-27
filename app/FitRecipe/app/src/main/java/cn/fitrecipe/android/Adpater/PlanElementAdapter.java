@@ -20,10 +20,8 @@ import com.daimajia.swipe.SimpleSwipeListener;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import cn.fitrecipe.android.CameraActivity;
 import cn.fitrecipe.android.FrApplication;
 import cn.fitrecipe.android.PunchPhotoChoiceActivity;
 import cn.fitrecipe.android.R;
@@ -31,19 +29,15 @@ import cn.fitrecipe.android.RecipeActivity;
 import cn.fitrecipe.android.SelectRecipeActivity;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.dao.FrDbHelper;
-import cn.fitrecipe.android.entity.Component;
 import cn.fitrecipe.android.entity.DatePlanItem;
-import cn.fitrecipe.android.entity.DayPlan;
 import cn.fitrecipe.android.entity.PlanComponent;
-import cn.fitrecipe.android.entity.PlanItem;
-import cn.fitrecipe.android.entity.Recipe;
 import cn.fitrecipe.android.entity.Report;
 import cn.fitrecipe.android.fragment.PlanFragment;
 
 /**
  * Created by wk on 2015/8/26.
  */
-public class PlanElementAdapter extends BaseAdapter{
+public class PlanElementAdapter extends BaseAdapter implements View.OnClickListener{
 
     Fragment fragment;
     List<DatePlanItem> items;
@@ -141,14 +135,17 @@ public class PlanElementAdapter extends BaseAdapter{
 //                    ((ImageView)v).setImageResource(R.drawable.icon_plan_punch_active);
 //                    item.setIsPunch(true);
                     Intent intent = new Intent(fragment.getActivity(), PunchPhotoChoiceActivity.class);
+                    intent.putExtra("item", item);
                     fragment.startActivity(intent);
                     Toast.makeText(fragment.getActivity(), "打卡", Toast.LENGTH_SHORT).show();
                 }else {
                     item.setIsPunch(false);
-//                    ((ImageView)v).setImageResource(R.drawable.icon_plan_punch);
+                    ((ImageView)v).setImageResource(R.drawable.icon_plan_punch);
+                    item.setImageCover(null);
                     Toast.makeText(fragment.getActivity(), "取消打卡", Toast.LENGTH_SHORT).show();
+                    notifyDataSetChanged();
                 }
-                adapter.notifyDataSetChanged();
+//                adapter.notifyDataSetChanged();
             }
 
         });
@@ -237,16 +234,20 @@ public class PlanElementAdapter extends BaseAdapter{
         holder.plan_protein_intake.setText(Math.round(item.getProtein_take())+"");
         holder.plan_fat_intake.setText(Math.round(item.getFat_take()) + "");
         holder.plan_time.setText(item.getTime());
-        FrApplication.getInstance().getMyImageLoader().displayImage(holder.plan_image_cover, item.getImageCover());
+        if(item.getImageCover() == null) {
+            FrApplication.getInstance().getMyImageLoader().displayImage(holder.plan_image_cover, item.getDefaultImageCover());
+        }else
+            FrApplication.getInstance().getMyImageLoader().displayImage(holder.plan_image_cover, item.getImageCover());
+
 
         //
         holder.plan_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 PlanComponent component = item.getComponents().get(position);
-                if(component.getType() == 1) {
-                    String recipe_id = component.getId() +"";
-                    Intent intent=new Intent(fragment.getActivity(), RecipeActivity.class);
+                if (component.getType() == 1) {
+                    String recipe_id = component.getId() + "";
+                    Intent intent = new Intent(fragment.getActivity(), RecipeActivity.class);
                     intent.putExtra("id", recipe_id);
                     fragment.startActivity(intent);
                 }
@@ -258,6 +259,13 @@ public class PlanElementAdapter extends BaseAdapter{
             convertView.setLayoutParams(params);
         }*/
         return convertView;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+
+        }
     }
 
 

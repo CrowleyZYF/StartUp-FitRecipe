@@ -184,9 +184,9 @@ public class ReportActivity extends Activity implements View.OnClickListener{
         dietStructureView.setValue(report);
 
         water_min = (TextView) findViewById(R.id.water_min);
-        water_min.setText(Math.round(report.getWaterIntakeMin() * 1000) + "mL");
+        water_min.setText(Math.round(report.getWaterIntakeMin() * 1000) + "g");
         water_max = (TextView) findViewById(R.id.water_max);
-        water_max.setText(Math.round(report.getWaterIntakeMax() * 1000) + "mL");
+        water_max.setText(Math.round(report.getWaterIntakeMax() * 1000) + "g");
 
         protein_min = (TextView) findViewById(R.id.protein_min);
         protein_min.setText(Math.round(report.getProteinIntakeMin()) + "g");
@@ -253,7 +253,7 @@ public class ReportActivity extends Activity implements View.OnClickListener{
                 }
             case R.id.check_plan:
                 Intent intent=new Intent(this,MainActivity.class);
-                intent.putExtra("tab", 1);
+                intent.putExtra("from", ReportActivity.class.getSimpleName());
                 this.startActivity(intent);
                 break;
             default:
