@@ -6,8 +6,8 @@
 # @Last Modified time: 2015-07-25 16:47:11
 
 from base.views import BaseView
-from .models import Recipe
-from .serializers import RecipeSerializer
+from .models import Recipe, Ingredient
+from .serializers import RecipeSerializer, IngredientSerializer
 from label.models import Label
 # Create your views here.
 
@@ -71,3 +71,17 @@ class RecipeSearch(BaseView):
         tag_list = list(set(tag_list).difference(set(r)))
         final = list(r) + tag_list
         return self.success_response(RecipeSerializer(final[start: start + num], many=True).data)
+
+
+class IngredientSearch(BaseView):
+    def get(self, request, format=None):
+        '''
+        ingredient search
+        '''
+        keyword = request.GET.get('keyword', None)
+        start = abs(int(request.GET.get('start', 0)))
+        num = abs(int(request.GET.get('num', 10)))
+        if keyword is None:
+            return self.success_response([])
+        ingredients = Ingredient.objects.filter(name__contains=keyword)
+        return self.success_response(IngredientSerializer(ingredients, many=True).data)

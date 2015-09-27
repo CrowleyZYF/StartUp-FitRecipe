@@ -3,9 +3,9 @@
 import json
 from django.db import IntegrityError
 from base.views import BaseView
-from .models import Plan, Calendar, Routine, Dish, SingleIngredient, SingleRecipe
+from .models import Plan, Calendar, Routine, Dish, SingleIngredient, SingleRecipe, Punch
 from recipe.models import Recipe, Ingredient
-from .serializers import PlanSerializer, CalendarSerializer
+from .serializers import PlanSerializer, CalendarSerializer, PunchSerializer
 from accounts.models import Account
 from datetime import date, datetime
 # Create your views here.
@@ -40,19 +40,24 @@ class PlanList(BaseView):
                     "id":3,
                     "amount": 300
                 }]
-            }]
+            }],
+            "authored_date": "2015-01-01"
         }
         '''
         try:
             body = json.loads(request.body)
             user = Account.find_account_by_user(request.user)
-            today = date.today()
+            try:
+                authored_date = datetime.strptime(body['authored_date'],'%Y-%m-%d').date()
+            except:
+                authored_date = date.today()
             # get today first
             try:
-                p = Plan.objects.get(user=user, authored_date=today)
+                ps = Plan.objects.filter(user=user, authored_date=authored_date)
                 # exists
                 # delete it
-                p.delete()
+                for p in ps:
+                    p.delete()
             except Plan.DoesNotExist:
                 # create new one
                 pass
@@ -68,13 +73,13 @@ class PlanList(BaseView):
                     SingleRecipe.objects.create(recipe=recipe, amount=sr['amount'], dish=d)
             # after created it join it!
             try:
-                c = Calendar.objects.get(user=user, joined_date=today)
+                c = Calendar.objects.get(user=user, joined_date=authored_date)
                 if c.plan.id != p.id:
                     c.plan = p
                     c.save()
             except Calendar.DoesNotExist:
-                Calendar.objects.create(user=user, plan=p)
-            return self.success_response('ok')
+                Calendar.objects.create(user=user, plan=p, joined_date=authored_date)
+            return self.success_response(PlanSerializer(p).data)
         except:
             raise#return self.fail_response(400, 'fail')
 
@@ -108,26 +113,66 @@ class CalendarList(BaseView):
         '''
         join plan
         same date & user will use the last one
+        {
+            "plan": 2,
+            "joined_date": "2015-01-01"
+        }
         '''
         body = json.loads(request.body)
         plan_id = body.get('plan', None)
+        try:
+            joined_date = datetime.strptime(body['authored_date'],'%Y-%m-%d').date()
+        except:
+            joined_date = date.today()
         user = Account.find_account_by_user(request.user)
         if plan_id is None:
             return self.fail_response(400, 'No Plan')
         try:
             p = Plan.objects.get(pk=plan_id)
+            p.dish_headcount += 1
+            p.save()
         except Plan.DoesNotExist:
             return self.fail_response(400, 'Plan Not Exist')
         try:
-            c = Calendar.objects.create(user=user, plan=p)
+            c = Calendar.objects.create(user=user, plan=p, joined_date=joined_date)
             return self.success_response('ok')
         except IntegrityError:
             # existed today
-            today = date.today()
-            c = Calendar.objects.get(user=user, joined_date=today)
+            c = Calendar.objects.get(user=user, joined_date=joined_date)
             c.plan = p
             c.save()
             return self.success_response('ok')
         except:
             return self.fail_response(400, 'error')
 
+class LastPlan(BaseView):
+    '''
+    获取最后一个
+    '''
+    def get(self, request, format=None):
+        user = Account.find_account_by_user(request.user)
+        c = Calendar.objects.filter(user=user, joined_date__lte=date.today()).order_by('-joined_date')[0]
+        return self.success_response(CalendarSerializer(c).data)
+
+
+class PunchList(BaseView):
+    '''
+    打卡
+    '''
+    def get(self, request, format=None):
+        user = Account.find_account_by_user(request.user)
+        turn_to_date = lambda x: x and datetime.strptime(x, '%Y%m%d') or date.today()
+        start_date = turn_to_date(request.GET.get('start', None))
+        end_date = turn_to_date(request.GET.get('end', None))
+        punchs = Punch.objects.filter(user=user, date__lte=end_date, date__gte=start_date)
+        return self.success_response(PunchSerializer(punchs, many=True).data)
+
+    def post(self, request, format=None):
+        user = Account.find_account_by_user(request.user)
+        body = json.loads(request.body)
+        type = body.get('type', None)
+        img = body.get('img', None)
+        if None in (type, img):
+            return self.fail_response(400, 'Wrong Data')
+        p = Punch.objects.create(user=user, type=type, img=img)
+        return self.success_response(PunchSerializer(p).data)

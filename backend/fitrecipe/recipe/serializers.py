@@ -17,14 +17,15 @@ class NutritionSerializer(BaseSerializer):
 
 
 class IngredientSerializer(BaseSerializer):
+    nutrition_set = serializers.DictField(source='get_nutrition')
 
     class Meta:
         model = Ingredient
-        fields = ('id', 'name')
+        fields = ('id', 'name', 'nutrition_set')
 
 
 class ComponentSerializer(BaseSerializer):
-    ingredient = IngredientSerializer()
+    ingredient = IngredientSerializer(value=('id', 'name'))
 
     class Meta:
         model = Component

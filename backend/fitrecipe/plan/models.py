@@ -28,6 +28,9 @@ class Plan(BaseModel):
     '''
     title = models.CharField(max_length=100, default='personal plan')
     img = models.URLField(max_length=200, null=True, blank=True)
+    cover = models.URLField(max_length=200, null=True, blank=True)
+    brief = models.TextField(default='')
+    internal_label = models.TextField(default=0, help_text=u'0-未指定，1-食谱，2-食材')
     inrtoduce = models.TextField(default='')
     difficulty = models.IntegerField(default=1)
     delicious = models.IntegerField(default=3)
@@ -115,7 +118,17 @@ class Calendar(BaseModel):
     '''
     user = models.ForeignKey(Account)
     plan = models.ForeignKey(Plan)
-    joined_date = models.DateField(auto_now_add=True)
+    joined_date = models.DateField()
 
     class Meta:
         unique_together = (('user', 'joined_date'),)
+
+
+class Punch(BaseModel):
+    '''
+    打卡记录
+    '''
+    user = models.ForeignKey(Account)
+    type = models.IntegerField()
+    img = models.URLField(max_length=200)
+    date = models.DateField(auto_now_add=True)
