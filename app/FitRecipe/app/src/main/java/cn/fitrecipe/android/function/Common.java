@@ -66,6 +66,24 @@ public class Common {
         return sdf.format(afterDate);
     }
 
+    /**
+     * translate 2015-09-26 to 20150926
+     * @param date
+     * @return
+     */
+    public static String dateFormat(String date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMdd");
+        Date date1;
+        try {
+            date1 = sdf.parse(date);
+            return sdf1.format(date1);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static String getTime() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHmmss");
         long now = System.currentTimeMillis();

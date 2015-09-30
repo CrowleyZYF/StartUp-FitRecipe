@@ -1,7 +1,6 @@
 package cn.fitrecipe.android.fragment;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,12 +8,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +26,9 @@ import java.util.Set;
 
 import cn.fitrecipe.android.Adpater.PlanElementAdapter;
 import cn.fitrecipe.android.FrApplication;
+import cn.fitrecipe.android.Http.FrRequest;
+import cn.fitrecipe.android.Http.FrServerConfig;
+import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.IngredientActivity;
 import cn.fitrecipe.android.NutritionActivity;
 import cn.fitrecipe.android.R;
@@ -29,12 +36,10 @@ import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.dao.FrDbHelper;
 import cn.fitrecipe.android.entity.DatePlan;
 import cn.fitrecipe.android.entity.DatePlanItem;
-import cn.fitrecipe.android.entity.DayPlan;
 import cn.fitrecipe.android.entity.PlanComponent;
-import cn.fitrecipe.android.entity.PlanItem;
 import cn.fitrecipe.android.entity.Report;
-import cn.fitrecipe.android.entity.SeriesPlan;
 import cn.fitrecipe.android.function.Common;
+import pl.tajchert.sample.DotsTextView;
 
 /**
  * Created by 奕峰 on 2015/4/11.
@@ -50,6 +55,10 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     private PlanElementAdapter adapter;
     private ImageView shopping_btn, next_btn, prev_btn;
     private TextView plan_status_day, plan_status, diy_days, plan_name;
+
+    private LinearLayout loadingInterface;
+    private DotsTextView dotsTextView;
+    private LinearLayout info_container;
 
     public static final int BREAKFAST_CODE = 00;
     public static final int ADDMEAL_01_CODE = 01;
@@ -74,6 +83,51 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         return v;
     }
 
+    // start, end 2015-09-23
+    private void getData(String start, String end) {
+        if(Common.isOpenNetwork(getActivity())) {
+            getDataFromServer(start, end);
+        }else
+            getDataFromLocal(start, end);
+    }
+
+    private void getDataFromServer(String start, String end ) {
+        start = Common.dateFormat(start);
+        end = Common.dateFormat(end);
+        GetRequest request = new GetRequest(FrServerConfig.getDatePlanUrl(start, end), FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject res) {
+                if(res != null && res.has("data")) {
+                    try {
+                        JSONArray data = res.getJSONArray("data");
+                        processData(data);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        });
+        FrRequest.getInstance().request(request);
+    }
+
+    private void processData(JSONArray data) throws JSONException {
+        if(data != null) {
+            for (int i = 0; i < data.length(); i++) {
+                JSONObject plan_json = data.getJSONObject(i);
+
+            }
+        }
+    }
+
+    private void getDataFromLocal(String start, String end) {
+
+    }
+
     private void initEvent() {
         shopping_btn.setOnClickListener(this);
         next_btn.setOnClickListener(this);
@@ -90,6 +144,10 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         prev_btn = (ImageView) v.findViewById(R.id.prev_btn);
         diy_days = (TextView) v.findViewById(R.id.diy_days);
         plan_name = (TextView) v.findViewById(R.id.plan_name);
+
+        loadingInterface = (LinearLayout) v.findViewById(R.id.loading_interface);
+        dotsTextView = (DotsTextView) v.findViewById(R.id.dots);
+        info_container = (LinearLayout) v.findViewById(R.id.info_container);
     }
 
     private void initData() {
@@ -131,6 +189,16 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         Toast.makeText(getActivity(), (tt - t) + "ms", Toast.LENGTH_SHORT).show();
     }
 
+    private void hideLoading(boolean isError, String errorMessage){
+        loadingInterface.setVisibility(View.GONE);
+        dotsTextView.stop();
+        if(isError){
+            Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+        }else{
+            info_container.setVisibility(View.VISIBLE);
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -145,10 +213,13 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     public void onPause() {
         super.onPause();
         if(datePlan != null) {
-            boolean flag = false;
-            for(int i = 0; i < items.size(); i++)
+            boolean flag = false, flag1 = false;
+            for(int i = 0; i < items.size(); i++) {
                 flag = flag || items.get(i).isInBasket();
+                flag1 = flag1 || items.get(i).isPunch();
+            }
             datePlan.setInBasket(flag);
+            datePlan.setIsPunch(flag1);
             datePlan.setItems(items);
         }
         Set<String> keySet = data.keySet();

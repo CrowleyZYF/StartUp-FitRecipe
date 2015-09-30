@@ -24,6 +24,8 @@ public class DatePlan implements Serializable, Comparable<DatePlan>{
     @DatabaseField
     private boolean inBasket;
     @DatabaseField
+    private boolean isPunch;
+    @DatabaseField
     private String plan_name;
 
     public String getPlan_name() {
@@ -80,5 +82,13 @@ public class DatePlan implements Serializable, Comparable<DatePlan>{
 
     public void setInBasket(boolean inBasket) {
         this.inBasket = inBasket;
+    }
+
+    public boolean isPunch() {
+        return isPunch;
+    }
+
+    public void setIsPunch(boolean isPunch) {
+        this.isPunch = isPunch;
     }
 }

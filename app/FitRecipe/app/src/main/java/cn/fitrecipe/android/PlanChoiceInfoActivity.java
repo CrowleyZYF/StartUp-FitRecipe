@@ -75,8 +75,6 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
         int plan_id =  getIntent().getIntExtra("plan_id", 0);
         initView();
         getData(plan_id);
-        initData();
-        initEvent();
     }
 
     private void getData(int id) {
@@ -112,10 +110,10 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
     }
 
     private void processData(JSONObject data) throws JSONException{
-        SeriesPlan plan = new SeriesPlan();
+        plan = new SeriesPlan();
         plan.setId(data.getInt("id"));
         plan.setImg(data.getString("img"));
-        plan.setInrtoduce(data.getString("introduce"));
+        plan.setInrtoduce(data.getString("inrtoduce"));
         plan.setDifficulty(data.getInt("difficulty"));
         plan.setDelicious(data.getInt("delicious"));
         plan.setBenifit(data.getInt("benifit"));
@@ -171,6 +169,8 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
             datePlans.add(datePlan);
         }
         plan.setDatePlans(datePlans);
+        initData();
+        initEvent();
     }
 
     private void hideLoading(boolean isError, String errorMessage){
@@ -205,15 +205,14 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
         planDetailViewPager = (PlanDetailViewPager) findViewById(R.id.plan_detail);
         prev_day_btn = (ImageView) findViewById(R.id.prev_day_btn);
         next_day_btn = (ImageView) findViewById(R.id.next_day_btn);
-        plan_day.setText(1 + "/" + plan.getTotal_days());
         nutrition_btn = (ImageView) findViewById(R.id.nutrition_btn);
-        plan_calories.setText(Math.round(plan.getDatePlans().get(0).getTotalCalories())+"");
-
         loadingInterface = (LinearLayout)findViewById(R.id.loading_interface);
         dotsTextView = (DotsTextView) findViewById(R.id.dots);
     }
 
     private void initData() {
+        plan_day.setText(1 + "/" + plan.getTotal_days());
+        plan_calories.setText(Math.round(plan.getDatePlans().get(0).getTotalCalories())+"");
         planDetailViewPagerAdapter = new PlanDetailViewPagerAdapter(this, plan);
         planDetailViewPager.setAdapter(planDetailViewPagerAdapter);
         planInfoViewPagerAdapter = new PlanInfoViewPagerAdapter(this, plan);

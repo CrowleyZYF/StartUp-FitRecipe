@@ -1,6 +1,7 @@
 package cn.fitrecipe.android.Adpater;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,23 +13,30 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import cn.fitrecipe.android.FrApplication;
+import cn.fitrecipe.android.PunchContentSureActivity;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.UI.PieChartView;
+import cn.fitrecipe.android.entity.DatePlan;
+import cn.fitrecipe.android.entity.DatePlanItem;
 import cn.fitrecipe.android.entity.PunchDay;
 import cn.fitrecipe.android.entity.PunchItem;
+import cn.fitrecipe.android.entity.Report;
+import cn.fitrecipe.android.function.Common;
 
 /**
  * Created by 奕峰 on 2015/4/24.
  */
 public class PunchDayAdapter extends RecyclerView.Adapter<PunchDayAdapter.PunchDayViewHolder>{
 
-    private List<PunchDay> PunchDaysList;
+    private List<DatePlan> PunchDaysList;
     private Context context;
+    private Report report;
 
-
-    public PunchDayAdapter(Context context, List<PunchDay> PunchDaysList) {
+    public PunchDayAdapter(Context context, List<DatePlan> PunchDaysList, Report report) {
         this.context = context;
         this.PunchDaysList = PunchDaysList;
+        this.report = report;
     }
 
     @Override
@@ -42,9 +50,9 @@ public class PunchDayAdapter extends RecyclerView.Adapter<PunchDayAdapter.PunchD
 
     @Override
     public void onBindViewHolder(PunchDayAdapter.PunchDayViewHolder contactViewHolder, int i) {
-        PunchDay pd = PunchDaysList.get(i);
+        DatePlan pd = PunchDaysList.get(i);
         contactViewHolder.punch_day.setText(pd.getDate());
-        PunchItemAdapter punchItemAdapter = new PunchItemAdapter(this.context, pd.getItemLists());
+        PunchItemAdapter punchItemAdapter = new PunchItemAdapter(this.context, pd);
         contactViewHolder.punch_items.setAdapter(punchItemAdapter);
     }
 
@@ -70,11 +78,13 @@ public class PunchDayAdapter extends RecyclerView.Adapter<PunchDayAdapter.PunchD
     private class PunchItemAdapter extends BaseAdapter{
 
         private Context context;
-        private List<PunchItem> punchItems;
+        private List<DatePlanItem> punchItems;
+        private DatePlan datePlan;
 
-        public PunchItemAdapter(Context context, List<PunchItem> punchItems){
+        public PunchItemAdapter(Context context, DatePlan datePlan){
             this.context = context;
-            this.punchItems = punchItems;
+            this.datePlan = datePlan;
+            this.punchItems = datePlan.getItems();
         }
 
         @Override
@@ -96,7 +106,7 @@ public class PunchDayAdapter extends RecyclerView.Adapter<PunchDayAdapter.PunchD
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             ViewHolder holder;
             if (convertView != null) {
                 holder = (ViewHolder) convertView.getTag();
@@ -110,15 +120,43 @@ public class PunchDayAdapter extends RecyclerView.Adapter<PunchDayAdapter.PunchD
                 holder.punch_piechart = (PieChartView) convertView.findViewById(R.id.punch_piechart);
                 convertView.setTag(holder);
             }
-            holder.punch_photo.setImageResource(punchItems.get(position).getPunch_item_photo());
-            holder.punch_day.setText(punchItems.get(position).getPunch_item_days_index() + "");
-            holder.punch_type.setText(punchItems.get(position).getPunch_item_type());
-            holder.punch_calories.setText(punchItems.get(position).getPunch_item_calorie() + "kcal");
-            float[] pieData = {Float.parseFloat(punchItems.get(position).getPunch_item_carbohydrate_ratio()),
-                    Float.parseFloat(punchItems.get(position).getPunch_item_protein_ratio()),
-                    Float.parseFloat(punchItems.get(position).getPunch_item_lipids_ratio())
-            };
-            holder.punch_piechart.setValue(pieData, false, false, false);
+            if(punchItems.get(position).getImageCover() == null)
+                FrApplication.getInstance().getMyImageLoader().displayImage(holder.punch_photo, punchItems.get(position).getDefaultImageCover());
+            else
+                FrApplication.getInstance().getMyImageLoader().displayImage(holder.punch_photo, punchItems.get(position).getImageCover());
+
+            holder.punch_day.setText((Common.getDiff(datePlan.getDate(), punchItems.get(position).getDate())+1) + "");
+            switch (punchItems.get(position).getType()) {
+                case "breakfast" :
+                    holder.punch_type.setText("早餐");    break;
+                case "lunch":
+                    holder.punch_type.setText("午餐");    break;
+                case "supper":
+                    holder.punch_type.setText("晚餐");    break;
+                case "add_meal_01":
+                case "add_meal_02":
+                    holder.punch_type.setText("加餐");    break;
+                case "add_meal_03":
+                    holder.punch_type.setText("夜宵");    break;
+            }
+            holder.punch_calories.setText(Math.round(punchItems.get(position).getCalories_take()) + "kcal");
+
+
+            double sum = punchItems.get(position).getCarbohydrate_take() + punchItems.get(position).getProtein_take() + punchItems.get(position).getFat_take();
+
+            int a = (int) Math.round(punchItems.get(position).getCarbohydrate_take() * 100 / sum);
+            int b = (int) Math.round(punchItems.get(position).getProtein_take() * 100 / sum);
+            int c = 100 - a - b;
+            holder.punch_piechart.setValue(new float[]{a, b, c}, false, false, false);
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, PunchContentSureActivity.class);
+                    intent.putExtra("item", punchItems.get(position));
+                    context.startActivity(intent);
+                }
+            });
+
             return convertView;
         }
 
