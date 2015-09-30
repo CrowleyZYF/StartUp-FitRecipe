@@ -3,7 +3,7 @@
 
 from rest_framework import serializers
 from base.serializers import BaseSerializer
-from .models import PlanAuthor, Plan, Dish, Routine, SingleIngredient, SingleRecipe, Calendar
+from .models import PlanAuthor, Plan, Dish, Routine, SingleIngredient, SingleRecipe, Calendar, Punch
 from recipe.serializers import RecipeSerializer, IngredientSerializer
 
 
@@ -69,3 +69,8 @@ class CalendarSerializer(BaseSerializer):
 
     class Meta:
         model = Calendar
+
+
+class PunchSerializer(BaseSerializer):
+    class Meta:
+        model = Punch

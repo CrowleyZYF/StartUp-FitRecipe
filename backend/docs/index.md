@@ -954,6 +954,75 @@
           }
         }
 
+## Upload Evaluation  [/api/account/upload_evaluation/]
+### Upload Evaluation [POST]
+
++ Request (application/json)
+
+    + Headers
+        Authorization: Token "user token"
+
+    + Body
+
+        {
+            "exerciseFrequency":1,
+            "jobType":1,
+            "daysToGoal":50,
+            "weightGoal":70,
+            "weight":65,
+            "height":173,
+            "exerciseInterval":1,
+            "age":23,
+            "preciseFat":0.2,
+            "goalType":true,
+            "gender":0,
+            "roughFat":1
+        }
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "error_message": null,
+            "data": "added"
+        }
+
+## Download Evaluation [/api/account/download_evaluation/]
+### Download Evaluation [GET]
+
++ Request (application/json)
+    
+    + Header
+        Authorization: Token "user token"
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "error_message": null,
+            "data": {
+                "id": 1,
+                "user": {
+                    "nick_name": "IklsJ95379",
+                    "is_official": false,
+                    "id": 3,
+                    "avatar": "http://tp2.sinaimg.cn/1937464505/180/5708528601/1"
+                },
+                "gender": 0,
+                "age": 23,
+                "height": 173,
+                "weight": 65,
+                "roughFat": 1,
+                "preciseFat": 0.2,
+                "jobType": 1,
+                "goalType": 1,
+                "exerciseFrequency": 1,
+                "exerciseInterval": 1,
+                "weightGoal": 70,
+                "daysToGoal": 50
+            }
+        }
+
 # Group Plan
 ## Official Plan List [/api/plan/list/]
 ### Get Official Plans [GET]
@@ -1027,7 +1096,26 @@
         {
           "status": 200,
           "error_message": null,
-          "data": "ok"
+          "data": {
+            "id": 21,
+            "author": null,
+            "created_time": "2015-09-27 23:24:34",
+            "updated_time": "2015-09-27 23:24:34",
+            "title": "personal plan",
+            "img": null,
+            "cover": null,
+            "brief": "",
+            "internal_label": "0",
+            "inrtoduce": "",
+            "difficulty": 1,
+            "delicious": 3,
+            "benifit": 0,
+            "total_days": 1,
+            "dish_headcount": 1,
+            "is_personal": true,
+            "authored_date": "2015-09-27",
+            "user": 7
+          }
         }
 
 ## Plan Detail [/api/plan/{id}/]
@@ -1112,7 +1200,8 @@
 + Request (application/json)
 
         {
-            "plan": 1
+            "plan": 1,
+            "joined_date": "2015-01-01"
         }
 
 + Response 200 (application/json)
@@ -1165,3 +1254,95 @@
           ]
         }
 
+## Get Current Plan [/api/plan/current]
+
+### Current Plan [GET]
+获取最后一个参加记录时间点
+
++ Response 200 (application/json)
+
+        {
+          "status": 200,
+          "error_message": null,
+          "data": {
+            "id": 4,
+            "plan": {
+              "id": 12,
+              "author": null,
+              "created_time": "2015-09-27 21:14:57",
+              "updated_time": "2015-09-27 21:14:57",
+              "title": "personal plan",
+              "img": null,
+              "cover": null,
+              "brief": "",
+              "internal_label": "0",
+              "inrtoduce": "",
+              "difficulty": 1,
+              "delicious": 3,
+              "benifit": 0,
+              "total_days": 1,
+              "dish_headcount": 1,
+              "is_personal": true,
+              "authored_date": "2015-09-27",
+              "user": 7
+            },
+            "created_time": "2015-09-27 21:14:57",
+            "updated_time": "2015-09-27 21:14:57",
+            "joined_date": "2015-09-27",
+            "user": 7
+          }
+        }
+
+
+## Punch [/api/plan/punch?start={start}&end={end}]
+
++ Parameters
+    + start: 20150101 - 开始时间
+    + end: 20150202 - 结束时间
+
+### Get Punch List [GET]
+获取打卡记录
+
++ Response 200 (application/json)
+
+        {
+          "status": 200,
+          "error_message": null,
+          "data": [
+            {
+              "id": 1,
+              "created_time": "2015-09-27 23:17:09",
+              "updated_time": "2015-09-27 23:17:09",
+              "type": 0,
+              "img": "h12412",
+              "date": "2015-09-27",
+              "user": 7
+            }
+          ]
+        }
+
+### Add Punch [POST]
+打卡
+
++ Request (application/json)
+
+        {
+          "type":0,
+          "img":"http://163.com"
+        }
+
++ Response 200 (application/json)
+
+        {
+          "status": 200,
+          "error_message": null,
+          "data": {
+            "id": 2,
+            "created_time": "2015-09-27 23:20:09",
+            "updated_time": "2015-09-27 23:20:09",
+            "type": 0,
+            "img":"http://163.com",
+            "date": "2015-09-27",
+            "user": 7
+          }
+        }

@@ -269,6 +269,12 @@ class Ingredient(BaseModel):
     def __unicode__(self):
         return self.name
 
+    def get_nutrition(self):
+        r = dict()
+        for n in self.nutrition_set.all():
+            r[n.eng_name] = {'amount': n.amount , 'unit': n.unit, 'name': n.name}
+        return r
+
     def save(self, *args, **kwargs):
         '''
         捕捉save事件，通过英文名，去录入营养物质
