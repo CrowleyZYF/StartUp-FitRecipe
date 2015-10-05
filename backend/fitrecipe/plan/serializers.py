@@ -21,7 +21,7 @@ class SingleIngredientSerializer(BaseSerializer):
 
 
 class SingleRecipeSerializer(BaseSerializer):
-    recipe = RecipeSerializer(value=('id', 'nutrition_set', 'img', 'title', 'duration', 'calories', ))
+    recipe = RecipeSerializer(value=('id', 'nutrition_set', 'img', 'title', 'duration', 'calories', 'component_set'))
 
     class Meta:
         model = SingleRecipe
