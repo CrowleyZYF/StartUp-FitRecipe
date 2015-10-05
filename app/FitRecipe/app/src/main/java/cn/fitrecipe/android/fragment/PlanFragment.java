@@ -1,7 +1,7 @@
 package cn.fitrecipe.android.fragment;
 
+import android.app.Application;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,12 +9,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +27,10 @@ import java.util.Set;
 
 import cn.fitrecipe.android.Adpater.PlanElementAdapter;
 import cn.fitrecipe.android.FrApplication;
+import cn.fitrecipe.android.Http.FrRequest;
+import cn.fitrecipe.android.Http.FrServerConfig;
+import cn.fitrecipe.android.Http.GetRequest;
+import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.IngredientActivity;
 import cn.fitrecipe.android.NutritionActivity;
 import cn.fitrecipe.android.R;
@@ -29,12 +38,10 @@ import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.dao.FrDbHelper;
 import cn.fitrecipe.android.entity.DatePlan;
 import cn.fitrecipe.android.entity.DatePlanItem;
-import cn.fitrecipe.android.entity.DayPlan;
 import cn.fitrecipe.android.entity.PlanComponent;
-import cn.fitrecipe.android.entity.PlanItem;
 import cn.fitrecipe.android.entity.Report;
-import cn.fitrecipe.android.entity.SeriesPlan;
 import cn.fitrecipe.android.function.Common;
+import pl.tajchert.sample.DotsTextView;
 
 /**
  * Created by 奕峰 on 2015/4/11.
@@ -51,6 +58,10 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     private ImageView shopping_btn, next_btn, prev_btn;
     private TextView plan_status_day, plan_status, diy_days, plan_name;
 
+    private LinearLayout loadingInterface;
+    private DotsTextView dotsTextView;
+    private LinearLayout info_container;
+
     public static final int BREAKFAST_CODE = 00;
     public static final int ADDMEAL_01_CODE = 01;
     public static final int LUNCH_CODE = 02;
@@ -59,7 +70,6 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     public static final int ADDMEAL_03_CODE = 05;
 
     private int pointer = 0;
-    private long now;
     private Map<String, DatePlan> data;
     public static boolean isFresh = false;
 
@@ -72,6 +82,51 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         initEvent();
         initData();
         return v;
+    }
+
+    // start, end 2015-09-23
+    private void getData(String start, String end) {
+        if(Common.isOpenNetwork(getActivity())) {
+            getDataFromServer(start, end);
+        }else
+            getDataFromLocal(start, end);
+    }
+
+    private void getDataFromServer(final String start, final String end) {
+        GetRequest request = new GetRequest(FrServerConfig.getRecentPlanUrl(), FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject res) {
+                if(res != null && res.has("data")) {
+                    try {
+                        JSONObject data = res.getJSONObject("data");
+                        processData(data);
+                        hideLoading(false, "");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                hideLoading(true, getResources().getString(R.string.network_error));
+                getDataFromLocal(start, end);
+            }
+        });
+        FrRequest.getInstance().request(request);
+    }
+
+    private void processData(JSONObject data) throws JSONException {
+        if(data != null) {
+            for (int i = 0; i < data.length(); i++) {
+
+
+            }
+        }
+    }
+
+    private void getDataFromLocal(String start, String end) {
+
     }
 
     private void initEvent() {
@@ -90,19 +145,84 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         prev_btn = (ImageView) v.findViewById(R.id.prev_btn);
         diy_days = (TextView) v.findViewById(R.id.diy_days);
         plan_name = (TextView) v.findViewById(R.id.plan_name);
+
+        loadingInterface = (LinearLayout) v.findViewById(R.id.loading_interface);
+        dotsTextView = (DotsTextView) v.findViewById(R.id.dots);
+        info_container = (LinearLayout) v.findViewById(R.id.info_container);
     }
 
     private void initData() {
-        now = System.currentTimeMillis();
         adapter = new PlanElementAdapter(this, items, report);
         plans.setAdapter(adapter);
 
-//        switchPlan(pointer);
-        loadData();
+        report = FrDbHelper.getInstance(getActivity()).getReport();
+        if(report == null) {
+            hideLoading(true, "No report!");
+            return;
+        }
+        if(report.isGoalType()) {
+            plan_status.setText("增肌第");
+        }else{
+            plan_status.setText("减脂第");
+        }
+
+//        try {
+//            createEmptyPlan();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+
+        getRecentPlan();
+
+//        getData();
+//        loadData();
+    }
+
+    private void createEmptyPlan() throws JSONException {
+        JSONObject params = new JSONObject();
+        JSONArray dish = new JSONArray();
+        List<DatePlanItem> items = FrDbHelper.getInstance(getActivity()).generateDatePlan();
+        for(int i = 0; i < items.size(); i++) {
+            JSONObject obj = new JSONObject();
+            obj.put("type", i);
+            JSONArray ingredient = new JSONArray();
+            JSONArray recipe = new JSONArray();
+            obj.put("ingredient", ingredient);
+            obj.put("recipe", recipe);
+            dish.put(obj);
+        }
+        params.put("dish", dish);
+        PostRequest request = new PostRequest(FrServerConfig.getUpdatePlanUrl(), FrApplication.getInstance().getToken(), params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject res) {
+                Toast.makeText(getActivity(), "create empty plan!", Toast.LENGTH_SHORT).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        });
+        FrRequest.getInstance().request(request);
+    }
+
+    private void getRecentPlan() {
+         GetRequest request = new GetRequest(FrServerConfig.getRecentPlanUrl(), FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject res) {
+                System.out.println(res);
+                Toast.makeText(getActivity(), "get recent plan!", Toast.LENGTH_SHORT).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        });
+        FrRequest.getInstance().request(request);
     }
 
     private void loadData() {
-        long t = System.currentTimeMillis();
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected void onPostExecute(Void aVoid) {
@@ -127,8 +247,16 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 return null;
             }
         }.execute();
-        long tt = System.currentTimeMillis();
-        Toast.makeText(getActivity(), (tt - t) + "ms", Toast.LENGTH_SHORT).show();
+    }
+
+    private void hideLoading(boolean isError, String errorMessage){
+        loadingInterface.setVisibility(View.GONE);
+        dotsTextView.stop();
+        if(isError){
+            Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+        }else{
+            info_container.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -145,10 +273,13 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     public void onPause() {
         super.onPause();
         if(datePlan != null) {
-            boolean flag = false;
-            for(int i = 0; i < items.size(); i++)
+            boolean flag = false, flag1 = false;
+            for(int i = 0; i < items.size(); i++) {
                 flag = flag || items.get(i).isInBasket();
+                flag1 = flag1 || items.get(i).isPunch();
+            }
             datePlan.setInBasket(flag);
+            datePlan.setIsPunch(flag1);
             datePlan.setItems(items);
         }
         Set<String> keySet = data.keySet();

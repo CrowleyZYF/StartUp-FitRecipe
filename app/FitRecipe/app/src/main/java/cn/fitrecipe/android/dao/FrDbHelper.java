@@ -433,4 +433,20 @@ public class FrDbHelper {
         BasketDao dao = new BasketDao(context);
         return dao.getBasket();
     }
+
+    public List<DatePlan> getPunchDatePlans() {
+        DatePlanDao datePlanDao = new DatePlanDao(context);
+        List<DatePlan> datePlans = datePlanDao.getPunchDatePlans();
+        for(int i = 0; i < datePlans.size(); i++) {
+            List<DatePlanItem> items = datePlans.get(i).getItems();
+            for(int j = 0; j < items.size(); ) {
+                if(!items.get(j).isPunch())
+                    items.remove(j);
+                else
+                    j++;
+            }
+            datePlans.get(i).setItems(items);
+        }
+        return datePlans;
+    }
 }

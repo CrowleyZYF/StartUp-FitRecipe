@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -20,10 +21,22 @@ import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
 import com.qiniu.util.Auth;
+import com.umeng.socialize.controller.UMServiceFactory;
+import com.umeng.socialize.controller.UMSocialService;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.sso.QZoneSsoHandler;
+import com.umeng.socialize.sso.SinaSsoHandler;
+import com.umeng.socialize.sso.TencentWBSsoHandler;
+import com.umeng.socialize.sso.UMQQSsoHandler;
+import com.umeng.socialize.sso.UMSsoHandler;
 
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -40,6 +53,7 @@ import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.Report;
 import cn.fitrecipe.android.fragment.PlanFragment;
 import cn.fitrecipe.android.function.Common;
+import cn.fitrecipe.android.function.PunchImageGenerator;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
@@ -61,18 +75,37 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
     private Report report;
     private String pngName;
 
+    // 首先在您的Activity中添加如下成员变量
+    final UMSocialService mController = UMServiceFactory.getUMSocialService("com.umeng.share");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_punch_sure);
 
-        String path = getIntent().getStringExtra("bitmap");
-        bitmap = BitmapFactory.decodeFile(path);
+        if(getIntent().hasExtra("bitmap")) {
+            String path = getIntent().getStringExtra("bitmap");
+            bitmap = BitmapFactory.decodeFile(path);
+        }
 
         item = (DatePlanItem) getIntent().getSerializableExtra("item");
         report = FrApplication.getInstance().getReport();
         initView();
+        initData();
         initEvent();
+    }
+
+    private void initData() {
+        //Sina
+        mController.getConfig().setSsoHandler(new SinaSsoHandler());
+        //QQ weibo
+        mController.getConfig().setSsoHandler(new TencentWBSsoHandler());
+        //QQ空间
+        QZoneSsoHandler qZoneSsoHandler = new QZoneSsoHandler(this, "100424468", "c7394704798a158208a74ab60104f0ba");
+        qZoneSsoHandler.addToSocialSDK();
+        //QQ好友
+        UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(this, "100424468","c7394704798a158208a74ab60104f0ba");
+        qqSsoHandler.addToSocialSDK();
     }
 
     private void initEvent() {
@@ -87,10 +120,19 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
         if(bitmap != null)
             punch_photo.setImageBitmap(bitmap);
         else
-            FrApplication.getInstance().getMyImageLoader().displayImage(punch_photo, item.getDefaultImageCover());
+            if(item.getImageCover() == null)
+                FrApplication.getInstance().getMyImageLoader().displayImage(punch_photo, item.getDefaultImageCover());
+            else
+                FrApplication.getInstance().getMyImageLoader().displayImage(punch_photo, item.getImageCover());
+
 
         left_btn = (ImageView) findViewById(R.id.left_btn);
         right_btn = (TextView) findViewById(R.id.right_btn);
+
+        if(bitmap == null)
+            right_btn.setText("分享");
+        else
+            right_btn.setText("发布");
 
         author_name = (TextView) findViewById(R.id.author_name);
         author_name.setText(FrApplication.getInstance().getAuthor().getNick_name());
@@ -177,15 +219,51 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        /**使用SSO授权必须添加如下代码 */
+        UMSsoHandler ssoHandler = mController.getConfig().getSsoHandler(requestCode) ;
+        if(ssoHandler != null){
+            ssoHandler.authorizeCallBack(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.left_btn:
                 finish();
                 break;
             case R.id.right_btn:
-                publish();
+                if(right_btn.getText().toString().equals("分享"))
+                    share();
+                else
+                    publish();
                 break;
         }
+    }
+
+    private void share() {
+        Bitmap bitmap = PunchImageGenerator.convertViewToBitmap(scrollView);
+        File path  = new File(Environment.getExternalStorageDirectory() + "/fitrecipe/");
+        if(!path.exists())
+            path.mkdirs();
+        File file = new File(path.getAbsolutePath() + "abc.jpg");
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+
+        }
+        // 设置分享内容
+        mController.setShareImage(new UMImage(this, bitmap));
+        mController.setShareContent("友盟社会化组件（SDK）让移动应用快速整合社交分享功能，http://www.umeng.com/social");
+        mController.openShare(this, false);
     }
 
     private void publish() {
@@ -238,6 +316,7 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
                         if (items.get(j).getType().equals(item.getType())) {
                             items.get(j).setImageCover(FrServerConfig.getQiNiuHost() + pngName);
                             items.get(j).setIsPunch(true);
+                            datePlan.setIsPunch(true);
                             break;
                         }
                     }

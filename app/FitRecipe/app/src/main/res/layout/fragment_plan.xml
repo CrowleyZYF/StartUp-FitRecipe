@@ -1,19 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:dots="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/white">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <include layout="@layout/fragment_plan_recipe_list" />
+        <LinearLayout
+            android:id="@+id/loading_interface"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="-20dp">
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="拼命加载中"
+                android:textSize="14sp"
+                android:textColor="@color/base_color"
+                android:layout_gravity="bottom"/>
+
+            <pl.tajchert.sample.DotsTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/dots"
+                android:textSize="30sp"
+                android:textColor="@color/base_color"
+                dots:autoplay="true"
+                dots:period="1000"
+                android:layout_gravity="bottom"/>
+        </LinearLayout>
 
 
+        <LinearLayout
+            android:id="@+id/info_container"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:orientation="horizontal">
+
+            <include layout="@layout/fragment_plan_recipe_list" />
+
+        </LinearLayout>
+
+    </FrameLayout>
 </LinearLayout>

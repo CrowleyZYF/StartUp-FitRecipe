@@ -153,4 +153,20 @@ public class FrServerConfig {
     public static String getPlanDetails(int id) {
         return HOST + "/api/plan/" + id + "/";
     }
+
+    public static String getPunchListUrl() {
+        return HOST;
+    }
+
+    public static String getDatePlanUrl(String start, String end) {
+        return HOST + "/api/plan/calendar?start=" + start + "&end=" + end;
+    }
+
+    public static String getRecentPlanUrl() {
+        return HOST + "/api/plan/current";
+    }
+
+    public static String getUpdatePlanUrl() {
+        return HOST + "/api/plan/list/";
+    }
 }

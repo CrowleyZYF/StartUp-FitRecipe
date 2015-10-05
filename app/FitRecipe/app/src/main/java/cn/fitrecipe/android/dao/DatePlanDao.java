@@ -49,4 +49,12 @@ public class DatePlanDao {
             throw new RuntimeException(e);
         }
     }
+
+    public List<DatePlan> getPunchDatePlans() {
+        try {
+            return datePlanDaoOpe.queryForEq("isPunch", true);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
