@@ -81,7 +81,7 @@ class PlanList(BaseView):
                 Calendar.objects.create(user=user, plan=p, joined_date=authored_date)
             return self.success_response(PlanSerializer(p).data)
         except:
-            raise#return self.fail_response(400, 'fail')
+            return self.fail_response(400, 'fail')
 
 
 class PlanDetail(BaseView):
@@ -106,8 +106,14 @@ class CalendarList(BaseView):
         start_date = turn_to_date(request.GET.get('start', None))
         end_date = turn_to_date(request.GET.get('end', None))
         calendars = Calendar.objects.filter(user=user, joined_date__gte=start_date, joined_date__lte=end_date)
-        serializer = CalendarSerializer(calendars, many=True)
-        return self.success_response(serializer.data)
+        try:
+            last_joined = Calendar.objects.filter(user=user, joined_date__lte=start_date).order_by('-joined_date')[0]
+            last = CalendarSerializer(last_joined).data
+        except IndexError:
+            last = None
+        serializer = CalendarSerializer(calendars, many=True).data
+        result = {'lastJoined': last, 'calendar': serializer}
+        return self.success_response(result)
 
     def post(self, request, format=None):
         '''

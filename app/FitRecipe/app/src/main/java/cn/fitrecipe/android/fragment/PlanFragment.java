@@ -1,5 +1,6 @@
 package cn.fitrecipe.android.fragment;
 
+import android.app.Application;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import cn.fitrecipe.android.FrApplication;
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
+import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.IngredientActivity;
 import cn.fitrecipe.android.NutritionActivity;
 import cn.fitrecipe.android.R;
@@ -68,7 +70,6 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     public static final int ADDMEAL_03_CODE = 05;
 
     private int pointer = 0;
-    private long now;
     private Map<String, DatePlan> data;
     public static boolean isFresh = false;
 
@@ -91,16 +92,15 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             getDataFromLocal(start, end);
     }
 
-    private void getDataFromServer(String start, String end ) {
-        start = Common.dateFormat(start);
-        end = Common.dateFormat(end);
-        GetRequest request = new GetRequest(FrServerConfig.getDatePlanUrl(start, end), FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
+    private void getDataFromServer(final String start, final String end) {
+        GetRequest request = new GetRequest(FrServerConfig.getRecentPlanUrl(), FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {
                 if(res != null && res.has("data")) {
                     try {
-                        JSONArray data = res.getJSONArray("data");
+                        JSONObject data = res.getJSONObject("data");
                         processData(data);
+                        hideLoading(false, "");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -109,16 +109,17 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                hideLoading(true, getResources().getString(R.string.network_error));
+                getDataFromLocal(start, end);
             }
         });
         FrRequest.getInstance().request(request);
     }
 
-    private void processData(JSONArray data) throws JSONException {
+    private void processData(JSONObject data) throws JSONException {
         if(data != null) {
             for (int i = 0; i < data.length(); i++) {
-                JSONObject plan_json = data.getJSONObject(i);
+
 
             }
         }
@@ -151,16 +152,77 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     }
 
     private void initData() {
-        now = System.currentTimeMillis();
         adapter = new PlanElementAdapter(this, items, report);
         plans.setAdapter(adapter);
 
-//        switchPlan(pointer);
-        loadData();
+        report = FrDbHelper.getInstance(getActivity()).getReport();
+        if(report == null) {
+            hideLoading(true, "No report!");
+            return;
+        }
+        if(report.isGoalType()) {
+            plan_status.setText("增肌第");
+        }else{
+            plan_status.setText("减脂第");
+        }
+
+//        try {
+//            createEmptyPlan();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+
+        getRecentPlan();
+
+//        getData();
+//        loadData();
+    }
+
+    private void createEmptyPlan() throws JSONException {
+        JSONObject params = new JSONObject();
+        JSONArray dish = new JSONArray();
+        List<DatePlanItem> items = FrDbHelper.getInstance(getActivity()).generateDatePlan();
+        for(int i = 0; i < items.size(); i++) {
+            JSONObject obj = new JSONObject();
+            obj.put("type", i);
+            JSONArray ingredient = new JSONArray();
+            JSONArray recipe = new JSONArray();
+            obj.put("ingredient", ingredient);
+            obj.put("recipe", recipe);
+            dish.put(obj);
+        }
+        params.put("dish", dish);
+        PostRequest request = new PostRequest(FrServerConfig.getUpdatePlanUrl(), FrApplication.getInstance().getToken(), params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject res) {
+                Toast.makeText(getActivity(), "create empty plan!", Toast.LENGTH_SHORT).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        });
+        FrRequest.getInstance().request(request);
+    }
+
+    private void getRecentPlan() {
+         GetRequest request = new GetRequest(FrServerConfig.getRecentPlanUrl(), FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject res) {
+                System.out.println(res);
+                Toast.makeText(getActivity(), "get recent plan!", Toast.LENGTH_SHORT).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        });
+        FrRequest.getInstance().request(request);
     }
 
     private void loadData() {
-        long t = System.currentTimeMillis();
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected void onPostExecute(Void aVoid) {
@@ -185,8 +247,6 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 return null;
             }
         }.execute();
-        long tt = System.currentTimeMillis();
-        Toast.makeText(getActivity(), (tt - t) + "ms", Toast.LENGTH_SHORT).show();
     }
 
     private void hideLoading(boolean isError, String errorMessage){
