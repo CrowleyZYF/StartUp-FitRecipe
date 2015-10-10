@@ -959,11 +959,6 @@
 
 + Request (application/json)
 
-    + Headers
-        Authorization: Token "user token"
-
-    + Body
-
         {
             "exerciseFrequency":1,
             "jobType":1,
@@ -989,11 +984,6 @@
 
 ## Download Evaluation [/api/account/download_evaluation/]
 ### Download Evaluation [GET]
-
-+ Request (application/json)
-
-    + Header
-        Authorization: Token "user token"
 
 + Response 200 (application/json)
 
