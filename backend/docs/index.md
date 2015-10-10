@@ -991,7 +991,7 @@
 ### Download Evaluation [GET]
 
 + Request (application/json)
-    
+
     + Header
         Authorization: Token "user token"
 
@@ -1226,32 +1226,58 @@
         {
           "status": 200,
           "error_message": null,
-          "data": [
-            {
-              "id": 2,
-              "plan": {
-                "id": 7,
-                "author": null,
-                "created_time": "2015-09-20 21:59:32",
-                "updated_time": "2015-09-20 21:59:32",
-                "title": "personal plan",
-                "img": null,
-                "inrtoduce": "",
-                "difficulty": 1,
-                "delicious": 3,
-                "benifit": 0,
-                "total_days": 1,
-                "dish_headcount": 1,
-                "is_personal": true,
-                "authored_date": "2015-09-20",
-                "user": 7
-              },
-              "created_time": "2015-09-20 21:59:32",
-              "updated_time": "2015-09-20 21:59:32",
-              "joined_date": "2015-09-20",
-              "user": 7
+          "data": {
+              "calendar": [
+                {
+                  "id": 2,
+                  "plan": {
+                    "id": 7,
+                    "author": null,
+                    "created_time": "2015-09-20 21:59:32",
+                    "updated_time": "2015-09-20 21:59:32",
+                    "title": "personal plan",
+                    "img": null,
+                    "inrtoduce": "",
+                    "difficulty": 1,
+                    "delicious": 3,
+                    "benifit": 0,
+                    "total_days": 1,
+                    "dish_headcount": 1,
+                    "is_personal": true,
+                    "authored_date": "2015-09-20",
+                    "user": 7
+                  },
+                  "created_time": "2015-09-20 21:59:32",
+                  "updated_time": "2015-09-20 21:59:32",
+                  "joined_date": "2015-09-20",
+                  "user": 7
+                }
+              ],
+              "lastJoined": {
+                  "id": 2,
+                  "plan": {
+                    "id": 7,
+                    "author": null,
+                    "created_time": "2015-09-20 21:59:32",
+                    "updated_time": "2015-09-20 21:59:32",
+                    "title": "personal plan",
+                    "img": null,
+                    "inrtoduce": "",
+                    "difficulty": 1,
+                    "delicious": 3,
+                    "benifit": 0,
+                    "total_days": 1,
+                    "dish_headcount": 1,
+                    "is_personal": true,
+                    "authored_date": "2015-09-20",
+                    "user": 7
+                  },
+                  "created_time": "2015-09-20 21:59:32",
+                  "updated_time": "2015-09-20 21:59:32",
+                  "joined_date": "2015-09-20",
+                  "user": 7
+                }
             }
-          ]
         }
 
 ## Get Current Plan [/api/plan/current]
