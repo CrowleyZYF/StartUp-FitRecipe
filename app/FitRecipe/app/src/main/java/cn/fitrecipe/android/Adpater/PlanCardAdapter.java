@@ -1,5 +1,6 @@
 package cn.fitrecipe.android.Adpater;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -26,10 +27,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class PlanCardAdapter extends RecyclerView.Adapter<PlanCardAdapter.PlanCardViewHolder>{
 
     private List<SeriesPlan> planCardsList;
-    private Context context;
+    private Activity context;
 
 
-    public PlanCardAdapter(Context context, List<SeriesPlan> planCardsList) {
+    public PlanCardAdapter(Activity context, List<SeriesPlan> planCardsList) {
         this.context = context;
         this.planCardsList = planCardsList;
     }
@@ -47,7 +48,8 @@ public class PlanCardAdapter extends RecyclerView.Adapter<PlanCardAdapter.PlanCa
                 Intent intent=new Intent(context,PlanChoiceInfoActivity.class);
                 //intent.putExtra("id", id);
                 intent.putExtra("plan_id", planCardsList.get(i).getId());
-                context.startActivity(intent);
+                intent.putExtra("isUsed", planCardsList.get(i).isUsed());
+                context.startActivityForResult(intent, 111);
             }
         });
 

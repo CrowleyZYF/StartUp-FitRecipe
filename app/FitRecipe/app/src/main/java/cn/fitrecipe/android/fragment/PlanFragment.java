@@ -2,6 +2,7 @@ package cn.fitrecipe.android.fragment;
 
 import android.app.Application;
 import android.content.Intent;
+import android.media.JetPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,15 +16,21 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import cn.fitrecipe.android.Adpater.PlanElementAdapter;
 import cn.fitrecipe.android.FrApplication;
@@ -38,9 +45,13 @@ import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.dao.FrDbHelper;
 import cn.fitrecipe.android.entity.DatePlan;
 import cn.fitrecipe.android.entity.DatePlanItem;
+import cn.fitrecipe.android.entity.PlanAuthor;
 import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.Report;
+import cn.fitrecipe.android.entity.Series;
+import cn.fitrecipe.android.entity.SeriesPlan;
 import cn.fitrecipe.android.function.Common;
+import cn.fitrecipe.android.function.JsonParseHelper;
 import pl.tajchert.sample.DotsTextView;
 
 /**
@@ -73,6 +84,10 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     private Map<String, DatePlan> data;
     public static boolean isFresh = false;
 
+    private Map<String, SeriesPlan> planMap;
+    private AtomicInteger count;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -86,20 +101,23 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
 
     // start, end 2015-09-23
     private void getData(String start, String end) {
+        data = new HashMap<>();
         if(Common.isOpenNetwork(getActivity())) {
+            start = Common.dateFormat(start);
+            end = Common.dateFormat(end);
             getDataFromServer(start, end);
         }else
             getDataFromLocal(start, end);
     }
 
     private void getDataFromServer(final String start, final String end) {
-        GetRequest request = new GetRequest(FrServerConfig.getRecentPlanUrl(), FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
+        GetRequest request = new GetRequest(FrServerConfig.getDatePlanUrl(start, end), FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {
                 if(res != null && res.has("data")) {
                     try {
                         JSONObject data = res.getJSONObject("data");
-                        processData(data);
+                        processData(data, start, end);
                         hideLoading(false, "");
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -116,13 +134,188 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         FrRequest.getInstance().request(request);
     }
 
-    private void processData(JSONObject data) throws JSONException {
+    private void processData(JSONObject data, String start, String end) throws JSONException {
         if(data != null) {
-            for (int i = 0; i < data.length(); i++) {
-
-
+            planMap = new ConcurrentHashMap<>();
+            count = new AtomicInteger(0);
+            if(data.getJSONObject("lastJoined") != null) {
+                count.incrementAndGet();
+                requestPlanDetails(data.getJSONObject("lastJoined").getString("joined_date"), data.getJSONObject("lastJoined").getJSONObject("plan").getInt("id"), start, end);
+            }
+            JSONArray calendar = data.getJSONArray("calendar");
+            for(int i = 0; i < calendar.length(); i++) {
+                count.incrementAndGet();
+                requestPlanDetails(calendar.getJSONObject(i).getString("joined_date"), calendar.getJSONObject(i).getJSONObject("plan").getInt("id"), start, end);
             }
         }
+    }
+
+    private void requestPlanDetails(final String join_date, int plan_id, final String start, final String end) {
+        String url = FrServerConfig.getPlanDetails(plan_id);
+        GetRequest request = new GetRequest(url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject res) {
+                if (res != null && res.has("data")) {
+                    try {
+                        JSONObject data = res.getJSONObject("data");
+                        parsePlanJson(join_date, data);
+                        count.decrementAndGet();
+                        if(count.compareAndSet(0, 0))
+                            postprocess(start, end);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                if (volleyError != null && volleyError.networkResponse != null) {
+                    hideLoading(true, getResources().getString(R.string.network_error));
+                    int statusCode = volleyError.networkResponse.statusCode;
+                    if (statusCode == 404) {
+                        Toast.makeText(
+                                getActivity(), "404！", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+        FrRequest.getInstance().request(request);
+    }
+
+    private void postprocess(String start, String end) {
+        Map<String, SeriesPlan> plans = new TreeMap<>();
+        Set<String> keyset = planMap.keySet();
+        Iterator<String> iterator = keyset.iterator();
+        while (iterator.hasNext()) {
+            String key = iterator.next();
+            plans.put(key, planMap.get(key));
+        }
+
+        start = Common.dateFormatReverse(start);
+        end = Common.dateFormatReverse(end);
+        Set<String> keyset1 = plans.keySet();
+        Iterator<String> iterator1 = keyset1.iterator();
+        String nowDate = iterator1.hasNext() ? iterator1.next() : null;
+        if(nowDate != null && Common.CompareDate(start, nowDate) >= 0) {
+            SeriesPlan now = plans.get(nowDate);
+            String str = start;
+            while(!str.equals(end)) {
+                if(plans.containsKey(str)) {
+                    nowDate = str;
+                    now = plans.get(str);
+                }
+                if(now.getTitle().equals("personal plan")) {
+                    if(nowDate.equals(str))
+                        data.put(str, plans.get(str).getDatePlans().get(0));
+                    else
+                        data.put(str, gernerateEmptyPlan(str));
+                }else {
+                    int th = Common.getDiff(str, nowDate);
+                    data.put(str, plans.get(str).getDatePlans().get(th));
+                }
+                str = Common.getSomeDay(str, 1);
+            }
+            switchPlan(pointer, 1);
+        }else {
+            Toast.makeText(getActivity(), "服务器数据错误!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private DatePlan gernerateEmptyPlan(String date) {
+        DatePlan datePlan = new DatePlan();
+        datePlan.setIsPunch(false);
+        datePlan.setPlan_name("personal plan");
+        datePlan.setInBasket(false);
+        datePlan.setDate(date);
+        datePlan.setItems(FrDbHelper.getInstance(getActivity()).generateDatePlan());
+        return datePlan;
+    }
+    private void parsePlanJson(String join_date, JSONObject data) throws JSONException {
+        SeriesPlan plan = new SeriesPlan();
+        plan.setId(data.getInt("id"));
+        plan.setImg(data.getString("img"));
+        plan.setInrtoduce(data.getString("inrtoduce"));
+        plan.setDifficulty(data.getInt("difficulty"));
+        plan.setDelicious(data.getInt("delicious"));
+        plan.setBenifit(data.getInt("benifit"));
+        plan.setTotal_days(data.getInt("total_days"));
+        plan.setDish_headcount(data.getInt("dish_headcount"));
+        plan.setTitle(data.getString("title"));
+
+//        JSONObject author_json = data.getJSONObject("author");
+//        plan.setAuthor(new Gson().fromJson(author_json.toString(), PlanAuthor.class));
+
+        ArrayList<DatePlan> datePlans = new ArrayList<>();
+
+        JSONArray routine_set = data.getJSONArray("routine_set");
+        for(int i  = 0; i < routine_set.length(); i++) {
+            JSONObject routine = routine_set.getJSONObject(i);
+            DatePlan datePlan = new DatePlan();
+            datePlan.setPlan_name(plan.getTitle());
+            JSONArray dish_set = routine.getJSONArray("dish_set");
+            List<DatePlanItem> items = new ArrayList<>();
+            for(int j = 0; j < dish_set.length(); j++) {
+                DatePlanItem item = new DatePlanItem();
+                int type = dish_set.getJSONObject(j).getInt("type");
+                switch (type) {
+                    case 0:
+                        item.setType("breakfast");  break;
+                    case 1:
+                        item.setType("add_meal_01"); break;
+                    case 2:
+                        item.setType("lunch");  break;
+                    case 3:
+                        item.setType("add_meal_02"); break;
+                    case 4:
+                        item.setType("supper");  break;
+                    case 5:
+                        item.setType("add_meal_03"); break;
+                }
+                JSONArray singleingredient_set = dish_set.getJSONObject(j).getJSONArray("singleingredient_set");
+                for(int k = 0; k < singleingredient_set.length(); k++) {
+                    PlanComponent component = new PlanComponent();
+                    component.setType(0);
+                    component.setName(singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getString("name"));
+                    component.setNutritions(JsonParseHelper.getNutritionSetFromJson(singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getJSONObject("nutrition_set")));
+                    component.setAmount(singleingredient_set.getJSONObject(k).getInt("amount"));
+                    component.setCalories(component.getAmount() * singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getJSONObject("nutrition_set").getJSONObject("Energy").getDouble("amount") / 100);
+//                    componentList.add(component);
+                    item.addContent(component);
+                }
+                JSONArray singlerecipe_set = dish_set.getJSONObject(j).getJSONArray("singlerecipe_set");
+                for(int k = 0; k < singlerecipe_set.length(); k++) {
+                    JSONObject json_recipe = singlerecipe_set.getJSONObject(k);
+                    PlanComponent component = new PlanComponent();
+                    component.setAmount(json_recipe.getInt("amount"));
+                    component.setCalories(component.getAmount() * json_recipe.getJSONObject("recipe").getDouble("calories") / 100);
+                    component.setType(1);
+                    component.setId(json_recipe.getJSONObject("recipe").getInt("id"));
+                    component.setName(json_recipe.getJSONObject("recipe").getString("title"));
+                    component.setNutritions(JsonParseHelper.getNutritionSetFromJson(json_recipe.getJSONObject("recipe").getJSONObject("nutrition_set")));
+                    JSONArray json_component = json_recipe.getJSONObject("recipe").getJSONArray("component_set");
+                    ArrayList<PlanComponent> components = new ArrayList<>();
+                    for(int q = 0; q < json_component.length(); q++) {
+                        PlanComponent component1 = new PlanComponent();
+                        JSONObject jcomponent = json_component.getJSONObject(q);
+                        component1.setName(jcomponent.getJSONObject("ingredient").getString("name"));
+                        component1.setAmount(jcomponent.getInt("amount"));
+                        component1.setType(0);
+                        components.add(component1);
+                    }
+                    component.setComponents(components);
+//                    componentList.add(component);
+                    item.addContent(component);
+                }
+//                item.setComponents(componentList);
+                items.add(item);
+            }
+            datePlan.setItems(items);
+            datePlans.add(datePlan);
+        }
+        plan.setDatePlans(datePlans);
+
+        planMap.put(join_date, plan);
     }
 
     private void getDataFromLocal(String start, String end) {
@@ -166,17 +359,22 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             plan_status.setText("减脂第");
         }
 
+
+        String today = Common.getDate();
+        getData(Common.getSomeDay(today, -2), Common.getSomeDay(today, 7));
 //        try {
 //            createEmptyPlan();
 //        } catch (JSONException e) {
 //            e.printStackTrace();
 //        }
 
-        getRecentPlan();
+//        getRecentPlan();
 
 //        getData();
 //        loadData();
     }
+
+
 
     private void createEmptyPlan() throws JSONException {
         JSONObject params = new JSONObject();
@@ -196,22 +394,6 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onResponse(JSONObject res) {
                 Toast.makeText(getActivity(), "create empty plan!", Toast.LENGTH_SHORT).show();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-
-            }
-        });
-        FrRequest.getInstance().request(request);
-    }
-
-    private void getRecentPlan() {
-         GetRequest request = new GetRequest(FrServerConfig.getRecentPlanUrl(), FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject res) {
-                System.out.println(res);
-                Toast.makeText(getActivity(), "get recent plan!", Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -262,32 +444,32 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onResume() {
         super.onResume();
-        if(isFresh) {
-            loadData();
-        }
-        isFresh = false;
+//        if(isFresh) {
+//            loadData();
+//        }
+//        isFresh = false;
     }
 
 
     @Override
     public void onPause() {
         super.onPause();
-        if(datePlan != null) {
-            boolean flag = false, flag1 = false;
-            for(int i = 0; i < items.size(); i++) {
-                flag = flag || items.get(i).isInBasket();
-                flag1 = flag1 || items.get(i).isPunch();
-            }
-            datePlan.setInBasket(flag);
-            datePlan.setIsPunch(flag1);
-            datePlan.setItems(items);
-        }
-        Set<String> keySet = data.keySet();
-        Iterator<String> iterator = keySet.iterator();
-        while (iterator.hasNext()) {
-            DatePlan update = data.get(iterator.next());
-            FrDbHelper.getInstance(getActivity()).addDatePlan(update);
-        }
+//        if(datePlan != null) {
+//            boolean flag = false, flag1 = false;
+//            for(int i = 0; i < items.size(); i++) {
+//                flag = flag || items.get(i).isInBasket();
+//                flag1 = flag1 || items.get(i).isPunch();
+//            }
+//            datePlan.setInBasket(flag);
+//            datePlan.setIsPunch(flag1);
+//            datePlan.setItems(items);
+//        }
+//        Set<String> keySet = data.keySet();
+//        Iterator<String> iterator = keySet.iterator();
+//        while (iterator.hasNext()) {
+//            DatePlan update = data.get(iterator.next());
+//            FrDbHelper.getInstance(getActivity()).addDatePlan(update);
+//        }
     }
 
     private boolean switchPlan(int pointer, int dir) {
@@ -318,12 +500,12 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             diy_days.setText(str);
             plan_status_day.setText(days + "");
             datePlan = data.get(str);
-            plan_name.setText(datePlan.getPlan_name());
+            plan_name.setText(datePlan.getPlan_name().equals("personal plan")?"自定义计划":datePlan.getPlan_name());
             items = datePlan.getItems();
             if(pointer > 0)
-                adapter.setData(items, datePlan.getPlan_name().equals("自定义计划")?true:false, false);
+                adapter.setData(items, datePlan.getPlan_name().equals("personal plan")?true:false, false);
             else
-                adapter.setData(items, datePlan.getPlan_name().equals("自定义计划")?true:false, true);
+                adapter.setData(items, datePlan.getPlan_name().equals("personal plan")?true:false, true);
             return true;
         }
         else {

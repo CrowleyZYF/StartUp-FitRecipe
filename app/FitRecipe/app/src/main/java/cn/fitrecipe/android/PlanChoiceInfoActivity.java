@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
+import com.qiniu.util.Json;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,6 +36,7 @@ import cn.fitrecipe.android.entity.DatePlanItem;
 import cn.fitrecipe.android.entity.PlanAuthor;
 import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.SeriesPlan;
+import cn.fitrecipe.android.function.JsonParseHelper;
 import me.relex.circleindicator.CircleIndicator;
 import pl.tajchert.sample.DotsTextView;
 
@@ -65,6 +67,7 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
     private SeriesPlan plan;
 
     private int nowY;
+    private boolean isUsed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +76,7 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
         setContentView(R.layout.activity_plan_choice_info);
 
         int plan_id =  getIntent().getIntExtra("plan_id", 0);
+        isUsed = getIntent().getBooleanExtra("isUsed", false);
         initView();
         getData(plan_id);
     }
@@ -87,6 +91,8 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
                         JSONObject data = res.getJSONObject("data");
                         processData(data);
                         hideLoading(false, "");
+                        initData();
+                        initEvent();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -119,6 +125,7 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
         plan.setBenifit(data.getInt("benifit"));
         plan.setTotal_days(data.getInt("total_days"));
         plan.setDish_headcount(data.getInt("dish_headcount"));
+        plan.setTitle(data.getString("title"));
 
         JSONObject author_json = data.getJSONObject("author");
         plan.setAuthor(new Gson().fromJson(author_json.toString(), PlanAuthor.class));
@@ -150,27 +157,48 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
                         item.setType("add_meal_03"); break;
                 }
                 JSONArray singleingredient_set = dish_set.getJSONObject(j).getJSONArray("singleingredient_set");
-                ArrayList<PlanComponent> componentList = new ArrayList<>();
                 for(int k = 0; k < singleingredient_set.length(); k++) {
                     PlanComponent component = new PlanComponent();
                     component.setType(0);
                     component.setName(singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getString("name"));
+                    component.setNutritions(JsonParseHelper.getNutritionSetFromJson(singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getJSONObject("nutrition_set")));
                     component.setAmount(singleingredient_set.getJSONObject(k).getInt("amount"));
-                    componentList.add(component);
+                    component.setCalories(component.getAmount() * singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getJSONObject("nutrition_set").getJSONObject("Energy").getDouble("amount") / 100);
+//                    componentList.add(component);
+                    item.addContent(component);
                 }
                 JSONArray singlerecipe_set = dish_set.getJSONObject(j).getJSONArray("singlerecipe_set");
-                //TODO
-
-
-                item.setComponents(componentList);
+                for(int k = 0; k < singlerecipe_set.length(); k++) {
+                    JSONObject json_recipe = singlerecipe_set.getJSONObject(k);
+                    PlanComponent component = new PlanComponent();
+                    component.setAmount(json_recipe.getInt("amount"));
+                    component.setCalories(component.getAmount() * json_recipe.getJSONObject("recipe").getDouble("calories") / 100);
+                    component.setType(1);
+                    component.setId(json_recipe.getJSONObject("recipe").getInt("id"));
+                    component.setName(json_recipe.getJSONObject("recipe").getString("title"));
+                    component.setNutritions(JsonParseHelper.getNutritionSetFromJson(json_recipe.getJSONObject("recipe").getJSONObject("nutrition_set")));
+                    JSONArray json_component = json_recipe.getJSONObject("recipe").getJSONArray("component_set");
+                    ArrayList<PlanComponent> components = new ArrayList<>();
+                    for(int q = 0; q < json_component.length(); q++) {
+                        PlanComponent component1 = new PlanComponent();
+                        JSONObject jcomponent = json_component.getJSONObject(q);
+                        component1.setName(jcomponent.getJSONObject("ingredient").getString("name"));
+                        component1.setAmount(jcomponent.getInt("amount"));
+                        component1.setType(0);
+                        components.add(component1);
+                    }
+                    component.setComponents(components);
+//                    componentList.add(component);
+                    item.addContent(component);
+                }
+//                item.setComponents(componentList);
                 items.add(item);
             }
             datePlan.setItems(items);
             datePlans.add(datePlan);
         }
         plan.setDatePlans(datePlans);
-        initData();
-        initEvent();
+        plan.setIsUsed(isUsed);
     }
 
     private void hideLoading(boolean isError, String errorMessage){
@@ -256,6 +284,10 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.left_btn:{
+                Intent intent = new Intent();
+                intent.putExtra("plan_id", plan.getId());
+                intent.putExtra("isUsed", plan.isUsed());
+                setResult(RESULT_OK, intent);
                 finish();
                 break;
             }

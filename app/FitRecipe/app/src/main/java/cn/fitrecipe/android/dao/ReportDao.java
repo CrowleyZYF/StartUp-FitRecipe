@@ -28,6 +28,7 @@ public class ReportDao {
     }
 
     public void add(Report report) {
+        report.setId(0);
         try {
             reportDaoOpe.create(report);
         } catch (SQLException e) {
@@ -35,15 +36,19 @@ public class ReportDao {
         }
     }
 
-    public Report getReport(Author author) {
-        List<Report> reports;
+    public Report getReport() {
         try {
-            reports = reportDaoOpe.queryForEq("author_id", author.getId());
+            return reportDaoOpe.queryForId(0);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        if(reports != null && reports.size() > 0)
-            return reports.get(reports.size()-1);
-        return null;
+    }
+
+    public void clear() {
+        try {
+            reportDaoOpe.deleteById(0);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -167,7 +167,6 @@ public class FrApplication extends Application {
 
     public void saveReport(Report report) {
         this.report = report;
-        report.setAuthor(getAuthor());
         FrDbHelper.getInstance(this).addReport(report);
     }
 

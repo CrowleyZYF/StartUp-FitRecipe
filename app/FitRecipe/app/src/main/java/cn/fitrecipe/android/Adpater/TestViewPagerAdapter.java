@@ -1,5 +1,6 @@
 package cn.fitrecipe.android.Adpater;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import cn.fitrecipe.android.FrApplication;
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.PostRequest;
@@ -410,6 +412,8 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
         for(int i=0;i<this.output.length;i++){
             output += this.output[i][1] + ": " + report.get(this.output[i][0]) + "\n";
         }*/
+        final ProgressDialog pd = ProgressDialog.show(context, "", "生成报告...", true, false);
+        pd.setCanceledOnTouchOutside(false);
         JSONObject params = new JSONObject();
         try {
             params.put("gender", userEvaluation.getGender());
@@ -428,11 +432,14 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        System.out.println(params);
-        PostRequest request = new PostRequest(FrServerConfig.getReportUrl(), null, params, new Response.Listener<JSONObject>() {
+        PostRequest request = new PostRequest(FrServerConfig.getReportUrl(), FrApplication.getInstance().getToken(), params, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {
-                Toast.makeText(context, res.toString(), Toast.LENGTH_SHORT).show();
+                Report report = userEvaluation.report();
+                pd.dismiss();
+                Intent intent=new Intent(context,ReportActivity.class);
+                intent.putExtra("report", report);
+                context.startActivity(intent);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -440,12 +447,7 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
                 Toast.makeText(context, context.getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
             }
         });
-
-//        FrRequest.getInstance().request(request);
-        Report report = userEvaluation.report();
-        Intent intent=new Intent(context,ReportActivity.class);
-        intent.putExtra("report", report);
-        context.startActivity(intent);
+        FrRequest.getInstance().request(request);
     }
 
     @Override

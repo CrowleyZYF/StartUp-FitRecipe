@@ -1,6 +1,7 @@
 package cn.fitrecipe.android;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -66,6 +67,8 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
     private DotsTextView dotsTextView;
     private ScrollView scrollView;
 
+    private ArrayList<SeriesPlan> plans;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -103,7 +106,7 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
 
     private void processData(JSONArray data) throws JSONException {
         Gson gson = new Gson();
-        ArrayList<SeriesPlan> plans = gson.fromJson(data.toString(), new TypeToken<ArrayList<SeriesPlan>>(){}.getType());
+        plans = gson.fromJson(data.toString(), new TypeToken<ArrayList<SeriesPlan>>(){}.getType());
         if(plans != null) {
             PlanInUseDao dao = new PlanInUseDao(this);
             PlanInUse planInUse = dao.getPlanInUse();
@@ -174,6 +177,21 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
             case R.id.left_btn:
                 finish();
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK) {
+            int plan_id = data.getIntExtra("plan_id", 0);
+            boolean isUsed = data.getBooleanExtra("isUsed", false);
+            for(int i = 0; i < plans.size(); i++) {
+                if(plans.get(i).getId() == plan_id)
+                    plans.get(i).setIsUsed(isUsed);
+                else
+                    plans.get(i).setIsUsed(false);
+            }
+            planCardAdapter.notifyDataSetChanged();
         }
     }
 }

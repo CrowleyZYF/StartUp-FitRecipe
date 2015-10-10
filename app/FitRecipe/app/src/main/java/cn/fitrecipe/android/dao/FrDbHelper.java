@@ -98,11 +98,7 @@ public class FrDbHelper {
      */
     public Report getReport() {
         ReportDao dao = new ReportDao(context);
-        Author author = getLoginAuthor();
-        if(author != null)
-            return dao.getReport(author);
-        else
-            return null;
+        return dao.getReport();
     }
 
     /**
@@ -128,6 +124,7 @@ public class FrDbHelper {
      */
     public void authorLogout(Author author) {
         new AuthorDao(context).logout(author);
+        new ReportDao(context).clear();
     }
 
     public Author getLoginAuthor() {

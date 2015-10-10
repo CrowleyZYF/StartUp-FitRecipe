@@ -84,6 +84,24 @@ public class Common {
         return null;
     }
 
+    /**
+     * translate 20150926 to 2015-09-26
+     * @param date
+     * @return String
+     */
+    public static String dateFormatReverse(String date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+        Date date1;
+        try {
+            date1 = sdf.parse(date);
+            return sdf1.format(date1);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static String getTime() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHmmss");
         long now = System.currentTimeMillis();

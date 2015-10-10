@@ -1,6 +1,8 @@
 package cn.fitrecipe.android.Adpater;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,13 +12,23 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.fitrecipe.android.FrApplication;
+import cn.fitrecipe.android.Http.FrRequest;
+import cn.fitrecipe.android.Http.FrServerConfig;
+import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.dao.FrDbHelper;
 import cn.fitrecipe.android.entity.SeriesPlan;
+import cn.fitrecipe.android.function.Common;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -71,7 +83,7 @@ public class PlanInfoViewPagerAdapter extends PagerAdapter {
                 default:
                     break;
             }
-            TextView choice_join = (TextView) planInfoContainer.findViewById(R.id.choice_join);
+            final TextView choice_join = (TextView) planInfoContainer.findViewById(R.id.choice_join);
             choice_join.setText(plan.getDish_headcount()+"人已采用");
             TextView choice_label = (TextView) planInfoContainer.findViewById(R.id.choice_label);
             if(plan.getBenifit() == 0){
@@ -112,10 +124,37 @@ public class PlanInfoViewPagerAdapter extends PagerAdapter {
                         FrDbHelper.getInstance(context).setPlanUnUsed(plan);
                     }
                     else {
-                        choice_join_btn.setText("取消选用");
-                        choice_join_btn.setTextColor(context.getResources().getColor(R.color.gray));
-                        choice_join_btn.setBackground(context.getResources().getDrawable(R.drawable.join_button_disable));
-                        FrDbHelper.getInstance(context).setPlanUsed(plan);
+                        final ProgressDialog pd = ProgressDialog.show(context, "", "选用计划...", true, false);
+                        pd.setCanceledOnTouchOutside(false);
+                        JSONObject p = new JSONObject();
+                        try {
+                            p.put("plan", plan.getId());
+                            p.put("joined_date", Common.getDate());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        PostRequest request = new PostRequest(FrServerConfig.getJoinPlanUrl(), FrApplication.getInstance().getToken(), p, new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject res) {
+                                try {
+                                    if(res.has("data") && res.getString("data").equals("ok")) {
+                                        choice_join_btn.setText("取消选用");
+                                        choice_join_btn.setTextColor(context.getResources().getColor(R.color.gray));
+                                        choice_join_btn.setBackground(context.getResources().getDrawable(R.drawable.join_button_disable));
+                                        FrDbHelper.getInstance(context).setPlanUsed(plan);
+                                        pd.dismiss();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError volleyError) {
+                                System.out.print("");
+                            }
+                        });
+                        FrRequest.getInstance().request(request);
                     }
                 }
             });

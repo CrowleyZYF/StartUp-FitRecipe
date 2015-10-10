@@ -44,7 +44,7 @@
             android:background="@color/background_color"
             android:scrollbars="none"
             android:fadingEdge="vertical"
-            android:visibility="gone"
+            android:visibility="invisible"
             android:padding="0dp">
 
             <LinearLayout

@@ -75,8 +75,9 @@ public class PunchFragment extends Fragment
         if(!Common.isOpenNetwork(getActivity())) {
             getPunchDateFromLocal();
         }else {
-            String url = FrServerConfig.getPunchListUrl();
-            GetRequest request = new GetRequest(url, null, new Response.Listener<JSONObject>() {
+            String today = Common.getDate();
+            String url = FrServerConfig.getPunchListUrl(Common.dateFormat(Common.getSomeDay(today, -15)), Common.dateFormat(today));
+            GetRequest request = new GetRequest(url, FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject res) {
                     if (res != null && res.has("data")) {

@@ -154,8 +154,8 @@ public class FrServerConfig {
         return HOST + "/api/plan/" + id + "/";
     }
 
-    public static String getPunchListUrl() {
-        return HOST;
+    public static String getPunchListUrl(String start, String end) {
+        return HOST + "/api/plan/punch?start="+ start +"&end=" + end;
     }
 
     public static String getDatePlanUrl(String start, String end) {
@@ -168,5 +168,13 @@ public class FrServerConfig {
 
     public static String getUpdatePlanUrl() {
         return HOST + "/api/plan/list/";
+    }
+
+    public static String getJoinPlanUrl() {
+        return HOST + "/api/plan/calendar";
+    }
+
+    public static String getDownloadReportUrl() {
+        return HOST + "/api/accounts/download_evaluation/";
     }
 }

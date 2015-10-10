@@ -12,6 +12,9 @@ import java.io.Serializable;
 @DatabaseTable(tableName = "fr_report")
 public class Report implements Serializable{
     //user info
+
+    @DatabaseField(id = true)
+    private int id;
     @DatabaseField
     private int gender;
     @DatabaseField
@@ -157,8 +160,6 @@ public class Report implements Serializable{
     private double SnackAfternoonRate;          //下午加餐摄入
     @DatabaseField
     private double DinnerRate;                  //晚餐摄入
-    @DatabaseField(foreign = true, canBeNull = false)
-    private Author author;
     @DatabaseField
     private String updatetime;
     @DatabaseField
@@ -688,14 +689,6 @@ public class Report implements Serializable{
         CarbohydrateIntake = carbohydrateIntake;
     }
 
-    public Author getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(Author author) {
-        this.author = author;
-    }
-
     public String getUpdatetime() {
         return updatetime;
     }
@@ -726,5 +719,13 @@ public class Report implements Serializable{
 
     public void setWeightGoal(double weightGoal) {
         this.weightGoal = weightGoal;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

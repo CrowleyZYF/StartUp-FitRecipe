@@ -1,9 +1,9 @@
 package cn.fitrecipe.android;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -28,7 +28,6 @@ import com.umeng.socialize.sso.UMQQSsoHandler;
 import com.umeng.socialize.sso.UMSsoHandler;
 import com.umeng.socialize.utils.Log;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,9 +35,12 @@ import java.util.Map;
 
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
+import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.entity.Author;
+import cn.fitrecipe.android.entity.Report;
 import cn.fitrecipe.android.function.Common;
+import cn.fitrecipe.android.function.Evaluation;
 
 
 public class LoginActivity extends Activity implements View.OnClickListener {
@@ -61,15 +63,70 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private Context nowContext;
     private String backActivity;
 
+    private ProgressDialog pd;
+
     private void loginSuccess(JSONObject data) throws JSONException {
         System.out.println(data);
         Author author = new Gson().fromJson(data.toString(), Author.class);
         author.setIsLogin(true);
         FrApplication.getInstance().setAuthor(author);
         Toast.makeText(getApplicationContext(), "欢迎："+ author.getNick_name(), Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(nowContext, MainActivity.class);
-        startActivity(intent);
-        LoginActivity.this.finish();
+        getReport();
+    }
+
+    private void getReport() {
+        //TODO
+        GetRequest request = new GetRequest(FrServerConfig.getDownloadReportUrl(), FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject res) {
+                if(res != null && res.has("data")) {
+                    try {
+                        processData(res.getJSONObject("data"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    pd.dismiss();
+                    Intent intent = new Intent(nowContext, MainActivity.class);
+                    startActivity(intent);
+                    LoginActivity.this.finish();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                if(volleyError != null && volleyError.networkResponse != null) {
+                    int statusCode = volleyError.networkResponse.statusCode;
+                    if(statusCode == 404) {
+                        Toast.makeText(LoginActivity.this, "报告不存在！", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+        FrRequest.getInstance().request(request);
+    }
+
+    private void processData(JSONObject data) throws JSONException {
+        int gender = data.getInt("gender");
+        int age = data.getInt("age");
+        int height = data.getInt("height");
+        int weight = data.getInt("weight");
+        int roughFat = data.getInt("roughFat");
+        double preciseFat = data.getDouble("preciseFat");
+        int jobType = data.getInt("jobType");
+        boolean goalType = false;
+        if(data.getInt("goalType") == 1)
+            goalType = true;
+        int exerciseFrequency = data.getInt("exerciseFrequency");
+        int exerciseInterval = data.getInt("exerciseInterval");
+        int weightGoal = data.getInt("weightGoal");
+        int daysToGoal = data.getInt("daysToGoal");
+
+        Evaluation evaluation = new Evaluation(gender, age, height, weight, roughFat, preciseFat, jobType, goalType, exerciseFrequency, exerciseInterval);
+        evaluation.setWeightGoal(weightGoal);
+        evaluation.setDaysToGoal(daysToGoal);
+        Report report = evaluation.report();
+        FrApplication.getInstance().saveReport(report);
+        FrApplication.getInstance().setIsTested(true);
     }
 
     private void accountError(){
@@ -154,6 +211,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             Toast.makeText(LoginActivity.this, "phone:" + accountString + " password:" + passwordString, Toast.LENGTH_SHORT).show();
             // TODO @WangKun
             // 正常登陆，登陆成功后调用loginSuccess，账号不存在调用accountError，密码错误调用passError
+            pd = ProgressDialog.show(LoginActivity.this, "", "正在登录...", true, false);
+            pd.setCanceledOnTouchOutside(false);
             JSONObject params = new JSONObject();
             try {
                 params.put("phone", accountString);

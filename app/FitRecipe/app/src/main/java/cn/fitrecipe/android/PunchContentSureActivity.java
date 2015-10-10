@@ -17,6 +17,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
@@ -30,6 +32,7 @@ import com.umeng.socialize.sso.TencentWBSsoHandler;
 import com.umeng.socialize.sso.UMQQSsoHandler;
 import com.umeng.socialize.sso.UMSsoHandler;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -42,7 +45,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
+import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.UI.PieChartView;
 import cn.fitrecipe.android.dao.FrDbHelper;
@@ -284,14 +289,57 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
             @Override
             public void complete(String s, ResponseInfo responseInfo, JSONObject jsonObject) {
                 Toast.makeText(PunchContentSureActivity.this, "上传完成！", Toast.LENGTH_SHORT).show();
-                saveServerPunchState();
+                savePunchState(pngName);
             }
         }, null);
     }
 
-    private void saveServerPunchState() {
+    private void savePunchState(String pngName) {
         //TODO @wk
         saveLocalPunchState();
+        saveServerPunchState(pngName);
+    }
+
+    private void saveServerPunchState(String pngName) {
+        JSONObject params = new JSONObject();
+        try {
+
+            switch (item.getType()) {
+                case "breakfast":
+                    params.put("type", 0);
+                    break;
+                case "add_meal_01":
+                    params.put("type", 1);
+                    break;
+                case "lunch":
+                    params.put("type", 2);
+                    break;
+                case "add_meal_02":
+                    params.put("type", 3);
+                    break;
+                case "supper":
+                    params.put("type", 4);
+                    break;
+                case "add_meal_03":
+                    params.put("type", 5);
+                    break;
+            }
+            params.put("img", FrServerConfig.getQiNiuHost() + pngName);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        PostRequest request = new PostRequest(FrServerConfig.getPunchListUrl(Common.dateFormat(Common.getDate()), Common.dateFormat(Common.getDate())), FrApplication.getInstance().getToken(), params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        });
+        FrRequest.getInstance().request(request);
     }
 
 
