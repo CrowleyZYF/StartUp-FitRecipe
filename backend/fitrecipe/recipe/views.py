@@ -7,6 +7,8 @@
 
 from base.views import BaseView
 from .models import Recipe, Ingredient
+from accounts.models import Account
+from collection.models import RecipeCollection
 from .serializers import RecipeSerializer, IngredientSerializer
 from label.models import Label
 # Create your views here.
@@ -39,9 +41,12 @@ class RecipeDetail(BaseView):
         return a specific recipe.
         '''
         recipe = self.get_object(Recipe, pk)
+        user = Account.find_account_by_user(request.user)
         if recipe.status > 0:
             serializer = RecipeSerializer(recipe, context={'simple': False})
-            return self.success_response(serializer.data)
+            result = serializer.data
+            result['has_collected'] = RecipeCollection.has_collected(recipe, user)
+            return self.success_response(result)
         else:
             return self.fail_response(400, 'DoesNotExist')
 
