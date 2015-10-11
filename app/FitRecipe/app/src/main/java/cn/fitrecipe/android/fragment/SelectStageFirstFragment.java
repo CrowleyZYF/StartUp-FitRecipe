@@ -98,7 +98,7 @@ public class SelectStageFirstFragment extends Fragment implements View.OnClickLi
             case R.id.search_btn:
                 search(search_input.getText().toString());
                 break;
-            default:;
+            default:
         }
     }
 

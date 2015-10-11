@@ -72,8 +72,6 @@
         </LinearLayout>
 
     </LinearLayout>
-
-
     
     <LinearLayout
         android:id="@+id/search_options"
@@ -104,6 +102,7 @@
 
 
     </LinearLayout>
+
     <FrameLayout
         android:layout_below="@id/search_header"
         android:layout_above="@id/search_options"
@@ -137,9 +136,9 @@
                 dots:period="1000"
                 android:layout_gravity="bottom"/>
         </LinearLayout>
+
     <ScrollView
         android:layout_width="match_parent"
-
         android:scrollbars="none"
         android:layout_height="match_parent">
 
@@ -150,4 +149,5 @@
 
     </ScrollView>
     </FrameLayout>
+
 </RelativeLayout>

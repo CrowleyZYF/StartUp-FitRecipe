@@ -46,3 +46,30 @@ def str_to_int(str, default=None):
             raise
         else:
             return default
+
+def pick_data(objs, type):
+    result = []
+    for item in objs:
+        result.append({
+            'id': item.id,
+            'name': type == 0 and item.name or item.title,
+            'type': type,
+            'nutrition_set': item.get_nutrition(),
+            })
+    # if type == 1:
+    #     for item in objs:
+    #         result.append({
+    #             'id': item.id,
+    #             'name': item.title,
+    #             'type': type,
+    #             'nutrition_set': item.get_nutrition(),
+    #         })
+    # else:
+    #     for item in objs:
+    #         result.append({
+    #             'id': item.id,
+    #             'name': item.name,
+    #             'type': type,
+    #             'nutrition_set': item.get_nutrition(),
+    #         })
+    return result

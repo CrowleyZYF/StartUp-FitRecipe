@@ -9,6 +9,7 @@ from base.views import BaseView
 from .models import Recipe, Ingredient
 from .serializers import RecipeSerializer, IngredientSerializer
 from label.models import Label
+from fitrecipe.utils import pick_data
 # Create your views here.
 
 
@@ -85,3 +86,19 @@ class IngredientSearch(BaseView):
             return self.success_response([])
         ingredients = Ingredient.objects.filter(name__contains=keyword)
         return self.success_response(IngredientSerializer(ingredients, many=True).data)
+
+class FoodSearch(BaseView): 
+    def get(self, request, format=None):
+        '''
+        ingredient search
+        '''
+        keyword = request.GET.get('keyword', None)
+        start = abs(int(request.GET.get('start', 0)))
+        num = abs(int(request.GET.get('num', 10)))
+        if keyword is None:
+            return self.success_response([])
+        r = Recipe.objects.filter(status__gt=0, title__contains=keyword)
+        i = Ingredient.objects.filter(name__contains=keyword)
+        result = pick_data(r, 1) + pick_data(i, 0)
+        return self.success_response(result[start: start + num])
+

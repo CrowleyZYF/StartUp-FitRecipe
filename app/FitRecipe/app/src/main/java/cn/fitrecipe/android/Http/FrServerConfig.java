@@ -3,8 +3,6 @@ package cn.fitrecipe.android.Http;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import cn.fitrecipe.android.CommentActivity;
-
 /**
  * Created by wk on 2015/7/23.
  */

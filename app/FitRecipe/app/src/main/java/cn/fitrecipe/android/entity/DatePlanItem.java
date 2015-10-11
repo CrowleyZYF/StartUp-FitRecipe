@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.fitrecipe.android.R;
+
 /**
  * Created by wk on 2015/9/14.
  */
@@ -234,6 +236,24 @@ public class DatePlanItem implements Serializable{
 
     public void setDefaultImageCover(String defaultImageCover) {
         this.defaultImageCover = defaultImageCover;
+        if (type.equals("breakfast")){
+            this.defaultImageCover = "drawable://" + R.drawable.breakfast;
+        }
+        if (type.equals("add_meal_01")){
+            this.defaultImageCover = "drawable://" + R.drawable.add_meal_01;
+        }
+        if (type.equals("lunch")){
+            this.defaultImageCover = "drawable://" + R.drawable.lunch;
+        }
+        if (type.equals("add_meal_02")){
+            this.defaultImageCover = "drawable://" + R.drawable.add_meal_02;
+        }
+        if (type.equals("supper")){
+            this.defaultImageCover = "drawable://" + R.drawable.dinner;
+        }
+        if (type.equals("add_meal_03")){
+            this.defaultImageCover = "drawable://" + R.drawable.add_meal_03;
+        }
     }
 
     public String getDate() {

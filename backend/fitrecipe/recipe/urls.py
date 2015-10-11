@@ -6,11 +6,12 @@
 # @Last Modified time: 2015-05-13 20:48:21
 from django.conf.urls import patterns, url
 
-from .views import RecipeList, RecipeDetail, RecipeSearch, IngredientSearch
+from .views import RecipeList, RecipeDetail, RecipeSearch, IngredientSearch, FoodSearch
 
 urlpatterns = patterns('',
     url(r'search/$', RecipeSearch.as_view()),
     url(r'search/ingredient/$', IngredientSearch.as_view()),
+    url(r'search/food/$', FoodSearch.as_view()),
     url(r'list/$', RecipeList.as_view()),
     url(r'(\d+)/$', RecipeDetail.as_view())
 )

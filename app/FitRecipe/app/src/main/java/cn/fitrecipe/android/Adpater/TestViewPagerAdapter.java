@@ -32,9 +32,7 @@ import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.PlanTestActivity;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.ReportActivity;
-import cn.fitrecipe.android.UI.TestViewPager;
 import cn.fitrecipe.android.entity.Report;
-import cn.fitrecipe.android.entity.Series;
 import cn.fitrecipe.android.function.Evaluation;
 
 /**
@@ -353,7 +351,7 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
 
                             }
                             if(position==11){
-                                userEvaluation.setWeightGoal(Integer.parseInt(dataList.get(11).get("data").toString()));
+                                userEvaluation.setWeightGoal(Double.parseDouble(dataList.get(11).get("data").toString()));
                                 TextView tips2 = (TextView) (questionLinearLayout.get(12)).findViewById(R.id.plan_tips);
                                 tips2.setText(context.getResources().getString(R.string.plan_test_question_12_tips_prefix) + userEvaluation.getShortestDaysToGoal() + context.getResources().getString(R.string.plan_test_question_12_tips_suffix));
                             }
