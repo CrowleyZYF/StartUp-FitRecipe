@@ -53,15 +53,13 @@ class PlanList(BaseView):
                 authored_date = date.today()
             # get today first
             try:
-                ps = Plan.objects.filter(user=user, authored_date=authored_date)
+                p = Plan.objects.get(user=user, authored_date=authored_date)
                 # exists
-                # delete it
-                for p in ps:
-                    p.delete()
+                # delete its routines
+                p.delete_routines()
             except Plan.DoesNotExist:
                 # create new one
-                pass
-            p = Plan.objects.create(user=user)
+                p = Plan.objects.create(user=user)
             r = Routine.objects.create(plan=p)
             for dish in body.get('dish', []):
                 d = Dish.objects.create(type=dish['type'], routine=r)

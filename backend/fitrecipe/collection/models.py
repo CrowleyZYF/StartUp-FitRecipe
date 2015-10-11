@@ -27,6 +27,13 @@ class RecipeCollection(Collection):
     def __unicode__(self):
         return u'%s的菜谱收藏' % self.owner.nick_name
 
+    @classmethod
+    def has_collected(cls, recipe, user):
+        try:
+            cls.objects.get(recipe=recipe, owner=user)
+            return True
+        except RecipeCollection.DoesNotExist:
+            return False
 
 class SeriesCollection(Collection):
     series = models.ForeignKey(Series)

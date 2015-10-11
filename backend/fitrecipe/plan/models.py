@@ -36,7 +36,7 @@ class Plan(BaseModel):
     delicious = models.IntegerField(default=3)
     benifit = models.IntegerField(default=0)  # 适宜人群:0-无所谓 1-减脂、2-增肌
     total_days = models.IntegerField(default=1)
-    dish_headcount = models.IntegerField(default=1)  # 选用人数
+    dish_headcount = models.IntegerField(default=1)  # 有多少人使用了这个计划
     author = models.ForeignKey(PlanAuthor, null=True, blank=True)
     user = models.ForeignKey(Account, null=True, blank=True)
     is_personal = models.BooleanField(default=True)
@@ -45,9 +45,8 @@ class Plan(BaseModel):
     def __unicode__(self):
         return self.title
 
-    def delete(self):
+    def delete_routines(self):
         self.routine_set.all().delete()
-        super(Plan, self).delete()
 
 
 class Routine(BaseModel):
