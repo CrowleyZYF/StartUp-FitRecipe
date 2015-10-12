@@ -15,10 +15,15 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +35,10 @@ import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.SelectRecipeActivity;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
+import cn.fitrecipe.android.entity.Component;
+import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.Recipe;
+import cn.fitrecipe.android.function.JsonParseHelper;
 import pl.tajchert.sample.DotsTextView;
 
 /**
@@ -44,9 +52,10 @@ public class SelectStageFirstFragment extends Fragment implements View.OnClickLi
     private EditText search_input;
     private ImageView clear_btn;
     private SearchRecipeAdapter adapter;
-    private List<Object> data;
+    private List<PlanComponent> data;
     private LinearLayout loadingInterface;
     private DotsTextView dotsTextView;
+    private int start , num = 15;
 
     @Nullable
     @Override
@@ -103,46 +112,79 @@ public class SelectStageFirstFragment extends Fragment implements View.OnClickLi
     }
 
     private void search(String text) {
-        if(data == null)
-            data = new ArrayList<>();
-        else
-            data.clear();
-        getData(text);
+        if(text == null || text.length() == 0) {
+            Toast.makeText(getActivity(), "搜索内容不能为空！", Toast.LENGTH_SHORT).show();
+        }else {
+            if (data == null)
+                data = new ArrayList<>();
+            else
+                data.clear();
+            start = 0;
+            getData(text);
+        }
     }
 
     private void getData(String text) {
-        showLoading();
-        GetRequest request = new GetRequest(FrServerConfig.getSearchFoodUrl(text,"0","10"), FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject res) {
-                if(res != null && res.has("data")) {
-                    try {
-                        JSONObject data = res.getJSONObject("data");
-                        hideLoading(false, "");
-                        processData(data);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+        if(start == 0)
+            showLoading();
+        GetRequest request = null;
+        try {
+            request = new GetRequest(FrServerConfig.getSearchFoodUrl(URLEncoder.encode(text, "utf-8"), start, num), FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
+                    @Override
+                public void onResponse(JSONObject res) {
+                    if(res != null && res.has("data")) {
+                        try {
+                            JSONArray data = res.getJSONArray("data");
+                            hideLoading(false, "");
+                            processData(data);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                hideLoading(true, getResources().getString(R.string.network_error));
-                if(volleyError != null && volleyError.networkResponse != null) {
-                    int statusCode = volleyError.networkResponse.statusCode;
-                    if(statusCode == 404) {
-                        Toast.makeText(getActivity(), "食谱不存在！", Toast.LENGTH_SHORT).show();
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    hideLoading(true, getResources().getString(R.string.network_error));
+                    if(volleyError != null && volleyError.networkResponse != null) {
+                        int statusCode = volleyError.networkResponse.statusCode;
+                        if(statusCode == 404) {
+                            Toast.makeText(getActivity(), "不存在！", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
-            }
-        });
+            });
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         FrRequest.getInstance().request(request);
+        start += num;
     }
 
-    private void processData(JSONObject json) throws JSONException {
-        Recipe recipe = Recipe.fromJson(json.toString());
-        data.add(recipe);
+    private void processData(JSONArray json) throws JSONException {
+        for(int i = 0; i <json.length(); i++) {
+            JSONObject obj = json.getJSONObject(i);
+            PlanComponent component = new PlanComponent();
+            component.setId(obj.getInt("id"));
+            component.setType(obj.getInt("type"));
+            component.setName(obj.getString("name"));
+            component.setAmount((int) obj.getDouble("amount"));
+            component.setNutritions(JsonParseHelper.getNutritionSetFromJson(obj.getJSONObject("nutrition_set")));
+            component.setCalories(obj.getJSONObject("nutrition_set").getJSONObject("Energy").getDouble("amount"));
+            if(component.getType() == 1) {
+                ArrayList<PlanComponent> components = new ArrayList<>();
+                JSONArray array = obj.getJSONArray("component_set");
+                for(int j = 0; j < array.length(); j++) {
+                    PlanComponent component1 = new PlanComponent();
+                    component1.setType(0);
+                    component1.setName(array.getJSONObject(j).getJSONObject("ingredient").getString("name"));
+                    component1.setAmount(array.getJSONObject(j).getInt("amount"));
+                    components.add(component1);
+                }
+                component.setComponents(components);
+            }
+            data.add(component);
+        }
         if(adapter == null) {
             adapter = new SearchRecipeAdapter(getActivity(), data);
             search_content.setAdapter(adapter);

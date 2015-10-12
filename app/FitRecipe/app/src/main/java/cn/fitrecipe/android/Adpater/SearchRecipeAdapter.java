@@ -12,6 +12,7 @@ import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.entity.Comment;
 import cn.fitrecipe.android.entity.Component;
 import cn.fitrecipe.android.entity.Ingredient;
+import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.Recipe;
 
 /**
@@ -20,9 +21,9 @@ import cn.fitrecipe.android.entity.Recipe;
 public class SearchRecipeAdapter extends BaseAdapter{
 
     Context context;
-    List<Object> data;
+    List<PlanComponent> data;
 
-    public SearchRecipeAdapter(Context context, List<Object> data) {
+    public SearchRecipeAdapter(Context context, List<PlanComponent> data) {
         this.context = context;
         this.data = data;
     }
@@ -54,14 +55,9 @@ public class SearchRecipeAdapter extends BaseAdapter{
             holder.textview2 = (TextView) convertView.findViewById(R.id.textview2);
             convertView.setTag(holder);
         }
-        Object obj = data.get(position);
-        if(obj instanceof Recipe) {
-            holder.textview1.setText(((Recipe) obj).getTitle());
-            holder.textview2.setText(Math.round(((Recipe)obj).getCalories()) + "kcal/100g");
-        }else if(obj instanceof Component) {
-            holder.textview1.setText(((Component) obj).getIngredient().getName());
-            holder.textview2.setText("100 kcal/100g");
-        }
+        PlanComponent component = data.get(position);
+        holder.textview1.setText(component.getName());
+        holder.textview2.setText(Math.round(component.getCalories())+" kcal/100g");
         return convertView;
     }
 

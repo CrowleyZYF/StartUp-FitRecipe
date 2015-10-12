@@ -94,6 +94,10 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+                pd.dismiss();
+                Intent intent = new Intent(nowContext, MainActivity.class);
+                startActivity(intent);
+                LoginActivity.this.finish();
                 if(volleyError != null && volleyError.networkResponse != null) {
                     int statusCode = volleyError.networkResponse.statusCode;
                     if(statusCode == 404) {
@@ -235,6 +239,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
+                    pd.dismiss();
                     if(volleyError != null && volleyError.networkResponse != null) {
                         int statusCode = volleyError.networkResponse.statusCode;
                         if(statusCode == 401) {

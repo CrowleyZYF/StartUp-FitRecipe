@@ -160,7 +160,7 @@ public class FrServerConfig {
         return HOST + "/api/plan/calendar?start=" + start + "&end=" + end;
     }
 
-    public static String getSearchFoodUrl(String keywords, String start, String num) {
+    public static String getSearchFoodUrl(String keywords, int start, int num) {
         return HOST + "/api/recipe/search/food/?keyword=" + keywords + "&start=" + start + "&num=" + num;
     }
 
@@ -179,4 +179,5 @@ public class FrServerConfig {
     public static String getDownloadReportUrl() {
         return HOST + "/api/accounts/download_evaluation/";
     }
+
 }

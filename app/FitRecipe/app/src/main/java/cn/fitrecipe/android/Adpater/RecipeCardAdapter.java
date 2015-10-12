@@ -75,7 +75,7 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Re
         contactViewHolder.recipe_time.setText("烹饪时间： " + rc.getDuration() + " min");
         contactViewHolder.recipe_like.setText("收藏 " + rc.getCollection_count());
 //        contactViewHolder.recipe_background.setBackground (this.context.getResources().getDrawable(rc.getRecipe_background()));
-        FrApplication.getInstance().getMyImageLoader().displayImage(contactViewHolder.recipe_background, rc.getImg());
+        FrApplication.getInstance().getMyImageLoader().displayImage(contactViewHolder.recipe_background, rc.getThumbnail());
     }
 
     @Override

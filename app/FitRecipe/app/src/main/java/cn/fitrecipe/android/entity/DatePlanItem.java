@@ -172,13 +172,13 @@ public class DatePlanItem implements Serializable{
                 }
                 else {
                     nutrition = nutritions.get(j);
-                    nutrition.setAmount(nutrition.getAmount() + nutrition_set.get(j).getAmount());
+                    nutrition.setAmount(nutrition.getAmount() + nutrition_set.get(j).getAmount() * obj.getAmount() / 100);
                     nutritions.set(j, nutrition);
                 }
 
             }
         }
-        calories_take += obj.getCalories();
+        calories_take += obj.getCalories()  * obj.getAmount() / 100;
         protein_take = nutritions.get(1).getAmount();
         fat_take = nutritions.get(2).getAmount();
         carbohydrate_take = nutritions.get(3).getAmount();
@@ -191,11 +191,11 @@ public class DatePlanItem implements Serializable{
         if (nutrition_set != null) {
             for (int j = 0; j < nutrition_set.size(); j++) {
                 Nutrition nutrition = nutritions.get(j);
-                nutrition.setAmount(nutrition.getAmount() - nutrition_set.get(j).getAmount());
+                nutrition.setAmount(nutrition.getAmount() - nutrition_set.get(j).getAmount() * component.getAmount() / 100);
                 nutritions.set(j, nutrition);
             }
         }
-        calories_take -= component.getCalories();
+        calories_take -= component.getCalories() * component.getAmount() / 100;
         protein_take = nutritions.get(1).getAmount();
         fat_take = nutritions.get(2).getAmount();
         carbohydrate_take = nutritions.get(3).getAmount();

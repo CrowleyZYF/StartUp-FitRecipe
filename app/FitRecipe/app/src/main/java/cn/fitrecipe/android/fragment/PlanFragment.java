@@ -20,6 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -44,8 +45,10 @@ import cn.fitrecipe.android.entity.DatePlan;
 import cn.fitrecipe.android.entity.DatePlanItem;
 import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.Report;
+import cn.fitrecipe.android.entity.Series;
 import cn.fitrecipe.android.entity.SeriesPlan;
 import cn.fitrecipe.android.function.Common;
+import cn.fitrecipe.android.function.JoinPlanHelper;
 import cn.fitrecipe.android.function.JsonParseHelper;
 import pl.tajchert.sample.DotsTextView;
 
@@ -75,16 +78,6 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     public static final int ADDMEAL_02_CODE = 03;
     public static final int SUPPER_CODE = 04;
     public static final int ADDMEAL_03_CODE = 05;
-
-    /*
-    * 三种情况
-    * 假设用户是10-10注册的
-    * 1. isNew=0 : 10-10号，用户第一次打开APP，并填写完评测进入计划页面，由于是新用户，肯定没有记录，所以直接创建一个空的自定义计划
-    * 2. isNew=1 : 10-10号，用户关闭APP后，再次打开APP，查询的范围是10-8到10-17，但是10-8,10-9是没有记录的，所以无法查询那个时候的记录，即lastJoined为null的情况
-    * 3. isNew=2 : 正常情况，即lastJoined不为空
-    * */
-    private int isNew = 2;
-
 
     private int pointer = 0;
     private Map<String, DatePlan> data;
@@ -182,9 +175,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                             try {
                                 JSONObject data = res.getJSONObject("data");
                                 processData(data, start, end);
-                                hideLoading(false, "");
                             } catch (JSONException e) {
-                                hideLoading(true, "服务器出错");
                                 e.printStackTrace();
                             }
                         }
@@ -208,8 +199,6 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             if(!data.getString("lastJoined").equals("null")) {
                 count.incrementAndGet();
                 requestPlanDetails(data.getJSONObject("lastJoined").getString("joined_date"), data.getJSONObject("lastJoined").getJSONObject("plan").getInt("id"), start, end);
-            }else{
-                isNew = 1;
             }
             JSONArray calendar = data.getJSONArray("calendar");
             for(int i = 0; i < calendar.length(); i++) {
@@ -218,8 +207,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             }
             //新用户完全没有记录 直接创建一个新的自定义计划
             if(data.getString("lastJoined").equals("null") && calendar.length()==0){
-                isNew = 0;
-                createEmptyPlan();
+                postprocess(start, end);
             }
         }
     }
@@ -346,7 +334,6 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 }
                 items.add(item);//添加早餐
             }
-
             datePlan.setItems(items);//添加某一天的一日五餐
             datePlans.add(datePlan);//添加计划中的某一天
         }
@@ -356,7 +343,8 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         planMap.put(join_date, plan);//和日期对应
     }
 
-    private void postprocess(String start, String end) {
+    private void postprocess(String start, String end) throws JSONException {
+        boolean isNew = false;
         Map<String, SeriesPlan> plans = new TreeMap<>();
         Set<String> keyset = planMap.keySet();
         Iterator<String> iterator = keyset.iterator();
@@ -370,43 +358,62 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         Set<String> keyset1 = plans.keySet();
         Iterator<String> iterator1 = keyset1.iterator();
         String nowDate = iterator1.hasNext() ? iterator1.next() : null;
-
-        if(isNew<2){
-            //对于前两种情况 nowData之前并没有记录 所以直接将start改成nowDate
-            start = nowDate;
-        }
-
-        if(nowDate != null && Common.CompareDate(start, nowDate) >= 0) {
-            SeriesPlan now = plans.get(nowDate);//切换的不同计划
-            String str = start;
-            while(!str.equals(end)) {
-
-                if(plans.containsKey(str)) {
-                    nowDate = str;
-                    now = plans.get(str);
+        if(nowDate != null) {
+            if (Common.CompareDate(start, nowDate) < 0)
+                start = nowDate;
+        }else {
+            //新用户 默认设定自定义计划
+            isNew = true;
+            start = Common.getDate();
+            nowDate = start;
+            plans.put(start, gerneratePersonalPlan());
+            new JoinPlanHelper(getActivity()).joinPersonalPlan(new JoinPlanHelper.CallBack() {
+                @Override
+                public void handle() {
+                    hideLoading(false, "");
+                    Toast.makeText(getActivity(), "默认设置自定义计划", Toast.LENGTH_SHORT).show();
                 }
+            });
+        }
+        SeriesPlan now = plans.get(nowDate);//切换的不同计划
+        String str = start;
+        while(Common.CompareDate(str, end) < 0) {
+
+            if(plans.containsKey(str)) {
+                nowDate = str;
+                now = plans.get(str);
+            }
                 /*
                 * nowDate是切换不同计划的时间点 str是自然时间 自定义计划是每天都会创建不同的
                 * 所以
                 * 1. 对于自定义计划来说 如果nowDate和str相同，就说明那天创建了自定义计划，直接放到记录里，否则就说明那天没有创建，为空
                 * 2. 对于第三方计划来说 则取某一天的计划 自动轮循
                 * */
-                if(now.getTitle().equals("personal plan")) {
-                    if(nowDate.equals(str))
-                        data.put(str, plans.get(str).getDatePlans().get(0));
-                    else
-                        data.put(str, gernerateEmptyPlan(str));
-                }else {
-                    int th = Common.getDiff(str, nowDate) % plans.get(str).getDatePlans().size();
-                    data.put(str, plans.get(nowDate).getDatePlans().get(th));
-                    indexDate.put(str, "完成("+th+"/"+plans.get(str).getDatePlans().size()+")天");
-                }
-                str = Common.getSomeDay(str, 1);
+            if(now.getTitle().equals("personal plan")) {
+                if(nowDate.equals(str))
+                    data.put(str, plans.get(str).getDatePlans().get(0));
+                else
+                    data.put(str, gernerateEmptyPlan(str));
+            }else {
+                int th = Common.getDiff(str, nowDate) % plans.get(str).getTotal_days();
+                data.put(str, plans.get(nowDate).getDatePlans().get(th));
+                indexDate.put(str, "完成("+th+"/"+plans.get(str).getDatePlans().size()+")天");
             }
-            switchPlan(pointer, 1);
-        }else {
-            Toast.makeText(getActivity(), "服务器数据错误!", Toast.LENGTH_SHORT).show();
+            str = Common.getSomeDay(str, 1);
         }
+        switchPlan(pointer, 1);
+        if(!isNew)
+            hideLoading(false, "");
+    }
+
+    private SeriesPlan gerneratePersonalPlan() {
+        SeriesPlan plan = new SeriesPlan();
+        plan.setTitle("personal plan");
+        plan.setTotal_days(1);
+        ArrayList<DatePlan> datePlans = new ArrayList<>();
+        datePlans.add(gernerateEmptyPlan(Common.getDate()));
+        plan.setDatePlans(datePlans);
+        return plan;
     }
 
     private DatePlan gernerateEmptyPlan(String date) {
@@ -464,44 +471,8 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-
-
     private void getDataFromLocal(String start, String end) {
 
-    }
-
-
-
-
-
-
-
-    private void createEmptyPlan() throws JSONException {
-        JSONObject params = new JSONObject();
-        JSONArray dish = new JSONArray();
-        List<DatePlanItem> items = FrDbHelper.getInstance(getActivity()).generateDatePlan();
-        for(int i = 0; i < items.size(); i++) {
-            JSONObject obj = new JSONObject();
-            obj.put("type", i);
-            JSONArray ingredient = new JSONArray();
-            JSONArray recipe = new JSONArray();
-            obj.put("ingredient", ingredient);
-            obj.put("recipe", recipe);
-            dish.put(obj);
-        }
-        params.put("dish", dish);
-        PostRequest request = new PostRequest(FrServerConfig.getUpdatePlanUrl(), FrApplication.getInstance().getToken(), params, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject res) {
-                Toast.makeText(getActivity(), "create empty plan!", Toast.LENGTH_SHORT).show();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-
-            }
-        });
-        FrRequest.getInstance().request(request);
     }
 
     private void loadData() {

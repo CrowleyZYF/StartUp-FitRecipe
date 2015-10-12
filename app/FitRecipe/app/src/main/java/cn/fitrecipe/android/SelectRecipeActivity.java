@@ -8,6 +8,7 @@ import android.view.View;
 
 import java.util.List;
 
+import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.fragment.SelectStageFirstFragment;
 import cn.fitrecipe.android.fragment.SelectStageSecondFragment;
 
@@ -16,8 +17,7 @@ public class SelectRecipeActivity extends Activity implements View.OnClickListen
     Fragment[] fragments;
     FragmentTransaction transaction;
     int last = -1;
-    List<Object> objects;
-    public Object obj_selected;
+    public PlanComponent obj_selected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

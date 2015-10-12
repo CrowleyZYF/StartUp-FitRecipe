@@ -251,11 +251,11 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                 newComponent.setAmount(component.getAmount() * recipe.getWeightInRecipeBasket() / recipe.getTotal_amount());
             newComponent.setId(component.getId());
             newComponent.setIngredient(component.getIngredient());
-            newComponent.setRecipe(component.getRecipe());
+//            newComponent.setRecipe(component.getRecipe());
             newComponent.setRemark(component.getRemark());
-            newComponent.setItemIndex(component.getItemIndex());
+//            newComponent.setItemIndex(component.getItemIndex());
             newComponent.setStatus(component.getStatus());
-            newComponent.setPlanItem(component.getPlanItem());
+//            newComponent.setPlanItem(component.getPlanItem());
             dataList.add(newComponent);
         }
 //        Collections.copy(dataList, recipe.getComponent_set());

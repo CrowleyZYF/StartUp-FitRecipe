@@ -4,29 +4,20 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by wk on 2015/8/6.
  */
-@DatabaseTable(tableName = "fr_component")
 public class Component implements Serializable{
 
-    @DatabaseField(generatedId = true)
     private int id;
-    @DatabaseField(canBeNull = true, foreign = true, foreignAutoRefresh = true)
     private Ingredient ingredient;
-    @DatabaseField
     private int amount;
-    @DatabaseField
     private String remark;
-    @DatabaseField
     private int status;
-    @DatabaseField(foreign = true)
-    private transient Recipe recipe;
-    @DatabaseField(foreign = true)
-    private transient PlanItem planItem;
-    @DatabaseField
-    private int itemIndex;
+    private ArrayList<Nutrition> nutritions;
+
 
     public int getStatus() {
         return status;
@@ -63,35 +54,19 @@ public class Component implements Serializable{
         this.id = id;
     }
 
-    public Recipe getRecipe() {
-        return recipe;
-    }
-
-    public void setRecipe(Recipe recipe) {
-        this.recipe = recipe;
-    }
-
-    public PlanItem getPlanItem() {
-        return planItem;
-    }
-
-    public void setPlanItem(PlanItem planItem) {
-        this.planItem = planItem;
-    }
-
-    public int getItemIndex() {
-        return itemIndex;
-    }
-
-    public void setItemIndex(int itemIndex) {
-        this.itemIndex = itemIndex;
-    }
-
     public int getAmount() {
         return amount;
     }
 
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    public ArrayList<Nutrition> getNutritions() {
+        return nutritions;
+    }
+
+    public void setNutritions(ArrayList<Nutrition> nutritions) {
+        this.nutritions = nutritions;
     }
 }

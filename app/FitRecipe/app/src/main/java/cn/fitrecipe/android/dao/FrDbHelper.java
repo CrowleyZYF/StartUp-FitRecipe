@@ -58,11 +58,11 @@ public class FrDbHelper {
         if(component_set != null) {
             for (int i = 0; i < component_set.size(); i++) {
                 Component component = component_set.get(i);
-                component.setRecipe(recipe);
+//                component.setRecipe(recipe);
 
                 Ingredient ingredient = component.getIngredient();
                 ingredientDao.add(ingredient);
-                componentDao.addComponentBelongToRecipe(component);
+//                componentDao.addComponentBelongToRecipe(component);
             }
         }
 

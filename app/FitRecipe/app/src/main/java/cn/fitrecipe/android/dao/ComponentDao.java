@@ -31,53 +31,6 @@ public class ComponentDao {
         }
     }
 
-    public int addComponentBelongToRecipe(Component component) {
-        try {
-            if(component.getRecipe() == null) {
-                componentDaoOpe.create(component);
-                return component.getId();
-            }else {
-                Map<String, Object> map = new HashMap<>();
-                map.put("recipe_id", component.getRecipe().getId());
-                map.put("ingredient_id", component.getIngredient().getId());
-                List<Component> components = componentDaoOpe.queryForFieldValues(map);
-                if (components != null && components.size() > 0) {
-                    component.setId(components.get(0).getId());
-                    componentDaoOpe.update(component);
-                    return component.getId();
-                }else {
-                    componentDaoOpe.create(component);
-                    return component.getId();
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public int addComponentBelongToPlanItem(Component component) {
-        try {
-            if(component.getPlanItem() == null) {
-                componentDaoOpe.create(component);
-                return component.getId();
-            }else {
-                Map<String, Object> map = new HashMap<>();
-                map.put("planItem_id", component.getPlanItem().getId());
-                map.put("ingredient_id", component.getIngredient().getId());
-                List<Component> components = componentDaoOpe.queryForFieldValues(map);
-                if (components != null && components.size() > 0) {
-                    component.setId(components.get(0).getId());
-                    componentDaoOpe.update(component);
-                    return component.getId();
-                }else {
-                    componentDaoOpe.create(component);
-                    return component.getId();
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public List<Component> getComponents(int recipe_id) {
         List<Component> components = null;

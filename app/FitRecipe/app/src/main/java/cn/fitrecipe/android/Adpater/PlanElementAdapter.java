@@ -351,7 +351,7 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
             PlanComponent component = item.getComponents().get(i);
             text1.setText(component.getName());
             text2.setText(component.getAmount()+"g");
-            text3.setText(Math.round(component.getCalories()) + "kcal");
+            text3.setText(Math.round(component.getCalories() * component.getAmount() / 100) + "kcal");
             view.findViewById(R.id.trash).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

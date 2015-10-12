@@ -47,6 +47,7 @@
                     android:textColor="#ffffff"/>
 
                 <TextView
+                    android:id="@+id/unit"
                     android:layout_width="wrap_content"
                     android:layout_height="45dp"
                     android:paddingLeft="10dp"
@@ -130,7 +131,7 @@
                                 android:id="@+id/calorie_data_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="4350 kcal"
+                                android:text="0 kcal"
                                 android:textSize="10sp"
                                 android:layout_marginRight="15dp"
                                 android:layout_alignParentRight="true"/>
@@ -161,7 +162,7 @@
                                 android:id="@+id/protein_data_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="100.00 g"
+                                android:text="0.00 g"
                                 android:textSize="10sp"
                                 android:layout_marginRight="15dp"
                                 android:layout_alignParentRight="true"/>
@@ -205,7 +206,7 @@
                                 android:id="@+id/carbohydrate_data_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="100.00 g"
+                                android:text="0.00 g"
                                 android:textSize="10sp"
                                 android:layout_marginRight="15dp"
                                 android:layout_alignParentRight="true"/>
@@ -236,7 +237,7 @@
                                 android:id="@+id/lipids_data_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="100.00 g"
+                                android:text="0.00 g"
                                 android:textSize="10sp"
                                 android:layout_marginRight="15dp"
                                 android:layout_alignParentRight="true"/>
