@@ -58,5 +58,6 @@ def pick_data(objs, type):
             'nutrition_set': item.get_nutrition(),
             #'component_set': type == 0 and '' or ComponentSerializer(item.component_set.all(), many=True).data,
             'component_set': type == 0 and 'null' or item.get_component(),
+            'amount': type == 0 and 'null' or item.get_total_amount(),
             })
     return result
