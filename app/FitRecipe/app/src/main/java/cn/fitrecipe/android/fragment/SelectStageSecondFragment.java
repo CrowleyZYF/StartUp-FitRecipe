@@ -25,19 +25,15 @@ import cn.fitrecipe.android.entity.Recipe;
 public class SelectStageSecondFragment extends Fragment implements View.OnClickListener{
     private View view;
     private TextView search_pre,search_finish;
-    private TextView recipe_title, recipe_weight, plan_num_dash, plan_num_sure;
-    private TextView[] nums;
-    private int[] ids = {R.id.plan_num_00, R.id.plan_num_01, R.id.plan_num_02, R.id.plan_num_03, R.id.plan_num_04, R.id.plan_num_05, R.id.plan_num_06,
-            R.id.plan_num_07, R.id.plan_num_08,  R.id.plan_num_09};
-    private StringBuilder weight;
+    private TextView recipe_title, recipe_weight, plan_num_dash, plan_num_sure, sub, add;
+    private double weight;
     private PieChartView piechartview;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = View.inflate(getActivity(), R.layout.fragment_select_recipe_2, null);
-        nums = new TextView[10];
-        weight = new StringBuilder();
+        weight = 0;
         initView();
         initEvent();
 
@@ -47,32 +43,13 @@ public class SelectStageSecondFragment extends Fragment implements View.OnClickL
     private void initEvent() {
         search_pre.setOnClickListener(this);
         search_finish.setOnClickListener(this);
-        for(int  i = 0; i < 10; i++) {
-            final String tmp = String.valueOf(i);
-            nums[i].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if ((weight.toString().length() == 0 || weight.toString().equals("0")) && tmp.equals("0")) {
-                        weight.setLength(0);
-                    } else {
-                        if (weight.toString().length() < 4)
-                            weight.append(tmp);
-                        else
-                            Toast.makeText(getActivity(), "重量不能超过10 000克!", Toast.LENGTH_SHORT).show();
-                        recipe_weight.setText(weight.toString());
-                    }
-
-                }
-            });
-        }
+        add.setOnClickListener(this);
+        sub.setOnClickListener(this);
         plan_num_dash.setOnClickListener(this);
         plan_num_sure.setOnClickListener(this);
     }
 
     private void initView() {
-        for(int i = 0; i < 10; i++) {
-            nums[i] = (TextView) view.findViewById(ids[i]);
-        }
         search_finish = (TextView) view.findViewById(R.id.search_finish);
         search_pre = (TextView) view.findViewById(R.id.search_pre);
         recipe_title = (TextView) view.findViewById(R.id.recipe_title);
@@ -80,6 +57,8 @@ public class SelectStageSecondFragment extends Fragment implements View.OnClickL
         plan_num_dash = (TextView) view.findViewById(R.id.plan_num_dash);
         plan_num_sure = (TextView) view.findViewById(R.id.plan_num_sure);
         piechartview = (PieChartView) view.findViewById(R.id.piechartview);
+        add = (TextView) view.findViewById(R.id.add);
+        sub = (TextView) view.findViewById(R.id.sub);
         fresh();
     }
 
@@ -124,10 +103,9 @@ public class SelectStageSecondFragment extends Fragment implements View.OnClickL
                 if(!w.equals("0")) {
                     Intent intent = new Intent();
                     PlanComponent component_selected = new PlanComponent();
-                    int weight = Integer.parseInt(recipe_weight.getText().toString());
                     if(((SelectRecipeActivity)getActivity()).obj_selected instanceof Recipe) {
                         Recipe recipe = (Recipe) ((SelectRecipeActivity)getActivity()).obj_selected;
-                        component_selected.setAmount(weight);
+                        component_selected.setAmount((int) Math.round(weight * recipe.getTotal_amount()));
                         component_selected.setName(recipe.getTitle());
                         component_selected.setType(1);
                         component_selected.setId(recipe.getId());
@@ -138,7 +116,7 @@ public class SelectStageSecondFragment extends Fragment implements View.OnClickL
                             PlanComponent component = new PlanComponent();
                             component.setName(recipe.getComponent_set().get(i).getIngredient().getName());
                             component.setType(0);
-                            component.setAmount(Math.round(recipe.getComponent_set().get(i).getAmount() * weight * 1.0f/ recipe.getTotal_amount()));
+                            component.setAmount(Math.round(recipe.getComponent_set().get(i).getAmount() * weight);
                             component.setCalories(100);
                             components.add(component);
                         }
@@ -160,17 +138,16 @@ public class SelectStageSecondFragment extends Fragment implements View.OnClickL
                 }else
                     Toast.makeText(getActivity(), "重量不能为0", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.plan_num_dash:
-                recipe_weight.setText("0");
-                weight.setLength(0);
+            case R.id.add:
+                weight += 0.25;
+                int tmp = (int)(weight * 4);
+                recipe_weight.setText(tmp % 4 == 0?String.valueOf(tmp/4):tmp +"/4");
                 break;
-            case R.id.plan_num_sure:
-                if(weight.toString().length() > 0) {
-                    weight.deleteCharAt(weight.toString().length() - 1);
-                    if(weight.toString().length() == 0)
-                        recipe_weight.setText("0");
-                    else
-                        recipe_weight.setText(weight.toString());
+            case R.id.sub:
+                if(weight > 0) {
+                    weight -= 0.25;
+                    int tmp1 = (int) (weight * 4);
+                    recipe_weight.setText(tmp1 % 4 == 0 ? String.valueOf(tmp1 / 4) : tmp1 + "/4");
                 }
                 break;
         }
