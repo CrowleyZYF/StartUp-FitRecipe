@@ -73,7 +73,10 @@ class Recipe(BaseModel):
         c = list()
         for item in self.component_set.all():
             temp = dict()
-            temp['name'] = item.ingredient.name
+            ingredient = dict()
+            ingredient['id'] = item.ingredient.id
+            ingredient['name'] = item.ingredient.name            
+            temp['ingredient'] = ingredient
             temp['amount'] = item.amount
             temp['remark'] = item.remark
             c.append(temp)
