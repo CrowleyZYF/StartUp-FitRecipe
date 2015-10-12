@@ -107,12 +107,12 @@ public class SelectStageFirstFragment extends Fragment implements View.OnClickLi
             data = new ArrayList<>();
         else
             data.clear();
-        getData();
+        getData(text);
     }
 
-    private void getData() {
+    private void getData(String text) {
         showLoading();
-        GetRequest request = new GetRequest(FrServerConfig.getRecipeDetails("8"), FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
+        GetRequest request = new GetRequest(FrServerConfig.getSearchFoodUrl(text,"0","10"), FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {
                 if(res != null && res.has("data")) {

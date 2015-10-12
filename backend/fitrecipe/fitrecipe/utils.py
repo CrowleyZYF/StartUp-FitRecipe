@@ -55,6 +55,7 @@ def pick_data(objs, type):
             'name': type == 0 and item.name or item.title,
             'type': type,
             'nutrition_set': item.get_nutrition(),
+            'component_set': type == 0 and '' or item.component_set,
             })
     # if type == 1:
     #     for item in objs:
