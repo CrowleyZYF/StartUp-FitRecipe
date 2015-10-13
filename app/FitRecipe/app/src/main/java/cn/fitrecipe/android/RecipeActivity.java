@@ -455,7 +455,8 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
             }
             case R.id.set_btn:{
                 //openSet();
-                startActivity(new Intent(this, IngredientActivity.class));
+                //startActivity(new Intent(this, IngredientActivity.class));
+                mController.openShare(this, false);
                 break;
             }
             case R.id.back_btn:{
@@ -495,7 +496,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                 break;
             }
             case R.id.put_in_basket:
-                recipe.setWeightInRecipeBasket(recipe.getIncreWeight());
+                /*recipe.setWeightInRecipeBasket(recipe.getIncreWeight());
                 if(!recipe.getInBasket()) {
                     recipe.setInBasket(true);
 //                    FrDbHelper.getInstance(this).addRecipeToBasket(recipe);
@@ -505,25 +506,28 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
 //                    FrDbHelper.getInstance(this).removeRecipeFromBasket(recipe);
                     Toast.makeText(this, recipe.getTitle() + "移除菜篮子", Toast.LENGTH_SHORT).show();
                 }
-                basketStateChange();
+                basketStateChange();*/
                 /*
                 put_in_basket.setText("+ 丢进菜篮子");
                 put_in_basket.setTextColor(getResources().getColor(R.color.active_color));
                 toggle_btn.setBackground(getResources().getDrawable(R.drawable.recipe_button_border));
                 */
+                Intent intent = new Intent(this, AddToPlanActivity.class);
+                startActivity(intent);
+                break;
 
         }
     }
 
     private void basketStateChange() {
         if(recipe.getInBasket()) {
-            put_in_basket.setText("- 移除菜篮子");
+            put_in_basket.setText("- 从计划移除");
             put_in_basket.setTextColor(getResources().getColor(R.color.gray));
             toggle_btn.setBackground(getResources().getDrawable(R.drawable.recipe_button_border_disable));
             add_btn.setEnabled(false);
             minus_btn.setEnabled(false);
         }else {
-            put_in_basket.setText("+ 丢进菜篮子");
+            put_in_basket.setText("+ 添加到计划");
             put_in_basket.setTextColor(getResources().getColor(R.color.active_color));
             toggle_btn.setBackground(getResources().getDrawable(R.drawable.recipe_button_border));
             add_btn.setEnabled(true);

@@ -66,6 +66,13 @@ public class Common {
         return sdf.format(afterDate);
     }
 
+    public static String getAddDate(int days) {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM月dd日");
+        long now = System.currentTimeMillis() + days * 24 * 3600 * 1000;
+        Date afterDate = new Date(now);
+        return sdf.format(afterDate);
+    }
+
     /**
      * translate 2015-09-26 to 20150926
      * @param date

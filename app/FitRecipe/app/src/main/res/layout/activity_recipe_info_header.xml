@@ -36,7 +36,7 @@
             android:padding="15dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/icon_shopping_white"
+            android:src="@drawable/icon_share"
             android:background="@drawable/icon_selector"
             />
     </RelativeLayout>
