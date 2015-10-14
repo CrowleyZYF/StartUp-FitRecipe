@@ -23,6 +23,7 @@ class PlanList(BaseView):
         '''
         create a personal plan
         {
+            "id": 18,
             "dish": [{
                 "type": 0,
                 "ingredient": [{
@@ -41,25 +42,23 @@ class PlanList(BaseView):
                     "amount": 300
                 }]
             }],
-            "authored_date": "2015-01-01"
+            "joined_date": "2015-01-01"
         }
         '''
         try:
             body = json.loads(request.body)
             user = Account.find_account_by_user(request.user)
             try:
-                authored_date = datetime.strptime(body['authored_date'],'%Y-%m-%d').date()
+                joined_date = datetime.strptime(body['joined_date'],'%Y-%m-%d').date()
             except:
-                authored_date = date.today()
-            # get today first
-            try:
-                p = Plan.objects.filter(user=user, authored_date=authored_date)[0]
-                # exists
-                # delete its routines
-                p.delete_routines()
-            except IndexError:
-                # create new one
+                joined_date = date.today()
+            planid = body.get('id', None)
+            if planid is None:
+                # create
                 p = Plan.objects.create(user=user)
+            else :
+                p = Plan.objects.get(user=user, pk=planid)
+                p.delete_routines()
             r = Routine.objects.create(plan=p)
             for dish in body.get('dish', []):
                 d = Dish.objects.create(type=dish['type'], routine=r)
@@ -71,12 +70,12 @@ class PlanList(BaseView):
                     SingleRecipe.objects.create(recipe=recipe, amount=sr['amount'], dish=d)
             # after created it join it!
             try:
-                c = Calendar.objects.get(user=user, joined_date=authored_date)
+                c = Calendar.objects.get(user=user, joined_date=joined_date)
                 if c.plan.id != p.id:
                     c.plan = p
                     c.save()
             except Calendar.DoesNotExist:
-                Calendar.objects.create(user=user, plan=p, joined_date=authored_date)
+                Calendar.objects.create(user=user, plan=p, joined_date=joined_date)
             return self.success_response(PlanSerializer(p).data)
         except:
             return self.fail_response(400, 'fail')
