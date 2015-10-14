@@ -53,11 +53,11 @@ class PlanList(BaseView):
                 authored_date = date.today()
             # get today first
             try:
-                p = Plan.objects.get(user=user, authored_date=authored_date)
+                p = Plan.objects.filter(user=user, authored_date=authored_date)[0]
                 # exists
                 # delete its routines
                 p.delete_routines()
-            except Plan.DoesNotExist:
+            except IndexError:
                 # create new one
                 p = Plan.objects.create(user=user)
             r = Routine.objects.create(plan=p)
