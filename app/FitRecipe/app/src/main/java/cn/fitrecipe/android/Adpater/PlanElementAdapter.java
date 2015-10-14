@@ -20,6 +20,8 @@ import com.daimajia.swipe.SimpleSwipeListener;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 
+import org.json.JSONException;
+
 import java.util.List;
 
 import cn.fitrecipe.android.FrApplication;
@@ -357,6 +359,11 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
                 public void onClick(View v) {
 //                    FrDbHelper.getInstance(fragment.getActivity()).deletePlanItem(item, i);
                     item.deleteContent(i);
+                    try {
+                        ((PlanFragment) fragment).update();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     notifyDataSetChanged();
                     Toast.makeText(fragment.getActivity(), "click delete", Toast.LENGTH_SHORT).show();
                 }

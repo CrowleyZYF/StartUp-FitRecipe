@@ -123,7 +123,7 @@ public class PlanInfoViewPagerAdapter extends PagerAdapter {
                         try {
                             new JoinPlanHelper(context).joinPersonalPlan(new JoinPlanHelper.CallBack() {
                                 @Override
-                                public void handle() {
+                                public void handle(Object... res) {
                                     choice_join_btn.setText("选用");
                                     choice_join_btn.setTextColor(context.getResources().getColor(R.color.white));
                                     choice_join_btn.setBackground(context.getResources().getDrawable(R.drawable.join_button));
@@ -138,9 +138,9 @@ public class PlanInfoViewPagerAdapter extends PagerAdapter {
                     }
                     else {
                         try {
-                            new JoinPlanHelper(context).setInUse(plan.getId(), new JoinPlanHelper.CallBack() {
+                            new JoinPlanHelper(context).joinOfficalPlan(plan.getId(), new JoinPlanHelper.CallBack() {
                                 @Override
-                                public void handle() {
+                                public void handle(Object... res) {
                                     choice_join_btn.setText("取消选用");
                                     choice_join_btn.setTextColor(context.getResources().getColor(R.color.gray));
                                     choice_join_btn.setBackground(context.getResources().getDrawable(R.drawable.join_button_disable));
