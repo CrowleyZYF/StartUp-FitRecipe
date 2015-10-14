@@ -20,7 +20,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -35,7 +34,6 @@ import cn.fitrecipe.android.FrApplication;
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
-import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.IngredientActivity;
 import cn.fitrecipe.android.NutritionActivity;
 import cn.fitrecipe.android.R;
@@ -45,7 +43,6 @@ import cn.fitrecipe.android.entity.DatePlan;
 import cn.fitrecipe.android.entity.DatePlanItem;
 import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.Report;
-import cn.fitrecipe.android.entity.Series;
 import cn.fitrecipe.android.entity.SeriesPlan;
 import cn.fitrecipe.android.function.Common;
 import cn.fitrecipe.android.function.JoinPlanHelper;
@@ -157,6 +154,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     // 获取服务器上的记录
     private void getData(String start, String end) {
         data = new HashMap<>();
+        indexDate = new HashMap<>();
         if(Common.isOpenNetwork(getActivity())) {
             start = Common.dateFormat(start);
             end = Common.dateFormat(end);
@@ -373,7 +371,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                     hideLoading(false, "");
                     Toast.makeText(getActivity(), "默认设置自定义计划", Toast.LENGTH_SHORT).show();
                 }
-            });
+            }, nowDate);
         }
         SeriesPlan now = plans.get(nowDate);//切换的不同计划
         String str = start;
@@ -395,9 +393,9 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 else
                     data.put(str, gernerateEmptyPlan(str));
             }else {
-                int th = Common.getDiff(str, nowDate) % plans.get(str).getTotal_days();
-                data.put(str, plans.get(nowDate).getDatePlans().get(th));
-                indexDate.put(str, "完成("+th+"/"+plans.get(str).getDatePlans().size()+")天");
+                int th = Common.getDiff(str, nowDate) % now.getTotal_days();
+                data.put(str, now.getDatePlans().get(th));
+                indexDate.put(str, "完成("+ (th+1) +"/"+now.getTotal_days()+")天");
             }
             str = Common.getSomeDay(str, 1);
         }
@@ -565,28 +563,28 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             case LUNCH_CODE:
                 if(resultCode == getActivity().RESULT_OK && data.hasExtra("component_selected")) {
                     PlanComponent obj = (PlanComponent) data.getSerializableExtra("component_selected");
-                    items.get(0).addContent(obj);
+                    items.get(2).addContent(obj);
                     adapter.notifyDataSetChanged();
                 }
                 break;
             case ADDMEAL_02_CODE:
                 if(resultCode == getActivity().RESULT_OK && data.hasExtra("component_selected")) {
                     PlanComponent obj = (PlanComponent) data.getSerializableExtra("component_selected");
-                    items.get(0).addContent(obj);
+                    items.get(3).addContent(obj);
                     adapter.notifyDataSetChanged();
                 }
                 break;
             case SUPPER_CODE:
                 if(resultCode == getActivity().RESULT_OK && data.hasExtra("component_selected")) {
                     PlanComponent obj = (PlanComponent) data.getSerializableExtra("component_selected");
-                    items.get(0).addContent(obj);
+                    items.get(4).addContent(obj);
                     adapter.notifyDataSetChanged();
                 }
                 break;
             case ADDMEAL_03_CODE:
                 if(resultCode == getActivity().RESULT_OK && data.hasExtra("component_selected")) {
                     PlanComponent obj = (PlanComponent) data.getSerializableExtra("component_selected");
-                    items.get(0).addContent(obj);
+                    items.get(5).addContent(obj);
                     adapter.notifyDataSetChanged();
                 }
                 break;

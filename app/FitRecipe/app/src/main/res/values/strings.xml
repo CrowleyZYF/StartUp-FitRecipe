@@ -239,5 +239,7 @@
     <string name="not_enough_space">没有足够的空间</string>
 
 
+    <string name="server_error">服务器错误</string>
+
 
 </resources>

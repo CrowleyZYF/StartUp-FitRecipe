@@ -177,6 +177,7 @@ public class SelectStageFirstFragment extends Fragment implements View.OnClickLi
                 for(int j = 0; j < array.length(); j++) {
                     PlanComponent component1 = new PlanComponent();
                     component1.setType(0);
+                    component1.setId(array.getJSONObject(j).getJSONObject("ingredient").getInt("id"));
                     component1.setName(array.getJSONObject(j).getJSONObject("ingredient").getString("name"));
                     component1.setAmount(array.getJSONObject(j).getInt("amount"));
                     components.add(component1);

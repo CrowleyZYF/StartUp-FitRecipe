@@ -16,6 +16,7 @@ import cn.fitrecipe.android.FrApplication;
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.PostRequest;
+import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.dao.FrDbHelper;
 import cn.fitrecipe.android.entity.DatePlanItem;
 
@@ -30,7 +31,7 @@ public class JoinPlanHelper {
         this.context = context;
     }
 
-    public void joinPersonalPlan(final CallBack callBack) throws JSONException {
+    public void joinPersonalPlan(final CallBack callBack, String date) throws JSONException {
         JSONObject params = new JSONObject();
         JSONArray dish = new JSONArray();
         List<DatePlanItem> items = FrDbHelper.getInstance(context).generateDatePlan();
@@ -39,20 +40,23 @@ public class JoinPlanHelper {
             obj.put("type", i);
             JSONArray ingredient = new JSONArray();
             JSONArray recipe = new JSONArray();
-            JSONObject obj1 = new JSONObject();
-            obj1.put("id", 1);
-            obj1.put("amount", 200);
-            ingredient.put(obj1);
+//            JSONObject obj1 = new JSONObject();
+//            obj1.put("id", 1);
+//            obj1.put("amount", 200);
+//            ingredient.put(obj1);
             obj.put("ingredient", ingredient);
             obj.put("recipe", recipe);
             dish.put(obj);
         }
         params.put("dish", dish);
+        params.put("authored_date", date);
         PostRequest request = new PostRequest(FrServerConfig.getUpdatePlanUrl(), FrApplication.getInstance().getToken(), params, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {
                 try {
-                    setInUse(res.getJSONObject("data").getInt("id"), callBack);
+                    Toast.makeText(context, "创建或更新计划成功！", Toast.LENGTH_SHORT).show();
+                    if(callBack != null)
+                        setInUse(res.getJSONObject("data").getInt("id"), callBack);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -60,17 +64,21 @@ public class JoinPlanHelper {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                if(volleyError != null && volleyError.networkResponse != null) {
+                    int statusCode = volleyError.networkResponse.statusCode;
+                    Toast.makeText(context, statusCode+"", Toast.LENGTH_SHORT).show();
+                }else
+                    Toast.makeText(context, context.getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
             }
         });
         FrRequest.getInstance().request(request);
     }
 
-    private void setInUse(int id, final CallBack callBack) throws JSONException {
+    public void setInUse(int id, final CallBack callBack) throws JSONException {
         JSONObject params = new JSONObject();
         params.put("plan", id);
         params.put("joined_date", Common.getDate());
-        PostRequest request = new PostRequest(FrServerConfig.getUpdatePlanUrl(), FrApplication.getInstance().getToken(), params, new Response.Listener<JSONObject>() {
+        PostRequest request = new PostRequest(FrServerConfig.getJoinPlanUrl(), FrApplication.getInstance().getToken(), params, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {
                 if(res.has("data")) {
@@ -85,7 +93,11 @@ public class JoinPlanHelper {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                if(volleyError != null && volleyError.networkResponse != null) {
+                    int statusCode = volleyError.networkResponse.statusCode;
+                    Toast.makeText(context, statusCode+"", Toast.LENGTH_SHORT).show();
+                }else
+                    Toast.makeText(context, context.getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
             }
         });
         FrRequest.getInstance().request(request);

@@ -173,7 +173,7 @@ public class FrServerConfig {
     }
 
     public static String getJoinPlanUrl() {
-        return HOST + "/api/plan/calendar";
+        return HOST + "/api/plan/calendar/";
     }
 
     public static String getDownloadReportUrl() {

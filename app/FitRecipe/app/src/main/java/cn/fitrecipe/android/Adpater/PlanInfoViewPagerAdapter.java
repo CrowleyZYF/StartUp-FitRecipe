@@ -29,6 +29,7 @@ import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.dao.FrDbHelper;
 import cn.fitrecipe.android.entity.SeriesPlan;
 import cn.fitrecipe.android.function.Common;
+import cn.fitrecipe.android.function.JoinPlanHelper;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -116,45 +117,40 @@ public class PlanInfoViewPagerAdapter extends PagerAdapter {
                 @Override
                 public void onClick(View v) {
                     plan.setIsUsed(!plan.isUsed());
+                    final ProgressDialog pd = ProgressDialog.show(context, "", "选用计划...", true, false);
+                    pd.setCanceledOnTouchOutside(false);
                     if(!plan.isUsed()) {
-                        choice_join_btn.setText("选用");
-                        choice_join_btn.setTextColor(context.getResources().getColor(R.color.white));
-                        choice_join_btn.setBackground(context.getResources().getDrawable(R.drawable.join_button));
-                        //
-                        FrDbHelper.getInstance(context).setPlanUnUsed(plan);
-                    }
-                    else {
-                        final ProgressDialog pd = ProgressDialog.show(context, "", "选用计划...", true, false);
-                        pd.setCanceledOnTouchOutside(false);
-                        JSONObject p = new JSONObject();
                         try {
-                            p.put("plan", plan.getId());
-                            p.put("joined_date", Common.getDate());
+                            new JoinPlanHelper(context).joinPersonalPlan(new JoinPlanHelper.CallBack() {
+                                @Override
+                                public void handle() {
+                                    choice_join_btn.setText("选用");
+                                    choice_join_btn.setTextColor(context.getResources().getColor(R.color.white));
+                                    choice_join_btn.setBackground(context.getResources().getDrawable(R.drawable.join_button));
+                                    //
+                                    FrDbHelper.getInstance(context).setPlanUnUsed(plan);
+                                    pd.dismiss();
+                                }
+                            }, Common.getDate());
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        PostRequest request = new PostRequest(FrServerConfig.getJoinPlanUrl(), FrApplication.getInstance().getToken(), p, new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject res) {
-                                try {
-                                    if(res.has("data") && res.getString("data").equals("ok")) {
-                                        choice_join_btn.setText("取消选用");
-                                        choice_join_btn.setTextColor(context.getResources().getColor(R.color.gray));
-                                        choice_join_btn.setBackground(context.getResources().getDrawable(R.drawable.join_button_disable));
-                                        FrDbHelper.getInstance(context).setPlanUsed(plan);
-                                        pd.dismiss();
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+                    }
+                    else {
+                        try {
+                            new JoinPlanHelper(context).setInUse(plan.getId(), new JoinPlanHelper.CallBack() {
+                                @Override
+                                public void handle() {
+                                    choice_join_btn.setText("取消选用");
+                                    choice_join_btn.setTextColor(context.getResources().getColor(R.color.gray));
+                                    choice_join_btn.setBackground(context.getResources().getDrawable(R.drawable.join_button_disable));
+                                    FrDbHelper.getInstance(context).setPlanUsed(plan);
+                                    pd.dismiss();
                                 }
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError volleyError) {
-                                System.out.print("");
-                            }
-                        });
-                        FrRequest.getInstance().request(request);
+                            });
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             });
