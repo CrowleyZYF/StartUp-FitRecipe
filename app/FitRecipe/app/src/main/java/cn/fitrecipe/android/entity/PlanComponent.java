@@ -12,7 +12,7 @@ public class PlanComponent implements Serializable, Comparable<PlanComponent> {
     private int type; //ingredient or recipe
     private String name;
     private int amount;
-    private double calories;
+    private double calories;        //100g
     private int status; //if drop from the basket
     private ArrayList<PlanComponent> components;
     private ArrayList<Nutrition> nutritions;

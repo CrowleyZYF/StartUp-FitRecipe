@@ -2,7 +2,6 @@ package cn.fitrecipe.android;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -25,10 +24,6 @@ public class WelcomeActivity extends Activity{
             }
         }, SPLASH_DISPLAY_LENGTH);
 
-//
-//        Intent intent  = new Intent(WelcomeActivity.this, PlayerActivity.class);
-//        intent.putExtra("vid", "XMTI0OTc5MzEyNA");
-//        startActivity(intent);
     }
 
 
@@ -44,7 +39,6 @@ public class WelcomeActivity extends Activity{
             WelcomeActivity.this.finish();
         }
     }
-    //test
 
     @Override
     protected void onDestroy() {

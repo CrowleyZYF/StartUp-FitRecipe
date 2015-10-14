@@ -5,6 +5,7 @@
 # @Last Modified by:   chaihaotian
 # @Last Modified time: 2015-07-25 17:52:50
 from random import Random
+# from recipe.serializers import ComponentSerializer
 
 
 def random_str(scope=None, num=16):
@@ -46,3 +47,17 @@ def str_to_int(str, default=None):
             raise
         else:
             return default
+
+def pick_data(objs, type):
+    result = []
+    for item in objs:
+        result.append({
+            'id': item.id,
+            'name': type == 0 and item.name or item.title,
+            'type': type,
+            'nutrition_set': item.get_nutrition(),
+            #'component_set': type == 0 and '' or ComponentSerializer(item.component_set.all(), many=True).data,
+            'component_set': type == 1 and item.get_component() or [],
+            'amount': type == 1 and item.get_total_amount(True) or 100.0,
+            })
+    return result

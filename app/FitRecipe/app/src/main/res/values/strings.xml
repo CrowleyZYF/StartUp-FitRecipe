@@ -46,6 +46,7 @@
     <string name="plan_nutrition_rate_prefix_01">g(</string>
     <string name="plan_nutrition_rate_prefix_02">%) : </string>
     <string name="plan_add">添加食材/食谱</string>
+    <string name="calorie">热量</string>
     <string name="carbohydrate">碳水</string>
     <string name="protein">蛋白质</string>
     <string name="lipids">脂类</string>
@@ -108,7 +109,8 @@
     <string name="search_hint">搜索食材、菜谱、标签</string>
     <string name="search">搜索</string>
     <string name="search_food">搜索食材/食谱</string>
-    <string name="search_unit">克</string>
+    <string name="search_food_unit">克</string>
+    <string name="search_recipe_unit">份</string>
     <string name="search_next">下一步</string>
     <string name="search_finish">完成</string>
     <string name="search_cancel">取消</string>
@@ -236,6 +238,8 @@
     <string name="no_storage_card">没有发现SD卡</string>
     <string name="not_enough_space">没有足够的空间</string>
 
+
+    <string name="server_error">服务器错误</string>
 
 
 </resources>

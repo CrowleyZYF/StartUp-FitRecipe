@@ -104,7 +104,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="15dp"
                     android:gravity="center_vertical"
-                    android:text="@string/search_unit"
+                    android:text="@string/search_recipe_unit"
                     android:textColor="#ffffff"/>
 
 

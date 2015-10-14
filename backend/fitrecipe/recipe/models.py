@@ -69,6 +69,20 @@ class Recipe(BaseModel):
             v['amount'] = round(v['amount'] / total_amount, 2)  # 一百克含量
         return r
 
+    def get_component(self):
+        c = list()
+        for item in self.component_set.all():
+            temp = dict()
+            ingredient = dict()
+            ingredient['id'] = item.ingredient.id
+            ingredient['name'] = item.ingredient.name            
+            temp['ingredient'] = ingredient
+            temp['amount'] = item.amount
+            temp['remark'] = item.remark
+            c.append(temp)
+        return c
+            
+
     def get_nutrition_amount(self, data, name):
         '''
         g,mg,ug 的转换为g

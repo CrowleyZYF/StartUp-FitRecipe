@@ -54,6 +54,20 @@ public class IngredientActivity extends Activity implements View.OnClickListener
         data = basket.getContent();
         if(data == null) data = new ArrayList<>();
         Collections.sort(data);
+        ArrayList<PlanComponent> components = new ArrayList<>();
+        for(int i = 0; i < data.size(); i++) {
+            if(data.get(i).getType() == 0) {
+                components.add(data.get(i));
+                data.remove(i);
+            }
+        }
+        if(components.size() > 0) {
+            PlanComponent component = new PlanComponent();
+            component.setName("其它");
+            component.setType(1);
+            component.setComponents(components);
+            data.add(component);
+        }
     }
 
     private void setFragment(int i) {

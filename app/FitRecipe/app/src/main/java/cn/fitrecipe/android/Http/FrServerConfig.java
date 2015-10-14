@@ -3,8 +3,6 @@ package cn.fitrecipe.android.Http;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import cn.fitrecipe.android.CommentActivity;
-
 /**
  * Created by wk on 2015/7/23.
  */
@@ -162,6 +160,10 @@ public class FrServerConfig {
         return HOST + "/api/plan/calendar?start=" + start + "&end=" + end;
     }
 
+    public static String getSearchFoodUrl(String keywords, int start, int num) {
+        return HOST + "/api/recipe/search/food/?keyword=" + keywords + "&start=" + start + "&num=" + num;
+    }
+
     public static String getRecentPlanUrl() {
         return HOST + "/api/plan/current";
     }
@@ -171,10 +173,11 @@ public class FrServerConfig {
     }
 
     public static String getJoinPlanUrl() {
-        return HOST + "/api/plan/calendar";
+        return HOST + "/api/plan/calendar/";
     }
 
     public static String getDownloadReportUrl() {
         return HOST + "/api/accounts/download_evaluation/";
     }
+
 }

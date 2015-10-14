@@ -63,16 +63,14 @@ public class BasketAdapter extends BaseAdapter {
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String recipeID = components.get(position).getId() + "";
-                Intent intent = new Intent(context, RecipeActivity.class);
-                intent.putExtra("id", recipeID);
-                context.startActivity(intent);
+                if(!components.get(position).getName().equals("其它")) {
+                    String recipeID = components.get(position).getId() + "";
+                    Intent intent = new Intent(context, RecipeActivity.class);
+                    intent.putExtra("id", recipeID);
+                    context.startActivity(intent);
+                }
             }
         });
-        int original = 0;
-        List<PlanComponent> componentList = components.get(position).getComponents();
-        for(int j = 0; j < componentList.size(); j++)  original += componentList.get(j).getAmount();
-        for(int j = 0; j < componentList.size(); j++)  componentList.get(j).setAmount(Math.round(componentList.get(j).getAmount() * components.get(position).getAmount() / original));
         holder.listView.setAdapter(new IngredientAdapter(context, components.get(position).getComponents(), null));
         return convertView;
     }

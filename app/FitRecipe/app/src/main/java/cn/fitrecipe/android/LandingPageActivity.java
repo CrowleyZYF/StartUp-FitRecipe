@@ -15,11 +15,21 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import cn.fitrecipe.android.Http.FrRequest;
+import cn.fitrecipe.android.Http.FrServerConfig;
+import cn.fitrecipe.android.Http.PostRequest;
 import me.relex.circleindicator.CircleIndicator;
 
 public class LandingPageActivity extends Activity implements ViewPager.OnPageChangeListener, View.OnClickListener{
@@ -39,6 +49,41 @@ public class LandingPageActivity extends Activity implements ViewPager.OnPageCha
         super.onCreate(savedInstanceState);
         layout = View.inflate(this, R.layout.activity_landingpage, null);
         setContentView(layout);
+
+
+        /**
+         *
+         *
+         */
+        Button btn = (Button) findViewById(R.id.btn);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final JSONObject params = new JSONObject();
+                Toast.makeText(LandingPageActivity.this, "注册测试用户!", Toast.LENGTH_SHORT).show();
+                try {
+                    params.put("phone", new Random().nextInt(1000));
+                    params.put("password", "123456");
+                }catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+                PostRequest request = new PostRequest(FrServerConfig.getRegisterUrl(), null, params, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject res) {
+                        try {
+                            Toast.makeText(LandingPageActivity.this, params.getInt("phone")+"", 10000).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                    }
+                });
+                FrRequest.getInstance().request(request);
+            }
+        });
 
         bitmaps = new ArrayList<Bitmap>();
 

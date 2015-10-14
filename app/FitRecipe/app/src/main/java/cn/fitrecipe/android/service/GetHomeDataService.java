@@ -103,7 +103,7 @@ public class GetHomeDataService extends Service {
 
         List<Recipe> updates = homeData.getUpdate();
         for (int i = 0;i < updates.size(); i++){
-            String img = updates.get(i).getImg();
+            String img = updates.get(i).getThumbnail();
             urls.add(img);
         }
 

@@ -78,12 +78,12 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
         ViewHolder holder;
         if(convertView == null) {
             convertView = View.inflate(fragment.getActivity(), R.layout.plan_list_item, null);
-
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         }else
             holder = (ViewHolder) convertView.getTag();
 
+        //如果是早餐，添加margin
         if (position!=0){
             holder.first_margin_01.setVisibility(View.GONE);
             holder.first_margin_02.setVisibility(View.GONE);
@@ -92,13 +92,15 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
             holder.first_margin_02.setVisibility(View.VISIBLE);
         }
 
+        //获取某一餐的信息
         final DatePlanItem item = items.get(position);
 
-        //
+        //滑动删除
         final ContentAdapter adapter = new ContentAdapter(item);
         holder.plan_content.setAdapter(adapter);
-        //
+        //添加食谱的按钮
         final RelativeLayout addBtn = holder.add_recipe;
+        //添加到菜篮子
         holder.plan_shopping.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,7 +124,7 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
                 adapter.notifyDataSetChanged();
             }
         });
-
+        //打卡
         holder.plan_punch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -349,7 +351,7 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
             PlanComponent component = item.getComponents().get(i);
             text1.setText(component.getName());
             text2.setText(component.getAmount()+"g");
-            text3.setText(Math.round(component.getCalories()) + "kcal");
+            text3.setText(Math.round(component.getCalories() * component.getAmount() / 100) + "kcal");
             view.findViewById(R.id.trash).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

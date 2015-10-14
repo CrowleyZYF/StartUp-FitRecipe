@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.fitrecipe.android.R;
+
 /**
  * Created by wk on 2015/9/14.
  */
@@ -170,13 +172,13 @@ public class DatePlanItem implements Serializable{
                 }
                 else {
                     nutrition = nutritions.get(j);
-                    nutrition.setAmount(nutrition.getAmount() + nutrition_set.get(j).getAmount());
+                    nutrition.setAmount(nutrition.getAmount() + nutrition_set.get(j).getAmount() * obj.getAmount() / 100);
                     nutritions.set(j, nutrition);
                 }
 
             }
         }
-        calories_take += obj.getCalories();
+        calories_take += obj.getCalories()  * obj.getAmount() / 100;
         protein_take = nutritions.get(1).getAmount();
         fat_take = nutritions.get(2).getAmount();
         carbohydrate_take = nutritions.get(3).getAmount();
@@ -189,11 +191,11 @@ public class DatePlanItem implements Serializable{
         if (nutrition_set != null) {
             for (int j = 0; j < nutrition_set.size(); j++) {
                 Nutrition nutrition = nutritions.get(j);
-                nutrition.setAmount(nutrition.getAmount() - nutrition_set.get(j).getAmount());
+                nutrition.setAmount(nutrition.getAmount() - nutrition_set.get(j).getAmount() * component.getAmount() / 100);
                 nutritions.set(j, nutrition);
             }
         }
-        calories_take -= component.getCalories();
+        calories_take -= component.getCalories() * component.getAmount() / 100;
         protein_take = nutritions.get(1).getAmount();
         fat_take = nutritions.get(2).getAmount();
         carbohydrate_take = nutritions.get(3).getAmount();
@@ -234,6 +236,24 @@ public class DatePlanItem implements Serializable{
 
     public void setDefaultImageCover(String defaultImageCover) {
         this.defaultImageCover = defaultImageCover;
+        if (type.equals("breakfast")){
+            this.defaultImageCover = "drawable://" + R.drawable.breakfast;
+        }
+        if (type.equals("add_meal_01")){
+            this.defaultImageCover = "drawable://" + R.drawable.add_meal_01;
+        }
+        if (type.equals("lunch")){
+            this.defaultImageCover = "drawable://" + R.drawable.lunch;
+        }
+        if (type.equals("add_meal_02")){
+            this.defaultImageCover = "drawable://" + R.drawable.add_meal_02;
+        }
+        if (type.equals("supper")){
+            this.defaultImageCover = "drawable://" + R.drawable.dinner;
+        }
+        if (type.equals("add_meal_03")){
+            this.defaultImageCover = "drawable://" + R.drawable.add_meal_03;
+        }
     }
 
     public String getDate() {

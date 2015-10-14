@@ -45,14 +45,12 @@ public class BasketIngredientFragment extends android.app.Fragment {
             PlanComponent planComponent = ((IngredientActivity) getActivity()).getData().get(i);
             if(planComponent.getType() == 1) {
                 List<PlanComponent> components = planComponent.getComponents();
-                int original = 0;
-                for(int j = 0; j < components.size(); j++)  original += components.get(j).getAmount();
                 for(int j = 0; j < components.size(); j++) {
                     String name = components.get(j).getName();
                     if (counter.containsKey(name)) {
                         PlanComponent component = counter.get(name);
                         component.setType(0);
-                        component.setAmount(component.getAmount() + components.get(j).getAmount() * planComponent.getAmount() / original);
+                        component.setAmount(component.getAmount() + components.get(j).getAmount());
                         int status = component.getStatus();
                         component.setStatus(status & components.get(j).getStatus());
                     }
@@ -60,7 +58,7 @@ public class BasketIngredientFragment extends android.app.Fragment {
                         PlanComponent component = new PlanComponent();
                         component.setName(components.get(j).getName());
                         component.setType(0);
-                        component.setAmount(components.get(j).getAmount() * planComponent.getAmount() / original);
+                        component.setAmount(components.get(j).getAmount());
                         component.setStatus(components.get(j).getStatus());
                         counter.put(name, component);
                     }

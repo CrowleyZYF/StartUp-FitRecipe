@@ -174,10 +174,12 @@ public class Recipe implements Serializable, Comparable<Recipe>{
         }
 
         //parse Author
-        if(data.has("author")) {
+        if(data.has("author") && !data.get("author").toString().equals("null")) {
             JSONObject jauthor = data.getJSONObject("author");
-            Author author = gson.fromJson(jauthor.toString(), Author.class);
-            recipe.setAuthor(author);
+            if(jauthor != null) {
+                Author author = gson.fromJson(jauthor.toString(), Author.class);
+                recipe.setAuthor(author);
+            }
         }
 
         if(data.has("created_time"))
