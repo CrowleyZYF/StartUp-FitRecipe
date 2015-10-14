@@ -24,7 +24,7 @@ class RoutineAdmin(nested_admin.NestedAdmin):
 
 
 class PlanAdmin(admin.ModelAdmin):
-    pass
+    list_filter = ('is_personal',)
 
 admin.site.register(PlanAuthor)
 admin.site.register(Plan, PlanAdmin)
