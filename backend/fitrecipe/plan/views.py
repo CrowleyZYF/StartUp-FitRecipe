@@ -5,7 +5,7 @@ from django.db import IntegrityError
 from base.views import BaseView
 from .models import Plan, Calendar, Routine, Dish, SingleIngredient, SingleRecipe, Punch
 from recipe.models import Recipe, Ingredient
-from .serializers import PlanSerializer, CalendarSerializer, PunchSerializer
+from .serializers import PlanSerializer, CalendarSerializer, PunchSerializer, DishSerializer
 from accounts.models import Account
 from datetime import date, datetime
 # Create your views here.
@@ -174,10 +174,12 @@ class PunchList(BaseView):
         user = Account.find_account_by_user(request.user)
         c = Calendar.objects.filter(user=user, joined_date__lte=date.today()).order_by('-joined_date')[0]
         for punch_item in punchs:
-            if punch_item.joined_date==c.joined_date:                
+            if punch_item.date==c.joined_date:                
                 plan = Plan.objects.get(pk=c.plan.id)
-                punch_item['dish'] = plan.routine_set.dish_set.get(type=punch_item.type)
-        return self.success_response(PunchSerializer(punchs, many=True).data)
+                dish = plan.routine_set.get(day=1).dish_set.get(type=punch_item.type)
+                result.append({'dish':DishSerializer(dish).data})
+        #return self.success_response(PunchSerializer(punchs, many=True).data)
+        return self.success_response(result)
 
     def post(self, request, format=None):
         user = Account.find_account_by_user(request.user)
