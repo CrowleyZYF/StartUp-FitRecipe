@@ -1057,10 +1057,12 @@
 
 ### Create Personal Plan [POST]
 创建自定义计划，只有一天。创建完成后自动加入
+传 id 的时候是修改，否则是创建。如果传的id是错的就报错了
 
 + Request (application/json)
 
         {
+            "id": 18,
             "dish": [{
                 "type": 0,
                 "ingredient": [{
@@ -1078,7 +1080,8 @@
                     "id":3,
                     "amount": 300
                 }]
-            }]
+            }],
+            "joined_date": "2015-01-01"
         }
 
 + Response 200 (application/json)

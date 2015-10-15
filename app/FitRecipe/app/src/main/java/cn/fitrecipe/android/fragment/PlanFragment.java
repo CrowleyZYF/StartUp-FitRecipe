@@ -20,7 +20,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -45,7 +44,6 @@ import cn.fitrecipe.android.entity.DatePlan;
 import cn.fitrecipe.android.entity.DatePlanItem;
 import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.Report;
-import cn.fitrecipe.android.entity.Series;
 import cn.fitrecipe.android.entity.SeriesPlan;
 import cn.fitrecipe.android.function.Common;
 import cn.fitrecipe.android.function.JoinPlanHelper;
@@ -151,12 +149,13 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         }
         //获取前面两天，后面七天的记录
         String today = Common.getDate();
-        getData(Common.getSomeDay(today, -2), Common.getSomeDay(today, 7));
+        getData(Common.getSomeDay(today, -2), Common.getSomeDay(today, 6));
     }
 
     // 获取服务器上的记录
     private void getData(String start, String end) {
         data = new HashMap<>();
+        indexDate = new HashMap<>();
         if(Common.isOpenNetwork(getActivity())) {
             start = Common.dateFormat(start);
             end = Common.dateFormat(end);
@@ -302,6 +301,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 for(int k = 0; k < singleingredient_set.length(); k++) {
                     PlanComponent component = new PlanComponent();
                     component.setType(0);//标记为食材
+                    component.setId(singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getInt("id"));
                     component.setName(singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getString("name"));//设置名称
                     component.setNutritions(JsonParseHelper.getNutritionSetFromJson(singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getJSONObject("nutrition_set")));//获取营养信息
                     component.setAmount(singleingredient_set.getJSONObject(k).getInt("amount"));//设置重量
@@ -344,8 +344,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     }
 
     private void postprocess(String start, String end) throws JSONException {
-        boolean isNew = false;
-        Map<String, SeriesPlan> plans = new TreeMap<>();
+        final Map<String, SeriesPlan> plans = new TreeMap<>();
         Set<String> keyset = planMap.keySet();
         Iterator<String> iterator = keyset.iterator();
         while (iterator.hasNext()) {
@@ -361,20 +360,30 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         if(nowDate != null) {
             if (Common.CompareDate(start, nowDate) < 0)
                 start = nowDate;
+            processDatePlan(start, end, plans, nowDate);
+            hideLoading(false, "");
         }else {
             //新用户 默认设定自定义计划
-            isNew = true;
             start = Common.getDate();
             nowDate = start;
-            plans.put(start, gerneratePersonalPlan());
+
+            final String finalStart = start;
+            final String finalEnd = end;
+            final String finalNowDate = nowDate;
             new JoinPlanHelper(getActivity()).joinPersonalPlan(new JoinPlanHelper.CallBack() {
                 @Override
-                public void handle() {
-                    hideLoading(false, "");
+                public void handle(Object... res) {
                     Toast.makeText(getActivity(), "默认设置自定义计划", Toast.LENGTH_SHORT).show();
+                    int id = (Integer) res[0];
+                    plans.put(finalStart, gerneratePersonalPlan(id));
+                    processDatePlan(finalStart, finalEnd, plans, finalNowDate);
+                    hideLoading(false, "");
                 }
-            });
+            }, nowDate);
         }
+    }
+
+    private void processDatePlan(String start, String end, Map<String, SeriesPlan> plans, String nowDate) {
         SeriesPlan now = plans.get(nowDate);//切换的不同计划
         String str = start;
         while(Common.CompareDate(str, end) < 0) {
@@ -389,25 +398,30 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 * 1. 对于自定义计划来说 如果nowDate和str相同，就说明那天创建了自定义计划，直接放到记录里，否则就说明那天没有创建，为空
                 * 2. 对于第三方计划来说 则取某一天的计划 自动轮循
                 * */
+            DatePlan datePlan;
             if(now.getTitle().equals("personal plan")) {
-                if(nowDate.equals(str))
-                    data.put(str, plans.get(str).getDatePlans().get(0));
+                if(nowDate.equals(str)) {
+                    datePlan = plans.get(str).getDatePlans().get(0);
+                    datePlan.setPlan_id(plans.get(str).getId());
+                    data.put(str, datePlan);
+                }
                 else
                     data.put(str, gernerateEmptyPlan(str));
             }else {
-                int th = Common.getDiff(str, nowDate) % plans.get(str).getTotal_days();
-                data.put(str, plans.get(nowDate).getDatePlans().get(th));
-                indexDate.put(str, "完成("+th+"/"+plans.get(str).getDatePlans().size()+")天");
+                int th = Common.getDiff(str, nowDate) % now.getTotal_days();
+                datePlan = now.getDatePlans().get(th);
+                datePlan.setPlan_id(now.getId());
+                data.put(str, now.getDatePlans().get(th));
+                indexDate.put(str, "完成("+ (th+1) +"/"+now.getTotal_days()+")天");
             }
             str = Common.getSomeDay(str, 1);
         }
         switchPlan(pointer, 1);
-        if(!isNew)
-            hideLoading(false, "");
     }
 
-    private SeriesPlan gerneratePersonalPlan() {
+    private SeriesPlan gerneratePersonalPlan(int id) {
         SeriesPlan plan = new SeriesPlan();
+        plan.setId(id);
         plan.setTitle("personal plan");
         plan.setTotal_days(1);
         ArrayList<DatePlan> datePlans = new ArrayList<>();
@@ -418,10 +432,11 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
 
     private DatePlan gernerateEmptyPlan(String date) {
         DatePlan datePlan = new DatePlan();
-        datePlan.setIsPunch(false);
+//        datePlan.setIsPunch(false);
         datePlan.setPlan_name("personal plan");
-        datePlan.setInBasket(false);
+//        datePlan.setInBasket(false);
         datePlan.setDate(date);
+        datePlan.setPlan_id(-1);
         datePlan.setItems(FrDbHelper.getInstance(getActivity()).generateDatePlan());
         return datePlan;
     }
@@ -429,11 +444,11 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     //pointer是往前或者往后几天 dir是之前还是之后
     private boolean switchPlan(int pointer, int dir) {
         if(datePlan != null) {
-            boolean flag = false;
-            for(int i = 0; i < items.size(); i++)
-                flag = flag || items.get(i).isInBasket();
-            datePlan.setInBasket(flag);
-            datePlan.setItems(items);
+//            boolean flag = false;
+//            for(int i = 0; i < items.size(); i++)
+//                flag = flag || items.get(i).isInBasket();
+//            datePlan.setInBasket(flag);
+//            datePlan.setItems(items);
         }
         String str = Common.getSomeDay(Common.getDate(), pointer);//获取几月几号的记录
         int days = Common.getDiff(str, report.getUpdatetime()) + 1;//增肌减脂第几天
@@ -459,7 +474,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             other_plan_days.setVisibility(datePlan.getPlan_name().equals("personal plan")?View.GONE:View.VISIBLE);
             other_plan_days.setText(indexDate!=null&&indexDate.containsKey(str)?indexDate.get(str):"");
             items = datePlan.getItems();
-            if(pointer > 0)
+            if(pointer != 0)
                 adapter.setData(items, datePlan.getPlan_name().equals("personal plan")?true:false, false);//未来
             else
                 adapter.setData(items, datePlan.getPlan_name().equals("personal plan")?true:false, true);//过去
@@ -552,6 +567,11 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 if(resultCode == getActivity().RESULT_OK && data.hasExtra("component_selected")) {
                     PlanComponent obj = (PlanComponent) data.getSerializableExtra("component_selected");
                     items.get(0).addContent(obj);
+                    try {
+                        update();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     adapter.notifyDataSetChanged();
                 }
                 break;
@@ -559,34 +579,59 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 if(resultCode == getActivity().RESULT_OK && data.hasExtra("component_selected")) {
                     PlanComponent obj = (PlanComponent) data.getSerializableExtra("component_selected");
                     items.get(1).addContent(obj);
+                    try {
+                        update();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     adapter.notifyDataSetChanged();
                 }
                 break;
             case LUNCH_CODE:
                 if(resultCode == getActivity().RESULT_OK && data.hasExtra("component_selected")) {
                     PlanComponent obj = (PlanComponent) data.getSerializableExtra("component_selected");
-                    items.get(0).addContent(obj);
+                    items.get(2).addContent(obj);
+                    try {
+                        update();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     adapter.notifyDataSetChanged();
                 }
                 break;
             case ADDMEAL_02_CODE:
                 if(resultCode == getActivity().RESULT_OK && data.hasExtra("component_selected")) {
                     PlanComponent obj = (PlanComponent) data.getSerializableExtra("component_selected");
-                    items.get(0).addContent(obj);
+                    items.get(3).addContent(obj);
+                    try {
+                        update();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     adapter.notifyDataSetChanged();
                 }
                 break;
             case SUPPER_CODE:
                 if(resultCode == getActivity().RESULT_OK && data.hasExtra("component_selected")) {
                     PlanComponent obj = (PlanComponent) data.getSerializableExtra("component_selected");
-                    items.get(0).addContent(obj);
+                    items.get(4).addContent(obj);
+                    try {
+                        update();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     adapter.notifyDataSetChanged();
                 }
                 break;
             case ADDMEAL_03_CODE:
                 if(resultCode == getActivity().RESULT_OK && data.hasExtra("component_selected")) {
                     PlanComponent obj = (PlanComponent) data.getSerializableExtra("component_selected");
-                    items.get(0).addContent(obj);
+                    items.get(5).addContent(obj);
+                    try {
+                        update();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     adapter.notifyDataSetChanged();
                 }
                 break;
@@ -594,6 +639,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
 
         super.onActivityResult(requestCode, resultCode, data);
     }
+
 
     public void toggle(String type) {
 //        Toast.makeText(getActivity(), type.value()+"", Toast.LENGTH_SHORT).show();
@@ -638,5 +684,62 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 }
                 break;
         }
+    }
+
+
+    public void update() throws JSONException {
+        JSONObject params = new JSONObject();
+        JSONArray dish = new JSONArray();
+        for(int i = 0; i < items.size(); i++) {
+            JSONObject obj = new JSONObject();
+            obj.put("type", i);
+            JSONArray ingredient = new JSONArray();
+            JSONArray recipe = new JSONArray();
+            ArrayList<PlanComponent> components = items.get(i).getComponents();
+            if(components != null) {
+                for(int j = 0; j <components.size(); j++) {
+                    JSONObject obj1 = new JSONObject();
+                    obj1.put("id", components.get(j).getId());
+                    obj1.put("amount", components.get(j).getAmount());
+                    if(components.get(j).getType() == 1)
+                        recipe.put(obj1);
+                    else
+                        ingredient.put(obj1);
+                }
+            }
+            obj.put("ingredient", ingredient);
+            obj.put("recipe", recipe);
+            dish.put(obj);
+        }
+        params.put("dish", dish);
+        if(datePlan.getPlan_id() != -1)
+            params.put("id", datePlan.getPlan_id());
+        else {
+            info_container.setEnabled(false);
+            params.put("joined_date", datePlan.getDate());
+        }
+        PostRequest request = new PostRequest(FrServerConfig.getUpdatePlanUrl(), FrApplication.getInstance().getToken(), params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject res) {
+                try {
+                    datePlan.setPlan_id(res.getJSONObject("data").getInt("id"));
+                    info_container.setEnabled(true);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Toast.makeText(getActivity(), "更新自定义计划成功！", Toast.LENGTH_SHORT).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                info_container.setEnabled(true);
+                if(volleyError != null && volleyError.networkResponse != null) {
+                    int statusCode = volleyError.networkResponse.statusCode;
+                    Toast.makeText(getActivity(), statusCode+"", Toast.LENGTH_SHORT).show();
+                }else
+                    Toast.makeText(getActivity(), getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+            }
+        });
+        FrRequest.getInstance().request(request);
     }
 }

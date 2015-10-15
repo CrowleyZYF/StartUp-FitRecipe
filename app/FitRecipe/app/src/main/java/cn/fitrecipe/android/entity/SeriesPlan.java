@@ -1,5 +1,8 @@
 package cn.fitrecipe.android.entity;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,8 +10,10 @@ import java.util.List;
 /**
  * Created by wk on 2015/9/1.
  */
+@DatabaseTable(tableName = "fr_plan")
 public class SeriesPlan implements Serializable, Comparable<SeriesPlan> {
 
+    @DatabaseField
     private int id;
     private String title;
     private int difficulty;
@@ -26,6 +31,8 @@ public class SeriesPlan implements Serializable, Comparable<SeriesPlan> {
     private String user;
     private PlanAuthor author;
     private String authored_date;
+    @DatabaseField(id = true)
+    private String joined_date;
     private boolean isUsed;
     private List<DatePlan> datePlans;
 
@@ -184,5 +191,13 @@ public class SeriesPlan implements Serializable, Comparable<SeriesPlan> {
 
     public void setIsUsed(boolean isUsed) {
         this.isUsed = isUsed;
+    }
+
+    public String getJoined_date() {
+        return joined_date;
+    }
+
+    public void setJoined_date(String joined_date) {
+        this.joined_date = joined_date;
     }
 }

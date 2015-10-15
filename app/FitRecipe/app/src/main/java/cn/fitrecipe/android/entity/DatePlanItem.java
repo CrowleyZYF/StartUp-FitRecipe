@@ -167,7 +167,7 @@ public class DatePlanItem implements Serializable{
                     nutrition = new Nutrition();
                     nutrition.setName(nutrition_set.get(j).getName());
                     nutrition.setUnit(nutrition_set.get(j).getUnit());
-                    nutrition.setAmount(nutrition_set.get(j).getAmount());
+                    nutrition.setAmount(nutrition_set.get(j).getAmount()* obj.getAmount() / 100);
                     nutritions.add(nutrition);
                 }
                 else {
