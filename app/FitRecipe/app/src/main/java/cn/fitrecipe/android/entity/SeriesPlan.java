@@ -39,7 +39,7 @@ public class SeriesPlan implements Serializable, Comparable<SeriesPlan> {
     private String created_time;
     private String updated_time;
     private String user;
-    private transient PlanAuthor author;
+    private PlanAuthor author;
     private String authored_date;
     private boolean isUsed;
     private ArrayList<DatePlan> datePlans;

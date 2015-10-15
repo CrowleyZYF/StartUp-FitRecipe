@@ -109,7 +109,8 @@ class CalendarList(BaseView):
         except IndexError:
             last = None
         serializer = CalendarSerializer(calendars, many=True).data
-        result = {'lastJoined': last, 'calendar': serializer}
+        punchs = Punch.objects.filter(user=user, date__lte=end_date, date__gte=start_date)
+        result = {'lastJoined': last, 'calendar': serializer, 'punch': punch}
         return self.success_response(result)
 
     def post(self, request, format=None):
