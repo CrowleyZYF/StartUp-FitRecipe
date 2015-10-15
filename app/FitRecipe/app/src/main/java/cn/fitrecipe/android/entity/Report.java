@@ -38,6 +38,8 @@ public class Report implements Serializable{
     @DatabaseField
     private double BMR;                         //基础代谢率（BMR）
     @DatabaseField
+    private int TDEE;                        //每日热量总消耗（TDEE）
+    @DatabaseField
     private double SuggestFitFrequency;         //建议每周运动频率
     @DatabaseField
     private double SuggestFitTime;              //建议每次运动时长
@@ -161,6 +163,8 @@ public class Report implements Serializable{
     @DatabaseField
     private double DinnerRate;                  //晚餐摄入
     @DatabaseField
+    private double SnackNightRate;              //夜宵摄入
+    @DatabaseField
     private String updatetime;
     @DatabaseField
     private boolean goalType;
@@ -180,6 +184,14 @@ public class Report implements Serializable{
 
     public void setBMR(double BMR) {
         this.BMR = BMR;
+    }
+
+    public int getTDEE() {
+        return TDEE;
+    }
+
+    public void setTDEE(int TDEE) {
+        this.TDEE = TDEE;
     }
 
     public double getSuggestFitFrequency() {
@@ -572,6 +584,14 @@ public class Report implements Serializable{
 
     public void setSnackAfternoonRate(double snackAfternoonRate) {
         SnackAfternoonRate = snackAfternoonRate;
+    }
+
+    public double getSnackNightRate() {
+        return SnackNightRate;
+    }
+
+    public void setSnackNightRate(double snackNightRate) {
+        snackNightRate = snackNightRate;
     }
 
     public double getDinnerRate() {

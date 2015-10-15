@@ -75,6 +75,7 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
         back_btn.setImageResource(R.drawable.icon_back_white);
         filter_btn = (ImageView) findViewById(R.id.right_btn);
         filter_btn.setImageResource(R.drawable.icon_filter);
+        filter_btn.setVisibility(View.GONE);
         sure_btn = (TextView) findViewById(R.id.filter_sure_btn);
 
         planChoiceRecyclerView = (RecyclerView) findViewById(R.id.plan_choice);
