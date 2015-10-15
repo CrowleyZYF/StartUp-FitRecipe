@@ -57,3 +57,11 @@ class ThemeCollection(Collection):
 
     def __unicode__(self):
         return u'%s的主题收藏' % self.owner.nick_name
+
+    @classmethod
+    def has_collected(cls, theme, user):
+        try:
+            cls.objects.get(theme=theme, owner=user)
+            return True
+        except ThemeCollection.DoesNotExist:
+            return False

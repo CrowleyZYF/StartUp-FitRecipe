@@ -42,11 +42,16 @@ class RecipeDetail(BaseView):
         return a specific recipe.
         '''
         recipe = self.get_object(Recipe, pk)
-        user = Account.find_account_by_user(request.user)
+        try:
+            user = Account.find_account_by_user(request.user)
+            has_collected = RecipeCollection.has_collected(recipe, user)
+        except Account.DoesNotExist:
+            has_collected = False
         if recipe.status > 0:
             serializer = RecipeSerializer(recipe, context={'simple': False})
             result = serializer.data
-            result['has_collected'] = RecipeCollection.has_collected(recipe, user)
+            result['has_collected'] = has_collected
+            result['comment_count'] = recipe.comment_set.count()
             return self.success_response(result)
         else:
             return self.fail_response(400, 'DoesNotExist')
@@ -92,7 +97,7 @@ class IngredientSearch(BaseView):
         ingredients = Ingredient.objects.filter(name__contains=keyword)
         return self.success_response(IngredientSerializer(ingredients, many=True).data)
 
-class FoodSearch(BaseView): 
+class FoodSearch(BaseView):
     def get(self, request, format=None):
         '''
         ingredient search

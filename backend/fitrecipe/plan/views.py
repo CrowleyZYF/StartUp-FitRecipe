@@ -138,13 +138,15 @@ class CalendarList(BaseView):
             return self.fail_response(400, 'Plan Not Exist')
         try:
             c = Calendar.objects.create(user=user, plan=p, joined_date=joined_date)
-            return self.success_response('ok')
         except IntegrityError:
             # existed today
             c = Calendar.objects.get(user=user, joined_date=joined_date)
             c.plan = p
             c.save()
-            return self.success_response('ok')
+        if not p.is_personal:
+            # official plan should clean all plan after
+            Calendar.objects.filter(user=user, joined_date__gt=joined_date).delete()
+        return self.success_response('ok')
         except:
             return self.fail_response(400, 'error')
 
@@ -154,8 +156,12 @@ class LastPlan(BaseView):
     '''
     def get(self, request, format=None):
         user = Account.find_account_by_user(request.user)
-        c = Calendar.objects.filter(user=user, joined_date__lte=date.today()).order_by('-joined_date')[0]
-        return self.success_response(CalendarSerializer(c).data)
+        try:
+            c = Calendar.objects.filter(user=user, joined_date__lte=date.today()).order_by('-joined_date')[0]
+            return self.success_response(CalendarSerializer(c).data)
+        except IndexError:
+            # new user has no plan
+            return self.success_response({})
 
 
 class PunchList(BaseView):
