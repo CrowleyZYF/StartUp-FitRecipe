@@ -42,18 +42,14 @@ public class CollectActivity extends FragmentActivity implements View.OnClickLis
 
     private LinearLayout me_collect_recipe;
     private LinearLayout me_collect_theme;
-    private LinearLayout me_collect_knowledge;
 
     private Fragment recipe_fragment;
     private Fragment theme_fragment;
-    private Fragment knowledge_fragment;
 
     private ImageView collect_recipe_active_line_1;
     private ImageView collect_recipe_active_line_2;
     private ImageView collect_theme_active_line_1;
     private ImageView collect_theme_active_line_2;
-    private ImageView collect_knowledge_active_line_1;
-    private ImageView collect_knowledge_active_line_2;
 
     private List<Collection> collections;
 
@@ -79,7 +75,6 @@ public class CollectActivity extends FragmentActivity implements View.OnClickLis
         back_btn.setOnClickListener(this);
         me_collect_recipe.setOnClickListener(this);
         me_collect_theme.setOnClickListener(this);
-        me_collect_knowledge.setOnClickListener(this);
     }
 
     private void initView() {
@@ -92,14 +87,11 @@ public class CollectActivity extends FragmentActivity implements View.OnClickLis
 
         me_collect_recipe = (LinearLayout) findViewById(R.id.collect_recipe);
         me_collect_theme = (LinearLayout) findViewById(R.id.collect_theme);
-        me_collect_knowledge = (LinearLayout) findViewById(R.id.collect_knowledge);
 
         collect_recipe_active_line_1 = (ImageView) findViewById(R.id.collect_recipe_active_line_1);
         collect_recipe_active_line_2 = (ImageView) findViewById(R.id.collect_recipe_active_line_2);
         collect_theme_active_line_1 = (ImageView) findViewById(R.id.collect_theme_active_line_1);
         collect_theme_active_line_2 = (ImageView) findViewById(R.id.collect_theme_active_line_2);
-        collect_knowledge_active_line_1 = (ImageView) findViewById(R.id.collect_knowledge_active_line_1);
-        collect_knowledge_active_line_2 = (ImageView) findViewById(R.id.collect_knowledge_active_line_2);
     }
 
     @Override
@@ -114,9 +106,6 @@ public class CollectActivity extends FragmentActivity implements View.OnClickLis
             case R.id.collect_theme:
                 setSelect(1);
                 break;
-            case R.id.collect_knowledge:
-                setSelect(2);
-                break;
         }
     }
 
@@ -129,8 +118,6 @@ public class CollectActivity extends FragmentActivity implements View.OnClickLis
         collect_recipe_active_line_2.setBackground(getResources().getDrawable(R.drawable.theme_line));
         collect_theme_active_line_1.setVisibility(View.INVISIBLE);
         collect_theme_active_line_2.setBackground(getResources().getDrawable(R.drawable.theme_line));
-        collect_knowledge_active_line_1.setVisibility(View.INVISIBLE);
-        collect_knowledge_active_line_2.setBackground(getResources().getDrawable(R.drawable.theme_line));
         switch (tab)
         {
             case 0:
@@ -155,17 +142,6 @@ public class CollectActivity extends FragmentActivity implements View.OnClickLis
                 collect_theme_active_line_1.setVisibility(View.VISIBLE);
                 collect_theme_active_line_2.setBackground(getResources().getDrawable(R.drawable.theme_line_active));
                 break;
-            case 2:
-                if (knowledge_fragment == null){
-                    knowledge_fragment = new KnowledgeCollectFragment();
-                    transaction.add(R.id.collect_content, knowledge_fragment);
-                } else{
-                    transaction.show(knowledge_fragment);
-                }
-                right_btn.setVisibility(View.GONE);
-                collect_knowledge_active_line_1.setVisibility(View.VISIBLE);
-                collect_knowledge_active_line_2.setBackground(getResources().getDrawable(R.drawable.theme_line_active));
-                break;
             default:
                 break;
         }
@@ -173,9 +149,6 @@ public class CollectActivity extends FragmentActivity implements View.OnClickLis
     }
 
     private void hideFragment(FragmentTransaction transaction) {
-        if (knowledge_fragment != null){
-            transaction.hide(knowledge_fragment);
-        }
         if (theme_fragment != null){
             transaction.hide(theme_fragment);
         }

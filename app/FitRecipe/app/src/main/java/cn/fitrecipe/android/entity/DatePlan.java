@@ -27,6 +27,8 @@ public class DatePlan implements Serializable, Comparable<DatePlan>{
     private boolean isPunch;
     @DatabaseField
     private String plan_name;
+    @DatabaseField
+    private int plan_id;
 
     public String getPlan_name() {
         return plan_name;
@@ -90,5 +92,13 @@ public class DatePlan implements Serializable, Comparable<DatePlan>{
 
     public void setIsPunch(boolean isPunch) {
         this.isPunch = isPunch;
+    }
+
+    public int getPlan_id() {
+        return plan_id;
+    }
+
+    public void setPlan_id(int plan_id) {
+        this.plan_id = plan_id;
     }
 }

@@ -127,7 +127,7 @@ public class PlanDetailViewPagerAdapter extends PagerAdapter {
             }
         }
 
-        class ComponentAdapter extends BaseAdapter {
+        class ComponentAdapter extends BaseAdapter implements View.OnClickListener {
             private List<PlanComponent> data;
 
             public ComponentAdapter(List<PlanComponent> data) {
@@ -163,7 +163,7 @@ public class PlanDetailViewPagerAdapter extends PagerAdapter {
                 holder.plan_item_name.setText(data.get(position).getName());
                 holder.plan_item_weight.setText(data.get(position).getAmount()+"g");
                 holder.plan_item_calories.setText(Math.round(data.get(position).getCalories()) + "kcal");
-                if(data.get(position).getType() == 1) {
+                /*if(data.get(position).getType() == 1) {
                     convertView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -173,19 +173,37 @@ public class PlanDetailViewPagerAdapter extends PagerAdapter {
                             context.startActivity(intent);
                         }
                     });
-                }
+                }*/
+                holder.plan_item_type.setText(data.get(position).getType()+"");
+                holder.plan_item_id.setText(data.get(position).getId()+"");
+                convertView.setOnClickListener(this);
                 return convertView;
+            }
+
+            @Override
+            public void onClick(View v) {
+                String type = ((TextView) v.findViewById(R.id.plan_item_type)).getText().toString();
+                String id = ((TextView) v.findViewById(R.id.plan_item_id)).getText().toString();
+                if (type.equals("1")){
+                    Intent intent = new Intent(context, RecipeActivity.class);
+                    intent.putExtra("id", id);
+                    context.startActivity(intent);
+                }
             }
 
             class ViewHolder {
                 TextView plan_item_name;
                 TextView plan_item_weight;
                 TextView plan_item_calories;
+                TextView plan_item_type;
+                TextView plan_item_id;
 
                 public ViewHolder(View v) {
                     plan_item_name = (TextView) v.findViewById(R.id.plan_item_name);
                     plan_item_weight = (TextView) v.findViewById(R.id.plan_item_weight);
                     plan_item_calories = (TextView) v.findViewById(R.id.plan_item_calories);
+                    plan_item_type = (TextView) v.findViewById(R.id.plan_item_type);
+                    plan_item_id = (TextView) v.findViewById(R.id.plan_item_id);
                 }
             }
         }

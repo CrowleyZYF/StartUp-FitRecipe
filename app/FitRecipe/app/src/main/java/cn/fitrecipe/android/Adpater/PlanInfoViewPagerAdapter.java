@@ -2,7 +2,6 @@ package cn.fitrecipe.android.Adpater;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -85,18 +84,12 @@ public class PlanInfoViewPagerAdapter extends PagerAdapter {
                     break;
             }
             final TextView choice_join = (TextView) planInfoContainer.findViewById(R.id.choice_join);
-            choice_join.setText(plan.getDish_headcount()+"人已采用");
+            choice_join.setText(plan.getDish_headcount()+"");
             TextView choice_label = (TextView) planInfoContainer.findViewById(R.id.choice_label);
             if(plan.getBenifit() == 0){
                 choice_label.setText(R.string.muscle);
             }else{
                 choice_label.setText(R.string.fat);
-            }
-            TextView choice_type = (TextView) planInfoContainer.findViewById(R.id.choice_type);
-            if(plan.getType() == 0){
-                choice_type.setText(R.string.plan_food);
-            }else{
-                choice_type.setText(R.string.plan_recipe);
             }
             TextView choice_days = (TextView) planInfoContainer.findViewById(R.id.choice_days);
             choice_days.setText(plan.getTotal_days() + "");
@@ -123,7 +116,7 @@ public class PlanInfoViewPagerAdapter extends PagerAdapter {
                         try {
                             new JoinPlanHelper(context).joinPersonalPlan(new JoinPlanHelper.CallBack() {
                                 @Override
-                                public void handle() {
+                                public void handle(Object... res) {
                                     choice_join_btn.setText("选用");
                                     choice_join_btn.setTextColor(context.getResources().getColor(R.color.white));
                                     choice_join_btn.setBackground(context.getResources().getDrawable(R.drawable.join_button));
@@ -138,9 +131,9 @@ public class PlanInfoViewPagerAdapter extends PagerAdapter {
                     }
                     else {
                         try {
-                            new JoinPlanHelper(context).setInUse(plan.getId(), new JoinPlanHelper.CallBack() {
+                            new JoinPlanHelper(context).joinOfficalPlan(plan.getId(), new JoinPlanHelper.CallBack() {
                                 @Override
-                                public void handle() {
+                                public void handle(Object... res) {
                                     choice_join_btn.setText("取消选用");
                                     choice_join_btn.setTextColor(context.getResources().getColor(R.color.gray));
                                     choice_join_btn.setBackground(context.getResources().getDrawable(R.drawable.join_button_disable));

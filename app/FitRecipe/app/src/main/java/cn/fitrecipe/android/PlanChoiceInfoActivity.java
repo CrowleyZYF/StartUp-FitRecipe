@@ -14,14 +14,12 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
-import com.qiniu.util.Json;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import cn.fitrecipe.android.Adpater.PlanDetailViewPagerAdapter;
@@ -294,6 +292,7 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
             case R.id.nutrition_btn:{
                 Intent intent = new Intent(this, PlanNutritionActivity.class);
                 intent.putExtra("plan", plan);
+                intent.putExtra("plan_day", plan_day.getText().toString());
                 startActivity(intent);
                 break;
             }

@@ -19,8 +19,6 @@ import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.UI.PieChartView;
 import cn.fitrecipe.android.entity.DatePlan;
 import cn.fitrecipe.android.entity.DatePlanItem;
-import cn.fitrecipe.android.entity.PunchDay;
-import cn.fitrecipe.android.entity.PunchItem;
 import cn.fitrecipe.android.entity.Report;
 import cn.fitrecipe.android.function.Common;
 

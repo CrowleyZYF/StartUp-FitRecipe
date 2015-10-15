@@ -23,7 +23,7 @@ public class ReportActivity extends Activity implements View.OnClickListener{
     private Report report;
     private ImageView report_sex;
     private TextView report_age, report_height, report_weight, report_fat;
-    private TextView report_bmi_number, report_bmi_judgement, report_bmr_number, report_burning_number_min, report_burning_number_max, report_exercise_type;
+    private TextView report_bmi_number, report_base_intake_number, report_bmi_judgement, report_bmr_number, report_burning_number_min, report_burning_number_max, report_exercise_type;
     private TextView report_best_weight_number, report_best_weight_judgement, report_base_info_weight_range_min, report_base_info_weight_range_max;
     private TextView calories_intake, calories_intake_range, suggest_fit_calories, suggest_fit_calories_range, suggest_fit_frequency, suggest_fit_time;
     private TextView report_target_weight, report_target_time,report_target_weight_weekly;
@@ -97,6 +97,8 @@ public class ReportActivity extends Activity implements View.OnClickListener{
 
         report_bmi_number = (TextView) findViewById(R.id.report_bmi_number);
         report_bmi_number.setText((int)(report.getBMI()*10)/10.0+"");
+        report_base_intake_number = (TextView) findViewById(R.id.report_base_intake_number);
+        report_base_intake_number.setText(report.getTDEE()+"");
 
         report_bmi_judgement = (TextView) findViewById(R.id.report_bmi_judgement);
         String judge = "";

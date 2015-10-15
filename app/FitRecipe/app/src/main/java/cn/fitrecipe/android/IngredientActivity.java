@@ -55,11 +55,12 @@ public class IngredientActivity extends Activity implements View.OnClickListener
         if(data == null) data = new ArrayList<>();
         Collections.sort(data);
         ArrayList<PlanComponent> components = new ArrayList<>();
-        for(int i = 0; i < data.size(); i++) {
+        for(int i = 0; i < data.size(); ) {
             if(data.get(i).getType() == 0) {
                 components.add(data.get(i));
                 data.remove(i);
-            }
+            }else
+                i++;
         }
         if(components.size() > 0) {
             PlanComponent component = new PlanComponent();
@@ -140,6 +141,14 @@ public class IngredientActivity extends Activity implements View.OnClickListener
 
     @Override
     protected void onPause() {
+        for(int i = 0; i < data.size(); i++) {
+            if(data.get(i).getName().equals("其它")) {
+                ArrayList<PlanComponent> components = data.get(i).getComponents();
+                for(int j = 0; j <components.size(); j++)
+                    data.add(components.get(j));
+                data.remove(i);
+            }
+        }
         basket.setContent(data);
         FrDbHelper.getInstance(this).saveBasket(basket);
         super.onPause();

@@ -73,7 +73,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@drawable/theme_line"/>
-        </LinearLayout>
+        </LinearLayout><!--
 
         <ImageView
             android:layout_width="1px"
@@ -108,7 +108,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@drawable/theme_line"/>
-        </LinearLayout>
+        </LinearLayout>-->
     </LinearLayout>
 
     <FrameLayout
