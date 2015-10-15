@@ -169,21 +169,41 @@ class PunchList(BaseView):
     打卡
     '''
     def get(self, request, format=None):
+        def get_planid(punch, calendar_list):
+            temp_storage = None
+            for c in calendar_list:
+                if c['joined_date'] < p.date:
+                    day = p.date - c['joined_date']
+                    return (temp_storage, day.days)
+                elif c['joined_date'] == p.date:
+                    return (c.plan, 1)
+                else:
+                    # >
+                    temp_storage = c['plan']
+            return (None, 0)
+
         user = Account.find_account_by_user(request.user)
         turn_to_date = lambda x: x and datetime.strptime(x, '%Y%m%d') or date.today()
         start_date = turn_to_date(request.GET.get('start', None))
         end_date = turn_to_date(request.GET.get('end', None))
         punchs = Punch.objects.filter(user=user, date__lte=end_date, date__gte=start_date)
-        '''Temp'''
+        calendars = Calendar.objects.filter(user=user, joined_date__lte=end_date, joined_date__gte=start_date).order_by('joined_date') # asc
+        # get all calendar
+        last_calendar = Calendar.objects.filter(user=user, joined_date__lte=date.today()).order_by('-joined_date')[0]
+        calendar_list = [{'joined_date': last_calendar.joined_date, 'plan': last_calendar.plan.id}]
+        for c in calendars:
+            calendar_list.append({'joined_date': c.joined_date, 'plan': c.plan.id})
         result = []
-        user = Account.find_account_by_user(request.user)
-        c = Calendar.objects.filter(user=user, joined_date__lte=date.today()).order_by('-joined_date')[0]
-        for punch_item in punchs:
-            if punch_item.date==c.joined_date:
-                plan = Plan.objects.get(pk=c.plan.id)
-                dish = plan.routine_set.get(day=1).dish_set.get(type=punch_item.type)
-                result.append({'dish':DishSerializer(dish).data})
-        #return self.success_response(PunchSerializer(punchs, many=True).data)
+        for p in punchs:
+            planid, day = get_planid(p, calendar_list)
+            plan = Plan.objects.get(pk=planid)
+            current_day_count = day % plan.total_days
+            if current_day_count == 0:
+                current_day_count = plan.total_days
+            dish = plan.routine_set.get(day=current_day_count).dish_set.get(type=p.type)
+            p_json = PunchSerializer(p).data
+            p_json['dish'] = DishSerializer(dish).data
+            result.append(p_json)
         return self.success_response(result)
 
     def post(self, request, format=None):
