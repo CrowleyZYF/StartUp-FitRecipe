@@ -1,5 +1,7 @@
 package cn.fitrecipe.android.entity;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -13,13 +15,22 @@ import java.util.List;
 @DatabaseTable(tableName = "fr_plan")
 public class SeriesPlan implements Serializable, Comparable<SeriesPlan> {
 
+    @DatabaseField(id = true)
+    private String joined_date;
     @DatabaseField
     private int id;
+    @DatabaseField
     private String title;
+    @DatabaseField
+    private boolean is_personal;
+    @DatabaseField
+    private int total_days;
+    @DatabaseField
+    private String datePlan_json;
+
     private int difficulty;
     private int delicious;
     private int benifit;
-    private int total_days;
     private int type;       //计划类型
     private int dish_headcount;
     private String desc;
@@ -27,14 +38,11 @@ public class SeriesPlan implements Serializable, Comparable<SeriesPlan> {
     private String img;
     private String created_time;
     private String updated_time;
-    private boolean is_personal;
     private String user;
-    private PlanAuthor author;
+    private transient PlanAuthor author;
     private String authored_date;
-    @DatabaseField(id = true)
-    private String joined_date;
     private boolean isUsed;
-    private List<DatePlan> datePlans;
+    private ArrayList<DatePlan> datePlans;
 
     public int getId() {
         return id;
@@ -178,11 +186,13 @@ public class SeriesPlan implements Serializable, Comparable<SeriesPlan> {
     }
 
     public List<DatePlan> getDatePlans() {
-        return datePlans;
+        Gson gson = new Gson();
+        return gson.fromJson(datePlan_json, new TypeToken<ArrayList<DatePlan>>(){}.getType());
     }
 
-    public void setDatePlans(List<DatePlan> datePlans) {
-        this.datePlans = datePlans;
+    public void setDatePlans(ArrayList<DatePlan> datePlans) {
+        Gson gson = new Gson();
+        datePlan_json = gson.toJson(datePlans);
     }
 
     public boolean isUsed() {
@@ -200,4 +210,5 @@ public class SeriesPlan implements Serializable, Comparable<SeriesPlan> {
     public void setJoined_date(String joined_date) {
         this.joined_date = joined_date;
     }
+
 }

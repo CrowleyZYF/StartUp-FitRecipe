@@ -43,55 +43,6 @@ public class FrDbHelper {
         return instance;
     }
 
-
-    /**
-     * add Recipe
-     * @param recipe
-     */
-    public void addRecipe(Recipe recipe) {
-        RecipeDao recipeDao = new RecipeDao(context);
-        IngredientDao ingredientDao = new IngredientDao(context);
-        ComponentDao componentDao = new ComponentDao(context);
-        NutritionDao nutritionDao = new NutritionDao(context);
-        recipeDao.add(recipe);
-        List<Component> component_set = recipe.getComponent_set();
-        if(component_set != null) {
-            for (int i = 0; i < component_set.size(); i++) {
-                Component component = component_set.get(i);
-//                component.setRecipe(recipe);
-
-                Ingredient ingredient = component.getIngredient();
-                ingredientDao.add(ingredient);
-//                componentDao.addComponentBelongToRecipe(component);
-            }
-        }
-
-        List<Nutrition> nutrition_set = recipe.getNutrition_set();
-        if(nutrition_set != null) {
-            for (int i = 0; i < nutrition_set.size(); i++) {
-                Nutrition nutrition = nutrition_set.get(i);
-                nutrition.setRecipe(recipe);
-                nutritionDao.add(nutrition);
-            }
-        }
-    }
-
-
-    /**
-     *get Recipe by Id
-     * @param id
-     * @return Recipe
-     */
-    public Recipe getRecipe(int id) {
-        RecipeDao recipeDao = new RecipeDao(context);
-        Recipe recipe = recipeDao.get(id);
-        if(recipe != null) {
-//            recipe.setNutrition_set(new NutritionDao(context).getNutritions(recipe.getId()));
-            recipe.setComponent_set(new ComponentDao(context).getComponents(recipe.getId()));
-        }
-        return  recipe;
-    }
-
     /**
      * get Report belongs to Author
      * @return Report

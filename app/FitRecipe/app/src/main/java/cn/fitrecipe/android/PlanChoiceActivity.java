@@ -21,10 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 import cn.fitrecipe.android.Adpater.PlanCardAdapter;
 import cn.fitrecipe.android.Http.FrRequest;
@@ -32,18 +29,8 @@ import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.UI.SlidingMenu;
-import cn.fitrecipe.android.dao.FrDbHelper;
 import cn.fitrecipe.android.dao.PlanInUseDao;
-import cn.fitrecipe.android.entity.Component;
-import cn.fitrecipe.android.entity.DatePlan;
-import cn.fitrecipe.android.entity.DatePlanItem;
-import cn.fitrecipe.android.entity.DayPlan;
-import cn.fitrecipe.android.entity.Ingredient;
-import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.PlanInUse;
-import cn.fitrecipe.android.entity.PlanItem;
-import cn.fitrecipe.android.entity.Recipe;
-import cn.fitrecipe.android.entity.Series;
 import cn.fitrecipe.android.entity.SeriesPlan;
 import pl.tajchert.sample.DotsTextView;
 
