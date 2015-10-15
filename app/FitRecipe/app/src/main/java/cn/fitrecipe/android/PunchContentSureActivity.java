@@ -376,8 +376,6 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
         }.execute();
     }
 
-
-
     class NutritionAdapter extends BaseAdapter {
 
         private Context context;

@@ -372,8 +372,10 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         recipe_comment.setText("评论 " + "100");
 
         //set the recipe author
-        FrApplication.getInstance().getMyImageLoader().displayImage(avatar_pic, recipe.getAuthor().getAvatar());
-        author_name.setText(recipe.getAuthor().getNick_name());
+        if(recipe.getAuthor() != null) {
+            FrApplication.getInstance().getMyImageLoader().displayImage(avatar_pic, recipe.getAuthor().getAvatar());
+            author_name.setText(recipe.getAuthor().getNick_name());
+        }
 
         //set the introduction of the recipe
         recipe_intro.setText(recipe.getIntroduce());

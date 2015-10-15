@@ -133,7 +133,6 @@ public class FrApplication extends Application {
     public void logOut() {
         FrDbHelper.getInstance(this).authorLogout(author);
         author = null;
-//        new CollectionDao(this).clear();
     }
 
     public boolean isLogin() {
@@ -169,18 +168,6 @@ public class FrApplication extends Application {
         this.report = report;
         FrDbHelper.getInstance(this).addReport(report);
     }
-
-//    public List<Collection> getCollections() {
-//        if(collections == null) {
-//            collections = new CollectionDao(this).getCollections();
-//        }
-//        return collections;
-//    }
-
-//    public void setCollections(List<Collection> collections) {
-//        this.collections = collections;
-//        new CollectionDao(this).saveCollections(collections);
-//    }
 
 
     class MyActivityCallbacks implements ActivityLifecycleCallbacks {

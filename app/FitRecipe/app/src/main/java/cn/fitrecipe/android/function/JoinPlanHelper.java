@@ -18,6 +18,7 @@ import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.dao.FrDbHelper;
+import cn.fitrecipe.android.entity.DatePlan;
 import cn.fitrecipe.android.entity.DatePlanItem;
 
 /**
@@ -49,17 +50,17 @@ public class JoinPlanHelper {
             dish.put(obj);
         }
         params.put("dish", dish);
-        params.put("authored_date", date);
+        params.put("joined_date", date);
         PostRequest request = new PostRequest(FrServerConfig.getUpdatePlanUrl(), FrApplication.getInstance().getToken(), params, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {
-                try {
-                    Toast.makeText(context, "创建或更新计划成功！", Toast.LENGTH_SHORT).show();
-                    if(callBack != null)
-                        setInUse(res.getJSONObject("data").getInt("id"), callBack);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                Toast.makeText(context, "创建或更新自定义计划成功！", Toast.LENGTH_SHORT).show();
+                if (callBack != null)
+                    try {
+                        callBack.handle(res.getJSONObject("data").getInt("id"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -74,7 +75,7 @@ public class JoinPlanHelper {
         FrRequest.getInstance().request(request);
     }
 
-    public void setInUse(int id, final CallBack callBack) throws JSONException {
+    public void joinOfficalPlan(int id, final CallBack callBack) throws JSONException {
         JSONObject params = new JSONObject();
         params.put("plan", id);
         params.put("joined_date", Common.getDate());
@@ -104,6 +105,6 @@ public class JoinPlanHelper {
     }
 
     public interface CallBack {
-         void handle();
+         void handle(Object... res);
     }
 }

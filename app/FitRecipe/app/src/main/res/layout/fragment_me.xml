@@ -64,8 +64,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="25dp"
-                android:text="打卡：12"
-                android:textSize="14sp"
+                android:text="打卡次数：12"
+                android:textSize="12sp"
                 android:textColor="#ffffff"/>
 
             <TextView
@@ -74,8 +74,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="25dp"
-                android:text="做过：25"
-                android:textSize="14sp"
+                android:text="收藏食谱：25"
+                android:textSize="12sp"
                 android:textColor="#ffffff"/>
             </LinearLayout>
     </LinearLayout>

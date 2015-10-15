@@ -6,13 +6,12 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
  * Created by wk on 2015/9/14.
  */
-@DatabaseTable(tableName = "fr_plan")
+@DatabaseTable(tableName = "fr_fuck")
 public class PlanInUse {
     @DatabaseField(id = true)
     private int isUsed;

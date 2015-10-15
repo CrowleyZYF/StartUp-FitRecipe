@@ -165,11 +165,11 @@
     <string name="plan_test_question_07">7. 运动类型？</string>
     <string name="plan_test_question_07_01">增肌增重</string>
     <string name="plan_test_question_07_02">减脂减肥</string>
-    <string name="plan_test_question_08">8. 一周运动几天？</string>
-    <string name="plan_test_question_08_01">1&#8211;2天</string>
-    <string name="plan_test_question_08_02">3&#8211;4天</string>
-    <string name="plan_test_question_08_03">5&#8211;6天</string>
-    <string name="plan_test_question_08_04">7天</string>
+    <string name="plan_test_question_08">8. 一周运动几次？</string>
+    <string name="plan_test_question_08_01">1&#8211;2次</string>
+    <string name="plan_test_question_08_02">3&#8211;5次</string>
+    <string name="plan_test_question_08_03">6&#8211;7次</string>
+    <string name="plan_test_question_08_04">7次以上</string>
     <string name="plan_test_question_09">9. 每次运动的时长？</string>
     <string name="plan_test_question_09_01">小于30分钟</string>
     <string name="plan_test_question_09_02">30&#8211;60分钟</string>
@@ -198,8 +198,8 @@
     <string name="report_sport_info">热量及运动建议</string>
     <string name="report_nutrition_info">营养建议</string>
     <string name="report_base_info_bmi">BMI(身体质量指数)</string>
-    <string name="report_base_info_bmr">BMR(静息代谢率)</string>
-    <string name="report_base_info_intake">基础代谢率</string>
+    <string name="report_base_info_bmr">BMR(基础代谢率)</string>
+    <string name="report_base_info_intake">TDEE(每日热量总消耗)</string>
     <string name="report_base_info_burning">燃脂心率</string>
     <string name="report_base_info_best_weight">最佳体重</string>
     <string name="report_base_info_weight_range">健康体重范围</string>
