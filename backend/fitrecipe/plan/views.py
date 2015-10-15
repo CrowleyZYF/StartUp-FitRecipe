@@ -110,7 +110,7 @@ class CalendarList(BaseView):
             last = None
         serializer = CalendarSerializer(calendars, many=True).data
         punchs = Punch.objects.filter(user=user, date__lte=end_date, date__gte=start_date)
-        result = {'lastJoined': last, 'calendar': serializer, 'punch': punch}
+        result = {'lastJoined': last, 'calendar': serializer, 'punch': PunchSerializer(punchs, many=True).data}
         return self.success_response(result)
 
     def post(self, request, format=None):
@@ -169,6 +169,14 @@ class PunchList(BaseView):
         start_date = turn_to_date(request.GET.get('start', None))
         end_date = turn_to_date(request.GET.get('end', None))
         punchs = Punch.objects.filter(user=user, date__lte=end_date, date__gte=start_date)
+        '''Temp'''
+        result = []
+        user = Account.find_account_by_user(request.user)
+        c = Calendar.objects.filter(user=user, joined_date__lte=date.today()).order_by('-joined_date')[0]
+        for punch_item in punchs:
+            if punch_item.joined_date==c.joined_date:                
+                plan = Plan.objects.get(pk=c.plan.id)
+                punch_item['dish'] = plan.routine_set.dish_set.get(type=punch_item.type)
         return self.success_response(PunchSerializer(punchs, many=True).data)
 
     def post(self, request, format=None):
