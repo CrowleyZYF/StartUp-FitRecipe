@@ -110,7 +110,7 @@ class CalendarList(BaseView):
             last = None
         serializer = CalendarSerializer(calendars, many=True).data
         punchs = Punch.objects.filter(user=user, date__lte=end_date, date__gte=start_date)
-        result = {'lastJoined': last, 'calendar': serializer, 'punch': punch}
+        result = {'lastJoined': last, 'calendar': serializer, 'punch': PunchSerializer(punchs, many=True).data}
         return self.success_response(result)
 
     def post(self, request, format=None):
