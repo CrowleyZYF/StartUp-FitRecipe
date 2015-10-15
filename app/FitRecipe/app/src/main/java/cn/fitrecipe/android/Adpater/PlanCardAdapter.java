@@ -17,7 +17,6 @@ import java.util.List;
 import cn.fitrecipe.android.FrApplication;
 import cn.fitrecipe.android.PlanChoiceInfoActivity;
 import cn.fitrecipe.android.R;
-import cn.fitrecipe.android.UI.LabelView;
 import cn.fitrecipe.android.entity.SeriesPlan;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -44,9 +43,7 @@ public class PlanCardAdapter extends RecyclerView.Adapter<PlanCardAdapter.PlanCa
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // String id = ((TextView) v.findViewById(R.id.choice_id)).getText().toString();
                 Intent intent=new Intent(context,PlanChoiceInfoActivity.class);
-                //intent.putExtra("id", id);
                 intent.putExtra("plan_id", planCardsList.get(i).getId());
                 intent.putExtra("isUsed", planCardsList.get(i).isUsed());
                 context.startActivityForResult(intent, 111);
@@ -88,22 +85,12 @@ public class PlanCardAdapter extends RecyclerView.Adapter<PlanCardAdapter.PlanCa
                 break;
         }
         if (pc.getBenifit()==0){//增肌
-            contactViewHolder.choice_label.setText(R.string.muscle);
-            contactViewHolder.choice_label.setBackgroundColor(this.context.getResources().getColor(R.color.perfect_background));
-            contactViewHolder.choice_label.setPadding(0,10,0,10);
+            contactViewHolder.choice_type.setText(R.string.muscle);
         }else{
-            contactViewHolder.choice_label.setText(R.string.fat);
-            contactViewHolder.choice_label.setBackgroundColor(this.context.getResources().getColor(R.color.lf_background));
-            contactViewHolder.choice_label.setPadding(0,10,0,10);
-        }
-        if (pc.getType()==0){//食材
-            contactViewHolder.choice_type.setText(R.string.plan_food);
-        }else{
-            contactViewHolder.choice_type.setText(R.string.plan_recipe);
+            contactViewHolder.choice_type.setText(R.string.fat);
         }
         contactViewHolder.choice_days.setText(pc.getTotal_days()+"天");
         contactViewHolder.choice_join.setText(pc.getDish_headcount() + "人");
-//        contactViewHolder.choice_background.setBackground(this.context.getResources().getDrawable(pc.getBackground()));
         FrApplication.getInstance().getMyImageLoader().displayImage(contactViewHolder.choice_background, pc.getImg());
         contactViewHolder.author_name.setText(pc.getAuthor().getName()+"");
         if(pc.getAuthor().getType()==0){
@@ -111,7 +98,6 @@ public class PlanCardAdapter extends RecyclerView.Adapter<PlanCardAdapter.PlanCa
         }else{
             contactViewHolder.author_type.setText("营养师");
         }
-//        contactViewHolder.author_avatar.setImageResource(R.drawable.author_header);
         FrApplication.getInstance().getMyImageLoader().displayImage(contactViewHolder.author_avatar, pc.getAuthor().getAvatar());
         if(pc.isUsed()){
             contactViewHolder.isUsed.setVisibility(View.VISIBLE);
@@ -137,12 +123,10 @@ public class PlanCardAdapter extends RecyclerView.Adapter<PlanCardAdapter.PlanCa
         protected ImageView choice_delicious_rank_01;
         protected ImageView choice_delicious_rank_02;
         protected ImageView choice_delicious_rank_03;
-        //protected TextView choice_label;
         protected TextView choice_days;
         protected TextView choice_type;
         protected TextView choice_join;
         protected RelativeLayout choice_background;
-        protected LabelView choice_label;
         protected TextView author_name;
         protected TextView author_type;
         protected CircleImageView author_avatar;
@@ -158,14 +142,10 @@ public class PlanCardAdapter extends RecyclerView.Adapter<PlanCardAdapter.PlanCa
             choice_delicious_rank_01 = (ImageView) itemView.findViewById(R.id.choice_delicious_rank_01);
             choice_delicious_rank_02 = (ImageView) itemView.findViewById(R.id.choice_delicious_rank_02);
             choice_delicious_rank_03 = (ImageView) itemView.findViewById(R.id.choice_delicious_rank_03);
-            //choice_label = (TextView)  itemView.findViewById(R.id.choice_label);
             choice_days = (TextView)  itemView.findViewById(R.id.choice_days);
             choice_type = (TextView)  itemView.findViewById(R.id.choice_type);
             choice_join = (TextView) itemView.findViewById(R.id.choice_join);
             choice_background = (RelativeLayout) itemView.findViewById(R.id.choice_background);
-            choice_label = new LabelView(context);
-            choice_label.setBackgroundColor(0xff03a9f4);
-            choice_label.setTargetView(choice_background, 5, LabelView.Gravity.RIGHT_TOP);
             author_name = (TextView) itemView.findViewById(R.id.author_name);
             author_type = (TextView) itemView.findViewById(R.id.author_type);
             author_avatar = (CircleImageView) itemView.findViewById(R.id.author_avatar);

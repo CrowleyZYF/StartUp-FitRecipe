@@ -24,18 +24,14 @@ public class RecordActivity extends FragmentActivity implements View.OnClickList
 
     private LinearLayout me_record_punch;
     private LinearLayout me_record_work;
-    private LinearLayout me_record_recipe;
 
     private Fragment punch_fragment;
     private Fragment work_fragment;
-    private Fragment recipe_fragment;
 
     private ImageView record_punch_active_line_1;
     private ImageView record_punch_active_line_2;
     private ImageView record_work_active_line_1;
     private ImageView record_work_active_line_2;
-    private ImageView record_recipe_active_line_1;
-    private ImageView record_recipe_active_line_2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +48,6 @@ public class RecordActivity extends FragmentActivity implements View.OnClickList
         back_btn.setOnClickListener(this);
         me_record_punch.setOnClickListener(this);
         me_record_work.setOnClickListener(this);
-        me_record_recipe.setOnClickListener(this);
     }
 
     private void initView() {
@@ -65,14 +60,11 @@ public class RecordActivity extends FragmentActivity implements View.OnClickList
 
         me_record_punch = (LinearLayout) findViewById(R.id.record_punch);
         me_record_work = (LinearLayout) findViewById(R.id.record_work);
-        me_record_recipe = (LinearLayout) findViewById(R.id.record_recipe);
 
         record_punch_active_line_1 = (ImageView) findViewById(R.id.record_punch_active_line_1);
         record_punch_active_line_2 = (ImageView) findViewById(R.id.record_punch_active_line_2);
         record_work_active_line_1 = (ImageView) findViewById(R.id.record_work_active_line_1);
         record_work_active_line_2 = (ImageView) findViewById(R.id.record_work_active_line_2);
-        record_recipe_active_line_1 = (ImageView) findViewById(R.id.record_recipe_active_line_1);
-        record_recipe_active_line_2 = (ImageView) findViewById(R.id.record_recipe_active_line_2);
     }
 
     @Override
@@ -87,9 +79,6 @@ public class RecordActivity extends FragmentActivity implements View.OnClickList
             case R.id.record_work:
                 setSelect(1);
                 break;
-            case R.id.record_recipe:
-                setSelect(2);
-                break;
         }
     }
 
@@ -102,8 +91,6 @@ public class RecordActivity extends FragmentActivity implements View.OnClickList
         record_punch_active_line_2.setBackground(getResources().getDrawable(R.drawable.theme_line));
         record_work_active_line_1.setVisibility(View.INVISIBLE);
         record_work_active_line_2.setBackground(getResources().getDrawable(R.drawable.theme_line));
-        record_recipe_active_line_1.setVisibility(View.INVISIBLE);
-        record_recipe_active_line_2.setBackground(getResources().getDrawable(R.drawable.theme_line));
         switch (tab)
         {
             case 0:
@@ -128,17 +115,6 @@ public class RecordActivity extends FragmentActivity implements View.OnClickList
                 record_work_active_line_1.setVisibility(View.VISIBLE);
                 record_work_active_line_2.setBackground(getResources().getDrawable(R.drawable.theme_line_active));
                 break;
-            case 2:
-                if (recipe_fragment == null){
-                    recipe_fragment = new RecipeFragment();
-                    transaction.add(R.id.record_content, recipe_fragment);
-                } else{
-                    transaction.show(recipe_fragment);
-                }
-                upload_btn.setVisibility(View.GONE);
-                record_recipe_active_line_1.setVisibility(View.VISIBLE);
-                record_recipe_active_line_2.setBackground(getResources().getDrawable(R.drawable.theme_line_active));
-                break;
             default:
                 break;
         }
@@ -151,9 +127,6 @@ public class RecordActivity extends FragmentActivity implements View.OnClickList
         }
         if (work_fragment != null){
             transaction.hide(work_fragment);
-        }
-        if (recipe_fragment != null){
-            transaction.hide(recipe_fragment);
         }
     }
 }

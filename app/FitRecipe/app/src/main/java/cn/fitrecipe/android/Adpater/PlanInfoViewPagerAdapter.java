@@ -2,7 +2,6 @@ package cn.fitrecipe.android.Adpater;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,18 +83,12 @@ public class PlanInfoViewPagerAdapter extends PagerAdapter {
                     break;
             }
             final TextView choice_join = (TextView) planInfoContainer.findViewById(R.id.choice_join);
-            choice_join.setText(plan.getDish_headcount()+"人已采用");
+            choice_join.setText(plan.getDish_headcount()+"");
             TextView choice_label = (TextView) planInfoContainer.findViewById(R.id.choice_label);
             if(plan.getBenifit() == 0){
                 choice_label.setText(R.string.muscle);
             }else{
                 choice_label.setText(R.string.fat);
-            }
-            TextView choice_type = (TextView) planInfoContainer.findViewById(R.id.choice_type);
-            if(plan.getType() == 0){
-                choice_type.setText(R.string.plan_food);
-            }else{
-                choice_type.setText(R.string.plan_recipe);
             }
             TextView choice_days = (TextView) planInfoContainer.findViewById(R.id.choice_days);
             choice_days.setText(plan.getTotal_days() + "");

@@ -165,7 +165,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="计划摄入宏量元素比"
+                android:text="计划摄入宏量元素供能比"
                 android:textColor="@color/login_input_text_color"
                 android:textSize="14sp"
                 android:gravity="center_vertical"
