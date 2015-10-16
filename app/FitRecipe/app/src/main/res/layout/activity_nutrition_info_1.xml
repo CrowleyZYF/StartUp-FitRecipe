@@ -214,6 +214,15 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"/>
 
+                <TextView
+                    android:id="@+id/protein_intake"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="140 g"
+                    android:textSize="10sp"
+                    android:textColor="#a4a4a4"
+                    android:layout_marginRight="10dp"/>
+
                 <ImageView
                     android:layout_width="10dp"
                     android:layout_height="10dp"
@@ -228,6 +237,15 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"/>
 
+                <TextView
+                    android:id="@+id/carbohydrate_intake"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="140 g"
+                    android:textSize="10sp"
+                    android:textColor="#a4a4a4"
+                    android:layout_marginRight="10dp"/>
+
                 <ImageView
                     android:layout_width="10dp"
                     android:layout_height="10dp"
@@ -240,6 +258,15 @@
                     android:textSize="10sp"
                     android:textColor="#a4a4a4"
                     android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"/>
+
+                <TextView
+                    android:id="@+id/lipids_intake"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="140 g"
+                    android:textSize="10sp"
+                    android:textColor="#a4a4a4"
                     android:layout_marginRight="5dp"/>
 
 

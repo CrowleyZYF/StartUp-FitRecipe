@@ -213,10 +213,10 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             Common.errorDialog(this, "登陆失败", "密码不得为空").show();
         }else {
             Toast.makeText(LoginActivity.this, "phone:" + accountString + " password:" + passwordString, Toast.LENGTH_SHORT).show();
-            // TODO @WangKun
-            // 正常登陆，登陆成功后调用loginSuccess，账号不存在调用accountError，密码错误调用passError
             pd = ProgressDialog.show(LoginActivity.this, "", "正在登录...", true, false);
             pd.setCanceledOnTouchOutside(false);
+            // TODO @WangKun
+            // 正常登陆，登陆成功后调用loginSuccess，账号不存在调用accountError，密码错误调用passError
             JSONObject params = new JSONObject();
             try {
                 params.put("phone", accountString);
@@ -260,6 +260,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         Toast.makeText(LoginActivity.this, "ID:" + userId + " Name:" + userName + " Source:" + platform, Toast.LENGTH_SHORT).show();
         // TODO @WangKun
         // 第三方登陆，登陆成功后调用loginSuccess，账号不存在调用accountError，密码错误调用passError
+        pd = ProgressDialog.show(LoginActivity.this, "", "正在登录...", true, false);
+        pd.setCanceledOnTouchOutside(false);
         JSONObject params = new JSONObject();
         try {
             params.put("external_id", userId);

@@ -24,6 +24,13 @@ public class Common {
                 .setConfirmText("确定");
     }
 
+    public static SweetAlertDialog infoDialog(Context context, String title, String content){
+        return new SweetAlertDialog(context, SweetAlertDialog.NORMAL_TYPE)
+                .setTitleText(title)
+                .setContentText(content)
+                .setConfirmText("确定");
+    }
+
     public static SweetAlertDialog errorDialog(Context context, String title, String content){
         return new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
                 .setTitleText(title)

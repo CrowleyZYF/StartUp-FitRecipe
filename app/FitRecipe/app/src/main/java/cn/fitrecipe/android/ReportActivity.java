@@ -2,7 +2,9 @@ package cn.fitrecipe.android;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -247,19 +249,38 @@ public class ReportActivity extends Activity implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
+        SharedPreferences preferences=getSharedPreferences("user", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
         switch (v.getId()) {
             case R.id.back_btn:
-                if(last.equals("me")) {
-                    finish();
-                    break;
+                if(!last.equals("me")) {
+                    editor.putBoolean("isSpecial", true);
                 }
+                break;
             case R.id.check_plan:
-                Intent intent=new Intent(this,MainActivity.class);
-                intent.putExtra("from", ReportActivity.class.getSimpleName());
-                this.startActivity(intent);
+                editor.putBoolean("isSpecial", true);
                 break;
             default:
                 break;
         }
+        editor.commit();
+        finish();
+    }
+
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            SharedPreferences preferences=getSharedPreferences("user", MODE_PRIVATE);
+            if(!last.equals("me")) {
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean("isSpecial", true);
+                editor.commit();
+            }
+            finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
