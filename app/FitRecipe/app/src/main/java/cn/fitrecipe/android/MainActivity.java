@@ -5,11 +5,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -17,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
 import com.umeng.fb.FeedbackAgent;
 
 import java.util.ArrayList;
@@ -25,6 +28,7 @@ import java.util.List;
 import cn.fitrecipe.android.fragment.IndexFragment;
 import cn.fitrecipe.android.fragment.MeFragment;
 import cn.fitrecipe.android.fragment.PlanFragment;
+import cn.fitrecipe.android.function.Common;
 import cn.fitrecipe.android.service.GetHomeDataService;
 
 public class MainActivity extends FragmentActivity implements OnClickListener
@@ -51,6 +55,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     private HomeDataReadyRececiver readyRececiver;
     private IntentFilter intentFilter;
 
+    private boolean returnToMe = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -67,7 +73,14 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         agent.sync();
         initView();
         initEvent();
-        setSelect(0);
+
+        //init tab
+        tab_index=0;
+        SharedPreferences preferences=getSharedPreferences("user", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("returnToMe", tab_index);
+        editor.commit();
+        setSelect(tab_index);
     }
 
     @Override
@@ -78,14 +91,29 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     @Override
     protected void onResume() {
         super.onResume();
-        Intent intent =getIntent();
-        if (intent.hasExtra("from")){
-            String from = intent.getStringExtra("from");
-            if(from.equals(ReportActivity.class.getSimpleName()))
-                setSelect(1);
+        SharedPreferences preferences=getSharedPreferences("user", MODE_PRIVATE);
+        int isReturnToMe = preferences.getInt("returnToMe", 0);
+        boolean isSpecial = preferences.getBoolean("isSpecial", false);
+        if(isReturnToMe == 1){
+            tab_index = 1;
+            setSelect(tab_index);
+            resetTabs();
+            frTabs.get(tab_index).setBackgroundColor(getResources().getColor(R.color.active_color));
+        }else{
+            //tab_index = 2;
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putInt("returnToMe", tab_index);
+            editor.commit();
+            resetTabs();
+            frTabs.get(tab_index).setBackgroundColor(getResources().getColor(R.color.active_color));
         }
-//        setSelect(tab_index);
+
         registerReceiver(readyRececiver, intentFilter);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
     }
 
     @Override
@@ -99,7 +127,6 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         frTabIndex.setOnClickListener(this);
         frTabMe.setOnClickListener(this);
         frTabPlan.setOnClickListener(this);
-        //frTabKnowledge.setOnClickListener(this);
 
         left_btn.setOnClickListener(this);
         right_btn.setOnClickListener(this);
@@ -110,10 +137,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         frTabIndex = (LinearLayout) findViewById(R.id.tab_index);
         frTabMe = (LinearLayout) findViewById(R.id.tab_me);
         frTabPlan = (LinearLayout) findViewById(R.id.tab_plan);
-        //frTabKnowledge = (LinearLayout) findViewById(R.id.tab_knowledge);
         frTabs.add(frTabIndex);
         frTabs.add(frTabPlan);
-        //frTabs.add(frTabKnowledge);
         frTabs.add(frTabMe);
 
         left_btn = (ImageView) findViewById(R.id.left_btn);
@@ -122,95 +147,73 @@ public class MainActivity extends FragmentActivity implements OnClickListener
 
     private void setSelect(int i)
     {
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction transaction = fm.beginTransaction();
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-//        hideFragment(transaction);
-        if(tab_index != -1 && i != 1) {
-            if(tab_index == 0 && frIndexFragment != null)
-                transaction.hide(frIndexFragment);
-            if(tab_index == 1 && frPlanFragment != null)
-                transaction.hide(frPlanFragment);
-            if(tab_index == 2 && frMeFragment != null)
-                transaction.hide(frMeFragment);
-            frTabs.get(tab_index).setBackgroundColor(getResources().getColor(R.color.base_color));
-        }else {
-//            frPlanFragment = new PlanFragment();
-//            transaction.add(R.id.content, frPlanFragment).hide(frPlanFragment);
-        }
-        switch (i)
-        {
-            case 0:
-                if (frIndexFragment == null){
-                    frIndexFragment = new IndexFragment();
-                    transaction.add(R.id.content, frIndexFragment);
-                }
-                transaction.show(frIndexFragment);
-                left_btn.setImageResource(R.drawable.icon_category);
-                right_btn.setImageResource(R.drawable.icon_search);
-                frTabs.get(i).setBackgroundColor(getResources().getColor(R.color.active_color));
-                tab_index = 0;
-                break;
-            case 1:
-                long t = System.currentTimeMillis();
-
-                if(!FrApplication.getInstance().isLogin()) {
-                    Toast.makeText(this, getResources().getString(R.string.login_tip), Toast.LENGTH_SHORT).show();
-                    break;
-                }
-                boolean isTest = FrApplication.getInstance().isTested();
-                if(isTest) {
-                    if (frPlanFragment == null) {
-                        frPlanFragment = new PlanFragment();
-                        transaction.add(R.id.content, frPlanFragment);
+        if(i==1 && !FrApplication.getInstance().isLogin()){
+            Common.infoDialog(this, "请先登录", "需要小伙伴先登录账号来保存些信息哦~").show();
+        }else{
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction transaction = fm.beginTransaction();
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            switch (i)
+            {
+                case 0:
+                    resetTabs();
+                    hideFragment(transaction);
+                    if (frIndexFragment == null){
+                        frIndexFragment = new IndexFragment();
+                        transaction.add(R.id.content, frIndexFragment);
                     }
-                    transaction.show(frPlanFragment);
-                    left_btn.setImageResource(R.drawable.icon_nutrition);
-                    right_btn.setImageResource(R.drawable.icon_change);
-                    if(tab_index == 0 && frIndexFragment != null)
-                        transaction.hide(frIndexFragment);
-                    if(tab_index == 1 && frPlanFragment != null)
-                        transaction.hide(frPlanFragment);
-                    if(tab_index == 2 && frMeFragment != null)
-                        transaction.hide(frMeFragment);
+                    transaction.show(frIndexFragment);
+                    left_btn.setImageResource(R.drawable.icon_category);
+                    right_btn.setImageResource(R.drawable.icon_search);
                     frTabs.get(i).setBackgroundColor(getResources().getColor(R.color.active_color));
-                    frTabs.get(tab_index).setBackgroundColor(getResources().getColor(R.color.base_color));
-                    tab_index = 1;
-                }else{
-//                    frTabs.get(tab_index).setBackgroundColor(getResources().getColor(R.color.active_color));
-//                    frTabs.get(i).setBackgroundColor(getResources().getColor(R.color.base_color));
-                    Intent intent=new Intent(this,PlanTestActivity.class);
-                    startActivity(intent);
-                }
-                long tt = System.currentTimeMillis();
-                Toast.makeText(this, "计划" + (tt-t)+"ms", Toast.LENGTH_SHORT).show();
-                break;
-            /*case 2:
-                if (frKnowledgeFragment == null){
-                    frKnowledgeFragment = new KnowledgeFragment();
-                    transaction.add(R.id.content, frKnowledgeFragment);
-                } else{
-                    transaction.show(frKnowledgeFragment);
-                }
-                left_btn.setImageResource(R.drawable.icon_knowledge);
-                right_btn.setImageResource(R.drawable.icon_search);
-                tab_index = 2;
-                break;*/
-            case 2:
-                if (frMeFragment == null){
-                    frMeFragment = new MeFragment();
-                    transaction.add(R.id.content, frMeFragment);
-                }
-                transaction.show(frMeFragment);
-                frTabs.get(i).setBackgroundColor(getResources().getColor(R.color.active_color));
-                left_btn.setImageResource(R.drawable.icon_letter);
-                right_btn.setImageResource(R.drawable.icon_set);
-                tab_index = 2;
-                break;
-            default:
-                break;
+                    tab_index = 0;
+                    break;
+                case 1:
+                    long t = System.currentTimeMillis();
+                    boolean isTest = FrApplication.getInstance().isTested();
+                    if(isTest) {
+                        resetTabs();
+                        hideFragment(transaction);
+                        if (frPlanFragment == null) {
+                            frPlanFragment = new PlanFragment();
+                            transaction.add(R.id.content, frPlanFragment);
+                        }
+                        transaction.show(frPlanFragment);
+                        left_btn.setImageResource(R.drawable.icon_nutrition);
+                        right_btn.setImageResource(R.drawable.icon_change);
+                        frTabs.get(i).setBackgroundColor(getResources().getColor(R.color.active_color));
+                        tab_index = 1;
+                    }else{
+                        resetTabs();
+                        frTabs.get(i).setBackgroundColor(getResources().getColor(R.color.active_color));
+                        Intent intent=new Intent(this,PlanTestActivity.class);
+                        SharedPreferences preferences=getSharedPreferences("user", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putInt("returnToMe", tab_index);
+                        editor.commit();
+                        startActivity(intent);
+                    }
+                    long tt = System.currentTimeMillis();
+                    Toast.makeText(this, "计划" + (tt-t)+"ms", Toast.LENGTH_SHORT).show();
+                    break;
+                case 2:
+                    resetTabs();
+                    hideFragment(transaction);
+                    if (frMeFragment == null){
+                        frMeFragment = new MeFragment();
+                        transaction.add(R.id.content, frMeFragment);
+                    }
+                    transaction.show(frMeFragment);
+                    frTabs.get(i).setBackgroundColor(getResources().getColor(R.color.active_color));
+                    left_btn.setImageResource(R.drawable.icon_letter);
+                    right_btn.setImageResource(R.drawable.icon_set);
+                    tab_index = 2;
+                    break;
+                default:
+                    break;
+            }
+            transaction.commit();
         }
-        transaction.commit();
     }
 
     private void hideFragment(FragmentTransaction transaction)
@@ -219,24 +222,19 @@ public class MainActivity extends FragmentActivity implements OnClickListener
             transaction.hide(frIndexFragment);
             frTabs.get(0).setBackgroundColor(getResources().getColor(R.color.base_color));
         }
+        if (frPlanFragment != null) {
+            transaction.hide(frPlanFragment);
+            frTabs.get(1).setBackgroundColor(getResources().getColor(R.color.base_color));
+        }
         if (frMeFragment != null) {
             transaction.hide(frMeFragment);
             frTabs.get(2).setBackgroundColor(getResources().getColor(R.color.base_color));
         }
-        if (frPlanFragment != null) {
-            transaction.hide(frPlanFragment);
-            frTabs.get(1).setBackgroundColor(getResources().getColor(R.color.base_color));
-        }/*
-        if (frKnowledgeFragment != null){
-            transaction.hide(frKnowledgeFragment);
-            frTabs.get(3).setBackgroundColor(getResources().getColor(R.color.base_color));
-        }*/
     }
 
     @Override
     public void onClick(View v)
     {
-//        resetTabs();
         switch (v.getId())
         {
             case R.id.tab_index:
@@ -245,9 +243,6 @@ public class MainActivity extends FragmentActivity implements OnClickListener
             case R.id.tab_plan:
                 setSelect(1);
                 break;
-            /*case R.id.tab_knowledge:
-                setSelect(2);
-                break;*/
             case R.id.tab_me:
                 setSelect(2);
                 break;
@@ -258,20 +253,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                         break;
                     case 1:
                         if(frPlanFragment != null) ((PlanFragment)frPlanFragment).toggle("all");
-                        /*
-                        TextView name = (TextView) findViewById(R.id.meal_name);
-                        TextView nutrition = (TextView) findViewById(R.id.ingredient_title);
-                        nutrition.setText(name.getText()+"营养表");
-                        TextView nutrition_weight = (TextView) findViewById(R.id.ingredient_title_weight);
-                        nutrition_weight.setVisibility(View.GONE);
-                        ScrollView nutrition_sv = (ScrollView) findViewById(R.id.plan_nutrition);
-                        nutrition_sv.smoothScrollTo(0,0);*/
                         break;
-                    /*case 2:
-                        Intent intent=new Intent(this,CollectActivity.class);
-                        intent.putExtra("tab", 2);
-                        startActivity(intent);
-                        break;*/
                     case 2:
                         startActivity(new Intent(this, LetterActivity.class));
                         break;
@@ -281,15 +263,11 @@ public class MainActivity extends FragmentActivity implements OnClickListener
             case R.id.right_btn:
                 switch (tab_index){
                     case 0:
-                        //startActivity(new Intent(this, SearchActivity.class));
                         startActivity(new Intent(this, SetActivity.class));
                         break;
                     case 1:
                         startActivity(new Intent(this, PlanChoiceActivity.class));
                         break;
-                    /*case 2:
-                        startActivity(new Intent(this, SearchActivity.class));
-                        break;*/
                     case 2:
                         startActivity(new Intent(this, SetActivity.class));
                         break;
@@ -351,5 +329,14 @@ public class MainActivity extends FragmentActivity implements OnClickListener
 //                }, 1000);
             }
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

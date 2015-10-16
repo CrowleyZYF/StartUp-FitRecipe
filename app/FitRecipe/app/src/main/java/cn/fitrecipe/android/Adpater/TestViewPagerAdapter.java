@@ -438,6 +438,7 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
                 Intent intent=new Intent(context,ReportActivity.class);
                 intent.putExtra("report", report);
                 context.startActivity(intent);
+                context.finish();
             }
         }, new Response.ErrorListener() {
             @Override
