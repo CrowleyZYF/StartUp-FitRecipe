@@ -111,7 +111,10 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.me_record_btn:{
-                startActivity(new Intent(getActivity(), RecordActivity.class));
+                if(!FrApplication.getInstance().isLogin()) {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.login_tip), Toast.LENGTH_SHORT).show();
+                }else
+                    startActivity(new Intent(getActivity(), RecordActivity.class));
                 break;
             }
             case R.id.me_collect_btn:{
@@ -127,7 +130,8 @@ public class MeFragment extends Fragment implements View.OnClickListener {
                     Toast.makeText(getActivity(), getResources().getString(R.string.login_tip), Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    startActivity(new Intent(getActivity(), ReportActivity.class));
+                    Intent intent = new Intent(getActivity(), ReportActivity.class);
+                    startActivity(intent);
                 }
                 break;
             }
