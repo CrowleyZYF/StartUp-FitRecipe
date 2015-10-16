@@ -176,7 +176,7 @@ class PunchList(BaseView):
                     day = p.date - c['joined_date']
                     return (temp_storage, day.days)
                 elif c['joined_date'] == p.date:
-                    return (c.plan, 1)
+                    return (c['plan'], 1)
                 else:
                     # >
                     temp_storage = c['plan']
