@@ -189,8 +189,11 @@ class PunchList(BaseView):
         punchs = Punch.objects.filter(user=user, date__lte=end_date, date__gte=start_date)
         calendars = Calendar.objects.filter(user=user, joined_date__lte=end_date, joined_date__gte=start_date).order_by('joined_date') # asc
         # get all calendar
-        last_calendar = Calendar.objects.filter(user=user, joined_date__lte=date.today()).order_by('-joined_date')[0]
-        calendar_list = [{'joined_date': last_calendar.joined_date, 'plan': last_calendar.plan.id}]
+        try:
+            last_calendar = Calendar.objects.filter(user=user, joined_date__lte=date.today()).order_by('-joined_date')[0]
+            calendar_list = [{'joined_date': last_calendar.joined_date, 'plan': last_calendar.plan.id}]
+        except IndexError:
+            calendar_list = []
         for c in calendars:
             calendar_list.append({'joined_date': c.joined_date, 'plan': c.plan.id})
         result = []
@@ -202,7 +205,7 @@ class PunchList(BaseView):
                 current_day_count = plan.total_days
             dish = plan.routine_set.get(day=current_day_count).dish_set.get(type=p.type)
             p_json = PunchSerializer(p).data
-            p_json['dish'] = DishSerializer(dish).data
+            p_json['dish'] = DishSerializer(dish, context={'simple': False}).data
             result.append(p_json)
         return self.success_response(result)
 
