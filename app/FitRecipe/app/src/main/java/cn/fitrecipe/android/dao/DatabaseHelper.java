@@ -13,8 +13,8 @@ import java.sql.SQLException;
 
 import cn.fitrecipe.android.entity.Author;
 import cn.fitrecipe.android.entity.Basket;
-import cn.fitrecipe.android.entity.DatePlan;
-import cn.fitrecipe.android.entity.PlanInUse;
+import cn.fitrecipe.android.entity.BasketRecord;
+import cn.fitrecipe.android.entity.PunchRecord;
 import cn.fitrecipe.android.entity.Report;
 import cn.fitrecipe.android.entity.SeriesPlan;
 
@@ -46,7 +46,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
             TableUtils.createTableIfNotExists(connectionSource, Report.class);
             TableUtils.createTableIfNotExists(connectionSource, Basket.class);
             TableUtils.createTableIfNotExists(connectionSource, SeriesPlan.class);
-            TableUtils.createTableIfNotExists(connectionSource, PlanInUse.class);
+            TableUtils.createTableIfNotExists(connectionSource, BasketRecord.class);
+            TableUtils.createTable(connectionSource, PunchRecord.class);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -61,7 +62,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
             TableUtils.dropTable(connectionSource, Report.class, true);
             TableUtils.dropTable(connectionSource, Basket.class, true);
             TableUtils.dropTable(connectionSource, SeriesPlan.class, true);
-            TableUtils.dropTable(connectionSource, PlanInUse.class, true);
+            TableUtils.dropTable(connectionSource, PunchRecord.class, true);
+            TableUtils.dropTable(connectionSource, BasketRecord.class, true);
         } catch (SQLException e) {
             e.printStackTrace();
         }

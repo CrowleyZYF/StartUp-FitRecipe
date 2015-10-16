@@ -153,7 +153,7 @@ public class FrServerConfig {
     }
 
     public static String getPunchListUrl(String start, String end) {
-        return HOST + "/api/plan/punch?start="+ start +"&end=" + end;
+        return HOST + "/api/plan/punch/?start="+ start +"&end=" + end;
     }
 
     public static String getDatePlanUrl(String start, String end) {
@@ -164,7 +164,7 @@ public class FrServerConfig {
         return HOST + "/api/recipe/search/food/?keyword=" + keywords + "&start=" + start + "&num=" + num;
     }
 
-    public static String getRecentPlanUrl() {
+    public static String getInUsePlanUrl() {
         return HOST + "/api/plan/current";
     }
 

@@ -38,11 +38,14 @@ import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.IngredientActivity;
 import cn.fitrecipe.android.NutritionActivity;
 import cn.fitrecipe.android.R;
+import cn.fitrecipe.android.SelectRecipeActivity;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.dao.FrDbHelper;
+import cn.fitrecipe.android.entity.BasketRecord;
 import cn.fitrecipe.android.entity.DatePlan;
 import cn.fitrecipe.android.entity.DatePlanItem;
 import cn.fitrecipe.android.entity.PlanComponent;
+import cn.fitrecipe.android.entity.PunchRecord;
 import cn.fitrecipe.android.entity.Report;
 import cn.fitrecipe.android.entity.SeriesPlan;
 import cn.fitrecipe.android.function.Common;
@@ -82,11 +85,15 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     public static boolean isFresh = false;
 
     private Map<String, SeriesPlan> planMap;
+    private Map<String, List<PunchRecord>> punchData;
+    private Map<String, List<BasketRecord>> basketData;
     private AtomicInteger count;
 
     //使用第三方计划的时候，完成第（1/7）天
     private Map<String, String> indexDate;
 
+    //network
+    private boolean isError = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -132,11 +139,11 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     }
 
     private void initData() {
+        //获取报告
+        report = FrDbHelper.getInstance(getActivity()).getReport();
         //初始化一日多餐
         adapter = new PlanElementAdapter(this, items, report);
         plans.setAdapter(adapter);
-        //获取报告
-        report = FrDbHelper.getInstance(getActivity()).getReport();
         if(report == null) {
             hideLoading(true, "No report!");
             return;
@@ -156,6 +163,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     private void getData(String start, String end) {
         data = new HashMap<>();
         indexDate = new HashMap<>();
+        punchData = new HashMap<>();
         if(Common.isOpenNetwork(getActivity())) {
             start = Common.dateFormat(start);
             end = Common.dateFormat(end);
@@ -203,6 +211,31 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             for(int i = 0; i < calendar.length(); i++) {
                 count.incrementAndGet();
                 requestPlanDetails(calendar.getJSONObject(i).getString("joined_date"), calendar.getJSONObject(i).getJSONObject("plan").getInt("id"), start, end);
+            }
+            JSONArray punchs = data.getJSONArray("punch");
+            punchData  = new TreeMap<>();
+            for(int i = 0; i < punchs.length(); i++) {
+                String date = punchs.getJSONObject(i).getString("date");
+                PunchRecord pr = new PunchRecord();
+                pr.setDate(date);
+                int type = punchs.getJSONObject(i).getInt("type");
+                pr.setImg(punchs.getJSONObject(i).getString("img"));
+                switch (type) {
+                    case 0: pr.setType("breakfast");    break;
+                    case 1: pr.setType("add_meal_01");    break;
+                    case 2: pr.setType("lunch");    break;
+                    case 3: pr.setType("add_meal_02");    break;
+                    case 4: pr.setType("supper");    break;
+                    case 5: pr.setType("add_meal_03");    break;
+                }
+                if(punchData.containsKey(date)) {
+                    punchData.get(date).add(pr);
+                }
+                else {
+                    List<PunchRecord> prs = new ArrayList<>();
+                    prs.add(pr);
+                    punchData.put(date, prs);
+                }
             }
             //新用户完全没有记录 直接创建一个新的自定义计划
             if(data.getString("lastJoined").equals("null") && calendar.length()==0){
@@ -283,19 +316,30 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 int type = dish_set.getJSONObject(j).getInt("type");
                 switch (type) {
                     case 0:
-                        item.setType("breakfast");  break;
+                        item.setType("breakfast");
+                        item.setDefaultImageCover("drawable://" + R.drawable.breakfast);
+                        break;
                     case 1:
-                        item.setType("add_meal_01"); break;
+                        item.setType("add_meal_01");
+                        item.setDefaultImageCover("drawable://" + R.drawable.add_meal_01);
+                        break;
                     case 2:
-                        item.setType("lunch");  break;
+                        item.setType("lunch");
+                        item.setDefaultImageCover("drawable://" + R.drawable.lunch);
+                        break;
                     case 3:
-                        item.setType("add_meal_02"); break;
+                        item.setType("add_meal_02");
+                        item.setDefaultImageCover("drawable://" + R.drawable.add_meal_02);
+                        break;
                     case 4:
-                        item.setType("supper");  break;
+                        item.setType("supper");
+                        item.setDefaultImageCover("drawable://" + R.drawable.dinner);
+                        break;
                     case 5:
-                        item.setType("add_meal_03"); break;
+                        item.setType("add_meal_03");
+                        item.setDefaultImageCover("drawable://" + R.drawable.add_meal_03);
+                        break;
                 }
-                item.setDefaultImageCover("");
                 //获取计划中食材
                 JSONArray singleingredient_set = dish_set.getJSONObject(j).getJSONArray("singleingredient_set");
                 for(int k = 0; k < singleingredient_set.length(); k++) {
@@ -314,7 +358,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                     JSONObject json_recipe = singlerecipe_set.getJSONObject(k);
                     PlanComponent component = new PlanComponent();
                     component.setAmount(json_recipe.getInt("amount"));
-                    component.setCalories(component.getAmount() * json_recipe.getJSONObject("recipe").getDouble("calories") / 100);
+                    component.setCalories(json_recipe.getJSONObject("recipe").getDouble("calories"));
                     component.setType(1);
                     component.setId(json_recipe.getJSONObject("recipe").getInt("id"));
                     component.setName(json_recipe.getJSONObject("recipe").getString("title"));
@@ -384,6 +428,13 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     }
 
     private void processDatePlan(String start, String end, Map<String, SeriesPlan> plans, String nowDate) {
+
+        /**
+         * 获取菜篮子信息
+         */
+
+        basketData = FrDbHelper.getInstance(getActivity()).getBasketInfo(start, end);
+
         SeriesPlan now = plans.get(nowDate);//切换的不同计划
         String str = start;
         while(Common.CompareDate(str, end) < 0) {
@@ -398,18 +449,22 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 * 1. 对于自定义计划来说 如果nowDate和str相同，就说明那天创建了自定义计划，直接放到记录里，否则就说明那天没有创建，为空
                 * 2. 对于第三方计划来说 则取某一天的计划 自动轮循
                 * */
-            DatePlan datePlan;
+            DatePlan datePlan = null;
             if(now.getTitle().equals("personal plan")) {
                 if(nowDate.equals(str)) {
                     datePlan = plans.get(str).getDatePlans().get(0);
                     datePlan.setPlan_id(plans.get(str).getId());
+                    datePlan.setDate(str);
                     data.put(str, datePlan);
                 }
-                else
-                    data.put(str, gernerateEmptyPlan(str));
+                else {
+                    datePlan = gernerateEmptyPlan(str);
+                    data.put(str, datePlan);
+                }
             }else {
                 int th = Common.getDiff(str, nowDate) % now.getTotal_days();
                 datePlan = now.getDatePlans().get(th);
+                datePlan.setDate(str);
                 datePlan.setPlan_id(now.getId());
                 data.put(str, now.getDatePlans().get(th));
                 indexDate.put(str, "完成("+ (th+1) +"/"+now.getTotal_days()+")天");
@@ -437,7 +492,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
 //        datePlan.setInBasket(false);
         datePlan.setDate(date);
         datePlan.setPlan_id(-1);
-        datePlan.setItems(FrDbHelper.getInstance(getActivity()).generateDatePlan());
+        datePlan.setItems(Common.generateDatePlan());
         return datePlan;
     }
 
@@ -452,20 +507,20 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         }
         String str = Common.getSomeDay(Common.getDate(), pointer);//获取几月几号的记录
         int days = Common.getDiff(str, report.getUpdatetime()) + 1;//增肌减脂第几天
-        if(days + dir * 2 > 0 && pointer + dir * 2 < 7) {
-            final String preGet = Common.getSomeDay(str, dir * 2);
-            if (data == null || !data.containsKey(preGet)) {
-                new Thread() {
-                    @Override
-                    public void run() {
-                        Map<String, DatePlan> res = FrDbHelper.getInstance(getActivity()).getDatePlan(preGet, preGet);
-                        if (res != null && res.size() > 0) {
-                            data.putAll(res);
-                        }
-                    }
-                }.start();
-            }
-        }
+//        if(days + dir * 2 > 0 && pointer + dir * 2 < 7) {
+//            final String preGet = Common.getSomeDay(str, dir * 2);
+//            if (data == null || !data.containsKey(preGet)) {
+//                new Thread() {
+//                    @Override
+//                    public void run() {
+//                        Map<String, DatePlan> res = FrDbHelper.getInstance(getActivity()).getDatePlan(preGet, preGet);
+//                        if (res != null && res.size() > 0) {
+//                            data.putAll(res);
+//                        }
+//                    }
+//                }.start();
+//            }
+//        }
         if (data.containsKey(str)) {
             diy_days.setText(str);
             plan_status_day.setText(days + "");
@@ -474,6 +529,62 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             other_plan_days.setVisibility(datePlan.getPlan_name().equals("personal plan")?View.GONE:View.VISIBLE);
             other_plan_days.setText(indexDate!=null&&indexDate.containsKey(str)?indexDate.get(str):"");
             items = datePlan.getItems();
+            if(punchData.containsKey(str)) {
+                List<PunchRecord> prs = punchData.get(str);
+                for(int i = 0; i < prs.size(); i++) {
+                    switch (prs.get(i).getType()) {
+                        case "breakfast":
+                            items.get(0).setIsPunch(true);
+                            items.get(0).setImageCover(prs.get(i).getImg());
+                            break;
+                        case "add_meal_01":
+                            items.get(1).setIsPunch(true);
+                            items.get(1).setImageCover(prs.get(i).getImg());
+                            break;
+                        case "lunch":
+                            items.get(2).setIsPunch(true);
+                            items.get(2).setImageCover(prs.get(i).getImg());
+                            break;
+                        case "add_meal_02":
+                            items.get(3).setIsPunch(true);
+                            items.get(3).setImageCover(prs.get(i).getImg());
+                            break;
+                        case "supper":
+                            items.get(4).setIsPunch(true);
+                            items.get(4).setImageCover(prs.get(i).getImg());
+                            break;
+                        case "add_meal_03":
+                            items.get(5).setIsPunch(true);
+                            items.get(5).setImageCover(prs.get(i).getImg());
+                            break;
+                    }
+                }
+            }
+            if(basketData.containsKey(str)) {
+                List<BasketRecord> brs = basketData.get(str);
+                for(int i = 0; i < brs.size(); i++) {
+                    switch (brs.get(i).getType()) {
+                        case "breakfast":
+                            items.get(0).setIsInBasket(true);
+                            break;
+                        case "add_meal_01":
+                            items.get(1).setIsInBasket(true);
+                            break;
+                        case "lunch":
+                            items.get(2).setIsInBasket(true);
+                            break;
+                        case "add_meal_02":
+                            items.get(3).setIsInBasket(true);
+                            break;
+                        case "supper":
+                            items.get(4).setIsInBasket(true);
+                            break;
+                        case "add_meal_03":
+                            items.get(5).setIsInBasket(true);
+                            break;
+                    }
+                }
+            }
             if(pointer != 0)
                 adapter.setData(items, datePlan.getPlan_name().equals("personal plan")?true:false, false);//未来
             else
@@ -511,7 +622,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 String start = Common.getSomeDay(Common.getDate(), -2);
                 if(Common.CompareDate(start, report.getUpdatetime()) < 0)
                     start = report.getUpdatetime();
-                data = FrDbHelper.getInstance(getActivity()).getDatePlan(start, Common.getSomeDay(Common.getDate(), 6));
+//                data = FrDbHelper.getInstance(getActivity()).getDatePlan(start, Common.getSomeDay(Common.getDate(), 6));
                 return null;
             }
         }.execute();

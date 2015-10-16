@@ -118,7 +118,7 @@ public class PunchDayAdapter extends RecyclerView.Adapter<PunchDayAdapter.PunchD
                 holder.punch_piechart = (PieChartView) convertView.findViewById(R.id.punch_piechart);
                 convertView.setTag(holder);
             }
-            if(punchItems.get(position).getImageCover() == null)
+            if(punchItems.get(position).getImageCover() == null || punchItems.get(position).getImageCover().length() == 0)
                 FrApplication.getInstance().getMyImageLoader().displayImage(holder.punch_photo, punchItems.get(position).getDefaultImageCover());
             else
                 FrApplication.getInstance().getMyImageLoader().displayImage(holder.punch_photo, punchItems.get(position).getImageCover());
@@ -151,6 +151,7 @@ public class PunchDayAdapter extends RecyclerView.Adapter<PunchDayAdapter.PunchD
                 public void onClick(View v) {
                     Intent intent = new Intent(context, PunchContentSureActivity.class);
                     intent.putExtra("item", punchItems.get(position));
+                    intent.putExtra("action", "share");
                     context.startActivity(intent);
                 }
             });

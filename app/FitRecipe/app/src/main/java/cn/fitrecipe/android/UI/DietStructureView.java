@@ -151,7 +151,7 @@ public class DietStructureView extends ImageView{
         tmp.drawBitmap(icon, new Rect(0, 0, icon.getWidth(), icon.getHeight()), new RectF(alignX, alignY, alignX + radius_outter / 6, alignY + radius_outter / 6), textPaint);
         alignY += radius_outter / 6 + radius_outter/15;
         textPaint.setTextSize(radius_outter / 12);
-        tmp.drawText(Math.round(report.getDietStructureMeatMin()) +"~" + Math.round(report.getDietStructureMeatMax()) + "g", x5 + radius_outter / 9, alignY - textPaint.ascent(), textPaint);
+        tmp.drawText(Math.round(report.getDietStructureMeatMin()) + "~" + Math.round(report.getDietStructureMeatMax()) + "g", x5 + radius_outter / 9, alignY - textPaint.ascent(), textPaint);
 
 
         //油脂
@@ -186,6 +186,7 @@ public class DietStructureView extends ImageView{
 
         alignY += textPaint.descent() - textPaint.ascent() + radius_outter / 15;
         icon = BitmapFactory.decodeResource(getResources(), R.drawable.icon_rice);
+        alignX = x1 - radius_outter/3;
         tmp.drawBitmap(icon, new Rect(0, 0, icon.getWidth(), icon.getHeight()), new RectF(alignX, alignY, alignX + radius_outter / 6, alignY + radius_outter / 6), textPaint);
 
         //蔬菜

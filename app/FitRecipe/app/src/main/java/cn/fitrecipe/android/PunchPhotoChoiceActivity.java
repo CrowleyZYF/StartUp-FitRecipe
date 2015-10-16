@@ -75,6 +75,7 @@ public class PunchPhotoChoiceActivity extends Activity implements View.OnClickLi
             case R.id.option_default:
                 Intent intent = new Intent(this, PunchContentSureActivity.class);
                 intent.putExtra("item", item);
+                intent.putExtra("action", "publish");
                 startActivity(intent);
                 finish();
                 break;
@@ -160,6 +161,7 @@ public class PunchPhotoChoiceActivity extends Activity implements View.OnClickLi
                 Intent intent = new Intent(this, PunchContentSureActivity.class);
                 intent.putExtra("bitmap", mFileTemp.getPath());
                 intent.putExtra("item", item);
+                intent.putExtra("action", "publish");
                 startActivity(intent);
                 finish();
                 break;
