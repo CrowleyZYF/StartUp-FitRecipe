@@ -8,6 +8,8 @@ from base.views import BaseView
 from .serializers import ThemeSerializer
 from .models import Theme
 from recipe.serializers import RecipeSerializer
+from accounts.models import Account
+from collection.models import ThemeCollection
 
 
 # Create your views here.
@@ -17,8 +19,14 @@ class ThemeDetail(BaseView):
         reutrn a specific Theme
         '''
         theme = self.get_object(Theme, pk)
-        serializer = ThemeSerializer(theme)
-        return self.success_response(serializer.data)
+        result = ThemeSerializer(theme).data
+        try:
+            user = Account.find_account_by_user(request.user)
+            has_collected = ThemeCollection.has_collected(theme, user)
+        except Account.DoesNotExist:
+            has_collected = False
+        result['has_collected'] = has_collected
+        return self.success_response(result)
 
 
 class ThemeList(BaseView):
