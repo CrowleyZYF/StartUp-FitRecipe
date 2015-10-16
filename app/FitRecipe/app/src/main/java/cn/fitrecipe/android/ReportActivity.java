@@ -253,16 +253,12 @@ public class ReportActivity extends Activity implements View.OnClickListener{
         SharedPreferences.Editor editor = preferences.edit();
         switch (v.getId()) {
             case R.id.back_btn:
-                if(last.equals("me")) {
-                    editor.putInt("returnToMe", 2);
-                }else{
-                    editor.putInt("returnToMe", 1);
-                    editor.putBoolean("isSpecical", true);
+                if(!last.equals("me")) {
+                    editor.putBoolean("isSpecial", true);
                 }
                 break;
             case R.id.check_plan:
-                editor.putInt("returnToMe", 1);
-                editor.putBoolean("isSpecical", true);
+                editor.putBoolean("isSpecial", true);
                 break;
             default:
                 break;
@@ -277,14 +273,11 @@ public class ReportActivity extends Activity implements View.OnClickListener{
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
             SharedPreferences preferences=getSharedPreferences("user", MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
-            if(last.equals("me")) {
-                editor.putInt("returnToMe", 2);
-            }else{
-                editor.putInt("returnToMe", 1);
-                editor.putBoolean("isSpecical", true);
+            if(!last.equals("me")) {
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean("isSpecial", true);
+                editor.commit();
             }
-            editor.commit();
             finish();
             return true;
         }
