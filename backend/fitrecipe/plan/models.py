@@ -131,3 +131,4 @@ class Punch(BaseModel):
     type = models.IntegerField()
     img = models.URLField(max_length=200)
     date = models.DateField(auto_now_add=True)
+    state = models.IntegerField(default=10) # 10 - 正常， －10 删除

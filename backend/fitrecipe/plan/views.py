@@ -186,7 +186,7 @@ class PunchList(BaseView):
         turn_to_date = lambda x: x and datetime.strptime(x, '%Y%m%d') or date.today()
         start_date = turn_to_date(request.GET.get('start', None))
         end_date = turn_to_date(request.GET.get('end', None))
-        punchs = Punch.objects.filter(user=user, date__lte=end_date, date__gte=start_date)
+        punchs = Punch.objects.filter(user=user, date__lte=end_date, date__gte=start_date, state__gte=10)
         calendars = Calendar.objects.filter(user=user, joined_date__lte=end_date, joined_date__gte=start_date).order_by('joined_date') # asc
         # get all calendar
         try:
@@ -218,3 +218,15 @@ class PunchList(BaseView):
             return self.fail_response(400, 'Wrong Data')
         p = Punch.objects.create(user=user, type=type, img=img)
         return self.success_response(PunchSerializer(p).data)
+
+
+class DeletePunch(BaseView):
+    def post(self, request, punch_id, format=None):
+        user = Account.find_account_by_user(request.user)
+        try:
+            p = Punch.objects.get(user=user, pk=punch_id)
+            p.state = -10
+            p.save()
+            return self.success_response('ok')
+        except Punch.DoesNotExist:
+            return self.fail_response(404, 'No Punch')
