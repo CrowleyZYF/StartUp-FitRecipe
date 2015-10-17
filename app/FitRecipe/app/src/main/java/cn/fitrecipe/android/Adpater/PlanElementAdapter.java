@@ -114,13 +114,13 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
                     addBtn.setEnabled(false);
                     ((ImageView)v).setImageResource(R.drawable.icon_plan_shopping_active);
                     item.setIsInBasket(true);
-                    FrDbHelper.getInstance(fragment.getActivity()).addToBasket(item.getComponents());
+                    FrDbHelper.getInstance(fragment.getActivity()).addToBasket(item.getComponents(), item.getDate(), item.getType());
                     Toast.makeText(fragment.getActivity(), "加入菜篮子", Toast.LENGTH_SHORT).show();
                 }else {
                     addBtn.setEnabled(true);
                     ((ImageView)v).setImageResource(R.drawable.icon_plan_shopping);
                     item.setIsInBasket(false);
-                    FrDbHelper.getInstance(fragment.getActivity()).removeFromBasket(item.getComponents());
+                    FrDbHelper.getInstance(fragment.getActivity()).removeFromBasket(item.getComponents(), item.getDate(), item.getType());
                     Toast.makeText(fragment.getActivity(), "从菜篮子取出", Toast.LENGTH_SHORT).show();
                 }
                 adapter.notifyDataSetChanged();
@@ -221,16 +221,35 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
 
         switch (item.getType()) {
             case "breakfast" :
-                holder.plan_title.setText("早餐");    break;
+                holder.plan_title.setText("早餐");
+                holder.calorie_plan_need.setText(Math.round(report.getBreakfastRate())+"");
+                holder.calorie_plan_radio.setText(Math.round(item.getCalories_take() * 100/  report.getBreakfastRate())+"");
+                break;
             case "lunch":
-                holder.plan_title.setText("午餐");    break;
+                holder.plan_title.setText("午餐");
+                holder.calorie_plan_need.setText(Math.round( report.getLunchRate())+"");
+                holder.calorie_plan_radio.setText(Math.round(item.getCalories_take() * 100/ report.getLunchRate())+"");
+                break;
             case "supper":
-                holder.plan_title.setText("晚餐");    break;
+                holder.plan_title.setText("晚餐");
+                holder.calorie_plan_need.setText(Math.round(report.getDinnerRate())+"");
+                holder.calorie_plan_radio.setText(Math.round(item.getCalories_take() * 100/ report.getDinnerRate())+"");
+                break;
             case "add_meal_01":
+                holder.plan_title.setText("加餐");
+                holder.calorie_plan_need.setText(Math.round(report.getSnackMorningRate())+"");
+                holder.calorie_plan_radio.setText(Math.round(item.getCalories_take() * 100/ report.getSnackMorningRate())+"");
+                break;
             case "add_meal_02":
-                holder.plan_title.setText("加餐");    break;
+                holder.plan_title.setText("加餐");
+                holder.calorie_plan_need.setText(Math.round(report.getSnackAfternoonRate())+"");
+                holder.calorie_plan_radio.setText(Math.round(item.getCalories_take() * 100/ report.getSnackAfternoonRate())+"");
+                break;
             case "add_meal_03":
-                holder.plan_title.setText("夜宵");    break;
+                holder.plan_title.setText("夜宵");
+                holder.calorie_plan_need.setText(Math.round(report.getSnackNightRate())+"");
+                holder.calorie_plan_radio.setText(Math.round(item.getCalories_take() * 100/ report.getSnackNightRate())+"");
+                break;
         }
 
         holder.calorie_plan_intake.setText(Math.round(item.getCalories_take())+"");
@@ -238,11 +257,10 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
         holder.plan_protein_intake.setText(Math.round(item.getProtein_take())+"");
         holder.plan_fat_intake.setText(Math.round(item.getFat_take()) + "");
         holder.plan_time.setText(item.getTime());
-        if(item.getImageCover() == null) {
+        if(item.getImageCover() == null || item.getImageCover().equals("")) {
             FrApplication.getInstance().getMyImageLoader().displayImage(holder.plan_image_cover, item.getDefaultImageCover());
         }else
             FrApplication.getInstance().getMyImageLoader().displayImage(holder.plan_image_cover, item.getImageCover());
-
 
         //
         holder.plan_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {

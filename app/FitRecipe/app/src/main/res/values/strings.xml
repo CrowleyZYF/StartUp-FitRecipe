@@ -233,7 +233,7 @@
     <string name="punch_sure">发布</string>
 
     <string name="save">保存</string>
-    <string name="saving_image">保存图片</string>
+    <string name="saving_image">保存图片...</string>
     <string name="preparing_card">准备SD卡</string>
     <string name="no_storage_card">没有发现SD卡</string>
     <string name="not_enough_space">没有足够的空间</string>

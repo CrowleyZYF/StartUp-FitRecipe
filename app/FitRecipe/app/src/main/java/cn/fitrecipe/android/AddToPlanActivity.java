@@ -1,15 +1,35 @@
 package cn.fitrecipe.android;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import cn.fitrecipe.android.Http.FrRequest;
+import cn.fitrecipe.android.Http.FrServerConfig;
+import cn.fitrecipe.android.Http.GetRequest;
+import cn.fitrecipe.android.Http.PostRequest;
+import cn.fitrecipe.android.entity.DatePlan;
+import cn.fitrecipe.android.entity.DatePlanItem;
+import cn.fitrecipe.android.entity.PlanComponent;
+import cn.fitrecipe.android.entity.SeriesPlan;
 import cn.fitrecipe.android.function.Common;
+import cn.fitrecipe.android.function.JsonParseHelper;
 
 /**
  * Created by 奕峰 on 2015/5/8.
@@ -37,13 +57,16 @@ public class AddToPlanActivity extends Activity implements View.OnClickListener 
     private Button add_to_plan_btn;
     private int choosen_date = 0;
     private int choosen_meal = 0;
-    private double adjust_unit_weight = 50.00;//每次调整的基本单位
-    private double now_weight = 200.00;//用户添加时的重量
+    private int adjust_unit_weight;//每次调整的基本单位
+    private int now_weight;//用户添加时的重量
 
     private TextView minus_btn;
     private TextView add_btn;
     private TextView weight_text;
 
+    private ArrayList<DatePlanItem> items;
+    private ProgressDialog pd;
+    private int recipe_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +74,9 @@ public class AddToPlanActivity extends Activity implements View.OnClickListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_addtoplan);
 
+        now_weight = getIntent().getIntExtra("amount", 0);
+        recipe_id = getIntent().getIntExtra("id", 0);
+        adjust_unit_weight = now_weight / 4;
         initView();
         initData();
         initEvent();
@@ -102,6 +128,7 @@ public class AddToPlanActivity extends Activity implements View.OnClickListener 
         minus_btn = (TextView) findViewById(R.id.minus_btn);
         add_btn = (TextView) findViewById(R.id.add_btn);
         weight_text = (TextView) findViewById(R.id.weight_text);
+        weight_text.setText(now_weight+"g");
     }
 
     private void setDate(){
@@ -158,12 +185,10 @@ public class AddToPlanActivity extends Activity implements View.OnClickListener 
                 setBtnChosen((TextView) v, false);
                 break;
             case R.id.add_to_plan_btn:
-                String date = date_text_array.get(choosen_date);
-                String meal = meal_text_array[choosen_meal];
-                Toast.makeText(this, "用户选择添加到"+date+"的"+meal+"中, 重量为："+now_weight+"g", Toast.LENGTH_LONG).show();
+                addToPlan();
                 break;
             case R.id.minus_btn:
-                if (now_weight>adjust_unit_weight){
+                if (now_weight > adjust_unit_weight){
                     now_weight -= adjust_unit_weight;
                     weight_text.setText(now_weight+" g");
                 }else {
@@ -177,5 +202,222 @@ public class AddToPlanActivity extends Activity implements View.OnClickListener 
             default:
                 break;
         }
+    }
+
+    private void addToPlan() {
+        String date = Common.getSomeDay(Common.getDate(), choosen_date);
+        String newDate = Common.dateFormat(date);
+        pd = ProgressDialog.show(AddToPlanActivity.this, "", "获取现有计划...", true, false);
+        pd.setCanceledOnTouchOutside(false);
+        GetRequest request = new GetRequest(FrServerConfig.getDatePlanUrl(newDate, newDate), FrApplication.getInstance().getToken(),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject res) {
+                        if(res != null && res.has("data")) {
+                            int plan_id = -1;
+                            try {
+                                JSONObject data = res.getJSONObject("data");
+                                if(data.has("calendar") && data.getJSONArray("calendar").length() > 0) {
+                                    plan_id = data.getJSONArray("calendar").getJSONObject(0).getJSONObject("plan").getInt("id");
+                                }
+                                postprpcess(plan_id);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        Toast.makeText(AddToPlanActivity.this, "出错了", Toast.LENGTH_SHORT).show();
+                        if(pd.isShowing())
+                            pd.dismiss();
+                    }
+                });
+        FrRequest.getInstance().request(request);
+    }
+
+    private void postprpcess(int plan_id) {
+        if(plan_id == -1) {
+            items = Common.generateDatePlan();
+            try {
+                update(plan_id);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }else {
+            requestPlanDetails(plan_id);
+        }
+    }
+
+    private void requestPlanDetails(final int plan_id) {
+        pd.setMessage("获取计划详情...");
+        GetRequest request = new GetRequest(FrServerConfig.getPlanDetails(plan_id), null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject res) {
+                        if (res != null && res.has("data")) {
+                            try {
+                                JSONObject data = res.getJSONObject("data");
+                                parsePlanJson(data);
+                                //
+                                update(plan_id);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        Toast.makeText(AddToPlanActivity.this, "出错了", Toast.LENGTH_SHORT).show();
+                        if(pd.isShowing())
+                            pd.dismiss();
+                    }
+                });
+        FrRequest.getInstance().request(request);
+    }
+
+    //处理计划的JSON
+    private void parsePlanJson(JSONObject data) throws JSONException {
+        JSONArray routine_set = data.getJSONArray("routine_set");
+        for(int i  = 0; i < routine_set.length(); i++) {
+            JSONObject routine = routine_set.getJSONObject(i);
+            JSONArray dish_set = routine.getJSONArray("dish_set");
+            //某一天的一日五餐
+            items = new ArrayList<>();
+            //列表项
+            for(int j = 0; j < dish_set.length(); j++) {
+                //具体某一餐
+                DatePlanItem item = new DatePlanItem();
+                //确定餐的类型
+                int type = dish_set.getJSONObject(j).getInt("type");
+                switch (type) {
+                    case 0:
+                        item.setType("breakfast");
+                        item.setDefaultImageCover("drawable://" + R.drawable.breakfast);
+                        break;
+                    case 1:
+                        item.setType("add_meal_01");
+                        item.setDefaultImageCover("drawable://" + R.drawable.add_meal_01);
+                        break;
+                    case 2:
+                        item.setType("lunch");
+                        item.setDefaultImageCover("drawable://" + R.drawable.lunch);
+                        break;
+                    case 3:
+                        item.setType("add_meal_02");
+                        item.setDefaultImageCover("drawable://" + R.drawable.add_meal_02);
+                        break;
+                    case 4:
+                        item.setType("supper");
+                        item.setDefaultImageCover("drawable://" + R.drawable.dinner);
+                        break;
+                    case 5:
+                        item.setType("add_meal_03");
+                        item.setDefaultImageCover("drawable://" + R.drawable.add_meal_03);
+                        break;
+                }
+                //获取计划中食材
+                JSONArray singleingredient_set = dish_set.getJSONObject(j).getJSONArray("singleingredient_set");
+                for(int k = 0; k < singleingredient_set.length(); k++) {
+                    PlanComponent component = new PlanComponent();
+                    component.setType(0);//标记为食材
+                    component.setId(singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getInt("id"));
+                    component.setName(singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getString("name"));//设置名称
+                    component.setNutritions(JsonParseHelper.getNutritionSetFromJson(singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getJSONObject("nutrition_set")));//获取营养信息
+                    component.setAmount(singleingredient_set.getJSONObject(k).getInt("amount"));//设置重量
+                    component.setCalories(component.getAmount() * singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getJSONObject("nutrition_set").getJSONObject("Energy").getDouble("amount") / 100);//设置卡路里
+                    item.addContent(component);
+                }
+                //获取计划中食谱
+                JSONArray singlerecipe_set = dish_set.getJSONObject(j).getJSONArray("singlerecipe_set");
+                for(int k = 0; k < singlerecipe_set.length(); k++) {
+                    JSONObject json_recipe = singlerecipe_set.getJSONObject(k);
+                    PlanComponent component = new PlanComponent();
+                    component.setAmount(json_recipe.getInt("amount"));
+                    component.setCalories(json_recipe.getJSONObject("recipe").getDouble("calories"));
+                    component.setType(1);
+                    component.setId(json_recipe.getJSONObject("recipe").getInt("id"));
+                    component.setName(json_recipe.getJSONObject("recipe").getString("title"));
+                    component.setNutritions(JsonParseHelper.getNutritionSetFromJson(json_recipe.getJSONObject("recipe").getJSONObject("nutrition_set")));
+                    JSONArray json_component = json_recipe.getJSONObject("recipe").getJSONArray("component_set");
+                    ArrayList<PlanComponent> components = new ArrayList<>();
+                    for(int q = 0; q < json_component.length(); q++) {
+                        PlanComponent component1 = new PlanComponent();
+                        JSONObject jcomponent = json_component.getJSONObject(q);
+                        component1.setName(jcomponent.getJSONObject("ingredient").getString("name"));
+                        component1.setAmount(jcomponent.getInt("amount"));
+                        component1.setType(0);
+                        components.add(component1);
+                    }
+                    component.setComponents(components);
+                    item.addContent(component);
+                }
+                items.add(item);//添加早餐
+            }
+        }
+    }
+
+    public void update(int plan_id) throws JSONException {
+        PlanComponent component = new PlanComponent();
+        component.setType(1);
+        component.setId(recipe_id);
+        component.setAmount((int) Math.round(now_weight));
+        ArrayList<PlanComponent> componentList = items.get(choosen_meal).getComponents() ;
+        if(componentList == null)
+            componentList = new ArrayList<>();
+        componentList.add(component);
+        items.get(choosen_meal).setComponents(componentList);
+
+        JSONObject params = new JSONObject();
+        JSONArray dish = new JSONArray();
+        for(int i = 0; i < items.size(); i++) {
+            JSONObject obj = new JSONObject();
+            obj.put("type", i);
+            JSONArray ingredient = new JSONArray();
+            JSONArray recipe = new JSONArray();
+            ArrayList<PlanComponent> components = items.get(i).getComponents();
+            if(components != null) {
+                for(int j = 0; j <components.size(); j++) {
+                    JSONObject obj1 = new JSONObject();
+                    obj1.put("id", components.get(j).getId());
+                    obj1.put("amount", components.get(j).getAmount());
+                    if(components.get(j).getType() == 1)
+                        recipe.put(obj1);
+                    else
+                        ingredient.put(obj1);
+                }
+            }
+            obj.put("ingredient", ingredient);
+            obj.put("recipe", recipe);
+            dish.put(obj);
+        }
+        params.put("dish", dish);
+        if(plan_id != -1)
+            params.put("id", plan_id);
+        else {
+            params.put("joined_date", Common.getSomeDay(Common.getDate(), choosen_date));
+        }
+        pd.setMessage("添加到计划...");
+        PostRequest request = new PostRequest(FrServerConfig.getUpdatePlanUrl(), FrApplication.getInstance().getToken(), params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject res) {
+                Toast.makeText(AddToPlanActivity.this, "更新自定义计划成功！", Toast.LENGTH_SHORT).show();
+                pd.dismiss();
+                finish();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Toast.makeText(AddToPlanActivity.this, "出错了", Toast.LENGTH_SHORT).show();
+                if(pd.isShowing())
+                    pd.dismiss();
+            }
+        });
+        FrRequest.getInstance().request(request);
     }
 }

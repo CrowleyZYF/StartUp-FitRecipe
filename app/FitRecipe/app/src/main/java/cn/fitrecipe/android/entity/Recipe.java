@@ -21,12 +21,9 @@ import cn.fitrecipe.android.Http.FrServerConfig;
 /**
  * Created by wk on 2015/8/6.
  */
-@DatabaseTable(tableName = "fr_recipe")
-public class Recipe implements Serializable, Comparable<Recipe>{
-
-    @DatabaseField(id = true)
+public class Recipe implements Serializable{
+    
     private int id;
-
     //ingnore when create database
     private ArrayList<Label> meat_labels;
     private ArrayList<Label> time_labels;
@@ -35,55 +32,26 @@ public class Recipe implements Serializable, Comparable<Recipe>{
     private ArrayList<Procedure>  procedure_set;
     private ArrayList<Comment> comment_set;
     private ArrayList<Nutrition> nutrition_set;
-
-    @ForeignCollectionField
     private Collection<Component> component_set;
-    @DatabaseField
     private String macro_element_ratio;
-    @DatabaseField
     private int total_amount;
-    @DatabaseField
     private double protein_ratio;
-    @DatabaseField
     private double fat_ratio;
     private Author author;
-    @DatabaseField
     private String created_time;
-    @DatabaseField
     private String updated_time;
-    @DatabaseField
     private String img;
-    @DatabaseField
     private String thumbnail;
-    @DatabaseField
     private String recommend_img;
-    @DatabaseField
     private String recommend_thumbnail;
-    @DatabaseField
     private String title;
-    @DatabaseField
     private String introduce;
-    @DatabaseField
     private String tips;
-    @DatabaseField
     private int duration;
-    @DatabaseField
     private double calories;
-    @DatabaseField
     private int collection_count;
-    @DatabaseField
+    private boolean has_collected;
     private String tags;
-    //if recipe in basket
-    @DatabaseField
-    private boolean inBasket;
-    @DatabaseField
-    private boolean inPlanItemBasket;
-    @DatabaseField (defaultValue = "0")
-    private int weightInPlanBasket;
-    @DatabaseField(defaultValue = "0")
-    private int weightInRecipeBasket;
-    @DatabaseField
-    private int increWeight;
 
 
     public static Recipe fromJson(String json) throws JSONException {
@@ -217,6 +185,9 @@ public class Recipe implements Serializable, Comparable<Recipe>{
 
         if(data.has("collection_count"))
             recipe.setCollection_count(data.getInt("collection_count"));
+
+        if(data.has("has_collected"))
+            recipe.setHas_collected(data.getBoolean("has_collected"));
 
         if(data.has("comment_set")) {
             String jsona = data.getJSONArray("comment_set").toString();
@@ -470,48 +441,11 @@ public class Recipe implements Serializable, Comparable<Recipe>{
         this.nutrition_set = nutrition_set;
     }
 
-    public boolean getInBasket() {
-        return inBasket;
+    public boolean isHas_collected() {
+        return has_collected;
     }
 
-    public void setInBasket(boolean inBasket) {
-        this.inBasket = inBasket;
-    }
-
-    @Override
-    public int compareTo(Recipe another) {
-        return -getId() + another.getId();
-    }
-
-    public int getIncreWeight() {
-        return increWeight;
-    }
-
-    public void setIncreWeight(int increWeight) {
-        this.increWeight = increWeight;
-    }
-
-    public int getWeightInPlanBasket() {
-        return weightInPlanBasket;
-    }
-
-    public void setWeightInPlanBasket(int weightInPlanBasket) {
-        this.weightInPlanBasket = weightInPlanBasket;
-    }
-
-    public int getWeightInRecipeBasket() {
-        return weightInRecipeBasket;
-    }
-
-    public void setWeightInRecipeBasket(int weightInRecipeBasket) {
-        this.weightInRecipeBasket = weightInRecipeBasket;
-    }
-
-    public boolean isInPlanItemBasket() {
-        return inPlanItemBasket;
-    }
-
-    public void setInPlanItemBasket(boolean inPlanItemBasket) {
-        this.inPlanItemBasket = inPlanItemBasket;
+    public void setHas_collected(boolean has_collected) {
+        this.has_collected = has_collected;
     }
 }

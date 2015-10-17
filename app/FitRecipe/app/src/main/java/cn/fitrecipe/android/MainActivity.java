@@ -92,18 +92,14 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     protected void onResume() {
         super.onResume();
         SharedPreferences preferences=getSharedPreferences("user", MODE_PRIVATE);
-        int isReturnToMe = preferences.getInt("returnToMe", 0);
         boolean isSpecial = preferences.getBoolean("isSpecial", false);
-        if(isReturnToMe == 1){
+        if(isSpecial){
+            SharedPreferences.Editor editor = preferences.edit();
             tab_index = 1;
             setSelect(tab_index);
-            resetTabs();
-            frTabs.get(tab_index).setBackgroundColor(getResources().getColor(R.color.active_color));
-        }else{
-            //tab_index = 2;
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putInt("returnToMe", tab_index);
+            editor.putBoolean("isSpecial", false);
             editor.commit();
+        }else{
             resetTabs();
             frTabs.get(tab_index).setBackgroundColor(getResources().getColor(R.color.active_color));
         }
@@ -187,10 +183,6 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                         resetTabs();
                         frTabs.get(i).setBackgroundColor(getResources().getColor(R.color.active_color));
                         Intent intent=new Intent(this,PlanTestActivity.class);
-                        SharedPreferences preferences=getSharedPreferences("user", MODE_PRIVATE);
-                        SharedPreferences.Editor editor = preferences.edit();
-                        editor.putInt("returnToMe", tab_index);
-                        editor.commit();
                         startActivity(intent);
                     }
                     long tt = System.currentTimeMillis();
@@ -238,13 +230,19 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         switch (v.getId())
         {
             case R.id.tab_index:
-                setSelect(0);
+                if(tab_index!=0){
+                    setSelect(0);
+                }
                 break;
             case R.id.tab_plan:
-                setSelect(1);
+                if (tab_index!=1){
+                    setSelect(1);
+                }
                 break;
             case R.id.tab_me:
-                setSelect(2);
+                if (tab_index!=2){
+                    setSelect(2);
+                }
                 break;
             case R.id.left_btn:
                 switch (tab_index){

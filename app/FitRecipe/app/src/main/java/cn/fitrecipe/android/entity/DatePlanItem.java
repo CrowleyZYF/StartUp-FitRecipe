@@ -14,13 +14,9 @@ public class DatePlanItem implements Serializable{
     private String type;
     private String time;
     private String date;
-    private double calories_need;
     private double calories_take;
-    private double carbohydrate_need;
     private double carbohydrate_take;
-    private double protein_need;
     private double protein_take;
-    private double fat_need;
     private double fat_take;
     private boolean isPunch;
     private boolean isInBasket;
@@ -71,28 +67,12 @@ public class DatePlanItem implements Serializable{
         this.time = time;
     }
 
-    public double getCalories_need() {
-        return calories_need;
-    }
-
-    public void setCalories_need(double calories_need) {
-        this.calories_need = calories_need;
-    }
-
     public double getCalories_take() {
         return calories_take;
     }
 
     public void setCalories_take(double calories_take) {
         this.calories_take = calories_take;
-    }
-
-    public double getCarbohydrate_need() {
-        return carbohydrate_need;
-    }
-
-    public void setCarbohydrate_need(double carbohydrate_need) {
-        this.carbohydrate_need = carbohydrate_need;
     }
 
     public double getCarbohydrate_take() {
@@ -103,28 +83,12 @@ public class DatePlanItem implements Serializable{
         this.carbohydrate_take = carbohydrate_take;
     }
 
-    public double getProtein_need() {
-        return protein_need;
-    }
-
-    public void setProtein_need(double protein_need) {
-        this.protein_need = protein_need;
-    }
-
     public double getProtein_take() {
         return protein_take;
     }
 
     public void setProtein_take(double protein_take) {
         this.protein_take = protein_take;
-    }
-
-    public double getFat_need() {
-        return fat_need;
-    }
-
-    public void setFat_need(double fat_need) {
-        this.fat_need = fat_need;
     }
 
     public double getFat_take() {

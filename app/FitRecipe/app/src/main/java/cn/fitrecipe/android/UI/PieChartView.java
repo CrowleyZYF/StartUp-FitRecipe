@@ -5,14 +5,16 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ImageView;
 
 /**
  * Created by 奕峰 on 2015/8/18.
  */
-public class PieChartView extends ImageView{
+public class PieChartView extends View {
 
     private float[] percents;
     private boolean isHasText = true;
@@ -36,8 +38,10 @@ public class PieChartView extends ImageView{
         super.onDraw(canvas);
         if(percents == null || percents.length == 0)
             return;
-        int width = canvas.getWidth();
-        int height = canvas.getHeight();
+//        int width = canvas.getWidth();
+//        int height = canvas.getHeight();
+        int width = getMeasuredWidth();
+        int height = getMeasuredHeight();
         int square = Math.min(width, height);
         float rx = width / 2.0f;
         float ry = height / 2.0f;
@@ -52,12 +56,19 @@ public class PieChartView extends ImageView{
         this.invalidate();
     }
 
+
     private void drawPieChart(Canvas canvas, float startX, float startY, float radius) {
 
-        final float BIG_TEXT_SIZE = 60;
-        final float SMALL_TEXT_SIZE = 30;
-        final float HUGE_BIG_TEXT_SIZE = 120;
-        final float HUGE_SMALL_TEXT_SIZE = 60;
+
+//        TextPaint p = new TextPaint();
+//        p.setColor(Color.BLACK);
+//        p.setTextSize(50);
+//        canvas.drawText("abc", 100, 100, p);
+
+        final float BIG_TEXT_SIZE = 50;
+        final float SMALL_TEXT_SIZE = 20;
+        final float HUGE_BIG_TEXT_SIZE = 110;
+        final float HUGE_SMALL_TEXT_SIZE = 50;
         int[] colors;
         String[] kinds;
         if(isDinner){

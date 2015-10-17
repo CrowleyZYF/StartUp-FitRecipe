@@ -29,8 +29,6 @@ import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.UI.SlidingMenu;
-import cn.fitrecipe.android.dao.PlanInUseDao;
-import cn.fitrecipe.android.entity.PlanInUse;
 import cn.fitrecipe.android.entity.SeriesPlan;
 import pl.tajchert.sample.DotsTextView;
 
@@ -95,16 +93,6 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
     private void processData(JSONArray data) throws JSONException {
         Gson gson = new Gson();
         plans = gson.fromJson(data.toString(), new TypeToken<ArrayList<SeriesPlan>>(){}.getType());
-        if(plans != null) {
-            PlanInUseDao dao = new PlanInUseDao(this);
-            PlanInUse planInUse = dao.getPlanInUse();
-            if(planInUse != null) {
-                for (int i = 0; i < plans.size(); i++) {
-                    if (planInUse.getName().equals(plans.get(i).getTitle()))
-                        plans.get(i).setIsUsed(true);
-                }
-            }
-        }
         planCardAdapter = new PlanCardAdapter(this, plans);
         planChoiceRecyclerView.setAdapter(planCardAdapter);
     }

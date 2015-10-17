@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by wk on 2015/9/22.
  */
-public class PlanAuthor implements Serializable{
+public class PlanAuthor implements Serializable {
 
     private int id;
     private String created_time;

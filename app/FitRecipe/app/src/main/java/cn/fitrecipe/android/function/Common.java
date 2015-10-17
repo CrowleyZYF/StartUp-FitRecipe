@@ -6,9 +6,11 @@ import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import cn.fitrecipe.android.R;
+import cn.fitrecipe.android.entity.DatePlanItem;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
@@ -146,4 +148,53 @@ public class Common {
         }
         return (int) ((date1.getTime() - date2.getTime()) / (24 * 3600 *1000));
     }
+
+    /**
+     *  generate a custom dateplan
+     * @return list of dateplanitem
+     */
+    public static ArrayList<DatePlanItem> generateDatePlan() {
+        ArrayList<DatePlanItem> items = new ArrayList<>();
+        DatePlanItem item1 = new DatePlanItem();
+        item1.setTime("08:30am");
+        item1.setType("breakfast");
+        item1.setDefaultImageCover("drawable://" + R.drawable.breakfast);
+
+
+        DatePlanItem item2 = new DatePlanItem();
+        item2.setTime("10:30am");
+        item2.setType("add_meal_01");
+        item2.setDefaultImageCover("drawable://" + R.drawable.add_meal_01);
+
+
+        DatePlanItem item3 = new DatePlanItem();
+        item3.setTime("12:30am");
+        item3.setType("lunch");
+        item3.setDefaultImageCover("drawable://" + R.drawable.lunch);
+
+        DatePlanItem item4 = new DatePlanItem();
+        item4.setTime("15:30am");
+        item4.setType("add_meal_02");
+        item4.setDefaultImageCover("drawable://" + R.drawable.add_meal_02);
+
+        DatePlanItem item5 = new DatePlanItem();
+        item5.setTime("18:30am");
+        item5.setType("supper");
+        item5.setDefaultImageCover("drawable://" + R.drawable.dinner);
+
+
+        DatePlanItem item6 = new DatePlanItem();
+        item6.setTime("22:30am");
+        item6.setType("add_meal_03");
+        item6.setDefaultImageCover("drawable://" + R.drawable.add_meal_03);
+
+        items.add(item1);
+        items.add(item2);
+        items.add(item3);
+        items.add(item4);
+        items.add(item5);
+        items.add(item6);
+        return items;
+    }
+
 }
