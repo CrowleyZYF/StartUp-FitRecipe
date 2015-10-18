@@ -107,7 +107,7 @@ public class RecipeCollectFragment extends Fragment
                         borderScrollView.setCompleteMore();
                     try {
                         JSONArray data = res.getJSONArray("data");
-                        if(data == null || data.length() == 0) {
+                        if(data == null || data.length() == 0 && lastid  != -1) {
                             Toast.makeText(getActivity(), "没有多余", Toast.LENGTH_SHORT).show();
                         }else
                             processData(data);

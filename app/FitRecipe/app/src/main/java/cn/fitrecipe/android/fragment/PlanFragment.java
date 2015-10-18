@@ -160,9 +160,11 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
 
     // 获取服务器上的记录
     private void getData(String start, String end) {
-        data = new HashMap<>();
+        if(data == null)
+            data = new HashMap<>();
 //        indexDate = new HashMap<>();
-        punchData = new HashMap<>();
+        if(punchData == null)
+            punchData = new TreeMap<>();
         if(Common.isOpenNetwork(getActivity())) {
             start = Common.dateFormat(start);
             end = Common.dateFormat(end);
@@ -212,7 +214,6 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 requestPlanDetails(calendar.getJSONObject(i).getString("joined_date"), calendar.getJSONObject(i).getJSONObject("plan").getInt("id"), start, end);
             }
             JSONArray punchs = data.getJSONArray("punch");
-            punchData  = new TreeMap<>();
             for(int i = 0; i < punchs.length(); i++) {
                 String date = punchs.getJSONObject(i).getString("date");
                 PunchRecord pr = new PunchRecord();
@@ -498,30 +499,15 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
 
     //pointer是往前或者往后几天 dir是之前还是之后
     private boolean switchPlan(int pointer, int dir) {
-        if(datePlan != null) {
-//            boolean flag = false;
-//            for(int i = 0; i < items.size(); i++)
-//                flag = flag || items.get(i).isInBasket();
-//            datePlan.setInBasket(flag);
-//            datePlan.setItems(items);
-        }
         String str = Common.getSomeDay(Common.getDate(), pointer);//获取几月几号的记录
         int days = Common.getDiff(str, report.getUpdatetime()) + 1;//增肌减脂第几天
-//        if(days + dir * 2 > 0 && pointer + dir * 2 < 7) {
-//            final String preGet = Common.getSomeDay(str, dir * 2);
-//            if (data == null || !data.containsKey(preGet)) {
-//                new Thread() {
-//                    @Override
-//                    public void run() {
-//                        Map<String, DatePlan> res = FrDbHelper.getInstance(getActivity()).getDatePlan(preGet, preGet);
-//                        if (res != null && res.size() > 0) {
-//                            data.putAll(res);
-//                        }
-//                    }
-//                }.start();
-//            }
-//        }
         if (data.containsKey(str)) {
+
+            /**
+             * 预取
+             */
+            prefetch(str);
+
             diy_days.setText(str);
             plan_status_day.setText(days + "");
             datePlan = data.get(str);
@@ -601,6 +587,19 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             Toast.makeText(getActivity(), "已经无计划了!", Toast.LENGTH_SHORT).show();
             return false;
         }
+    }
+
+    private void prefetch(String str) {
+        String start = str;
+        for(int i = 0; i < 6; i++) {
+            start = Common.getSomeDay(str, -i);
+            if(!data.containsKey(start)) {
+                break;
+            }
+        }
+        String end = Common.getSomeDay(str, -5);
+        Toast.makeText(getActivity(), "预取" + start + "-" + end, Toast.LENGTH_SHORT).show();
+        getData(start, end);
     }
 
     private void getDataFromLocal(String start, String end) {

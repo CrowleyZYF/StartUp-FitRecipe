@@ -15,6 +15,7 @@ public class Theme implements Serializable{
     private String content;
     private String img;
     private String thumbnail;
+    private boolean has_collected;
     private int recipe_count;
 
     public int getId() {
@@ -79,5 +80,13 @@ public class Theme implements Serializable{
 
     public void setRecipe_count(int recipe_count) {
         this.recipe_count = recipe_count;
+    }
+
+    public boolean isHas_collected() {
+        return has_collected;
+    }
+
+    public void setHas_collected(boolean has_collected) {
+        this.has_collected = has_collected;
     }
 }

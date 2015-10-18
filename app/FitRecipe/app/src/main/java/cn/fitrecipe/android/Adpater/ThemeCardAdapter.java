@@ -34,8 +34,15 @@ public class ThemeCardAdapter extends RecyclerView.Adapter<ThemeCardAdapter.Them
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
                 inflate(R.layout.fragment_index_theme_item, viewGroup, false);
+        return new ThemeCardViewHolder(itemView);
+    }
 
-        itemView.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onBindViewHolder(ThemeCardAdapter.ThemeCardViewHolder contactViewHolder, final int i) {
+        Theme tc = themeCardsList.get(i);
+//        contactViewHolder.theme_background.setImageResource(tc.getRecipe_background());
+//        System.out.println(contactViewHolder.theme_background.toString() + "   :   " + tc.getThumbnail());
+        contactViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(context,ThemeActivity.class);
@@ -43,15 +50,6 @@ public class ThemeCardAdapter extends RecyclerView.Adapter<ThemeCardAdapter.Them
                 context.startActivity(intent);
             }
         });
-
-        return new ThemeCardViewHolder(itemView);
-    }
-
-    @Override
-    public void onBindViewHolder(ThemeCardAdapter.ThemeCardViewHolder contactViewHolder, int i) {
-        Theme tc = themeCardsList.get(i);
-//        contactViewHolder.theme_background.setImageResource(tc.getRecipe_background());
-//        System.out.println(contactViewHolder.theme_background.toString() + "   :   " + tc.getThumbnail());
         FrApplication.getInstance().getMyImageLoader().displayImage(contactViewHolder.theme_background, tc.getThumbnail());
     }
 
@@ -65,9 +63,11 @@ public class ThemeCardAdapter extends RecyclerView.Adapter<ThemeCardAdapter.Them
 
     public static class ThemeCardViewHolder extends RecyclerView.ViewHolder {
         protected LinearLayout theme_background;
+        public View itemView;
 
         public ThemeCardViewHolder(View itemView) {
             super(itemView);
+            this.itemView = itemView;
             theme_background = (LinearLayout) itemView.findViewById(R.id.theme_image);
         }
     }

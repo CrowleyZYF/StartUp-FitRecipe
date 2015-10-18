@@ -68,11 +68,48 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
         theme = (Theme) intent.getSerializableExtra("theme");
         try {
             initView();
-            getData();
+            getCollectionInfo();
         } catch (JSONException e) {
             e.printStackTrace();
         }
         initEvent();
+    }
+
+    private void getCollectionInfo() {
+        GetRequest request = new GetRequest(FrServerConfig.getThemeInfo(theme.getId()), FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject res) {
+                if(res.has("data")){
+                    try {
+                        JSONObject data = res.getJSONObject("data");
+                        if (data != null) {
+                            isCollected = data.getBoolean("has_collected");
+                            initData();
+                            getData();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+            }
+        });
+        FrRequest.getInstance().request(request);
+    }
+
+    private void initData() {
+        if(isCollected){
+            follow_btn.setText(R.string.cancel_follow);
+            follow_btn.setBackground(getResources().getDrawable(R.color.disable_color));
+            follow_icon.setImageResource(R.drawable.icon_like_green);
+        }else{
+            follow_btn.setText(R.string.follow);
+            follow_btn.setBackground(getResources().getDrawable(R.color.active_color));
+            follow_icon.setImageResource(R.drawable.icon_like_noshadow);
+        }
     }
 
     private void getData() throws JSONException {
@@ -118,15 +155,6 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
             }
         });
         FrRequest.getInstance().request(request);
-        if(isCollected){
-            follow_btn.setText(R.string.cancel_follow);
-            follow_btn.setBackground(getResources().getDrawable(R.color.disable_color));
-            follow_icon.setImageResource(R.drawable.icon_like_green);
-        }else{
-            follow_btn.setText(R.string.follow);
-            follow_btn.setBackground(getResources().getDrawable(R.color.active_color));
-            follow_icon.setImageResource(R.drawable.icon_like_noshadow);
-        }
     }
 
 
@@ -147,7 +175,6 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
         }
         else
             recipeCardAdapter.notifyDataSetChanged();
-
     }
 
     private void initView() throws JSONException {
@@ -222,7 +249,7 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
             return;
         }
         if(isCollected){
-            String url = FrServerConfig.getDeleteCollectionUrl("theme", 0);
+            String url = FrServerConfig.getDeleteCollectionUrl("theme", theme.getId());
             PostRequest request = new PostRequest(url, FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject res) {
@@ -254,18 +281,6 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
                     follow_btn.setText(R.string.cancel_follow);
                     follow_btn.setBackground(getResources().getDrawable(R.color.disable_color));
                     follow_icon.setImageResource(R.drawable.icon_like_green);
-//                    if(res.has("data")) {
-//                        try {
-//                            Collection collection = new Gson().fromJson(res.getJSONObject("data").toString(), Collection.class);
-//                            collection.setType("theme");
-//                            List<Collection> collectionList = FrApplication.getInstance().getCollections();
-//                            if(collectionList == null) collectionList = new ArrayList<>();
-//                            collectionList.add(collection);
-//                            FrApplication.getInstance().setCollections(collectionList);
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
                 }
             }, new Response.ErrorListener() {
                 @Override
