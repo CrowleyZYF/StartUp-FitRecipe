@@ -48,16 +48,64 @@
             android:visibility="gone"
             android:padding="0dp">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/plan_choice"
-                android:scrollbars="vertical"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="0dp"
-                android:clipToPadding="false"
-                android:layout_marginBottom="20dp"
-                />
+                android:orientation="vertical">
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="切换至自定义计划："
+                        android:textSize="16sp"
+                        android:padding="10dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        />
+
+                    <TextView
+                        android:id="@+id/changeToDIY"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:background="@drawable/plan_button_border"
+                        android:text="确认切换"
+                        android:textSize="14sp"
+                        android:textColor="@color/base_color"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"/>
+
+                </RelativeLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/theme_line"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/plan_choice"
+                    android:scrollbars="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="0dp"
+                    android:clipToPadding="false"
+                    android:layout_marginBottom="20dp"
+                    />
+
+            </LinearLayout>
         </ScrollView>
     </FrameLayout>
 </LinearLayout>
