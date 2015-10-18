@@ -397,7 +397,14 @@
             android:background="@drawable/dash_border"
             android:layout_marginTop="10dp">
 
-            <LinearLayout
+            <cn.fitrecipe.android.UI.LinearLayoutForListView
+                android:id="@+id/plan_nutrition_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </cn.fitrecipe.android.UI.LinearLayoutForListView>
+
+            <!--<LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
@@ -706,7 +713,7 @@
                     android:textColor="#a4a4a4"
                     android:gravity="center_vertical"/>
 
-            </LinearLayout>
+            </LinearLayout>-->
 
 
         </LinearLayout>

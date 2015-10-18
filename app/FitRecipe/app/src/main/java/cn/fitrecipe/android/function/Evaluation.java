@@ -478,9 +478,9 @@ public class Evaluation {
 		report.setFiberIntakeMax(27.5);
 		report.setFiberIntakeMin(22.5);
 		//unsaturated fatty acids intake, constant, 250mg/day
-		report.setUnsaturatedFattyAcidsIntake(250);
-		report.setUnsaturatedFattyAcidsIntakeMax(275);
-		report.setUnsaturatedFattyAcidsIntakeMin(225);
+		report.setUnsaturatedFattyAcidsIntake(25);
+		report.setUnsaturatedFattyAcidsIntakeMax(27.5);
+		report.setUnsaturatedFattyAcidsIntakeMin(22.5);
 		//cholesterol less than 300mg/day, not sure
 		report.setCholesterolIntakeMax(330);
 		report.setCholesterolIntakeMin(270);
@@ -499,16 +499,16 @@ public class Evaluation {
 			ALSodium = 1.2;
 			ULSodium = 2.3;
 		}
-		report.setSodiumIntakeMax(ULSodium);
-		report.setSodiumIntakeMin(ALSodium);
+		report.setSodiumIntakeMax(ULSodium*1000);
+		report.setSodiumIntakeMin(ALSodium*1000);
 		//VC intake, from USDA, mg/day
 		double ALVC = 90;
 		double ULVC = 2000;
 		report.setVCIntakeMin((ALVC - gender * 15));
 		report.setVCIntakeMax(ULVC);
 		//VD intake, from USDA, IU/day
-		double ALVD = 600;
-		double ULVD = 4000;
+		double ALVD = 7.5 ;
+		double ULVD = 10;
 		report.setVDIntakeMin(ALVD);
 		report.setVDIntakeMax(ULVD);
 		
