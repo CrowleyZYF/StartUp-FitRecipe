@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.SelectRecipeActivity;
+import cn.fitrecipe.android.UI.BorderScrollView;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.entity.Component;
 import cn.fitrecipe.android.entity.PlanComponent;
@@ -55,7 +57,9 @@ public class SelectStageFirstFragment extends Fragment implements View.OnClickLi
     private List<PlanComponent> data;
     private LinearLayout loadingInterface;
     private DotsTextView dotsTextView;
+    private BorderScrollView scrollView;
     private int start , num = 15;
+    private String search;
 
     @Nullable
     @Override
@@ -74,8 +78,19 @@ public class SelectStageFirstFragment extends Fragment implements View.OnClickLi
         search_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ((SelectRecipeActivity)getActivity()).obj_selected = data.get(position);
-                ((SelectRecipeActivity)getActivity()).setFragment(1);
+                ((SelectRecipeActivity) getActivity()).obj_selected = data.get(position);
+                ((SelectRecipeActivity) getActivity()).setFragment(1);
+            }
+        });
+        scrollView.setOnBorderListener(new BorderScrollView.OnBorderListener() {
+            @Override
+            public void onBottom() {
+                getData();
+            }
+
+            @Override
+            public void onTop() {
+
             }
         });
     }
@@ -88,6 +103,7 @@ public class SelectStageFirstFragment extends Fragment implements View.OnClickLi
         search_btn = (TextView) view.findViewById(R.id.search_btn);
         loadingInterface = (LinearLayout) view.findViewById(R.id.loading_interface);
         dotsTextView = (DotsTextView) view.findViewById(R.id.dots);
+        scrollView = (BorderScrollView) view.findViewById(R.id.scrollView);
     }
 
 
@@ -112,31 +128,40 @@ public class SelectStageFirstFragment extends Fragment implements View.OnClickLi
     }
 
     private void search(String text) {
-        if(text == null || text.length() == 0) {
+//        if(text == null || text.length() == 0) {
+        if(text == null) {
             Toast.makeText(getActivity(), "搜索内容不能为空！", Toast.LENGTH_SHORT).show();
         }else {
+            search = text;
             if (data == null)
                 data = new ArrayList<>();
             else
                 data.clear();
             start = 0;
-            getData(text);
+            getData();
         }
     }
 
-    private void getData(String text) {
+    private void getData() {
         if(start == 0)
             showLoading();
         GetRequest request = null;
         try {
-            request = new GetRequest(FrServerConfig.getSearchFoodUrl(URLEncoder.encode(text, "utf-8"), start, num), FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
+            request = new GetRequest(FrServerConfig.getSearchFoodUrl(URLEncoder.encode(search, "utf-8"), start, num), FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
                     @Override
                 public void onResponse(JSONObject res) {
                     if(res != null && res.has("data")) {
                         try {
                             JSONArray data = res.getJSONArray("data");
-                            hideLoading(false, "");
                             processData(data);
+                            if(start == 0)
+                                hideLoading(false, "");
+                            else {
+                                scrollView.setCompleteMore();
+                                if(data.length() == 0)
+                                    Toast.makeText(getActivity(), "没有多余的搜索结果了!", Toast.LENGTH_SHORT).show();
+                            }
+                            start += num;
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -158,7 +183,6 @@ public class SelectStageFirstFragment extends Fragment implements View.OnClickLi
             e.printStackTrace();
         }
         FrRequest.getInstance().request(request);
-        start += num;
     }
 
     private void processData(JSONArray json) throws JSONException {

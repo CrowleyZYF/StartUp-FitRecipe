@@ -37,7 +37,7 @@ public class ReportActivity extends Activity implements View.OnClickListener{
     private TextView unsaturatedFattyAcids_min, unsaturatedFattyAcids_max, cholesterol_min, cholesterol_max;
     private TextView vc_min, vc_max, vd_min, vd_max;
 
-    private ImageView back_btn;
+    private ImageView back_btn, restart_btn;
     private TextView check_plan_btn;
     private String last;
 
@@ -71,6 +71,7 @@ public class ReportActivity extends Activity implements View.OnClickListener{
 
     private void initEvent() {
         check_plan_btn.setOnClickListener(this);
+        restart_btn.setOnClickListener(this);
     }
 
     private void initView() {
@@ -242,7 +243,9 @@ public class ReportActivity extends Activity implements View.OnClickListener{
         back_btn = (ImageView) findViewById(R.id.back_btn);
         back_btn.setOnClickListener(this);
 
+
         check_plan_btn = (TextView) findViewById(R.id.check_plan);
+        restart_btn = (ImageView) findViewById(R.id.restart_btn);
     }
 
 
@@ -258,6 +261,10 @@ public class ReportActivity extends Activity implements View.OnClickListener{
                 break;
             case R.id.check_plan:
                 editor.putBoolean("isSpecial", true);
+                break;
+            case R.id.restart_btn:
+                Intent intent = new Intent(ReportActivity.this, PlanTestActivity.class);
+                startActivity(intent);
                 break;
             default:
                 break;

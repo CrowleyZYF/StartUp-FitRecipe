@@ -180,4 +180,8 @@ public class FrServerConfig {
         return HOST + "/api/accounts/download_evaluation/";
     }
 
+    public static String getPunchDeleteUrl(int id) {
+        return HOST + "/api/plan/punch/" + id + "/delete";
+    }
+
 }

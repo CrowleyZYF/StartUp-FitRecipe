@@ -189,7 +189,6 @@
                                 android:id="@+id/plan_time"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="08:30"
                                 android:textSize="14sp"
                                 android:textColor="@color/white"
                                 android:shadowColor="@color/login_input_text_color"
@@ -234,6 +233,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
+                    android:visibility="gone"
                     android:orientation="vertical">
 
                     <TextView
