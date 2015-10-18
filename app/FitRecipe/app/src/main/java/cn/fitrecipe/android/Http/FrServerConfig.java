@@ -59,7 +59,7 @@ public class FrServerConfig {
     public static String getThemeDetailsUrl(JSONObject params) throws JSONException {
         StringBuilder sb = new StringBuilder(HOST + "/api/theme/");
         if(params.has("id")) {
-            sb.append(params.getString("id") + "/recipes");
+            sb.append(params.getString("id") + "/recipes/");
             sb.append("?");
             if (params.has("start"))
                 sb.append("start=" + params.getInt("start") + "&");
@@ -71,7 +71,7 @@ public class FrServerConfig {
 
     //get Category
     public static String getRecipeListByCategory(JSONObject params) throws JSONException {
-        StringBuilder sb = new StringBuilder(HOST + "/api/recipe/list?");
+        StringBuilder sb = new StringBuilder(HOST + "/api/recipe/list/?");
         if(params.has("meat"))
             sb.append("meat=" + params.getString("meat") +"&");
         if(params.has("effect"))
@@ -157,7 +157,7 @@ public class FrServerConfig {
     }
 
     public static String getDatePlanUrl(String start, String end) {
-        return HOST + "/api/plan/calendar?start=" + start + "&end=" + end;
+        return HOST + "/api/plan/calendar/?start=" + start + "&end=" + end;
     }
 
     public static String getSearchFoodUrl(String keywords, int start, int num) {
