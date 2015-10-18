@@ -96,13 +96,6 @@
         <activity android:name=".PunchContentSureActivity" >
         </activity>
         <activity android:name="com.umeng.fb.ConversationActivity" />
-
-        <meta-data
-            android:name="UMENG_APPKEY"
-            android:value="55acde25e0f55ad433002de4" />
-        <meta-data
-            android:name="UMENG_CHANNEL"
-            android:value="Test" />
         <!-- ###################注册SDK使用的Activity###################### -->
         <!-- 分享编辑页 -->
         <activity
@@ -137,7 +130,9 @@
             android:name="UMENG_APPKEY"
             android:value="55acde25e0f55ad433002de4" >
         </meta-data>
-
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="Test" />
         <service
             android:name=".service.GetHomeDataService"
             android:enabled="true"

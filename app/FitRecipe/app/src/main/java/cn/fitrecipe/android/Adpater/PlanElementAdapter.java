@@ -14,6 +14,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.daimajia.swipe.SimpleSwipeListener;
@@ -21,10 +23,14 @@ import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
 import cn.fitrecipe.android.FrApplication;
+import cn.fitrecipe.android.Http.FrRequest;
+import cn.fitrecipe.android.Http.FrServerConfig;
+import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.PunchPhotoChoiceActivity;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.RecipeActivity;
@@ -130,7 +136,6 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
         holder.plan_punch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO @wk
                 if (item.size() == 0) {
                     Toast.makeText(fragment.getActivity(), "请添加食谱、食材后再打卡！", Toast.LENGTH_SHORT).show();
                     return;
@@ -146,7 +151,19 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
                     item.setIsPunch(false);
                     ((ImageView)v).setImageResource(R.drawable.icon_plan_punch);
                     item.setImageCover(null);
-                    Toast.makeText(fragment.getActivity(), "取消打卡", Toast.LENGTH_SHORT).show();
+                    PostRequest request = new PostRequest(FrServerConfig.getPunchDeleteUrl(item.getPunchId()), FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject jsonObject) {
+                            Toast.makeText(fragment.getActivity(), "取消打卡成功!", Toast.LENGTH_SHORT).show();
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError volleyError) {
+                            Toast.makeText(fragment.getActivity(), "取消打卡失败!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    FrRequest.getInstance().request(request);
+                    FrDbHelper.getInstance(fragment.getActivity()).unpunch(item.getDate(), item.getType());
                     notifyDataSetChanged();
                 }
 //                adapter.notifyDataSetChanged();
@@ -182,6 +199,7 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
 
         if(!isValid) {
             holder.add_recipe.setVisibility(View.GONE);
+
         }
         else {
             holder.add_recipe.setVisibility(View.VISIBLE);
@@ -222,31 +240,37 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
         switch (item.getType()) {
             case "breakfast" :
                 holder.plan_title.setText("早餐");
+                holder.plan_time.setText("08:30 AM");
                 holder.calorie_plan_need.setText(Math.round(report.getBreakfastRate())+"");
                 holder.calorie_plan_radio.setText(Math.round(item.getCalories_take() * 100/  report.getBreakfastRate())+"");
                 break;
             case "lunch":
                 holder.plan_title.setText("午餐");
+                holder.plan_time.setText("12:30 PM");
                 holder.calorie_plan_need.setText(Math.round( report.getLunchRate())+"");
                 holder.calorie_plan_radio.setText(Math.round(item.getCalories_take() * 100/ report.getLunchRate())+"");
                 break;
             case "supper":
                 holder.plan_title.setText("晚餐");
+                holder.plan_time.setText("18:30 PM");
                 holder.calorie_plan_need.setText(Math.round(report.getDinnerRate())+"");
                 holder.calorie_plan_radio.setText(Math.round(item.getCalories_take() * 100/ report.getDinnerRate())+"");
                 break;
             case "add_meal_01":
                 holder.plan_title.setText("加餐");
+                holder.plan_time.setText("10:30 AM");
                 holder.calorie_plan_need.setText(Math.round(report.getSnackMorningRate())+"");
                 holder.calorie_plan_radio.setText(Math.round(item.getCalories_take() * 100/ report.getSnackMorningRate())+"");
                 break;
             case "add_meal_02":
                 holder.plan_title.setText("加餐");
+                holder.plan_time.setText("15:30 PM");
                 holder.calorie_plan_need.setText(Math.round(report.getSnackAfternoonRate())+"");
                 holder.calorie_plan_radio.setText(Math.round(item.getCalories_take() * 100/ report.getSnackAfternoonRate())+"");
                 break;
             case "add_meal_03":
                 holder.plan_title.setText("夜宵");
+                holder.plan_time.setText("21:30 PM");
                 holder.calorie_plan_need.setText(Math.round(report.getSnackNightRate())+"");
                 holder.calorie_plan_radio.setText(Math.round(item.getCalories_take() * 100/ report.getSnackNightRate())+"");
                 break;
@@ -256,7 +280,6 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
         holder.plan_carbohydrate_intake.setText(Math.round(item.getCarbohydrate_take())+"");
         holder.plan_protein_intake.setText(Math.round(item.getProtein_take())+"");
         holder.plan_fat_intake.setText(Math.round(item.getFat_take()) + "");
-        holder.plan_time.setText(item.getTime());
         if(item.getImageCover() == null || item.getImageCover().equals("")) {
             FrApplication.getInstance().getMyImageLoader().displayImage(holder.plan_image_cover, item.getDefaultImageCover());
         }else
@@ -367,7 +390,7 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
             SwipeLayout swipeLayout = (SwipeLayout)view.findViewById(getSwipeLayoutResourceId(i));
             if(swipeLayout.getOpenStatus() == SwipeLayout.Status.Open)
                 swipeLayout.close();
-            swipeLayout.setSwipeEnabled((!item.isInBasket()) && (!(item.isPunch())));
+            swipeLayout.setSwipeEnabled((!item.isInBasket()) && isValid &&(!(item.isPunch())));
             PlanComponent component = item.getComponents().get(i);
             text1.setText(component.getName());
             text2.setText(component.getAmount()+"g");

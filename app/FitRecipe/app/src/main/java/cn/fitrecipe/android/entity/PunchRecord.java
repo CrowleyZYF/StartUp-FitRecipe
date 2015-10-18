@@ -10,6 +10,8 @@ import com.j256.ormlite.table.DatabaseTable;
 public class PunchRecord {
 
     @DatabaseField
+    private int id;
+    @DatabaseField
     private String date;
     @DatabaseField
     private String type;
@@ -38,5 +40,13 @@ public class PunchRecord {
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

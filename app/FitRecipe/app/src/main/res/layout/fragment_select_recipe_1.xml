@@ -42,7 +42,6 @@
                     android:layout_marginTop="0dp"
                     android:layout_gravity="center_vertical"
                     android:hint="@string/search_food"
-                    android:text="牛"
                     android:textColor="@color/login_input_text_color"
                     android:textSize="12sp"
                     android:layout_marginRight="5dp"
@@ -138,17 +137,22 @@
                 android:layout_gravity="bottom"/>
         </LinearLayout>
 
-    <ScrollView
+    <cn.fitrecipe.android.UI.BorderScrollView
         android:layout_width="match_parent"
         android:scrollbars="none"
+        android:id="@+id/scrollView"
         android:layout_height="match_parent">
-
-        <cn.fitrecipe.android.UI.LinearLayoutForListView
-            android:id="@+id/search_content"
+        <LinearLayout
+            android:id="@+id/container_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </ScrollView>
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <cn.fitrecipe.android.UI.LinearLayoutForListView
+                android:id="@+id/search_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+    </cn.fitrecipe.android.UI.BorderScrollView>
     </FrameLayout>
 
 </RelativeLayout>

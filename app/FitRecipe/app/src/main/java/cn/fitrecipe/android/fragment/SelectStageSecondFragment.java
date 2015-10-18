@@ -40,7 +40,7 @@ public class SelectStageSecondFragment extends Fragment implements View.OnClickL
         view = View.inflate(getActivity(), R.layout.fragment_select_recipe_2, null);
         nums = new TextView[10];
         weight = new StringBuilder();
-        weight2 = 0;
+        weight2 = 1;
         initView();
         initEvent();
 
@@ -121,7 +121,12 @@ public class SelectStageSecondFragment extends Fragment implements View.OnClickL
         if(component.getType() == 1) {
             food_adjust.setVisibility(View.GONE);
             recipe_adjust.setVisibility(View.VISIBLE);
+            recipe_weight.setText(1+"");
             unit.setText(getResources().getString(R.string.search_recipe_unit));
+            calorie_data_text.setText(Math.round(component.getCalories() * component.getAmount() * weight2 / 100) + " kcal");
+            protein_data_text.setText(String.format("%.2f g", component.getNutritions().get(1).getAmount() * component.getAmount() * weight2 / 100));
+            lipids_data_text.setText(String.format("%.2f g", component.getNutritions().get(2).getAmount() * component.getAmount() * weight2 / 100));
+            carbohydrate_data_text.setText(String.format("%.2f g", component.getNutritions().get(3).getAmount() * component.getAmount() * weight2 / 100));
         }else {
             food_adjust.setVisibility(View.VISIBLE);
             recipe_adjust.setVisibility(View.GONE);
@@ -184,11 +189,7 @@ public class SelectStageSecondFragment extends Fragment implements View.OnClickL
                 break;
             case R.id.add:
                 weight2 += 0.25;
-                int tmp = (int)(weight2 * 4);
-                if(tmp % 4 == 0) {
-                    recipe_weight.setText(String.valueOf(tmp / 4));
-                }else
-                    recipe_weight.setText(tmp + "/4");
+                recipe_weight.setText(weight2+"");
                 PlanComponent component = ((SelectRecipeActivity)getActivity()).obj_selected;
                 calorie_data_text.setText(Math.round(component.getCalories() * component.getAmount() * weight2 / 100)+" kcal");
                 protein_data_text.setText(String.format("%.2f g", component.getNutritions().get(1).getAmount() * component.getAmount() * weight2 / 100));
@@ -198,11 +199,7 @@ public class SelectStageSecondFragment extends Fragment implements View.OnClickL
             case R.id.sub:
                 if(weight2 > 0) {
                     weight2 -= 0.25;
-                    tmp = (int) (weight2 * 4);
-                    if (tmp % 4 == 0) {
-                        recipe_weight.setText(String.valueOf(tmp / 4));
-                    } else
-                        recipe_weight.setText(tmp + "/4");
+                    recipe_weight.setText(weight2+"");
                 }
                 component = ((SelectRecipeActivity)getActivity()).obj_selected;
                 calorie_data_text.setText(Math.round(component.getCalories() * component.getAmount() * weight2 / 100)+" kcal");

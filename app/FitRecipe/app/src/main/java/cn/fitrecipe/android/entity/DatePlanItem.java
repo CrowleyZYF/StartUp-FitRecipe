@@ -19,6 +19,7 @@ public class DatePlanItem implements Serializable{
     private double protein_take;
     private double fat_take;
     private boolean isPunch;
+    private int punchId;
     private boolean isInBasket;
     private String imageCover;
     private String defaultImageCover;
@@ -226,5 +227,13 @@ public class DatePlanItem implements Serializable{
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public int getPunchId() {
+        return punchId;
+    }
+
+    public void setPunchId(int punchId) {
+        this.punchId = punchId;
     }
 }

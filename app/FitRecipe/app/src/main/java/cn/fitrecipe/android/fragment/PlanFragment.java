@@ -38,7 +38,6 @@ import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.IngredientActivity;
 import cn.fitrecipe.android.NutritionActivity;
 import cn.fitrecipe.android.R;
-import cn.fitrecipe.android.SelectRecipeActivity;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.dao.FrDbHelper;
 import cn.fitrecipe.android.entity.BasketRecord;
@@ -162,7 +161,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     // 获取服务器上的记录
     private void getData(String start, String end) {
         data = new HashMap<>();
-        indexDate = new HashMap<>();
+//        indexDate = new HashMap<>();
         punchData = new HashMap<>();
         if(Common.isOpenNetwork(getActivity())) {
             start = Common.dateFormat(start);
@@ -220,6 +219,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 pr.setDate(date);
                 int type = punchs.getJSONObject(i).getInt("type");
                 pr.setImg(punchs.getJSONObject(i).getString("img"));
+                pr.setId(punchs.getJSONObject(i).getInt("id"));
                 switch (type) {
                     case 0: pr.setType("breakfast");    break;
                     case 1: pr.setType("add_meal_01");    break;
@@ -467,7 +467,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 datePlan.setDate(str);
                 datePlan.setPlan_id(now.getId());
                 data.put(str, now.getDatePlans().get(th));
-                indexDate.put(str, "完成("+ (th+1) +"/"+now.getTotal_days()+")天");
+//                indexDate.put(str, "完成("+ (th+1) +"/"+now.getTotal_days()+")天");
             }
             str = Common.getSomeDay(str, 1);
         }
@@ -525,9 +525,9 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             diy_days.setText(str);
             plan_status_day.setText(days + "");
             datePlan = data.get(str);
-            plan_name.setText(datePlan.getPlan_name().equals("personal plan")?"自定义计划":datePlan.getPlan_name());
-            other_plan_days.setVisibility(datePlan.getPlan_name().equals("personal plan")?View.GONE:View.VISIBLE);
-            other_plan_days.setText(indexDate!=null&&indexDate.containsKey(str)?indexDate.get(str):"");
+            plan_name.setText(datePlan.getPlan_name().equals("personal plan") ? "自定义计划" : datePlan.getPlan_name());
+            other_plan_days.setVisibility(datePlan.getPlan_name().equals("personal plan") ? View.GONE : View.VISIBLE);
+//            other_plan_days.setText(indexDate!=null&&indexDate.containsKey(str)?indexDate.get(str):"");
             items = datePlan.getItems();
             if(punchData.containsKey(str)) {
                 List<PunchRecord> prs = punchData.get(str);
@@ -535,26 +535,32 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                     switch (prs.get(i).getType()) {
                         case "breakfast":
                             items.get(0).setIsPunch(true);
+                            items.get(0).setPunchId(prs.get(i).getId());
                             items.get(0).setImageCover(prs.get(i).getImg());
                             break;
                         case "add_meal_01":
                             items.get(1).setIsPunch(true);
+                            items.get(1).setPunchId(prs.get(i).getId());
                             items.get(1).setImageCover(prs.get(i).getImg());
                             break;
                         case "lunch":
                             items.get(2).setIsPunch(true);
+                            items.get(2).setPunchId(prs.get(i).getId());
                             items.get(2).setImageCover(prs.get(i).getImg());
                             break;
                         case "add_meal_02":
                             items.get(3).setIsPunch(true);
+                            items.get(3).setPunchId(prs.get(i).getId());
                             items.get(3).setImageCover(prs.get(i).getImg());
                             break;
                         case "supper":
                             items.get(4).setIsPunch(true);
+                            items.get(4).setPunchId(prs.get(i).getId());
                             items.get(4).setImageCover(prs.get(i).getImg());
                             break;
                         case "add_meal_03":
                             items.get(5).setIsPunch(true);
+                            items.get(5).setPunchId(prs.get(i).getId());
                             items.get(5).setImageCover(prs.get(i).getImg());
                             break;
                     }
