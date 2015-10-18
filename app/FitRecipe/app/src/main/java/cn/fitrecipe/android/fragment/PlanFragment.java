@@ -38,7 +38,6 @@ import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.IngredientActivity;
 import cn.fitrecipe.android.NutritionActivity;
 import cn.fitrecipe.android.R;
-import cn.fitrecipe.android.SelectRecipeActivity;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.dao.FrDbHelper;
 import cn.fitrecipe.android.entity.BasketRecord;
@@ -467,7 +466,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 datePlan.setDate(str);
                 datePlan.setPlan_id(now.getId());
                 data.put(str, now.getDatePlans().get(th));
-                indexDate.put(str, "完成("+ (th+1) +"/"+now.getTotal_days()+")天");
+                indexDate.put(str, "("+ (th+1) +"/"+now.getTotal_days()+")");
             }
             str = Common.getSomeDay(str, 1);
         }

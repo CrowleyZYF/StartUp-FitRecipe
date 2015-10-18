@@ -177,7 +177,7 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
                     component.setName(singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getString("name"));
                     component.setNutritions(JsonParseHelper.getNutritionSetFromJson(singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getJSONObject("nutrition_set")));
                     component.setAmount(singleingredient_set.getJSONObject(k).getInt("amount"));
-                    component.setCalories(component.getAmount() * singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getJSONObject("nutrition_set").getJSONObject("Energy").getDouble("amount") / 100);
+                    component.setCalories(singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getJSONObject("nutrition_set").getJSONObject("Energy").getDouble("amount"));
 //                    componentList.add(component);
                     item.addContent(component);
                 }
@@ -186,7 +186,7 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
                     JSONObject json_recipe = singlerecipe_set.getJSONObject(k);
                     PlanComponent component = new PlanComponent();
                     component.setAmount(json_recipe.getInt("amount"));
-                    component.setCalories(component.getAmount() * json_recipe.getJSONObject("recipe").getDouble("calories") / 100);
+                    component.setCalories(json_recipe.getJSONObject("recipe").getDouble("calories"));
                     component.setType(1);
                     component.setId(json_recipe.getJSONObject("recipe").getInt("id"));
                     component.setName(json_recipe.getJSONObject("recipe").getString("title"));

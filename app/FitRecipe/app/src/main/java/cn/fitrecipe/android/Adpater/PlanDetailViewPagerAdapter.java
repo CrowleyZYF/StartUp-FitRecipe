@@ -162,7 +162,7 @@ public class PlanDetailViewPagerAdapter extends PagerAdapter {
                 }
                 holder.plan_item_name.setText(data.get(position).getName());
                 holder.plan_item_weight.setText(data.get(position).getAmount()+"g");
-                holder.plan_item_calories.setText(Math.round(data.get(position).getCalories()) + "kcal");
+                holder.plan_item_calories.setText(Math.round(data.get(position).getCalories() * data.get(position).getAmount() / 100) + "kcal");
                 /*if(data.get(position).getType() == 1) {
                     convertView.setOnClickListener(new View.OnClickListener() {
                         @Override
