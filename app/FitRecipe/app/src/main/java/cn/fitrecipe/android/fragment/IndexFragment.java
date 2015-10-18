@@ -94,6 +94,7 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
         homeData = FrApplication.getInstance().getHomeData();
         if(recipeCardAdapter == null && recommendViewPagerAdapter == null && themeCardAdapter == null) {
             try {
+                scrollView.setVisibility(View.VISIBLE);
                 initData();
                 initEvent();
             } catch (JSONException e) {
@@ -101,13 +102,13 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
             }
         }else {
             try {
-                processData();
+                initData();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            recommendViewPagerAdapter.notifyDataSetChanged();
-            recipeCardAdapter.notifyDataSetChanged();
-            themeCardAdapter.notifyDataSetChanged();
+//            recommendViewPagerAdapter.notifyDataSetChanged();
+//            recipeCardAdapter.notifyDataSetChanged();
+//            themeCardAdapter.notifyDataSetChanged();
         }
     }
 

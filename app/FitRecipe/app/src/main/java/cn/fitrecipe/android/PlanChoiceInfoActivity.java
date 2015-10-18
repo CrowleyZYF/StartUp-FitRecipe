@@ -146,17 +146,29 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
                 int type = dish_set.getJSONObject(j).getInt("type");
                 switch (type) {
                     case 0:
-                        item.setType("breakfast");  break;
+                        item.setType("breakfast");
+                        item.setDefaultImageCover("drawable://" + R.drawable.breakfast);
+                        break;
                     case 1:
-                        item.setType("add_meal_01"); break;
+                        item.setType("add_meal_01");
+                        item.setDefaultImageCover("drawable://" + R.drawable.add_meal_01);
+                        break;
                     case 2:
-                        item.setType("lunch");  break;
+                        item.setType("lunch");
+                        item.setDefaultImageCover("drawable://" + R.drawable.lunch);
+                        break;
                     case 3:
-                        item.setType("add_meal_02"); break;
+                        item.setType("add_meal_02");
+                        item.setDefaultImageCover("drawable://" + R.drawable.add_meal_02);
+                        break;
                     case 4:
-                        item.setType("supper");  break;
+                        item.setType("supper");
+                        item.setDefaultImageCover("drawable://" + R.drawable.dinner);
+                        break;
                     case 5:
-                        item.setType("add_meal_03"); break;
+                        item.setType("add_meal_03");
+                        item.setDefaultImageCover("drawable://" + R.drawable.add_meal_03);
+                        break;
                 }
                 JSONArray singleingredient_set = dish_set.getJSONObject(j).getJSONArray("singleingredient_set");
                 for(int k = 0; k < singleingredient_set.length(); k++) {

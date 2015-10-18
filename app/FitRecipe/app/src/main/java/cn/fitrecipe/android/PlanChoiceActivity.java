@@ -54,6 +54,8 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
 
     private ArrayList<SeriesPlan> plans;
 
+    private String planInUse;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -93,6 +95,11 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
     private void processData(JSONArray data) throws JSONException {
         Gson gson = new Gson();
         plans = gson.fromJson(data.toString(), new TypeToken<ArrayList<SeriesPlan>>(){}.getType());
+        for (int i = 0; i < plans.size(); i++) {
+            if(planInUse != null && plans.get(i).getTitle().equals(planInUse)) {
+                plans.get(i).setIsUsed(true);
+            }
+        }
         planCardAdapter = new PlanCardAdapter(this, plans);
         planChoiceRecyclerView.setAdapter(planCardAdapter);
     }
@@ -109,18 +116,43 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
     }
 
     private void getData() {
-        GetRequest request = new GetRequest(FrServerConfig.getOfficalPlanUrl(), null, new Response.Listener<JSONObject>() {
+        GetRequest requestB = new GetRequest(FrServerConfig.getInUsePlanUrl(), FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {
-                if (res != null && res.has("data")) {
-                    try {
-                        JSONArray data = res.getJSONArray("data");
-                        processData(data);
-                        hideLoading(false, "");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                try {
+                    if (res != null && res.has("data") && res.getJSONObject("data").has("plan")) {
+                        planInUse = res.getJSONObject("data").getJSONObject("plan").getString("title");
                     }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+                //获取官方计划
+                GetRequest request = new GetRequest(FrServerConfig.getOfficalPlanUrl(), null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject res) {
+                        if (res != null && res.has("data")) {
+                            try {
+                                JSONArray data = res.getJSONArray("data");
+                                processData(data);
+                                hideLoading(false, "");
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        if (volleyError != null && volleyError.networkResponse != null) {
+                            hideLoading(true, getResources().getString(R.string.network_error));
+                            int statusCode = volleyError.networkResponse.statusCode;
+                            if (statusCode == 404) {
+                                Toast.makeText(PlanChoiceActivity.this, "404！", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                });
+                FrRequest.getInstance().request(request);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -134,7 +166,7 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
                 }
             }
         });
-        FrRequest.getInstance().request(request);
+        FrRequest.getInstance().request(requestB);
     }
 
     private void initEvent() {
