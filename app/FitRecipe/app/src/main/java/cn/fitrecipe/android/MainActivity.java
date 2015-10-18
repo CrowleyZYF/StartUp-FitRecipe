@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -16,8 +17,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.umeng.fb.FeedbackAgent;
@@ -30,9 +33,12 @@ import cn.fitrecipe.android.fragment.MeFragment;
 import cn.fitrecipe.android.fragment.PlanFragment;
 import cn.fitrecipe.android.function.Common;
 import cn.fitrecipe.android.service.GetHomeDataService;
+import pl.tajchert.sample.DotsTextView;
 
 public class MainActivity extends FragmentActivity implements OnClickListener
 {
+    private FrameLayout frContent;
+
     private LinearLayout frTabIndex;
     private LinearLayout frTabMe;
     private LinearLayout frTabPlan;
@@ -55,8 +61,6 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     private HomeDataReadyRececiver readyRececiver;
     private IntentFilter intentFilter;
 
-    private boolean returnToMe = true;
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -76,10 +80,6 @@ public class MainActivity extends FragmentActivity implements OnClickListener
 
         //init tab
         tab_index=0;
-        SharedPreferences preferences=getSharedPreferences("user", MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt("returnToMe", tab_index);
-        editor.commit();
         setSelect(tab_index);
     }
 
@@ -108,11 +108,6 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-    }
-
-    @Override
     protected void onPause() {
         unregisterReceiver(readyRececiver);
         super.onPause();
@@ -130,6 +125,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
 
     private void initView()
     {
+        frContent = (FrameLayout) findViewById(R.id.content);
+
         frTabIndex = (LinearLayout) findViewById(R.id.tab_index);
         frTabMe = (LinearLayout) findViewById(R.id.tab_me);
         frTabPlan = (LinearLayout) findViewById(R.id.tab_plan);
