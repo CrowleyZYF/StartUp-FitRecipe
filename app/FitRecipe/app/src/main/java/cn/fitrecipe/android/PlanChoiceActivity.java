@@ -29,8 +29,10 @@ import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.UI.SlidingMenu;
+import cn.fitrecipe.android.dao.FrDbHelper;
 import cn.fitrecipe.android.entity.SeriesPlan;
 import cn.fitrecipe.android.function.Common;
+import cn.fitrecipe.android.function.JoinPlanHelper;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import pl.tajchert.sample.DotsTextView;
 
@@ -55,7 +57,7 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
     private ScrollView scrollView;
 
     private ArrayList<SeriesPlan> plans;
-
+    private String planInUse;
     private TextView changeToDIY;
 
     @Override
@@ -97,6 +99,15 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
     private void processData(JSONArray data) throws JSONException {
         Gson gson = new Gson();
         plans = gson.fromJson(data.toString(), new TypeToken<ArrayList<SeriesPlan>>(){}.getType());
+        for (int i = 0; i < plans.size(); i++) {
+            if(planInUse != null && plans.get(i).getTitle().equals(planInUse)) {
+                plans.get(i).setIsUsed(true);
+            }
+        }
+        if(planInUse != null && planInUse.equals("personal plan"))
+            setChangeToDIY(true);
+        else
+            setChangeToDIY(false);
         planCardAdapter = new PlanCardAdapter(this, plans);
         planChoiceRecyclerView.setAdapter(planCardAdapter);
     }
@@ -113,18 +124,43 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
     }
 
     private void getData() {
-        GetRequest request = new GetRequest(FrServerConfig.getOfficalPlanUrl(), null, new Response.Listener<JSONObject>() {
+        GetRequest requestB = new GetRequest(FrServerConfig.getInUsePlanUrl(), FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {
-                if (res != null && res.has("data")) {
-                    try {
-                        JSONArray data = res.getJSONArray("data");
-                        processData(data);
-                        hideLoading(false, "");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                try {
+                    if (res != null && res.has("data") && res.getJSONObject("data").has("plan")) {
+                        planInUse = res.getJSONObject("data").getJSONObject("plan").getString("title");
                     }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+                //获取官方计划
+                GetRequest request = new GetRequest(FrServerConfig.getOfficalPlanUrl(), null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject res) {
+                        if (res != null && res.has("data")) {
+                            try {
+                                JSONArray data = res.getJSONArray("data");
+                                processData(data);
+                                hideLoading(false, "");
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        if (volleyError != null && volleyError.networkResponse != null) {
+                            hideLoading(true, getResources().getString(R.string.network_error));
+                            int statusCode = volleyError.networkResponse.statusCode;
+                            if (statusCode == 404) {
+                                Toast.makeText(PlanChoiceActivity.this, "404！", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                });
+                FrRequest.getInstance().request(request);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -138,7 +174,7 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
                 }
             }
         });
-        FrRequest.getInstance().request(request);
+        FrRequest.getInstance().request(requestB);
     }
 
     private void initEvent() {
@@ -196,7 +232,23 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
                             .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                 @Override
                                 public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                    //ToDo
+                                    try {
+                                        new JoinPlanHelper(PlanChoiceActivity.this).joinPersonalPlan(new JoinPlanHelper.CallBack() {
+                                            @Override
+                                            public void handle(Object... res) {
+                                                int id = (Integer)res[0];
+                                                SeriesPlan plan1 = Common.gerneratePersonalPlan(id);
+                                                plan1.setJoined_date(Common.getDate());
+                                                FrDbHelper.getInstance(PlanChoiceActivity.this).joinPlan(plan1);
+                                                FrApplication.getInstance().setPlanInUse(plan1);
+                                            }
+                                        }, Common.getDate());
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                    for(int i = 0; i < plans.size(); i++)
+                                        plans.get(i).setIsUsed(false);
+                                    planCardAdapter.notifyDataSetChanged();
                                     setChangeToDIY(true);
                                     sweetAlertDialog.dismiss();
                                 }
@@ -210,6 +262,10 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
         if(resultCode == RESULT_OK) {
             int plan_id = data.getIntExtra("plan_id", 0);
             boolean isUsed = data.getBooleanExtra("isUsed", false);
+            if(FrApplication.getInstance().getPlanInUse() != null && FrApplication.getInstance().getPlanInUse().getTitle().equals("personal plan"))
+                setChangeToDIY(true);
+            else
+                setChangeToDIY(false);
             for(int i = 0; i < plans.size(); i++) {
                 if(plans.get(i).getId() == plan_id)
                     plans.get(i).setIsUsed(isUsed);

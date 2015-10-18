@@ -30,7 +30,7 @@ public class FrServerConfig {
 
     //get Recipe
     public static String getRecipeDetails(String id) {
-        return HOST + "/api/recipe/" + id;
+        return HOST + "/api/recipe/" + id + "/";
     }
 
     //get Home data
@@ -165,7 +165,7 @@ public class FrServerConfig {
     }
 
     public static String getInUsePlanUrl() {
-        return HOST + "/api/plan/current";
+        return HOST + "/api/plan/current/";
     }
 
     public static String getUpdatePlanUrl() {

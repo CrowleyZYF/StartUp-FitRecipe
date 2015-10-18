@@ -284,21 +284,21 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject res) {
-                            if(res != null && res.has("data")) {
-                                try {
+                            try {
+                                if (res != null && res.has("data") && res.getJSONObject("data").has("plan")) {
                                     plan_name = res.getJSONObject("data").getJSONObject("plan").getString("title");
                                     if (plan_name.equals("personal plan")) {
                                         addto_plan.setEnabled(true);
                                         addto_plan.setTextColor(getResources().getColor(R.color.active_color));
                                         toggle_btn.setBackground(getResources().getDrawable(R.drawable.recipe_button_border));
                                     }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
                                 }
-                                Toast.makeText(RecipeActivity.this, plan_name, Toast.LENGTH_SHORT).show();
-                                initData();
-                                display();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
+                            Toast.makeText(RecipeActivity.this, plan_name, Toast.LENGTH_SHORT).show();
+                            initData();
+                            display();
                         }
                     },
                     new Response.ErrorListener() {
