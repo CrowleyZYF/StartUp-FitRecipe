@@ -11,8 +11,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -80,8 +83,12 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
     private Report report;
     private String pngName;
 
+    private int view_container_height;
+
     // 首先在您的Activity中添加如下成员变量
     final UMSocialService mController = UMServiceFactory.getUMSocialService("com.umeng.share");
+
+    private String action;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +100,7 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
             bitmap = BitmapFactory.decodeFile(path);
         }
 
+        action = getIntent().getStringExtra("action");
         item = (DatePlanItem) getIntent().getSerializableExtra("item");
         report = FrApplication.getInstance().getReport();
         initView();
@@ -125,7 +133,7 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
         if(bitmap != null)
             punch_photo.setImageBitmap(bitmap);
         else
-            if(item.getImageCover() == null)
+            if(item.getImageCover() == null || item.getImageCover().length() == 0)
                 FrApplication.getInstance().getMyImageLoader().displayImage(punch_photo, item.getDefaultImageCover());
             else
                 FrApplication.getInstance().getMyImageLoader().displayImage(punch_photo, item.getImageCover());
@@ -134,7 +142,7 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
         left_btn = (ImageView) findViewById(R.id.left_btn);
         right_btn = (TextView) findViewById(R.id.right_btn);
 
-        if(bitmap == null)
+        if(action.equals("share"))
             right_btn.setText("分享");
         else
             right_btn.setText("发布");
@@ -212,7 +220,7 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
         int a = (int) Math.round(item.getCarbohydrate_take() * 100 / sum);
         int b = (int) Math.round(item.getProtein_take() * 100 / sum);
         int c = 100 - a - b;
-        chartView2.setValue(new float[] {a, b, c}, true, false, false);
+        chartView2.setValue(new float[]{a, b, c}, true, false, false);
 
         nutrition_list = (LinearLayoutForListView) findViewById(R.id.nutrition_list);
         List<Nutrition> nutritions = item.getNutritions();
@@ -240,7 +248,7 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
                 finish();
                 break;
             case R.id.right_btn:
-                if(right_btn.getText().toString().equals("分享"))
+                if(action.equals("share"))
                     share();
                 else
                     publish();
@@ -248,12 +256,16 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
         }
     }
 
+
+
     private void share() {
+        ProgressDialog pd = ProgressDialog.show(PunchContentSureActivity.this, "", "正在生成图片...", true, false);
+        pd.setCanceledOnTouchOutside(false);
         Bitmap bitmap = PunchImageGenerator.convertViewToBitmap(scrollView);
         File path  = new File(Environment.getExternalStorageDirectory() + "/fitrecipe/");
         if(!path.exists())
             path.mkdirs();
-        File file = new File(path.getAbsolutePath() + "abc.jpg");
+        File file = new File(path.getAbsolutePath() + "/abc.jpg");
         try {
             FileOutputStream fos = new FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
@@ -265,6 +277,7 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
         } finally {
 
         }
+        pd.dismiss();
         // 设置分享内容
         mController.setShareImage(new UMImage(this, bitmap));
         mController.setShareContent("友盟社会化组件（SDK）让移动应用快速整合社交分享功能，http://www.umeng.com/social");
@@ -276,28 +289,33 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
         pd = ProgressDialog.show(this, "", "正在发布...", true);
         pd.setCanceledOnTouchOutside(false);
 
-        UploadManager uploadManager = new UploadManager();
-        Auth auth = Auth.create("LV1xTmPqkwCWd3yW4UNn90aaXyPZCGPG-MdaA3Ob", "mfMEtgpxmdRrgM7No-AwtaFCkCM6mOVr_FYbq6MR");        //get token from access key and secret key
-        String token = auth.uploadToken("fitrecipe");
+        if(bitmap != null) {
+            UploadManager uploadManager = new UploadManager();
+            Auth auth = Auth.create("LV1xTmPqkwCWd3yW4UNn90aaXyPZCGPG-MdaA3Ob", "mfMEtgpxmdRrgM7No-AwtaFCkCM6mOVr_FYbq6MR");        //get token from access key and secret key
+            String token = auth.uploadToken("fitrecipe");
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
 
-        pngName = FrApplication.getInstance().getAuthor().getNick_name() + Common.getTime();
-        Toast.makeText(PunchContentSureActivity.this, pngName, Toast.LENGTH_SHORT).show();
-        uploadManager.put(baos.toByteArray(), pngName, token, new UpCompletionHandler() {
-            @Override
-            public void complete(String s, ResponseInfo responseInfo, JSONObject jsonObject) {
-                Toast.makeText(PunchContentSureActivity.this, "上传完成！", Toast.LENGTH_SHORT).show();
-                savePunchState(pngName);
-            }
-        }, null);
+            pngName = FrApplication.getInstance().getAuthor().getNick_name() + Common.getTime();
+            Toast.makeText(PunchContentSureActivity.this, pngName, Toast.LENGTH_SHORT).show();
+            uploadManager.put(baos.toByteArray(), pngName, token, new UpCompletionHandler() {
+                @Override
+                public void complete(String s, ResponseInfo responseInfo, JSONObject jsonObject) {
+                    Toast.makeText(PunchContentSureActivity.this, "上传完成！", Toast.LENGTH_SHORT).show();
+                    savePunchState(pngName);
+                }
+            }, null);
+        }else {
+            savePunchState(null);
+        }
     }
 
     private void savePunchState(String pngName) {
         //TODO @wk
-        saveLocalPunchState();
+//        saveLocalPunchState();
         saveServerPunchState(pngName);
+        pd.dismiss();
     }
 
     private void saveServerPunchState(String pngName) {
@@ -324,20 +342,27 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
                     params.put("type", 5);
                     break;
             }
-            params.put("img", FrServerConfig.getQiNiuHost() + pngName);
+            if(pngName != null)
+                params.put("img", FrServerConfig.getQiNiuHost() + pngName);
+            else
+                params.put("img", "");
         } catch (JSONException e) {
             e.printStackTrace();
         }
         PostRequest request = new PostRequest(FrServerConfig.getPunchListUrl(Common.dateFormat(Common.getDate()), Common.dateFormat(Common.getDate())), FrApplication.getInstance().getToken(), params, new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(JSONObject jsonObject) {
-
+            public void onResponse(JSONObject res) {
+                if(res.has("data")) {
+                    Toast.makeText(PunchContentSureActivity.this, "打卡完成!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(PunchContentSureActivity.this, RecordActivity.class);
+                    startActivity(intent);
+                }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
-            }
+                Toast.makeText(PunchContentSureActivity.this, "打卡出错!", Toast.LENGTH_SHORT).show();
+        }
         });
         FrRequest.getInstance().request(request);
     }
@@ -347,30 +372,30 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected void onPostExecute(Void aVoid) {
-                PlanFragment.isFresh = true;
-                pd.dismiss();
-                Intent intent = new Intent(PunchContentSureActivity.this, RecordActivity.class);
-                startActivity(intent);
+//                PlanFragment.isFresh = true;
+//                pd.dismiss();
+//                Intent intent = new Intent(PunchContentSureActivity.this, RecordActivity.class);
+//                startActivity(intent);
             }
 
             @Override
             protected Void doInBackground(Void... params) {
-                String now = item.getDate();
-                Map<String, DatePlan> data = FrDbHelper.getInstance(PunchContentSureActivity.this).getDatePlan(now, now);
-                if (data.size() > 0) {
-                    DatePlan datePlan = data.get(now);
-                    List<DatePlanItem> items = datePlan.getItems();
-                    for (int j = 0; j < item.size(); j++) {
-                        if (items.get(j).getType().equals(item.getType())) {
-                            items.get(j).setImageCover(FrServerConfig.getQiNiuHost() + pngName);
-                            items.get(j).setIsPunch(true);
-                            datePlan.setIsPunch(true);
-                            break;
-                        }
-                    }
-                    datePlan.setItems(items);
-                    FrDbHelper.getInstance(PunchContentSureActivity.this).addDatePlan(datePlan);
-                }
+//                String now = item.getDate();
+//                Map<String, DatePlan> data = FrDbHelper.getInstance(PunchContentSureActivity.this).getDatePlan(now, now);
+//                if (data.size() > 0) {
+//                    DatePlan datePlan = data.get(now);
+//                    List<DatePlanItem> items = datePlan.getItems();
+//                    for (int j = 0; j < item.size(); j++) {
+//                        if (items.get(j).getType().equals(item.getType())) {
+//                            items.get(j).setImageCover(FrServerConfig.getQiNiuHost() + pngName);
+//                            items.get(j).setIsPunch(true);
+//                            datePlan.setIsPunch(true);
+//                            break;
+//                        }
+//                    }
+//                    datePlan.setItems(items);
+//                    FrDbHelper.getInstance(PunchContentSureActivity.this).addDatePlan(datePlan);
+//                }
                 return null;
             }
         }.execute();

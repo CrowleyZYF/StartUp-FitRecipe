@@ -164,7 +164,7 @@ public class FrServerConfig {
         return HOST + "/api/recipe/search/food/?keyword=" + keywords + "&start=" + start + "&num=" + num;
     }
 
-    public static String getRecentPlanUrl() {
+    public static String getInUsePlanUrl() {
         return HOST + "/api/plan/current";
     }
 

@@ -35,7 +35,7 @@ public class JoinPlanHelper {
     public void joinPersonalPlan(final CallBack callBack, String date) throws JSONException {
         JSONObject params = new JSONObject();
         JSONArray dish = new JSONArray();
-        List<DatePlanItem> items = FrDbHelper.getInstance(context).generateDatePlan();
+        List<DatePlanItem> items = Common.generateDatePlan();
         for(int i = 0; i < items.size(); i++) {
             JSONObject obj = new JSONObject();
             obj.put("type", i);

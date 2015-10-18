@@ -1365,3 +1365,19 @@
             "user": 7
           }
         }
+
+## Delete Punch [/api/plan/punch/{punch_id}/delete]
+
++ Parameters
+    + punch_id: 1 - 打卡的 id，是打卡的！
+
+### Delete Punch [POST]
+删掉打卡
+
++ Response 200 (application)
+
+        {
+          "status": 200,
+          "error_message": null,
+          "data": "ok"
+        }

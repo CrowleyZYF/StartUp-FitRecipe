@@ -6,9 +6,11 @@
     android:background="@color/white"
     android:scrollbars="none"
     android:fadingEdge="vertical"
-    android:padding="0dp">
+    android:padding="0dp"
+    android:fillViewport="false">
 
     <LinearLayout
+        android:id="@+id/view_container"
         android:layout_width="match_parent"
         android:background="@color/white"
         android:layout_height="wrap_content"
@@ -270,7 +272,7 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:orientation="vertical"
-            android:layout_marginTop="20dp">
+            android:paddingTop="20dp">
 
             <ImageView
                 android:layout_width="120dp"
@@ -494,7 +496,6 @@
                     android:layout_height="wrap_content" />
 
             </LinearLayout>
-
         </LinearLayout>
 
     </LinearLayout>

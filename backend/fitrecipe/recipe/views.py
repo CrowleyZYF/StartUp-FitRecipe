@@ -14,6 +14,9 @@ from label.models import Label
 from fitrecipe.utils import pick_data
 # Create your views here.
 
+class SystemCheck(BaseView):
+    def head(self, request, format=None):
+        return self.success_response('Good')
 
 class RecipeList(BaseView):
 
