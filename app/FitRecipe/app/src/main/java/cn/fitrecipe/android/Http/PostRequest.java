@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public class PostRequest extends JsonObjectRequest{
 
-    private final int timeout = 3000;
+    private final int timeout = 10000;
     private String token;
 
     public PostRequest(String url, String token, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {

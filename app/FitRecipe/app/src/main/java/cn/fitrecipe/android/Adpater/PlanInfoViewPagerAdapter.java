@@ -52,7 +52,7 @@ public class PlanInfoViewPagerAdapter extends PagerAdapter {
             TextView choice_name = (TextView) planInfoContainer.findViewById(R.id.choice_name);
             choice_name.setText(plan.getTitle());
             TextView choice_intro = (TextView) planInfoContainer.findViewById(R.id.choice_intro);
-            choice_intro.setText(plan.getInrtoduce());
+            choice_intro.setText(plan.getBrief());
             ImageView choice_hard_rank_02 = (ImageView) planInfoContainer.findViewById(R.id.choice_hard_rank_02);
             ImageView choice_hard_rank_03 = (ImageView) planInfoContainer.findViewById(R.id.choice_hard_rank_03);
             switch (plan.getDifficulty()){
@@ -118,6 +118,11 @@ public class PlanInfoViewPagerAdapter extends PagerAdapter {
                                 @Override
                                 public void handle(Object... res) {
                                     choice_join_btn.setText("选用");
+                                    int id = (Integer)res[0];
+                                    SeriesPlan plan1 = Common.gerneratePersonalPlan(id);
+                                    plan1.setJoined_date(Common.getDate());
+                                    FrDbHelper.getInstance(context).joinPlan(plan1);
+                                    FrApplication.getInstance().setPlanInUse(plan1);
                                     choice_join_btn.setTextColor(context.getResources().getColor(R.color.white));
                                     choice_join_btn.setBackground(context.getResources().getDrawable(R.drawable.join_button));
                                     //
@@ -134,6 +139,9 @@ public class PlanInfoViewPagerAdapter extends PagerAdapter {
                                 @Override
                                 public void handle(Object... res) {
                                     choice_join_btn.setText("取消选用");
+                                    plan.setJoined_date(Common.getDate());
+                                    FrDbHelper.getInstance(context).joinPlan(plan);
+                                    FrApplication.getInstance().setPlanInUse(plan);
                                     choice_join_btn.setTextColor(context.getResources().getColor(R.color.gray));
                                     choice_join_btn.setBackground(context.getResources().getDrawable(R.drawable.join_button_disable));
                                     pd.dismiss();
@@ -173,7 +181,7 @@ public class PlanInfoViewPagerAdapter extends PagerAdapter {
             TextView author_intro = (TextView) planInfoContainer.findViewById(R.id.author_intro);
             author_intro.setText("简介：" + plan.getAuthor().getIntroduce());
             TextView choice_intro = (TextView) planInfoContainer.findViewById(R.id.plan_intro);
-            choice_intro.setText(plan.getDesc());
+            choice_intro.setText(plan.getInrtoduce());
         }
         container.addView(planInfoContainer);
         introLinearLayout.add(planInfoContainer);

@@ -353,8 +353,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         recipe_time.setText("烹饪时间："+ recipe.getDuration() + "min");
         recipe_calorie.setText("热量："+ recipe.getCalories() + "kcal/100g");
         recipe_collect.setText("收藏 " + recipe.getCollection_count());
-        //TODO wait for @Chai
-        recipe_comment.setText("评论 " + "待完成");
+        recipe_comment.setText("评论 " + recipe.getComment_count());
 
         //set the recipe author
         if(recipe.getAuthor() != null) {
