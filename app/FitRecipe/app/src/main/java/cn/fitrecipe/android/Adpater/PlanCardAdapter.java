@@ -40,7 +40,13 @@ public class PlanCardAdapter extends RecyclerView.Adapter<PlanCardAdapter.PlanCa
                 from(viewGroup.getContext()).
                 inflate(R.layout.activity_plan_choice_item_2, viewGroup, false);
 
-        itemView.setOnClickListener(new View.OnClickListener() {
+        return new PlanCardViewHolder(itemView, this.context);
+    }
+
+    @Override
+    public void onBindViewHolder(PlanCardAdapter.PlanCardViewHolder contactViewHolder, final int i) {
+
+        contactViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(context,PlanChoiceInfoActivity.class);
@@ -50,11 +56,6 @@ public class PlanCardAdapter extends RecyclerView.Adapter<PlanCardAdapter.PlanCa
             }
         });
 
-        return new PlanCardViewHolder(itemView, this.context);
-    }
-
-    @Override
-    public void onBindViewHolder(PlanCardAdapter.PlanCardViewHolder contactViewHolder, int i) {
         SeriesPlan pc = planCardsList.get(i);
         contactViewHolder.choice_id.setText(pc.getId()+"");
         contactViewHolder.choice_name.setText(pc.getTitle());
@@ -115,6 +116,8 @@ public class PlanCardAdapter extends RecyclerView.Adapter<PlanCardAdapter.PlanCa
     }
 
     public static class PlanCardViewHolder extends RecyclerView.ViewHolder {
+
+        protected View itemView;
         protected TextView choice_id;
         protected TextView choice_name;
         protected ImageView choice_hard_rank_01;
@@ -134,6 +137,9 @@ public class PlanCardAdapter extends RecyclerView.Adapter<PlanCardAdapter.PlanCa
 
         public PlanCardViewHolder(View itemView, Context context) {
             super(itemView);
+
+            this.itemView = itemView;
+
             choice_id =  (TextView) itemView.findViewById(R.id.choice_id);
             choice_name = (TextView) itemView.findViewById(R.id.choice_name);
             choice_hard_rank_01 = (ImageView) itemView.findViewById(R.id.choice_hard_rank_01);

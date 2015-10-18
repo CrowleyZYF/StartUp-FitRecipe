@@ -71,6 +71,13 @@
                     android:src="@drawable/icon_dinner"
                     android:layout_marginRight="5dp"/>
 
+                <ImageView
+                    android:id="@+id/nutrition_add_meal_03_punch"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/icon_add_meal3"
+                    android:layout_marginRight="5dp"/>
+
             </LinearLayout>
 
         </RelativeLayout>
@@ -127,6 +134,7 @@
                     android:layout_marginTop="-6dp">
 
                     <TextView
+                        android:id="@+id/plan_info_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
@@ -169,6 +177,8 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"/>
 
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="260dp"
@@ -177,7 +187,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="宏量元素比"
+                android:text="宏量元素供能比"
                 android:textColor="@color/login_input_text_color"
                 android:textSize="14sp"
                 android:gravity="center_vertical"
@@ -205,6 +215,7 @@
                         android:layout_centerInParent="true">
 
                         <cn.fitrecipe.android.UI.PieChartView
+                            android:id="@+id/suggest_take_piechart"
                             android:layout_width="150dp"
                             android:layout_height="150dp"
                             android:layout_gravity="center_horizontal"/>
@@ -212,7 +223,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="建议摄入"
+                            android:text="建议日摄入"
                             android:textColor="#a4a4a4"
                             android:textSize="12sp"
                             android:layout_gravity="center_horizontal"
@@ -304,12 +315,9 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"/>
 
-
-
             </LinearLayout>
 
         </LinearLayout>
-
 
         <ImageView
             android:layout_width="match_parent"
@@ -318,34 +326,84 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="营养表"
-            android:textColor="@color/login_input_text_color"
-            android:textSize="14sp"
-            android:gravity="center_vertical"
-            android:paddingTop="10dp"
-            android:paddingLeft="10dp"/>
-
         <LinearLayout
+            android:id="@+id/personal_plan_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="20dp"
-            android:padding="2dp"
-            android:background="@drawable/dash_border"
-            android:layout_marginTop="10dp">
+            android:visibility="visible">
 
-            <cn.fitrecipe.android.UI.LinearLayoutForListView
-                android:id="@+id/recipe_nutrition_list"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="营养表"
+                android:textColor="@color/login_input_text_color"
+                android:textSize="14sp"
+                android:gravity="center_vertical"
+                android:paddingTop="10dp"
+                android:paddingLeft="10dp"/>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="20dp"
+                android:padding="2dp"
+                android:background="@drawable/dash_border"
+                android:layout_marginTop="10dp">
 
-            </cn.fitrecipe.android.UI.LinearLayoutForListView>
+                <cn.fitrecipe.android.UI.LinearLayoutForListView
+                    android:id="@+id/recipe_nutrition_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </cn.fitrecipe.android.UI.LinearLayoutForListView>
+
+            </LinearLayout>
 
         </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/other_plan_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="营养表"
+                android:textColor="@color/login_input_text_color"
+                android:textSize="14sp"
+                android:gravity="center_vertical"
+                android:paddingTop="10dp"
+                android:paddingLeft="10dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="20dp"
+                android:padding="2dp"
+                android:background="@drawable/dash_border"
+                android:layout_marginTop="10dp">
+
+                <cn.fitrecipe.android.UI.LinearLayoutForListView
+                    android:id="@+id/recipe_nutrition_list2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </cn.fitrecipe.android.UI.LinearLayoutForListView>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
     </LinearLayout>
 </ScrollView>

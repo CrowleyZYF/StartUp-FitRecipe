@@ -469,6 +469,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 datePlan.setPlan_id(now.getId());
                 data.put(str, now.getDatePlans().get(th));
 //                indexDate.put(str, "完成("+ (th+1) +"/"+now.getTotal_days()+")天");
+
             }
             str = Common.getSomeDay(str, 1);
         }

@@ -9,6 +9,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.fitrecipe.android.Http.FrServerConfig;
+
 /**
  * Created by wk on 2015/9/1.
  */
@@ -213,7 +215,7 @@ public class SeriesPlan implements Serializable, Comparable<SeriesPlan> {
     }
 
     public String getCover() {
-        return cover;
+        return FrServerConfig.getImageCompressed(cover);
     }
 
     public void setCover(String cover) {
