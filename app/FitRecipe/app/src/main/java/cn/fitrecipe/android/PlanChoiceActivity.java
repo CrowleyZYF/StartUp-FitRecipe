@@ -30,6 +30,8 @@ import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.UI.SlidingMenu;
 import cn.fitrecipe.android.entity.SeriesPlan;
+import cn.fitrecipe.android.function.Common;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import pl.tajchert.sample.DotsTextView;
 
 /**
@@ -53,12 +55,11 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
     private ScrollView scrollView;
 
     private ArrayList<SeriesPlan> plans;
-
     private String planInUse;
+    private TextView changeToDIY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan_choice_container);
 
@@ -89,6 +90,7 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
         scrollView = (ScrollView) findViewById(R.id.scrollView);
 
         mRightMenu = (SlidingMenu) findViewById(R.id.container_layout);
+        changeToDIY = (TextView) findViewById(R.id.changeToDIY);
     }
 
 
@@ -173,6 +175,28 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
         filter_btn.setOnClickListener(this);
         sure_btn.setOnClickListener(this);
         back_btn.setOnClickListener(this);
+        changeToDIY.setOnClickListener(this);
+    }
+
+    // true for set to diy, false to cancel diy
+    private void setChangeToDIY(boolean toDIY){
+        if (toDIY){
+            changeToDIY.setText("已使用");
+            changeToDIY.setTextColor(getResources().getColor(R.color.gray));
+            changeToDIY.setBackground(getResources().getDrawable(R.drawable.recipe_button_border_disable));
+        }else {
+            changeToDIY.setText("确认切换");
+            changeToDIY.setTextColor(getResources().getColor(R.color.base_color));
+            changeToDIY.setBackground(getResources().getDrawable(R.drawable.plan_button_border));
+        }
+    }
+
+    private boolean getChangeToDIY(){
+        if (changeToDIY.getText().toString().equals("已使用")){
+            return true;
+        }else {
+            return false;
+        }
     }
 
     @Override
@@ -185,6 +209,29 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
             case R.id.left_btn:
                 finish();
                 break;
+            case R.id.changeToDIY:
+                if (getChangeToDIY()){
+                    Common.errorDialog(this,"已经使用","已经处于自定义计划中，可点击进入其他计划进行选择切换").show();
+                }else{
+                    new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
+                            .setTitleText("切换计划")
+                            .setContentText("确定切换至自定义计划么？他将会覆盖今天之后的第三方计划")
+                            .setConfirmText("确定").setCancelText("取消").showCancelButton(true)
+                            .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                    sweetAlertDialog.dismiss();
+                                }
+                            })
+                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                    //ToDo
+                                    setChangeToDIY(true);
+                                    sweetAlertDialog.dismiss();
+                                }
+                            }).show();
+                }
         }
     }
 
