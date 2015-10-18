@@ -37,8 +37,8 @@ public class ReportActivity extends Activity implements View.OnClickListener{
     private TextView unsaturatedFattyAcids_min, unsaturatedFattyAcids_max, cholesterol_min, cholesterol_max;
     private TextView vc_min, vc_max, vd_min, vd_max;
 
-    private ImageView back_btn;
-    private TextView check_plan_btn, restart_btn;
+    private ImageView back_btn, restart_btn;
+    private TextView check_plan_btn;
     private String last;
 
     //view
@@ -214,15 +214,15 @@ public class ReportActivity extends Activity implements View.OnClickListener{
         fiber_max.setText(Math.round(report.getFiberIntakeMax())+"g");
 
         sodium_min = (TextView) findViewById(R.id.sodium_min);
-        sodium_min.setText(report.getSodiumIntakeMin() + "g");
+        sodium_min.setText(report.getSodiumIntakeMin() + "mg");
         sodium_max = (TextView) findViewById(R.id.sodium_max);
-        sodium_max.setText(report.getSodiumIntakeMax()+"g");
+        sodium_max.setText(report.getSodiumIntakeMax()+"mg");
 
 
         unsaturatedFattyAcids_min = (TextView) findViewById(R.id.unsaturatedFattyAcids_min);
-        unsaturatedFattyAcids_min.setText(Math.round(report.getUnsaturatedFattyAcidsIntakeMin()) + "mg");
+        unsaturatedFattyAcids_min.setText(Math.round(report.getUnsaturatedFattyAcidsIntakeMin()) + "g");
         unsaturatedFattyAcids_max = (TextView) findViewById(R.id.unsaturatedFattyAcids_max);
-        unsaturatedFattyAcids_max.setText(Math.round(report.getUnsaturatedFattyAcidsIntakeMax())+"mg");
+        unsaturatedFattyAcids_max.setText(Math.round(report.getUnsaturatedFattyAcidsIntakeMax())+"g");
 
 
         cholesterol_min = (TextView) findViewById(R.id.cholesterol_min);
@@ -236,16 +236,16 @@ public class ReportActivity extends Activity implements View.OnClickListener{
         vc_max.setText(Math.round(report.getVCIntakeMax())+"mg");
 
         vd_min = (TextView) findViewById(R.id.vd_min);
-        vd_min.setText(Math.round(report.getVDIntakeMin()) + "mg");
+        vd_min.setText(Math.round(report.getVDIntakeMin()) + "ug");
         vd_max = (TextView) findViewById(R.id.vd_max);
-        vd_max.setText(Math.round(report.getVDIntakeMax())+"mg");
+        vd_max.setText(Math.round(report.getVDIntakeMax())+"ug");
 
         back_btn = (ImageView) findViewById(R.id.back_btn);
         back_btn.setOnClickListener(this);
-        vd_max.setText(Math.round(report.getVDIntakeMax()) + "g");
+
 
         check_plan_btn = (TextView) findViewById(R.id.check_plan);
-        restart_btn = (TextView) findViewById(R.id.restart_btn);
+        restart_btn = (ImageView) findViewById(R.id.restart_btn);
     }
 
 
