@@ -29,8 +29,10 @@ import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.UI.SlidingMenu;
+import cn.fitrecipe.android.dao.FrDbHelper;
 import cn.fitrecipe.android.entity.SeriesPlan;
 import cn.fitrecipe.android.function.Common;
+import cn.fitrecipe.android.function.JoinPlanHelper;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import pl.tajchert.sample.DotsTextView;
 
@@ -102,6 +104,10 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
                 plans.get(i).setIsUsed(true);
             }
         }
+        if(planInUse != null && planInUse.equals("personal plan"))
+            setChangeToDIY(true);
+        else
+            setChangeToDIY(false);
         planCardAdapter = new PlanCardAdapter(this, plans);
         planChoiceRecyclerView.setAdapter(planCardAdapter);
     }
@@ -226,7 +232,23 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
                             .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                 @Override
                                 public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                    //ToDo
+                                    try {
+                                        new JoinPlanHelper(PlanChoiceActivity.this).joinPersonalPlan(new JoinPlanHelper.CallBack() {
+                                            @Override
+                                            public void handle(Object... res) {
+                                                int id = (Integer)res[0];
+                                                SeriesPlan plan1 = Common.gerneratePersonalPlan(id);
+                                                plan1.setJoined_date(Common.getDate());
+                                                FrDbHelper.getInstance(PlanChoiceActivity.this).joinPlan(plan1);
+                                                FrApplication.getInstance().setPlanInUse(plan1);
+                                            }
+                                        }, Common.getDate());
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                    for(int i = 0; i < plans.size(); i++)
+                                        plans.get(i).setIsUsed(false);
+                                    planCardAdapter.notifyDataSetChanged();
                                     setChangeToDIY(true);
                                     sweetAlertDialog.dismiss();
                                 }
@@ -240,6 +262,10 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
         if(resultCode == RESULT_OK) {
             int plan_id = data.getIntExtra("plan_id", 0);
             boolean isUsed = data.getBooleanExtra("isUsed", false);
+            if(FrApplication.getInstance().getPlanInUse() != null && FrApplication.getInstance().getPlanInUse().getTitle().equals("personal plan"))
+                setChangeToDIY(true);
+            else
+                setChangeToDIY(false);
             for(int i = 0; i < plans.size(); i++) {
                 if(plans.get(i).getId() == plan_id)
                     plans.get(i).setIsUsed(isUsed);
