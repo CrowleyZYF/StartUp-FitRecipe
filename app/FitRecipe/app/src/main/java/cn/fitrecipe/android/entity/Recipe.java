@@ -51,6 +51,7 @@ public class Recipe implements Serializable{
     private double calories;
     private int collection_count;
     private boolean has_collected;
+    private int comment_count;
     private String tags;
 
 
@@ -447,5 +448,13 @@ public class Recipe implements Serializable{
 
     public void setHas_collected(boolean has_collected) {
         this.has_collected = has_collected;
+    }
+
+    public int getComment_count() {
+        return comment_count;
+    }
+
+    public void setComment_count(int comment_count) {
+        this.comment_count = comment_count;
     }
 }

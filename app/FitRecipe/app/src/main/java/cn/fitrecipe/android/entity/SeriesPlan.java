@@ -33,15 +33,16 @@ public class SeriesPlan implements Serializable, Comparable<SeriesPlan> {
     private int benifit;
     private int type;       //计划类型
     private int dish_headcount;
-    private String desc;
     private String inrtoduce;
     private String img;
+    private String cover;
     private String created_time;
     private String updated_time;
     private String user;
     private PlanAuthor author;
     private String authored_date;
     private boolean isUsed;
+    private String brief;
     private ArrayList<DatePlan> datePlans;
 
     public int getId() {
@@ -106,14 +107,6 @@ public class SeriesPlan implements Serializable, Comparable<SeriesPlan> {
 
     public void setDish_headcount(int dish_headcount) {
         this.dish_headcount = dish_headcount;
-    }
-
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
     }
 
     public String getInrtoduce() {
@@ -211,4 +204,19 @@ public class SeriesPlan implements Serializable, Comparable<SeriesPlan> {
         this.joined_date = joined_date;
     }
 
+    public String getBrief() {
+        return brief;
+    }
+
+    public void setBrief(String brief) {
+        this.brief = brief;
+    }
+
+    public String getCover() {
+        return cover;
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
+    }
 }

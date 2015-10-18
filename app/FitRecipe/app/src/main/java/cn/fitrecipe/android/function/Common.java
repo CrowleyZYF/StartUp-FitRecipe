@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import cn.fitrecipe.android.R;
+import cn.fitrecipe.android.entity.DatePlan;
 import cn.fitrecipe.android.entity.DatePlanItem;
+import cn.fitrecipe.android.entity.SeriesPlan;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
@@ -195,6 +197,29 @@ public class Common {
         items.add(item5);
         items.add(item6);
         return items;
+    }
+
+
+    public static SeriesPlan gerneratePersonalPlan(int id) {
+        SeriesPlan plan = new SeriesPlan();
+        plan.setId(id);
+        plan.setTitle("personal plan");
+        plan.setTotal_days(1);
+        ArrayList<DatePlan> datePlans = new ArrayList<>();
+        datePlans.add(gernerateEmptyPlan(Common.getDate()));
+        plan.setDatePlans(datePlans);
+        return plan;
+    }
+
+    public static DatePlan gernerateEmptyPlan(String date) {
+        DatePlan datePlan = new DatePlan();
+//        datePlan.setIsPunch(false);
+        datePlan.setPlan_name("personal plan");
+//        datePlan.setInBasket(false);
+        datePlan.setDate(date);
+        datePlan.setPlan_id(-1);
+        datePlan.setItems(Common.generateDatePlan());
+        return datePlan;
     }
 
 }

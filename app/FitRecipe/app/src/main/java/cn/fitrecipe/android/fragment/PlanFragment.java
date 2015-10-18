@@ -641,10 +641,43 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onResume() {
         super.onResume();
+
+        if(FrApplication.getInstance().getPlanInUse() != null) {
+            String select_name = FrApplication.getInstance().getPlanInUse().getTitle();
+            String plan_name = "";
+            String today = Common.getDate();
+            if(data.containsKey(today)) {
+                plan_name = data.get(today).getPlan_name();
+                if(!plan_name.equals(select_name)) {
+                    changePlan(today, FrApplication.getInstance().getPlanInUse());
+                }
+            }
+        }
 //        if(isFresh) {
 //            loadData();
 //        }
 //        isFresh = false;
+    }
+
+    private void changePlan(String today, SeriesPlan plan) {
+        for(int i = 0; i < 6; i++) {
+            String str = Common.getSomeDay(today, i);
+            DatePlan datePlan = null;
+            if(plan.getTitle().equals("personal plan")) {
+                if(i == 0) {
+                    datePlan = plan.getDatePlans().get(0);
+                    datePlan.setPlan_id(plan.getId());
+                }else {
+                    datePlan = Common.gernerateEmptyPlan(str);
+                }
+            }else {
+                datePlan = plan.getDatePlans().get(i % plan.getTotal_days());
+                datePlan.setPlan_id(plan.getId());
+            }
+            datePlan.setDate(str);
+            data.put(str,datePlan);
+        }
+        switchPlan(pointer, 0);
     }
 
 

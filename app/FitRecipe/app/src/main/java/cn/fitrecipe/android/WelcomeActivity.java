@@ -27,7 +27,7 @@ public class WelcomeActivity extends Activity{
     }
 
 
-    private void goToMainActivity(){;
+    private void goToMainActivity(){
         boolean isLogined = FrApplication.getInstance().isLogin();
         if(isLogined){
             Intent mainIntent = new Intent(WelcomeActivity.this, MainActivity.class);

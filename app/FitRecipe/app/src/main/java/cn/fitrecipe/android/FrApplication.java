@@ -20,6 +20,8 @@ import cn.fitrecipe.android.entity.Collection;
 import cn.fitrecipe.android.entity.HomeData;
 import cn.fitrecipe.android.entity.Recipe;
 import cn.fitrecipe.android.entity.Report;
+import cn.fitrecipe.android.entity.Series;
+import cn.fitrecipe.android.entity.SeriesPlan;
 
 ;
 
@@ -41,6 +43,8 @@ public class FrApplication extends Application {
     private HomeData homeData;
     //报告缓存
     private Report report;
+
+    private SeriesPlan planInUse;
 
     //收藏
     private List<Collection> collections;
@@ -167,6 +171,14 @@ public class FrApplication extends Application {
     public void saveReport(Report report) {
         this.report = report;
         FrDbHelper.getInstance(this).addReport(report);
+    }
+
+    public SeriesPlan getPlanInUse() {
+        return planInUse;
+    }
+
+    public void setPlanInUse(SeriesPlan planInUse) {
+        this.planInUse = planInUse;
     }
 
 

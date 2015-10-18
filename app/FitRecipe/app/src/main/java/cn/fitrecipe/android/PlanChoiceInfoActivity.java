@@ -58,6 +58,8 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
     private LinearLayout loadingInterface;
     private DotsTextView dotsTextView;
 
+
+    private LinearLayout choice_info_background;
     private PlanDetailViewPager planDetailViewPager;
     private PlanDetailViewPagerAdapter planDetailViewPagerAdapter;
     private ImageView prev_day_btn;
@@ -123,7 +125,9 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
         plan.setBenifit(data.getInt("benifit"));
         plan.setTotal_days(data.getInt("total_days"));
         plan.setDish_headcount(data.getInt("dish_headcount"));
+        plan.setBrief(data.getString("brief"));
         plan.setTitle(data.getString("title"));
+        plan.setCover(data.getString("cover"));
 
         JSONObject author_json = data.getJSONObject("author");
         plan.setAuthor(new Gson().fromJson(author_json.toString(), PlanAuthor.class));
@@ -234,6 +238,8 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
         nutrition_btn = (ImageView) findViewById(R.id.nutrition_btn);
         loadingInterface = (LinearLayout)findViewById(R.id.loading_interface);
         dotsTextView = (DotsTextView) findViewById(R.id.dots);
+
+        choice_info_background = (LinearLayout) findViewById(R.id.choice_info_background);
     }
 
     private void initData() {
@@ -244,6 +250,7 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
         planInfoViewPagerAdapter = new PlanInfoViewPagerAdapter(this, plan);
         planInfoViewPager.setAdapter(planInfoViewPagerAdapter);
         planInfoIndicator.setViewPager(planInfoViewPager);
+        FrApplication.getInstance().getMyImageLoader().displayImage(choice_info_background, plan.getCover());
     }
 
     private void initEvent() {
