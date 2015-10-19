@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/choice_info_background"
+    android:layout_width="match_parent"
+    android:layout_height="380dp"
+    >
+
+    <LinearLayout
+        android:id="@+id/fit_plan_intro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/fit_base_intro"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="80dp">
+
+        <ImageView
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:src="@drawable/icon_plan"
+            android:layout_gravity="top"
+            android:layout_marginTop="2dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="计划简介："
+                android:shadowColor="@color/login_input_text_color"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="4"
+                android:textSize="12sp"
+                android:textColor="#ffffff"
+                android:layout_marginLeft="5dp"/>
+
+            <TextView
+                android:id="@+id/plan_intro"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="1. 以低GI食物为主\n2. 以低GI食物为主\n3. 以低GI食物为主"
+                android:shadowColor="@color/login_input_text_color"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="4"
+                android:textSize="12sp"
+                android:textColor="#ffffff"
+                android:layout_marginLeft="5dp" />
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>
