@@ -11,19 +11,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.fitrecipe.android.FrApplication;
-import cn.fitrecipe.android.Http.FrRequest;
-import cn.fitrecipe.android.Http.FrServerConfig;
-import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.dao.FrDbHelper;
 import cn.fitrecipe.android.entity.SeriesPlan;
@@ -153,7 +146,7 @@ public class PlanInfoViewPagerAdapter extends PagerAdapter {
                     }
                 }
             });
-        }else{
+        }else if(position == 1){
             planInfoContainer = LayoutInflater.from(context).inflate(R.layout.activity_plan_choice_intro_2, null);
             CircleImageView author_avatar = (CircleImageView) planInfoContainer.findViewById(R.id.author_avatar);
 //            author_avatar.setImageResource(R.drawable.author_header);
@@ -180,6 +173,10 @@ public class PlanInfoViewPagerAdapter extends PagerAdapter {
             }
             TextView author_intro = (TextView) planInfoContainer.findViewById(R.id.author_intro);
             author_intro.setText("简介：" + plan.getAuthor().getIntroduce());
+            /*TextView choice_intro = (TextView) planInfoContainer.findViewById(R.id.plan_intro);
+            choice_intro.setText(plan.getInrtoduce());*/
+        }else{
+            planInfoContainer = LayoutInflater.from(context).inflate(R.layout.activity_plan_choice_intro_3, null);
             TextView choice_intro = (TextView) planInfoContainer.findViewById(R.id.plan_intro);
             choice_intro.setText(plan.getInrtoduce());
         }
@@ -188,10 +185,17 @@ public class PlanInfoViewPagerAdapter extends PagerAdapter {
         return planInfoContainer;
     }
 
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        //super.destroyItem(container, position, object);
+        container.removeView(introLinearLayout.get(position));
+    }
+
     @Override
     public int getCount() {
 //        return introLinearLayout.size()
-        return 2;
+        return 3;
     }
 
     @Override
