@@ -120,7 +120,7 @@ public class SeriesPlan implements Serializable, Comparable<SeriesPlan> {
     }
 
     public String getImg() {
-        return img;
+        return FrServerConfig.getImageCompressed(img);
     }
 
     public void setImg(String img) {

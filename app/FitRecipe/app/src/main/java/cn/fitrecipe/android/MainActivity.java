@@ -313,15 +313,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         @Override
         public void onReceive(Context context, Intent intent) {
             if(intent.getAction().equals(action)) {
-//                new Handler() {
-//
-//                }.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-                        ((IndexFragment) frIndexFragment).fresh();
-                        stopService(new Intent(MainActivity.this, GetHomeDataService.class));
-//                    }
-//                }, 1000);
+                ((IndexFragment) frIndexFragment).fresh();
+                stopService(new Intent(MainActivity.this, GetHomeDataService.class));
             }
         }
     }

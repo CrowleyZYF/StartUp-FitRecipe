@@ -37,6 +37,7 @@ import cn.fitrecipe.android.RecipeActivity;
 import cn.fitrecipe.android.SelectRecipeActivity;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.dao.FrDbHelper;
+import cn.fitrecipe.android.entity.BasketRecord;
 import cn.fitrecipe.android.entity.DatePlanItem;
 import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.Report;
@@ -120,12 +121,14 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
                     addBtn.setEnabled(false);
                     ((ImageView)v).setImageResource(R.drawable.icon_plan_shopping_active);
                     item.setIsInBasket(true);
+                    ((PlanFragment) fragment).addToBasket(item.getDate(), item.getType());
                     FrDbHelper.getInstance(fragment.getActivity()).addToBasket(item.getComponents(), item.getDate(), item.getType());
                     Toast.makeText(fragment.getActivity(), "加入菜篮子", Toast.LENGTH_SHORT).show();
                 }else {
                     addBtn.setEnabled(true);
                     ((ImageView)v).setImageResource(R.drawable.icon_plan_shopping);
                     item.setIsInBasket(false);
+                    ((PlanFragment) fragment).removeFromBasket(item.getDate(), item.getType());
                     FrDbHelper.getInstance(fragment.getActivity()).removeFromBasket(item.getComponents(), item.getDate(), item.getType());
                     Toast.makeText(fragment.getActivity(), "从菜篮子取出", Toast.LENGTH_SHORT).show();
                 }
@@ -164,6 +167,7 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
                     });
                     FrRequest.getInstance().request(request);
                     FrDbHelper.getInstance(fragment.getActivity()).unpunch(item.getDate(), item.getType());
+                    ((PlanFragment)fragment).deletePunch(item.getDate(), item.getType());
                     notifyDataSetChanged();
                 }
 //                adapter.notifyDataSetChanged();

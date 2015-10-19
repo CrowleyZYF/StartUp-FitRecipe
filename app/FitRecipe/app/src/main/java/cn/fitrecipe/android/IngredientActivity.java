@@ -55,8 +55,10 @@ public class IngredientActivity extends Activity implements View.OnClickListener
         if(data == null) data = new ArrayList<>();
         Collections.sort(data);
         ArrayList<PlanComponent> components = new ArrayList<>();
+        int total = 0;
         for(int i = 0; i < data.size(); ) {
             if(data.get(i).getType() == 0) {
+                total += data.get(i).getAmount();
                 components.add(data.get(i));
                 data.remove(i);
             }else
@@ -67,6 +69,7 @@ public class IngredientActivity extends Activity implements View.OnClickListener
             component.setName("其它");
             component.setType(1);
             component.setComponents(components);
+            component.setAmount(total);
             data.add(component);
         }
     }
@@ -130,6 +133,7 @@ public class IngredientActivity extends Activity implements View.OnClickListener
                 break;
             case R.id.shopping_clear:
                 FrDbHelper.getInstance(this).clearBasket();
+                FrApplication.getInstance().setIsBasketEmpty(true);
                 data.clear();
                 PlanFragment.isFresh = true;
                 ((BasketIngredientFragment) fragment1).fresh();

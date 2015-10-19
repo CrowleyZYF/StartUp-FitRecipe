@@ -240,7 +240,7 @@ public class AddToPlanActivity extends Activity implements View.OnClickListener 
 
     private void postprpcess(int plan_id) {
         if(plan_id == -1) {
-            items = Common.generateDatePlan();
+            items = Common.generateDatePlan(Common.getDate());
             try {
                 update(plan_id);
             } catch (JSONException e) {

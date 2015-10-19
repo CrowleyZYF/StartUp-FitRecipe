@@ -33,6 +33,7 @@ import cn.fitrecipe.android.PlanTestActivity;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.ReportActivity;
 import cn.fitrecipe.android.entity.Report;
+import cn.fitrecipe.android.function.Common;
 import cn.fitrecipe.android.function.Evaluation;
 
 /**
@@ -413,6 +414,7 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
         final ProgressDialog pd = ProgressDialog.show(context, "", "生成报告...", true, false);
         pd.setCanceledOnTouchOutside(false);
         JSONObject params = new JSONObject();
+        final String str = Common.getDate();
         try {
             params.put("gender", userEvaluation.getGender());
             params.put("age", userEvaluation.getAge());
@@ -426,6 +428,7 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
             params.put("jobType", userEvaluation.getJobType());
             params.put("exerciseFrequency", userEvaluation.getExerciseFrequency());
             params.put("exerciseInterval", userEvaluation.getExerciseInterval());
+            params.put("date", str);
             System.out.println(params.toString());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -433,7 +436,7 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
         PostRequest request = new PostRequest(FrServerConfig.getReportUrl(), FrApplication.getInstance().getToken(), params, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {
-                Report report = userEvaluation.report();
+                Report report = userEvaluation.report(str);
                 pd.dismiss();
                 Intent intent=new Intent(context,ReportActivity.class);
                 intent.putExtra("report", report);

@@ -206,7 +206,7 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
 
 
         item_calories = (TextView) findViewById(R.id.item_calories);
-        item_calories.setText(String.format("%.2f", item.getCalories_take() / 4.0 ));
+        item_calories.setText(String.format("%.1f", item.getCalories_take()));
         caloire_ratio = (TextView) findViewById(R.id.caloire_ratio);
         caloire_ratio.setText(Math.round(item.getCalories_take() * 100.0 / report.getCaloriesIntake())  + "%");
         protein_amount = (TextView) findViewById(R.id.protein_amount);
@@ -216,9 +216,9 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
         fat_amount = (TextView) findViewById(R.id.fat_amount);
         fat_amount.setText(String.format("%.1f", item.getFat_take()) + "g");
 
-        double sum = item.getProtein_take() + item.getCarbohydrate_take() + item.getFat_take();
-        int a = (int) Math.round(item.getCarbohydrate_take() * 100 / sum);
-        int b = (int) Math.round(item.getProtein_take() * 100 / sum);
+        double sum = item.getProtein_take() * 4+ item.getCarbohydrate_take() * 4 + item.getFat_take() * 9;
+        int a = (int) Math.round(item.getCarbohydrate_take() * 4 * 100 / sum);
+        int b = (int) Math.round(item.getProtein_take() * 4 * 100 / sum);
         int c = 100 - a - b;
         chartView2.setValue(new float[]{a, b, c}, true, false, false);
 
