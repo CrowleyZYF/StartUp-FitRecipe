@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -32,7 +31,6 @@ import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
-import cn.fitrecipe.android.dao.FrDbHelper;
 import cn.fitrecipe.android.entity.DatePlan;
 import cn.fitrecipe.android.entity.DatePlanItem;
 import cn.fitrecipe.android.entity.PlanComponent;
@@ -224,7 +222,7 @@ public class PunchFragment extends Fragment
         loadingInterface.setVisibility(View.GONE);
         dotsTextView.stop();
         if(isError){
-            Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+            //Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
         }
         info_container.setVisibility(View.VISIBLE);
         info_container.smoothScrollTo(0, 0);

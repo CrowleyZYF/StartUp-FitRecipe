@@ -17,13 +17,6 @@
 package cn.fitrecipe.android.cropimage;
 
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.concurrent.CountDownLatch;
-
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -46,9 +39,14 @@ import android.os.Handler;
 import android.os.StatFs;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.concurrent.CountDownLatch;
 
 import cn.fitrecipe.android.R;
 
@@ -588,9 +586,7 @@ public class CropImage extends MonitoredActivity {
                     }
 
                     if (mNumFaces > 1) {
-                        Toast.makeText(CropImage.this,
-                                "Multi face crop help",
-                                Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(CropImage.this,"Multi face crop help",Toast.LENGTH_SHORT).show();
                     }
                 }
             });

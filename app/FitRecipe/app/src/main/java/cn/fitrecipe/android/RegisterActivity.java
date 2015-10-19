@@ -3,7 +3,6 @@ package cn.fitrecipe.android;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -196,7 +195,7 @@ public class RegisterActivity extends Activity implements OnClickListener {
 				} else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){
 					Toast.makeText(getApplicationContext(), "验证码已经发送", Toast.LENGTH_SHORT).show();
 				}else if (event ==SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES){//返回支持发送验证码的国家列表
-					Toast.makeText(getApplicationContext(), "获取国家列表成功", Toast.LENGTH_SHORT).show();
+					//Toast.makeText(getApplicationContext(), "获取国家列表成功", Toast.LENGTH_SHORT).show();
 				}
 			} else {
 				((Throwable) data).printStackTrace();
@@ -204,7 +203,7 @@ public class RegisterActivity extends Activity implements OnClickListener {
 				//Toast.makeText(RegisterActivity.this, "验证码错误", Toast.LENGTH_SHORT).show();
                 Common.errorDialog(nowContext, "注册失败", "验证码错误").show();
 				if (resId > 0) {
-					Toast.makeText(RegisterActivity.this, resId, Toast.LENGTH_SHORT).show();
+					//Toast.makeText(RegisterActivity.this, resId, Toast.LENGTH_SHORT).show();
 				}
 			}
 		}

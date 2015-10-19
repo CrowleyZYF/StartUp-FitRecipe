@@ -13,8 +13,6 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,7 +28,6 @@ import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.UI.BorderScrollView;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
-import cn.fitrecipe.android.entity.Collection;
 import cn.fitrecipe.android.entity.Recipe;
 import cn.fitrecipe.android.entity.Theme;
 import pl.tajchert.sample.DotsTextView;
@@ -253,7 +250,7 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
             PostRequest request = new PostRequest(url, FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject res) {
-                    Toast.makeText(ThemeActivity.this, "取消收藏!", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(ThemeActivity.this, "取消收藏!", Toast.LENGTH_SHORT).show();
                     follow_btn.setText(R.string.follow);
                     follow_btn.setBackground(getResources().getDrawable(R.color.active_color));
                     follow_icon.setImageResource(R.drawable.icon_like_noshadow);
@@ -277,7 +274,7 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
             PostRequest request = new PostRequest(url, FrApplication.getInstance().getToken(), params, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject res) {
-                    Toast.makeText(ThemeActivity.this, "收藏成功!", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(ThemeActivity.this, "收藏成功!", Toast.LENGTH_SHORT).show();
                     follow_btn.setText(R.string.cancel_follow);
                     follow_btn.setBackground(getResources().getDrawable(R.color.disable_color));
                     follow_icon.setImageResource(R.drawable.icon_like_green);

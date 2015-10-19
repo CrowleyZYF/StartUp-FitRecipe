@@ -1,7 +1,6 @@
 package cn.fitrecipe.android.fragment;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -307,8 +306,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                             hideLoading(true, getResources().getString(R.string.network_error));
                             int statusCode = volleyError.networkResponse.statusCode;
                             if (statusCode == 404) {
-                                Toast.makeText(
-                                        getActivity(), "404！", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getActivity(), "404！", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -355,7 +353,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 new JoinPlanHelper(getActivity()).joinPersonalPlan(new JoinPlanHelper.CallBack() {
                     @Override
                     public void handle(Object... res) {
-                        Toast.makeText(getActivity(), "默认设置自定义计划", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getActivity(), "默认设置自定义计划", Toast.LENGTH_SHORT).show();
                         int id = (Integer) res[0];
                         plans.put(finalStart, Common.gerneratePersonalPlan(id));
                         processDatePlan(finalStart, finalEnd, plans, finalNowDate, isPre);
@@ -363,7 +361,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                     }
                 }, nowDate);
             }else {
-                Toast.makeText(getActivity(), "预取 " + start + "-" + end + "为空！", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "预取 " + start + "-" + end + "为空！", Toast.LENGTH_SHORT).show();
                 isPreEnable = false;
             }
         }
@@ -516,7 +514,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             return true;
         }
         else {
-            Toast.makeText(getActivity(), "已经无计划了!", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "已经无计划了!", Toast.LENGTH_SHORT).show();
             return false;
         }
     }
@@ -539,7 +537,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             isPreEnable = false;
         }
         if(Common.CompareDate(start, end) <= 0) {
-            Toast.makeText(getActivity(), "预取" + start + "-" + end, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "预取" + start + "-" + end, Toast.LENGTH_SHORT).show();
             getData(start, end, true);
         }
     }
@@ -553,7 +551,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         loadingInterface.setVisibility(View.GONE);
         dotsTextView.stop();
         if(isError){
-            Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+            //Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
         }else{
             info_container.setVisibility(View.VISIBLE);
         }
@@ -744,7 +742,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Toast.makeText(getActivity(), "更新自定义计划成功！", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "更新自定义计划成功！", Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -752,7 +750,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 info_container.setEnabled(true);
                 if(volleyError != null && volleyError.networkResponse != null) {
                     int statusCode = volleyError.networkResponse.statusCode;
-                    Toast.makeText(getActivity(), statusCode+"", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), statusCode+"", Toast.LENGTH_SHORT).show();
                 }else
                     Toast.makeText(getActivity(), getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
             }

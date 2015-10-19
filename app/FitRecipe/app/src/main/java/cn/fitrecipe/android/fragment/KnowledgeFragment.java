@@ -9,21 +9,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.Toast;
-
-import com.rey.material.widget.CheckBox;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.rey.material.widget.CheckBox;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import cn.fitrecipe.android.Adpater.SeriesCardAdapter;
 import cn.fitrecipe.android.FrApplication;
@@ -92,7 +89,7 @@ public class KnowledgeFragment extends Fragment{
         loadingInterface.setVisibility(View.GONE);
         dotsTextView.stop();
         if(isError){
-            Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+            //Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
         }else{
             knowledge_series_list.setVisibility(View.VISIBLE);
             knowledge_series_list.smoothScrollTo(0, 0);

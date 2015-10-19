@@ -93,7 +93,7 @@ public class ThemeFragment extends Fragment
                     try {
                         JSONArray data = res.getJSONArray("data");
                         if(data == null || data.length() == 0) {
-                            Toast.makeText(getActivity(), "没有多余", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getActivity(), "没有多余", Toast.LENGTH_SHORT).show();
                         }else
                             processData(data);
                     } catch (JSONException e) {

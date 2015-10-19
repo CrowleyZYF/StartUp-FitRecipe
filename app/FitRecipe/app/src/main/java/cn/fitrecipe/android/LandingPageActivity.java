@@ -1,17 +1,14 @@
 package cn.fitrecipe.android;
 
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -60,7 +57,7 @@ public class LandingPageActivity extends Activity implements ViewPager.OnPageCha
             @Override
             public void onClick(View v) {
                 final JSONObject params = new JSONObject();
-                Toast.makeText(LandingPageActivity.this, "注册测试用户!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(LandingPageActivity.this, "注册测试用户!", Toast.LENGTH_SHORT).show();
                 try {
                     params.put("phone", new Random().nextInt(1000));
                     params.put("password", "123456");
@@ -71,7 +68,7 @@ public class LandingPageActivity extends Activity implements ViewPager.OnPageCha
                     @Override
                     public void onResponse(JSONObject res) {
                         try {
-                            Toast.makeText(LandingPageActivity.this, params.getInt("phone")+"", 10000).show();
+                            Toast.makeText(LandingPageActivity.this, params.getInt("phone")+"", 10000);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

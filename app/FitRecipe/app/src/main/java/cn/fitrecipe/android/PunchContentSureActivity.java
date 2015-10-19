@@ -11,11 +11,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,20 +43,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.UI.PieChartView;
-import cn.fitrecipe.android.dao.FrDbHelper;
-import cn.fitrecipe.android.entity.DatePlan;
 import cn.fitrecipe.android.entity.DatePlanItem;
 import cn.fitrecipe.android.entity.Nutrition;
 import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.Report;
-import cn.fitrecipe.android.fragment.PlanFragment;
 import cn.fitrecipe.android.function.Common;
 import cn.fitrecipe.android.function.PunchImageGenerator;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -298,7 +291,7 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
 
             pngName = FrApplication.getInstance().getAuthor().getNick_name() + Common.getTime();
-            Toast.makeText(PunchContentSureActivity.this, pngName, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(PunchContentSureActivity.this, pngName, Toast.LENGTH_SHORT).show();
             uploadManager.put(baos.toByteArray(), pngName, token, new UpCompletionHandler() {
                 @Override
                 public void complete(String s, ResponseInfo responseInfo, JSONObject jsonObject) {
@@ -353,7 +346,7 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
             @Override
             public void onResponse(JSONObject res) {
                 if(res.has("data")) {
-                    Toast.makeText(PunchContentSureActivity.this, "打卡完成!", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(PunchContentSureActivity.this, "打卡完成!", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(PunchContentSureActivity.this, RecordActivity.class);
                     startActivity(intent);
                 }

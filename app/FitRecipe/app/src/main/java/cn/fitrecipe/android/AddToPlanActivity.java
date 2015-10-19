@@ -16,18 +16,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.Http.PostRequest;
-import cn.fitrecipe.android.entity.DatePlan;
 import cn.fitrecipe.android.entity.DatePlanItem;
 import cn.fitrecipe.android.entity.PlanComponent;
-import cn.fitrecipe.android.entity.SeriesPlan;
 import cn.fitrecipe.android.function.Common;
 import cn.fitrecipe.android.function.JsonParseHelper;
 
@@ -406,7 +401,7 @@ public class AddToPlanActivity extends Activity implements View.OnClickListener 
         PostRequest request = new PostRequest(FrServerConfig.getUpdatePlanUrl(), FrApplication.getInstance().getToken(), params, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {
-                Toast.makeText(AddToPlanActivity.this, "更新自定义计划成功！", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(AddToPlanActivity.this, "更新自定义计划成功！", Toast.LENGTH_SHORT).show();
                 FrApplication.getInstance().setIsAddRecipeToPlan(true);
                 pd.dismiss();
                 finish();

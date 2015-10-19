@@ -70,7 +70,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         Author author = new Gson().fromJson(data.toString(), Author.class);
         author.setIsLogin(true);
         FrApplication.getInstance().setAuthor(author);
-        Toast.makeText(getApplicationContext(), "欢迎："+ author.getNick_name(), Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), "欢迎："+ author.getNick_name(), Toast.LENGTH_LONG).show();
         getReport();
     }
 
@@ -213,7 +213,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         }else if(passwordString.equals("")){
             Common.errorDialog(this, "登陆失败", "密码不得为空").show();
         }else {
-            Toast.makeText(LoginActivity.this, "phone:" + accountString + " password:" + passwordString, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(LoginActivity.this, "phone:" + accountString + " password:" + passwordString, Toast.LENGTH_SHORT).show();
             pd = ProgressDialog.show(LoginActivity.this, "", "正在登录...", true, false);
             pd.setCanceledOnTouchOutside(false);
             // TODO @WangKun
@@ -258,7 +258,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
     //第三方登录
     private void doOtherLogin(final String userId, final String userName, final String platform) {
-        Toast.makeText(LoginActivity.this, "ID:" + userId + " Name:" + userName + " Source:" + platform, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(LoginActivity.this, "ID:" + userId + " Name:" + userName + " Source:" + platform, Toast.LENGTH_SHORT).show();
         // TODO @WangKun
         // 第三方登陆，登陆成功后调用loginSuccess，账号不存在调用accountError，密码错误调用passError
         pd = ProgressDialog.show(LoginActivity.this, "", "正在登录...", true, false);

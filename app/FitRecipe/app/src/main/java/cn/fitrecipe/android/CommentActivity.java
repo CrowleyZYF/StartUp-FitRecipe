@@ -1,10 +1,8 @@
 package cn.fitrecipe.android;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -29,7 +27,6 @@ import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.UI.BorderScrollView;
-import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.entity.Author;
 import cn.fitrecipe.android.entity.Comment;
 
@@ -188,7 +185,7 @@ public class CommentActivity extends Activity implements View.OnClickListener {
         //modify the view
         Author author = FrApplication.getInstance().getAuthor();
         if(author == null) {
-            Toast.makeText(this, "请登录！！！", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "请登录！", Toast.LENGTH_SHORT).show();
 //            Intent intent = new Intent(this, LoginActivity.class);
 //            startActivity(intent);
 //            this.finish();
@@ -208,7 +205,7 @@ public class CommentActivity extends Activity implements View.OnClickListener {
         PostRequest request = new PostRequest(url, FrApplication.getInstance().getToken(), params, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {
-                Toast.makeText(CommentActivity.this, "评论成功!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(CommentActivity.this, "评论成功!", Toast.LENGTH_SHORT).show();
                 if(res.has("data")) {
                     try {
                         Comment comment = new Gson().fromJson(res.getJSONObject("data").toString(), Comment.class);

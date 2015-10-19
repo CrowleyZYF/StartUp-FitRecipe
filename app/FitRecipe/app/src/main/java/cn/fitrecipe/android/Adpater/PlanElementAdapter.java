@@ -37,7 +37,6 @@ import cn.fitrecipe.android.RecipeActivity;
 import cn.fitrecipe.android.SelectRecipeActivity;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.dao.FrDbHelper;
-import cn.fitrecipe.android.entity.BasketRecord;
 import cn.fitrecipe.android.entity.DatePlanItem;
 import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.Report;
@@ -123,14 +122,14 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
                     item.setIsInBasket(true);
                     ((PlanFragment) fragment).addToBasket(item.getDate(), item.getType());
                     FrDbHelper.getInstance(fragment.getActivity()).addToBasket(item.getComponents(), item.getDate(), item.getType());
-                    Toast.makeText(fragment.getActivity(), "加入菜篮子", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(fragment.getActivity(), "加入菜篮子", Toast.LENGTH_SHORT).show();
                 }else {
                     addBtn.setEnabled(true);
                     ((ImageView)v).setImageResource(R.drawable.icon_plan_shopping);
                     item.setIsInBasket(false);
                     ((PlanFragment) fragment).removeFromBasket(item.getDate(), item.getType());
                     FrDbHelper.getInstance(fragment.getActivity()).removeFromBasket(item.getComponents(), item.getDate(), item.getType());
-                    Toast.makeText(fragment.getActivity(), "从菜篮子取出", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(fragment.getActivity(), "从菜篮子取出", Toast.LENGTH_SHORT).show();
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -149,7 +148,7 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
                     Intent intent = new Intent(fragment.getActivity(), PunchPhotoChoiceActivity.class);
                     intent.putExtra("item", item);
                     fragment.startActivity(intent);
-                    Toast.makeText(fragment.getActivity(), "打卡", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(fragment.getActivity(), "打卡", Toast.LENGTH_SHORT).show();
                 }else {
                     item.setIsPunch(false);
                     ((ImageView)v).setImageResource(R.drawable.icon_plan_punch);
@@ -157,12 +156,12 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
                     PostRequest request = new PostRequest(FrServerConfig.getPunchDeleteUrl(item.getPunchId()), FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject jsonObject) {
-                            Toast.makeText(fragment.getActivity(), "取消打卡成功!", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(fragment.getActivity(), "取消打卡成功!", Toast.LENGTH_SHORT).show();
                         }
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError volleyError) {
-                            Toast.makeText(fragment.getActivity(), "取消打卡失败!", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(fragment.getActivity(), "取消打卡失败!", Toast.LENGTH_SHORT).show();
                         }
                     });
                     FrRequest.getInstance().request(request);
@@ -410,7 +409,7 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
                         e.printStackTrace();
                     }
                     notifyDataSetChanged();
-                    Toast.makeText(fragment.getActivity(), "click delete", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(fragment.getActivity(), "click delete", Toast.LENGTH_SHORT).show();
                 }
             });
         }
