@@ -189,7 +189,11 @@ public class SelectStageSecondFragment extends Fragment implements View.OnClickL
                 break;
             case R.id.add:
                 weight2 += 0.25;
-                recipe_weight.setText(weight2+"");
+                int tmp = (int)(weight2 * 4);
+                if(tmp % 4 == 0)
+                    recipe_weight.setText(String.valueOf(tmp/4));
+                else
+                    recipe_weight.setText(String.valueOf(weight2));
                 PlanComponent component = ((SelectRecipeActivity)getActivity()).obj_selected;
                 calorie_data_text.setText(Math.round(component.getCalories() * component.getAmount() * weight2 / 100)+" kcal");
                 protein_data_text.setText(String.format("%.2f g", component.getNutritions().get(1).getAmount() * component.getAmount() * weight2 / 100));
@@ -199,7 +203,11 @@ public class SelectStageSecondFragment extends Fragment implements View.OnClickL
             case R.id.sub:
                 if(weight2 > 0) {
                     weight2 -= 0.25;
-                    recipe_weight.setText(weight2+"");
+                    tmp = (int)(weight2 * 4);
+                    if(tmp % 4 == 0)
+                        recipe_weight.setText(String.valueOf(tmp/4));
+                    else
+                        recipe_weight.setText(String.valueOf(weight2));
                 }
                 component = ((SelectRecipeActivity)getActivity()).obj_selected;
                 calorie_data_text.setText(Math.round(component.getCalories() * component.getAmount() * weight2 / 100)+" kcal");

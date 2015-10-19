@@ -413,7 +413,7 @@ public class Evaluation {
 		return metabolic;
 	}*/
 	
-	public Report report() {
+	public Report report(String update) {
 		final String NotSure = "ToBeContinued";
 		Report report = new Report();
 		report.setGender(gender);
@@ -425,10 +425,7 @@ public class Evaluation {
         report.setDaysToGoal(daysToGoal);
 		report.setRoughFat(roughFat);
 		report.setPreciseFat(preciseFat);
-		long now = System.currentTimeMillis();
-		Date date = new Date(now);
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		report.setUpdatetime(sdf.format(date));
+		report.setUpdatetime(update);
 
 		//BMI
 		report.setBMI(getBMI());

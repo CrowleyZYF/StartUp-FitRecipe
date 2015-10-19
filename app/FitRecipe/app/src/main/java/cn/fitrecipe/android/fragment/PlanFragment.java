@@ -83,9 +83,13 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     private Map<String, DatePlan> data;
     public static boolean isFresh = false;
 
+    //保存切换计划的记录
     private Map<String, SeriesPlan> planMap;
+    //保存计划打卡记录
     private Map<String, List<PunchRecord>> punchData;
+    //保存菜篮子
     private Map<String, List<BasketRecord>> basketData;
+    //计划详情获取计数， 用于判断所有计划是否获取完成
     private AtomicInteger count;
 
     //使用第三方计划的时候，完成第（1/7）天
@@ -93,6 +97,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
 
     //network
     private boolean isError = false;
+    private boolean isPreEnable = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -155,26 +160,43 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         }
         //获取前面两天，后面七天的记录
         String today = Common.getDate();
-        getData(Common.getSomeDay(today, -2), Common.getSomeDay(today, 6));
+        getData(Common.getSomeDay(today, -2), Common.getSomeDay(today, 5), false);
+        if(FrApplication.getInstance().isAddRecipeToPlan())
+             FrApplication.getInstance().setIsAddRecipeToPlan(false);
     }
 
     // 获取服务器上的记录
-    private void getData(String start, String end) {
+
+    /**
+     * 获取计划， 判断是从服务器获取，还是直接从本地获取
+     * @param start 计划开始时间
+     * @param end   计划结束时间
+     * @param isPre true表示预取，获取成功之后不会切换计划switchplan, false表示刚进入计划获取的数据
+     */
+    private void getData(String start, String end, boolean isPre) {
         if(data == null)
             data = new HashMap<>();
 //        indexDate = new HashMap<>();
         if(punchData == null)
             punchData = new TreeMap<>();
+        if(indexDate == null)
+            indexDate = new TreeMap<>();
         if(Common.isOpenNetwork(getActivity())) {
             start = Common.dateFormat(start);
             end = Common.dateFormat(end);
-            getDataFromServer(start, end);
+            getDataFromServer(start, end, isPre);
         }else
             getDataFromLocal(start, end);
     }
 
-    // 请求数据
-    private void getDataFromServer(final String start, final String end) {
+
+    /**
+     * 从服务器获取切换计划的记录
+     * @param start
+     * @param end
+     * @param isPre
+     */
+    private void getDataFromServer(final String start, final String end, final boolean isPre) {
         GetRequest request = new GetRequest(FrServerConfig.getDatePlanUrl(start, end), FrApplication.getInstance().getToken(),
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -182,7 +204,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                         if(res != null && res.has("data")) {
                             try {
                                 JSONObject data = res.getJSONObject("data");
-                                processData(data, start, end);
+                                processData(data, start, end, isPre);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -199,19 +221,26 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         FrRequest.getInstance().request(request);
     }
 
-    //处理网络上的数据
-    private void processData(JSONObject data, String start, String end) throws JSONException {
+    /**
+     * 处理从服务器器获取的数据，并根据获取数据中plan id去获取每个计划详情
+     * @param data
+     * @param start
+     * @param end
+     * @param isPre
+     * @throws JSONException
+     */
+    private void processData(JSONObject data, String start, String end, boolean isPre) throws JSONException {
         if(data != null) {
             planMap = new ConcurrentHashMap<>();
             count = new AtomicInteger(0);
             if(!data.getString("lastJoined").equals("null")) {
                 count.incrementAndGet();
-                requestPlanDetails(data.getJSONObject("lastJoined").getString("joined_date"), data.getJSONObject("lastJoined").getJSONObject("plan").getInt("id"), start, end);
+                requestPlanDetails(data.getJSONObject("lastJoined").getString("joined_date"), data.getJSONObject("lastJoined").getJSONObject("plan").getInt("id"), start, end, isPre);
             }
             JSONArray calendar = data.getJSONArray("calendar");
             for(int i = 0; i < calendar.length(); i++) {
                 count.incrementAndGet();
-                requestPlanDetails(calendar.getJSONObject(i).getString("joined_date"), calendar.getJSONObject(i).getJSONObject("plan").getInt("id"), start, end);
+                requestPlanDetails(calendar.getJSONObject(i).getString("joined_date"), calendar.getJSONObject(i).getJSONObject("plan").getInt("id"), start, end, isPre);
             }
             JSONArray punchs = data.getJSONArray("punch");
             for(int i = 0; i < punchs.length(); i++) {
@@ -240,13 +269,20 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             }
             //新用户完全没有记录 直接创建一个新的自定义计划
             if(data.getString("lastJoined").equals("null") && calendar.length()==0){
-                postprocess(start, end);
+                postprocess(start, end, isPre);
             }
         }
     }
 
-    //获取计划详情
-    private void requestPlanDetails(final String join_date, int plan_id, final String start, final String end) {
+    /**
+     * 根据plan_id获取计划详情
+     * @param join_date
+     * @param plan_id
+     * @param start
+     * @param end
+     * @param isPre
+     */
+    private void requestPlanDetails(final String join_date, int plan_id, final String start, final String end, final boolean isPre) {
         GetRequest request = new GetRequest(FrServerConfig.getPlanDetails(plan_id), null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -254,10 +290,10 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                         if (res != null && res.has("data")) {
                             try {
                                 JSONObject data = res.getJSONObject("data");
-                                parsePlanJson(join_date, data);
+                                planMap.put(join_date, JsonParseHelper.getSeriesPlanFromJson(data));//和日期对应
                                 count.decrementAndGet();
                                 if(count.compareAndSet(0, 0))
-                                    postprocess(start, end);
+                                    postprocess(start, end, isPre);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -280,115 +316,14 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         FrRequest.getInstance().request(request);
     }
 
-    //处理计划的JSON
-    private void parsePlanJson(String join_date, JSONObject data) throws JSONException {
-        SeriesPlan plan = new SeriesPlan();
-        plan.setId(data.getInt("id"));//计划ID
-        plan.setImg(data.getString("img"));//计划缩略图
-        plan.setInrtoduce(data.getString("inrtoduce"));//计划背景图
-        plan.setDifficulty(data.getInt("difficulty"));//计划操作难度
-        plan.setDelicious(data.getInt("delicious"));//计划美味程度
-        plan.setBenifit(data.getInt("benifit"));//计划类型：增肌-减脂
-        plan.setTotal_days(data.getInt("total_days"));//计划总共的天数
-        plan.setDish_headcount(data.getInt("dish_headcount"));//采用计划的人数
-        plan.setTitle(data.getString("title"));//计划名称
-
-        //好多天的计划
-        ArrayList<DatePlan> datePlans = new ArrayList<>();
-
-        JSONArray routine_set = data.getJSONArray("routine_set");
-
-        for(int i  = 0; i < routine_set.length(); i++) {
-            JSONObject routine = routine_set.getJSONObject(i);
-
-            //某一天的计划
-            DatePlan datePlan = new DatePlan();
-            datePlan.setPlan_name(plan.getTitle());
-
-            JSONArray dish_set = routine.getJSONArray("dish_set");
-            //某一天的一日五餐
-            List<DatePlanItem> items = new ArrayList<>();
-
-            //列表项
-            for(int j = 0; j < dish_set.length(); j++) {
-                //具体某一餐
-                DatePlanItem item = new DatePlanItem();
-                //确定餐的类型
-                int type = dish_set.getJSONObject(j).getInt("type");
-                switch (type) {
-                    case 0:
-                        item.setType("breakfast");
-                        item.setDefaultImageCover("drawable://" + R.drawable.breakfast);
-                        break;
-                    case 1:
-                        item.setType("add_meal_01");
-                        item.setDefaultImageCover("drawable://" + R.drawable.add_meal_01);
-                        break;
-                    case 2:
-                        item.setType("lunch");
-                        item.setDefaultImageCover("drawable://" + R.drawable.lunch);
-                        break;
-                    case 3:
-                        item.setType("add_meal_02");
-                        item.setDefaultImageCover("drawable://" + R.drawable.add_meal_02);
-                        break;
-                    case 4:
-                        item.setType("supper");
-                        item.setDefaultImageCover("drawable://" + R.drawable.dinner);
-                        break;
-                    case 5:
-                        item.setType("add_meal_03");
-                        item.setDefaultImageCover("drawable://" + R.drawable.add_meal_03);
-                        break;
-                }
-                //获取计划中食材
-                JSONArray singleingredient_set = dish_set.getJSONObject(j).getJSONArray("singleingredient_set");
-                for(int k = 0; k < singleingredient_set.length(); k++) {
-                    PlanComponent component = new PlanComponent();
-                    component.setType(0);//标记为食材
-                    component.setId(singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getInt("id"));
-                    component.setName(singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getString("name"));//设置名称
-                    component.setNutritions(JsonParseHelper.getNutritionSetFromJson(singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getJSONObject("nutrition_set")));//获取营养信息
-                    component.setAmount(singleingredient_set.getJSONObject(k).getInt("amount"));//设置重量
-                    component.setCalories(component.getAmount() * singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getJSONObject("nutrition_set").getJSONObject("Energy").getDouble("amount") / 100);//设置卡路里
-                    item.addContent(component);
-                }
-                //获取计划中食谱
-                JSONArray singlerecipe_set = dish_set.getJSONObject(j).getJSONArray("singlerecipe_set");
-                for(int k = 0; k < singlerecipe_set.length(); k++) {
-                    JSONObject json_recipe = singlerecipe_set.getJSONObject(k);
-                    PlanComponent component = new PlanComponent();
-                    component.setAmount(json_recipe.getInt("amount"));
-                    component.setCalories(json_recipe.getJSONObject("recipe").getDouble("calories"));
-                    component.setType(1);
-                    component.setId(json_recipe.getJSONObject("recipe").getInt("id"));
-                    component.setName(json_recipe.getJSONObject("recipe").getString("title"));
-                    component.setNutritions(JsonParseHelper.getNutritionSetFromJson(json_recipe.getJSONObject("recipe").getJSONObject("nutrition_set")));
-                    JSONArray json_component = json_recipe.getJSONObject("recipe").getJSONArray("component_set");
-                    ArrayList<PlanComponent> components = new ArrayList<>();
-                    for(int q = 0; q < json_component.length(); q++) {
-                        PlanComponent component1 = new PlanComponent();
-                        JSONObject jcomponent = json_component.getJSONObject(q);
-                        component1.setName(jcomponent.getJSONObject("ingredient").getString("name"));
-                        component1.setAmount(jcomponent.getInt("amount"));
-                        component1.setType(0);
-                        components.add(component1);
-                    }
-                    component.setComponents(components);
-                    item.addContent(component);
-                }
-                items.add(item);//添加早餐
-            }
-            datePlan.setItems(items);//添加某一天的一日五餐
-            datePlans.add(datePlan);//添加计划中的某一天
-        }
-
-        plan.setDatePlans(datePlans);//设置计划中的好几天
-
-        planMap.put(join_date, plan);//和日期对应
-    }
-
-    private void postprocess(String start, String end) throws JSONException {
+    /**
+     * 如果是老用户，直接推算出每天的计划，如果是新用户，需要为新用户创建新的默认自定义计划。如果是预取,不会创建
+     * @param start
+     * @param end
+     * @param isPre
+     * @throws JSONException
+     */
+    private void postprocess(String start, String end, final boolean isPre) throws JSONException {
         final Map<String, SeriesPlan> plans = new TreeMap<>();
         Set<String> keyset = planMap.keySet();
         Iterator<String> iterator = keyset.iterator();
@@ -405,51 +340,63 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         if(nowDate != null) {
             if (Common.CompareDate(start, nowDate) < 0)
                 start = nowDate;
-            processDatePlan(start, end, plans, nowDate);
-            hideLoading(false, "");
+            processDatePlan(start, end, plans, nowDate, isPre);
+            if(!isPre)
+                hideLoading(false, "");
         }else {
             //新用户 默认设定自定义计划
-            start = Common.getDate();
-            nowDate = start;
+            if(!isPre) {
+                start = Common.getDate();
+                nowDate = start;
 
-            final String finalStart = start;
-            final String finalEnd = end;
-            final String finalNowDate = nowDate;
-            new JoinPlanHelper(getActivity()).joinPersonalPlan(new JoinPlanHelper.CallBack() {
-                @Override
-                public void handle(Object... res) {
-                    Toast.makeText(getActivity(), "默认设置自定义计划", Toast.LENGTH_SHORT).show();
-                    int id = (Integer) res[0];
-                    plans.put(finalStart, gerneratePersonalPlan(id));
-                    processDatePlan(finalStart, finalEnd, plans, finalNowDate);
-                    hideLoading(false, "");
-                }
-            }, nowDate);
+                final String finalStart = start;
+                final String finalEnd = end;
+                final String finalNowDate = nowDate;
+                new JoinPlanHelper(getActivity()).joinPersonalPlan(new JoinPlanHelper.CallBack() {
+                    @Override
+                    public void handle(Object... res) {
+                        Toast.makeText(getActivity(), "默认设置自定义计划", Toast.LENGTH_SHORT).show();
+                        int id = (Integer) res[0];
+                        plans.put(finalStart, Common.gerneratePersonalPlan(id));
+                        processDatePlan(finalStart, finalEnd, plans, finalNowDate, isPre);
+                        hideLoading(false, "");
+                    }
+                }, nowDate);
+            }else {
+                Toast.makeText(getActivity(), "预取 " + start + "-" + end + "为空！", Toast.LENGTH_SHORT).show();
+                isPreEnable = false;
+            }
         }
     }
 
-    private void processDatePlan(String start, String end, Map<String, SeriesPlan> plans, String nowDate) {
+    /**
+     * 推算出每天的计划，并显示，在切换每天计划是，判断之前的6天计划是否已获取，如未获取，预取
+     * @param start
+     * @param end
+     * @param plans
+     * @param nowDate
+     * @param isPre
+     */
+    private void processDatePlan(String start, String end, Map<String, SeriesPlan> plans, String nowDate, boolean isPre) {
 
         /**
          * 获取菜篮子信息
          */
-
         basketData = FrDbHelper.getInstance(getActivity()).getBasketInfo(start, end);
-
         SeriesPlan now = plans.get(nowDate);//切换的不同计划
         String str = start;
-        while(Common.CompareDate(str, end) < 0) {
+        while(Common.CompareDate(str, end) <= 0) {
 
             if(plans.containsKey(str)) {
                 nowDate = str;
                 now = plans.get(str);
             }
-                /*
-                * nowDate是切换不同计划的时间点 str是自然时间 自定义计划是每天都会创建不同的
-                * 所以
-                * 1. 对于自定义计划来说 如果nowDate和str相同，就说明那天创建了自定义计划，直接放到记录里，否则就说明那天没有创建，为空
-                * 2. 对于第三方计划来说 则取某一天的计划 自动轮循
-                * */
+            /**
+             * nowDate是切换不同计划的时间点 str是自然时间 自定义计划是每天都会创建不同的
+             * 所以
+             * 1. 对于自定义计划来说 如果nowDate和str相同，就说明那天创建了自定义计划，直接放到记录里，否则就说明那天没有创建，为空
+             * 2. 对于第三方计划来说 则取某一天的计划 自动轮循
+             * */
             DatePlan datePlan = null;
             if(now.getTitle().equals("personal plan")) {
                 if(nowDate.equals(str)) {
@@ -459,7 +406,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                     data.put(str, datePlan);
                 }
                 else {
-                    datePlan = gernerateEmptyPlan(str);
+                    datePlan = Common.gernerateEmptyPlan(str);
                     data.put(str, datePlan);
                 }
             }else {
@@ -468,57 +415,41 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 datePlan.setDate(str);
                 datePlan.setPlan_id(now.getId());
                 data.put(str, now.getDatePlans().get(th));
-//                indexDate.put(str, "完成("+ (th+1) +"/"+now.getTotal_days()+")天");
-
+                indexDate.put(str, "完成("+ (th+1) +"/"+now.getTotal_days()+")天");
             }
             str = Common.getSomeDay(str, 1);
         }
-        switchPlan(pointer, 1);
+        if(!isPre)
+            switchPlan(pointer, 1);
     }
 
-    private SeriesPlan gerneratePersonalPlan(int id) {
-        SeriesPlan plan = new SeriesPlan();
-        plan.setId(id);
-        plan.setTitle("personal plan");
-        plan.setTotal_days(1);
-        ArrayList<DatePlan> datePlans = new ArrayList<>();
-        datePlans.add(gernerateEmptyPlan(Common.getDate()));
-        plan.setDatePlans(datePlans);
-        return plan;
-    }
 
-    private DatePlan gernerateEmptyPlan(String date) {
-        DatePlan datePlan = new DatePlan();
-//        datePlan.setIsPunch(false);
-        datePlan.setPlan_name("personal plan");
-//        datePlan.setInBasket(false);
-        datePlan.setDate(date);
-        datePlan.setPlan_id(-1);
-        datePlan.setItems(Common.generateDatePlan());
-        return datePlan;
-    }
 
     //pointer是往前或者往后几天 dir是之前还是之后
     private boolean switchPlan(int pointer, int dir) {
         String str = Common.getSomeDay(Common.getDate(), pointer);//获取几月几号的记录
         int days = Common.getDiff(str, report.getUpdatetime()) + 1;//增肌减脂第几天
-        if (data.containsKey(str)) {
+        if (days > 0 && data.containsKey(str)) {
 
             /**
              * 预取
              */
-            prefetch(str);
+            if (isPreEnable)
+                prefetch(str);
 
             diy_days.setText(str);
             plan_status_day.setText(days + "");
             datePlan = data.get(str);
+            datePlan.setDate(str);
             plan_name.setText(datePlan.getPlan_name().equals("personal plan") ? "自定义计划" : datePlan.getPlan_name());
             other_plan_days.setVisibility(datePlan.getPlan_name().equals("personal plan") ? View.GONE : View.VISIBLE);
-//            other_plan_days.setText(indexDate!=null&&indexDate.containsKey(str)?indexDate.get(str):"");
+            other_plan_days.setText(indexDate != null && indexDate.containsKey(str) ? indexDate.get(str) : "");
             items = datePlan.getItems();
-            if(punchData.containsKey(str)) {
+            for(int i = 0; i < items.size(); i++)
+                items.get(i).setDate(datePlan.getDate());
+            if (punchData.containsKey(str)) {
                 List<PunchRecord> prs = punchData.get(str);
-                for(int i = 0; i < prs.size(); i++) {
+                for (int i = 0; i < prs.size(); i++) {
                     switch (prs.get(i).getType()) {
                         case "breakfast":
                             items.get(0).setIsPunch(true);
@@ -553,9 +484,9 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                     }
                 }
             }
-            if(basketData.containsKey(str)) {
+            if (basketData.containsKey(str)) {
                 List<BasketRecord> brs = basketData.get(str);
-                for(int i = 0; i < brs.size(); i++) {
+                for (int i = 0; i < brs.size(); i++) {
                     switch (brs.get(i).getType()) {
                         case "breakfast":
                             items.get(0).setIsInBasket(true);
@@ -578,10 +509,10 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                     }
                 }
             }
-            if(pointer != 0)
-                adapter.setData(items, datePlan.getPlan_name().equals("personal plan")?true:false, false);//未来
+            if (pointer != 0)
+                adapter.setData(items, datePlan.getPlan_name().equals("personal plan") ? true : false, false);//未来
             else
-                adapter.setData(items, datePlan.getPlan_name().equals("personal plan")?true:false, true);//过去
+                adapter.setData(items, datePlan.getPlan_name().equals("personal plan") ? true : false, true);//过去
             return true;
         }
         else {
@@ -590,49 +521,33 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         }
     }
 
+    /**
+     * 预取str之前5天的计划
+     * @param str
+     */
     private void prefetch(String str) {
-        String start = str;
+        String end = str;
         for(int i = 0; i < 6; i++) {
-            start = Common.getSomeDay(str, -i);
-            if(!data.containsKey(start)) {
+            end = Common.getSomeDay(str, -i);
+            if(!data.containsKey(end)) {
                 break;
             }
         }
-        String end = Common.getSomeDay(str, -5);
-        Toast.makeText(getActivity(), "预取" + start + "-" + end, Toast.LENGTH_SHORT).show();
-        getData(start, end);
+        String start = Common.getSomeDay(str, -5);
+        if(Common.CompareDate(report.getUpdatetime(), start) >= 0) {
+            start = report.getUpdatetime();
+            isPreEnable = false;
+        }
+        if(Common.CompareDate(start, end) <= 0) {
+            Toast.makeText(getActivity(), "预取" + start + "-" + end, Toast.LENGTH_SHORT).show();
+            getData(start, end, true);
+        }
     }
 
     private void getDataFromLocal(String start, String end) {
 
     }
 
-    private void loadData() {
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                if(report.isGoalType()) {
-                    plan_status.setText("增肌第");
-                }else{
-                    plan_status.setText("减脂第");
-                }
-                switchPlan(pointer, 1);
-            }
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                if (data != null)
-                    data.clear();
-                datePlan = null;
-                report = FrDbHelper.getInstance(getActivity()).getReport();
-                String start = Common.getSomeDay(Common.getDate(), -2);
-                if(Common.CompareDate(start, report.getUpdatetime()) < 0)
-                    start = report.getUpdatetime();
-//                data = FrDbHelper.getInstance(getActivity()).getDatePlan(start, Common.getSomeDay(Common.getDate(), 6));
-                return null;
-            }
-        }.execute();
-    }
 
     private void hideLoading(boolean isError, String errorMessage){
         loadingInterface.setVisibility(View.GONE);
@@ -659,10 +574,22 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 }
             }
         }
-//        if(isFresh) {
-//            loadData();
-//        }
-//        isFresh = false;
+
+        if(FrApplication.getInstance().isBasketEmpty() && basketData != null) {
+            basketData.clear();
+            for(int i = 0; i < items.size(); i++) {
+                items.get(i).setIsInBasket(false);
+            }
+            adapter.notifyDataSetChanged();
+            FrApplication.getInstance().setIsBasketEmpty(false);
+        }
+
+        if(FrApplication.getInstance().isAddRecipeToPlan()) {
+            //获取前面两天，后面七天的记录
+            String today = Common.getDate();
+            getData(Common.getSomeDay(today, -2), Common.getSomeDay(today, 5), false);
+            FrApplication.getInstance().setIsAddRecipeToPlan(false);
+        }
     }
 
     private void changePlan(String today, SeriesPlan plan) {
@@ -677,7 +604,9 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                     datePlan = Common.gernerateEmptyPlan(str);
                 }
             }else {
-                datePlan = plan.getDatePlans().get(i % plan.getTotal_days());
+                int th = i % plan.getTotal_days();
+                datePlan = plan.getDatePlans().get(th);
+                indexDate.put(str, "完成("+ (th+1) +"/"+ plan.getTotal_days()+")天");
                 datePlan.setPlan_id(plan.getId());
             }
             datePlan.setDate(str);
@@ -690,103 +619,41 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onPause() {
         super.onPause();
-//        if(datePlan != null) {
-//            boolean flag = false, flag1 = false;
-//            for(int i = 0; i < items.size(); i++) {
-//                flag = flag || items.get(i).isInBasket();
-//                flag1 = flag1 || items.get(i).isPunch();
-//            }
-//            datePlan.setInBasket(flag);
-//            datePlan.setIsPunch(flag1);
-//            datePlan.setItems(items);
-//        }
-//        Set<String> keySet = data.keySet();
-//        Iterator<String> iterator = keySet.iterator();
-//        while (iterator.hasNext()) {
-//            DatePlan update = data.get(iterator.next());
-//            FrDbHelper.getInstance(getActivity()).addDatePlan(update);
-//        }
     }
-
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        int index = 0;
         switch (requestCode) {
             case BREAKFAST_CODE:
-                if(resultCode == getActivity().RESULT_OK && data.hasExtra("component_selected")) {
-                    PlanComponent obj = (PlanComponent) data.getSerializableExtra("component_selected");
-                    items.get(0).addContent(obj);
-                    try {
-                        update();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    adapter.notifyDataSetChanged();
-                }
+                index = 0;
                 break;
             case ADDMEAL_01_CODE:
-                if(resultCode == getActivity().RESULT_OK && data.hasExtra("component_selected")) {
-                    PlanComponent obj = (PlanComponent) data.getSerializableExtra("component_selected");
-                    items.get(1).addContent(obj);
-                    try {
-                        update();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    adapter.notifyDataSetChanged();
-                }
+                index = 1;
                 break;
             case LUNCH_CODE:
-                if(resultCode == getActivity().RESULT_OK && data.hasExtra("component_selected")) {
-                    PlanComponent obj = (PlanComponent) data.getSerializableExtra("component_selected");
-                    items.get(2).addContent(obj);
-                    try {
-                        update();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    adapter.notifyDataSetChanged();
-                }
+                index = 2;
                 break;
             case ADDMEAL_02_CODE:
-                if(resultCode == getActivity().RESULT_OK && data.hasExtra("component_selected")) {
-                    PlanComponent obj = (PlanComponent) data.getSerializableExtra("component_selected");
-                    items.get(3).addContent(obj);
-                    try {
-                        update();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    adapter.notifyDataSetChanged();
-                }
+                index = 3;
                 break;
             case SUPPER_CODE:
-                if(resultCode == getActivity().RESULT_OK && data.hasExtra("component_selected")) {
-                    PlanComponent obj = (PlanComponent) data.getSerializableExtra("component_selected");
-                    items.get(4).addContent(obj);
-                    try {
-                        update();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    adapter.notifyDataSetChanged();
-                }
+                index = 4;
                 break;
             case ADDMEAL_03_CODE:
-                if(resultCode == getActivity().RESULT_OK && data.hasExtra("component_selected")) {
-                    PlanComponent obj = (PlanComponent) data.getSerializableExtra("component_selected");
-                    items.get(5).addContent(obj);
-                    try {
-                        update();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    adapter.notifyDataSetChanged();
-                }
+                index = 5;
                 break;
         }
-
+        if(resultCode == getActivity().RESULT_OK && data.hasExtra("component_selected")) {
+            PlanComponent obj = (PlanComponent) data.getSerializableExtra("component_selected");
+            items.get(index).addContent(obj);
+            try {
+                update();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            adapter.notifyDataSetChanged();
+        }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -892,4 +759,67 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         });
         FrRequest.getInstance().request(request);
     }
+
+    public void addToBasket(String date, String type) {
+        BasketRecord br = new BasketRecord();
+        br.setType(type);
+        br.setDate(date);
+        List<BasketRecord> brs;
+        if(basketData.containsKey(date)) {
+            brs = basketData.get(date);
+        }else
+            brs = new ArrayList<>();
+        brs.add(br);
+        basketData.put(date, brs);
+    }
+
+    public void removeFromBasket(String date, String type) {
+        BasketRecord br = new BasketRecord();
+        br.setType(type);
+        br.setDate(date);
+        List<BasketRecord> brs;
+        if(basketData.containsKey(date)) {
+            brs = basketData.get(date);
+        }else
+            brs = new ArrayList<>();
+        for(int i = 0; i < brs.size(); i++) {
+            if(brs.get(i).getType().equals(type) && brs.get(i).getDate().equals(date)) {
+                brs.remove(i);
+                break;
+            }
+        }
+        basketData.put(date, brs);
+    }
+
+    public void deletePunch(String date, String type) {
+        PunchRecord pr = new PunchRecord();
+        pr.setType(type);
+        pr.setDate(date);
+        List<PunchRecord> prs;
+        if(punchData.containsKey(date)) {
+            prs = punchData.get(date);
+        }else
+            prs = new ArrayList<>();
+        for(int i = 0; i < prs.size(); i++) {
+            if(prs.get(i).getType().equals(type) && prs.get(i).getDate().equals(date)) {
+                prs.remove(i);
+                break;
+            }
+        }
+        punchData.put(date, prs);
+    }
+
+    public void punch(String date, String type) {
+        PunchRecord pr = new PunchRecord();
+        pr.setType(type);
+        pr.setDate(date);
+        List<PunchRecord> prs;
+        if(punchData.containsKey(date)) {
+            prs = punchData.get(date);
+        }else
+            prs = new ArrayList<>();
+        prs.add(pr);
+        punchData.put(date, prs);
+    }
+
 }

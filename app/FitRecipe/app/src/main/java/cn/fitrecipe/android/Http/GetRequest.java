@@ -7,6 +7,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONObject;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,12 +24,14 @@ public class GetRequest extends JsonObjectRequest{
         super(Method.GET, url, jsonRequest, listener, errorListener);
         this.token = token;
         this.setRetryPolicy(new DefaultRetryPolicy(timeout, retries, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        System.out.println(Calendar.getInstance().getTime() + "Method:GET Url:" + url + " Authorization: Token " +token + " params: " + jsonRequest.toString());
     }
 
     public GetRequest(String url, String token, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         super(Method.GET, url, listener, errorListener);
         this.token = token;
         this.setRetryPolicy(new DefaultRetryPolicy(timeout, retries, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        System.out.println(Calendar.getInstance().getTime() + "Method:GET Url:" + url + " Authorization: Token " + token + " params: null");
     }
 
     @Override

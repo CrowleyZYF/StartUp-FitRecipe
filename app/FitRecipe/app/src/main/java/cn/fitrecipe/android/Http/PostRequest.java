@@ -8,6 +8,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONObject;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +24,7 @@ public class PostRequest extends JsonObjectRequest{
         super(Method.POST, url, listener, errorListener);
         this.setRetryPolicy(new DefaultRetryPolicy(timeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         this.token = token;
+        System.out.println(Calendar.getInstance().getTime() + "Method:POST Url:" + url + " Authorization: Token " + token + " params: null");
     }
 
 
@@ -30,6 +32,7 @@ public class PostRequest extends JsonObjectRequest{
         super(Method.POST, url, jsonRequest, listener, errorListener);
         this.setRetryPolicy(new DefaultRetryPolicy(timeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         this.token = token;
+        System.out.println(Calendar.getInstance().getTime() + "Method:POST Url:" + url + " Authorization: Token " +token + " params: " + jsonRequest.toString());
     }
 
 

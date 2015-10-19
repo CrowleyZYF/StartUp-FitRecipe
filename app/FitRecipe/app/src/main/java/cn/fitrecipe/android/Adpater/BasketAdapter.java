@@ -14,6 +14,7 @@ import java.util.List;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.RecipeActivity;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
+import cn.fitrecipe.android.entity.Component;
 import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.Recipe;
 
@@ -71,6 +72,11 @@ public class BasketAdapter extends BaseAdapter {
                 }
             }
         });
+       int total = 0;
+        List<PlanComponent>  list = components.get(position).getComponents();
+        for(int i = 0; i < list.size(); i++) total += list.get(i).getAmount();
+
+        for(int i = 0; i < list.size(); i++)  list.get(i).setAmount(components.get(position).getAmount() * list.get(i).getAmount()/ total);
         holder.listView.setAdapter(new IngredientAdapter(context, components.get(position).getComponents(), null));
         return convertView;
     }
