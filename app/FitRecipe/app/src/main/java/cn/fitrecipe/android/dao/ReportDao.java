@@ -30,6 +30,9 @@ public class ReportDao {
     public void add(Report report) {
         report.setId(0);
         try {
+            if(reportDaoOpe.idExists(0)) {
+                reportDaoOpe.deleteById(0);
+            }
             reportDaoOpe.create(report);
         } catch (SQLException e) {
             throw new RuntimeException(e);

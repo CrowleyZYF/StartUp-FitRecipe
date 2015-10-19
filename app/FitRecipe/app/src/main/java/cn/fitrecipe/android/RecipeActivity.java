@@ -38,6 +38,8 @@ import cn.fitrecipe.android.ImageLoader.ILoadingListener;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.UI.PieChartView;
 import cn.fitrecipe.android.entity.Component;
+import cn.fitrecipe.android.entity.DatePlanItem;
+import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.Recipe;
 import cn.fitrecipe.android.entity.Report;
 import cn.fitrecipe.android.floatingactionbutton.FloatingActionButton;
@@ -481,6 +483,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
             }
             case R.id.put_in_basket:
                 Intent intent = new Intent(this, AddToPlanActivity.class);
+                intent.putExtra("recipe", recipe);
                 intent.putExtra("id", recipe.getId());
                 intent.putExtra("amount", recipe.getTotal_amount());
                 startActivity(intent);

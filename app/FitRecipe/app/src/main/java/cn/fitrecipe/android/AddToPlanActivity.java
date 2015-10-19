@@ -24,9 +24,12 @@ import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.Http.PostRequest;
+import cn.fitrecipe.android.entity.BasketRecord;
 import cn.fitrecipe.android.entity.DatePlan;
 import cn.fitrecipe.android.entity.DatePlanItem;
 import cn.fitrecipe.android.entity.PlanComponent;
+import cn.fitrecipe.android.entity.PunchRecord;
+import cn.fitrecipe.android.entity.Recipe;
 import cn.fitrecipe.android.entity.SeriesPlan;
 import cn.fitrecipe.android.function.Common;
 import cn.fitrecipe.android.function.JsonParseHelper;
@@ -68,6 +71,8 @@ public class AddToPlanActivity extends Activity implements View.OnClickListener 
     private ProgressDialog pd;
     private int recipe_id;
 
+    private Recipe recipe;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -76,6 +81,7 @@ public class AddToPlanActivity extends Activity implements View.OnClickListener 
 
         now_weight = getIntent().getIntExtra("amount", 0);
         recipe_id = getIntent().getIntExtra("id", 0);
+        recipe = (Recipe) getIntent().getSerializableExtra("recipe");
         adjust_unit_weight = now_weight / 4;
         initView();
         initData();
@@ -204,8 +210,78 @@ public class AddToPlanActivity extends Activity implements View.OnClickListener 
         }
     }
 
+    private void error() {
+        Toast.makeText(this, date_text_array.get(choosen_date) + "  " + meal_text_array[choosen_meal] + "已打卡或在菜篮子中，不能添加到菜篮子", Toast.LENGTH_SHORT).show();
+    }
+
     private void addToPlan() {
         String date = Common.getSomeDay(Common.getDate(), choosen_date);
+        boolean flag = true;
+        if(FrApplication.getInstance().getBasketData() != null) {
+            List<BasketRecord> brs = FrApplication.getInstance().getBasketData().get(date);
+            if(brs != null) {
+                String type = "";
+                switch (choosen_meal) {
+                    case 0:
+                        type = "breakfast";
+                        break;
+                    case 1:
+                        type = "add_meal_01";
+                        break;
+                    case 2:
+                        type = "lunch";
+                        break;
+                    case 3:
+                        type = "add_meal_02";
+                        break;
+                    case 4:
+                        type = "supper";
+                        break;
+                    case 5:
+                        type = "add_meal_03";
+                        break;
+
+                }
+                for (int i = 0; i < brs.size(); i++)
+                    if (brs.get(i).getType().equals(type))
+                        flag = false;
+            }
+        }
+        if(FrApplication.getInstance().getPunchData() != null) {
+            List<PunchRecord> prs = FrApplication.getInstance().getPunchData().get(date);
+            if (prs != null) {
+                String type = "";
+                switch (choosen_meal) {
+                    case 0:
+                        type = "breakfast";
+                        break;
+                    case 1:
+                        type = "add_meal_01";
+                        break;
+                    case 2:
+                        type = "lunch";
+                        break;
+                    case 3:
+                        type = "add_meal_02";
+                        break;
+                    case 4:
+                        type = "supper";
+                        break;
+                    case 5:
+                        type = "add_meal_03";
+                        break;
+
+                }
+                for (int i = 0; i < prs.size(); i++)
+                    if (prs.get(i).getType().equals(type))
+                        flag = false;
+            }
+        }
+        if(!flag) {
+            error();
+            return;
+        }
+
         String newDate = Common.dateFormat(date);
         pd = ProgressDialog.show(AddToPlanActivity.this, "", "获取现有计划...", true, false);
         pd.setCanceledOnTouchOutside(false);
@@ -362,11 +438,11 @@ public class AddToPlanActivity extends Activity implements View.OnClickListener 
         }
     }
 
-    public void update(int plan_id) throws JSONException {
-        PlanComponent component = new PlanComponent();
+    public void update(final int plan_id) throws JSONException {
+        final PlanComponent component = PlanComponent.getPlanComponentFromRecipe(recipe, now_weight);
         component.setType(1);
         component.setId(recipe_id);
-        component.setAmount((int) Math.round(now_weight));
+        component.setAmount(now_weight);
         ArrayList<PlanComponent> componentList = items.get(choosen_meal).getComponents() ;
         if(componentList == null)
             componentList = new ArrayList<>();
@@ -407,7 +483,10 @@ public class AddToPlanActivity extends Activity implements View.OnClickListener 
             @Override
             public void onResponse(JSONObject res) {
                 Toast.makeText(AddToPlanActivity.this, "更新自定义计划成功！", Toast.LENGTH_SHORT).show();
-                FrApplication.getInstance().setIsAddRecipeToPlan(true);
+                FrApplication.getInstance().setComponent(component);
+                FrApplication.getInstance().setDate(Common.getSomeDay(Common.getDate(), choosen_date));
+                FrApplication.getInstance().setType(choosen_meal);
+                FrApplication.getInstance().setPlan_id(plan_id);
                 pd.dismiss();
                 finish();
             }
