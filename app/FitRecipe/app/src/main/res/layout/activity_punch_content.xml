@@ -191,7 +191,7 @@
                             <ImageView
                                 android:layout_width="14dp"
                                 android:layout_height="14dp"
-                                android:src="@drawable/icon_bmi_white"/>
+                                android:src="@drawable/icon_meal_white"/>
 
                             <TextView
                                 android:id="@+id/punch_type"
@@ -206,7 +206,7 @@
                             <ImageView
                                 android:layout_width="14dp"
                                 android:layout_height="14dp"
-                                android:src="@drawable/icon_calendar"/>
+                                android:src="@drawable/icon_calendar_white"/>
 
                             <TextView
                                 android:id="@+id/punch_date"

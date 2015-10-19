@@ -13,6 +13,7 @@ import android.widget.TextView;
 import cn.fitrecipe.android.fragment.PunchFragment;
 import cn.fitrecipe.android.fragment.RecipeFragment;
 import cn.fitrecipe.android.fragment.WorkFragment;
+import cn.fitrecipe.android.function.Common;
 
 /**
  * Created by 奕峰 on 2015/5/8.
@@ -77,7 +78,8 @@ public class RecordActivity extends FragmentActivity implements View.OnClickList
                 setSelect(0);
                 break;
             case R.id.record_work:
-                setSelect(1);
+                //setSelect(1);
+                Common.toBeContinuedDialog(this).show();
                 break;
         }
     }

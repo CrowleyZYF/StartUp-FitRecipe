@@ -18,6 +18,7 @@ import java.util.List;
 import cn.fitrecipe.android.Adpater.ProcedureCardAdapter;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.entity.Procedure;
+import cn.fitrecipe.android.function.Common;
 
 public class RecipeProcedureActivity extends Activity implements View.OnClickListener{
 
@@ -83,7 +84,8 @@ public class RecipeProcedureActivity extends Activity implements View.OnClickLis
                 this.finish();
                 break;
             case R.id.right_btn:
-                playVideo();
+                //playVideo();
+                Common.toBeContinuedDialog(this);
                 break;
             default:
         }

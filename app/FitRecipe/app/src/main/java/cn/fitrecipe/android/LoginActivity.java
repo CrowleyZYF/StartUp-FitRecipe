@@ -385,13 +385,16 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.sina_login:
-                login(SHARE_MEDIA.SINA);
+                //login(SHARE_MEDIA.SINA);
+                Common.toBeContinuedDialog(this).show();
                 break;
             case R.id.wechat_login:
-                login(SHARE_MEDIA.WEIXIN);
+                //login(SHARE_MEDIA.WEIXIN);
+                Common.toBeContinuedDialog(this).show();
                 break;
             case R.id.qq_login:
-                login_qq();
+                //login_qq();
+                Common.toBeContinuedDialog(this).show();
                 break;
             case R.id.back_btn:
                 if(backActivity != null && backActivity.equals("landingPage")){

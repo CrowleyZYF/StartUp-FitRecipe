@@ -244,6 +244,7 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
         author_btn = (ImageView) findViewById(R.id.right_btn);
         author_btn.setBackgroundColor(getResources().getColor(R.color.transparent));
         author_btn.setImageResource(R.drawable.icon_user);
+        author_btn.setVisibility(View.GONE);
         planDetailViewPager = (PlanDetailViewPager) findViewById(R.id.plan_detail);
         prev_day_btn = (ImageView) findViewById(R.id.prev_day_btn);
         next_day_btn = (ImageView) findViewById(R.id.next_day_btn);

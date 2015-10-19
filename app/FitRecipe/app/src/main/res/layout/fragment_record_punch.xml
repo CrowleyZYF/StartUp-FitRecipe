@@ -3,7 +3,8 @@
     xmlns:dots="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background_color">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -41,7 +42,7 @@
             android:layout_width="match_parent"
             android:id="@+id/info_container"
             android:layout_height="match_parent"
-            android:background="@color/white"
+            android:background="@color/background_color"
             android:scrollbars="none"
             android:fadingEdge="vertical"
             android:visibility="gone"
