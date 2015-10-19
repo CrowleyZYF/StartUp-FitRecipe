@@ -48,6 +48,8 @@ public class FrApplication extends Application {
 
     private boolean isBasketEmpty;
 
+    private boolean isAddRecipeToPlan;
+
     //收藏
     private List<Collection> collections;
 
@@ -189,6 +191,14 @@ public class FrApplication extends Application {
 
     public void setIsBasketEmpty(boolean isBasketEmpty) {
         this.isBasketEmpty = isBasketEmpty;
+    }
+
+    public boolean isAddRecipeToPlan() {
+        return isAddRecipeToPlan;
+    }
+
+    public void setIsAddRecipeToPlan(boolean isAddRecipeToPlan) {
+        this.isAddRecipeToPlan = isAddRecipeToPlan;
     }
 
 

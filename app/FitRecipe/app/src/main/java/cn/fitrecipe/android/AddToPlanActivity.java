@@ -407,6 +407,7 @@ public class AddToPlanActivity extends Activity implements View.OnClickListener 
             @Override
             public void onResponse(JSONObject res) {
                 Toast.makeText(AddToPlanActivity.this, "更新自定义计划成功！", Toast.LENGTH_SHORT).show();
+                FrApplication.getInstance().setIsAddRecipeToPlan(true);
                 pd.dismiss();
                 finish();
             }

@@ -161,6 +161,8 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         //获取前面两天，后面七天的记录
         String today = Common.getDate();
         getData(Common.getSomeDay(today, -2), Common.getSomeDay(today, 5), false);
+        if(FrApplication.getInstance().isAddRecipeToPlan())
+             FrApplication.getInstance().setIsAddRecipeToPlan(false);
     }
 
     // 获取服务器上的记录
@@ -580,6 +582,13 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             }
             adapter.notifyDataSetChanged();
             FrApplication.getInstance().setIsBasketEmpty(false);
+        }
+
+        if(FrApplication.getInstance().isAddRecipeToPlan()) {
+            //获取前面两天，后面七天的记录
+            String today = Common.getDate();
+            getData(Common.getSomeDay(today, -2), Common.getSomeDay(today, 5), false);
+            FrApplication.getInstance().setIsAddRecipeToPlan(false);
         }
     }
 
