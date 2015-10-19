@@ -250,7 +250,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                         if(frPlanFragment != null) ((PlanFragment)frPlanFragment).toggle("all");
                         break;
                     case 2:
-                        startActivity(new Intent(this, LetterActivity.class));
+                        //startActivity(new Intent(this, LetterActivity.class));
+                        Common.toBeContinuedDialog(this).show();
                         break;
                 }
                 frTabs.get(tab_index).setBackgroundColor(getResources().getColor(R.color.active_color));
@@ -258,13 +259,15 @@ public class MainActivity extends FragmentActivity implements OnClickListener
             case R.id.right_btn:
                 switch (tab_index){
                     case 0:
-                        startActivity(new Intent(this, SetActivity.class));
+                        //startActivity(new Intent(this, SetActivity.class));
+                        Common.toBeContinuedDialog(this).show();
                         break;
                     case 1:
                         startActivity(new Intent(this, PlanChoiceActivity.class));
                         break;
                     case 2:
-                        startActivity(new Intent(this, SetActivity.class));
+                        //startActivity(new Intent(this, SetActivity.class));
+                        Common.toBeContinuedDialog(this).show();
                         break;
                 }
                 frTabs.get(tab_index).setBackgroundColor(getResources().getColor(R.color.active_color));

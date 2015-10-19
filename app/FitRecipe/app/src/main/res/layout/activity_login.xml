@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff">
+    android:background="@drawable/login_bg">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/register"
-            android:textColor="@color/base_color"
+            android:textColor="#333333"
             android:textSize="12sp"
             android:padding="15dp"
             android:layout_alignParentRight="true"
@@ -55,16 +55,12 @@
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="6"
-                android:src="@drawable/logo"/>
+                android:src="@drawable/logo_white"/>
 
             </LinearLayout>
 
@@ -88,16 +84,17 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:text="@string/phone"
-                    android:textColor="@color/login_input_text_color"
+                    android:textColor="@color/white"
                     android:textSize="15sp"
                     android:layout_marginRight="10dp"/>
 
                 <EditText
                     android:id="@+id/account"
                     android:inputType="number"
+                    android:textColor="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/login_input"/>
+                    android:background="#00000000"/>
                 </LinearLayout>
 
             <ImageView
@@ -118,7 +115,7 @@
                     android:gravity="center_vertical"
                     android:text="@string/password"
                     android:textSize="15sp"
-                    android:textColor="@color/login_input_text_color"
+                    android:textColor="@color/white"
                     android:layout_marginRight="10dp"/>
 
                 <EditText
@@ -126,8 +123,9 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="match_parent"
+                    android:textColor="@color/white"
                     android:inputType="textPassword"
-                    android:background="@drawable/login_input" />
+                    android:background="#00000000" />
 
                 <LinearLayout
                     android:id="@+id/forget_password"
@@ -142,7 +140,7 @@
                         android:gravity="center_vertical"
                         android:text="@string/forget_password"
                         android:textSize="12sp"
-                        android:textColor="@color/login_input_text_color"
+                        android:textColor="@color/white"
                         android:layout_marginRight="5dp"/>
 
                     <ImageView
@@ -174,7 +172,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:text="@string/login"
-                android:textColor="@color/login_text_color"
+                android:textColor="@color/white"
                 android:background="@drawable/login_button"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"/>
@@ -217,7 +215,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/login_wechat"/>
+                        android:text="@string/login_wechat"
+                        android:textColor="@color/white"/>
 
                     </LinearLayout>
 
@@ -238,7 +237,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/login_sina"/>
+                        android:text="@string/login_sina"
+                        android:textColor="@color/white"/>
 
                 </LinearLayout>
 
@@ -259,7 +259,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/login_qq"/>
+                        android:text="@string/login_qq"
+                        android:textColor="@color/white"/>
 
                 </LinearLayout>
 

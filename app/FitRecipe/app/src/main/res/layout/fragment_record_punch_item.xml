@@ -86,7 +86,7 @@
                     <ImageView
                         android:layout_width="8dp"
                         android:layout_height="8dp"
-                        android:src="@drawable/icon_bmi_white"/>
+                        android:src="@drawable/icon_meal_white"/>
                     
                     <TextView
                         android:id="@+id/punch_type"
@@ -118,11 +118,11 @@
 
             </LinearLayout>
             
-            <cn.fitrecipe.android.UI.PieChartView
+            <!--<cn.fitrecipe.android.UI.PieChartView
                 android:id="@+id/punch_piechart"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginRight="5dp"/>
+                android:layout_marginRight="5dp"/>-->
 
 
         </LinearLayout>

@@ -44,6 +44,7 @@ import cn.fitrecipe.android.entity.Recipe;
 import cn.fitrecipe.android.entity.Report;
 import cn.fitrecipe.android.floatingactionbutton.FloatingActionButton;
 import cn.fitrecipe.android.floatingactionbutton.FloatingActionsMenu;
+import cn.fitrecipe.android.function.Common;
 import pl.tajchert.sample.DotsTextView;
 
 public class RecipeActivity extends Activity implements View.OnClickListener, PopupWindow.OnDismissListener {
@@ -128,6 +129,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
     //add weight every
     private List<Integer> increment_list;
     private List<Component> dataList;
+    private List<Component> dataList_copy;
 
     private String plan_name;
 
@@ -244,6 +246,18 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
 
     private void initData() {
         dataList = recipe.getComponent_set();
+
+
+        dataList_copy = new ArrayList<>();
+        for(int i = 0; i < recipe.getComponent_set().size(); i++ ) {
+            Component component = new Component();
+            component.setAmount(recipe.getComponent_set().get(i).getAmount());
+            dataList_copy.add(component);
+        }
+
+
+
+
 //        Collections.copy(dataList, recipe.getComponent_set());
         component_adapter=new MyComponentAdapter();
         ingredient_listView.setAdapter(component_adapter);
@@ -377,8 +391,8 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
             user_need_calorie.setText("（" + Math.round(report.getCaloriesIntake()) + "kcal）");
             calorie_radio.setText(Math.round((weight * calories / report.getCaloriesIntake())) +"%");
         }else {
-            user_need_calorie.setText("（" + "----" + "kcal）");
-            calorie_radio.setText("--");
+            user_need_calorie.setText("（" + "---- " + "kcal）");
+            calorie_radio.setText(" --%");
         }
 
         isCollected = recipe.isHas_collected();
@@ -416,7 +430,8 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
     private void adjustComponent() {
         for(int i = 0; i < dataList.size(); i++) {
             Component component = dataList.get(i);
-            component.setAmount(recipe.getComponent_set().get(i).getAmount() * weight / recipe.getTotal_amount());
+            //component.setAmount(recipe.getComponent_set().get(i).getAmount() * weight / recipe.getTotal_amount());
+            component.setAmount(dataList_copy.get(i).getAmount() * weight / recipe.getTotal_amount());
         }
         recipe_weight.setText(weight + "克");
         ingredient_title_weight.setText("（" + weight + "克）");
@@ -424,7 +439,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         if(report != null)
             calorie_radio.setText(Math.round((weight * recipe.getCalories() / report.getCaloriesIntake())) + "%");
         else
-            calorie_radio.setText("--");
+            calorie_radio.setText(" --%");
         component_adapter.notifyDataSetChanged();
     }
 
@@ -442,7 +457,8 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
             case R.id.set_btn:{
                 //openSet();
                 //startActivity(new Intent(this, IngredientActivity.class));
-                mController.openShare(this, false);
+                //mController.openShare(this, false);
+                Common.toBeContinuedDialog(this).show();
                 break;
             }
             case R.id.back_btn:{
@@ -477,7 +493,8 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                 break;
             }
             case R.id.action_share:{
-                mController.openShare(this, false);
+                Common.toBeContinuedDialog(this).show();
+                //mController.openShare(this, false);
                 //openSet();
                 break;
             }
@@ -543,8 +560,10 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
             adjustComponent();
         }else{
             if(weight >= recipe.getTotal_amount()/4) {
-                weight -=  recipe.getTotal_amount() / 4;
-                adjustComponent();
+                if (!(weight - recipe.getTotal_amount() / 4 <= 0)){
+                    weight -=  recipe.getTotal_amount() / 4;
+                    adjustComponent();
+                }
             }
         }
     }
