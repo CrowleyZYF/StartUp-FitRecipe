@@ -69,6 +69,10 @@ public class FrServerConfig {
         return  sb.toString();
     }
 
+    public static String getThemeInfo(int id) {
+        return HOST + "/api/theme/" +id+ "/";
+    }
+
     //get Category
     public static String getRecipeListByCategory(JSONObject params) throws JSONException {
         StringBuilder sb = new StringBuilder(HOST + "/api/recipe/list/?");

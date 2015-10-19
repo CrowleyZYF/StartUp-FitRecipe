@@ -127,7 +127,7 @@ public class RegisterActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
         case R.id.back_btn:
-            if(backActivity.equals("landingPage")){
+            if(backActivity != null && backActivity.equals("landingPage")){
                 startActivity(new Intent(this, LandingPageActivity.class));
                 finish();
             }else{

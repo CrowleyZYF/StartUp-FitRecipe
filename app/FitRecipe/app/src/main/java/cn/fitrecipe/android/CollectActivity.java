@@ -68,8 +68,6 @@ public class CollectActivity extends FragmentActivity implements View.OnClickLis
         }else {
             setSelect(0);
         }
-
-
     }
     private void initEvent() {
         back_btn.setOnClickListener(this);
