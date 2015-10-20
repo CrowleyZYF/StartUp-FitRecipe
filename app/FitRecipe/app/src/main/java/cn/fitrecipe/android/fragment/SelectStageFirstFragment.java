@@ -130,7 +130,7 @@ public class SelectStageFirstFragment extends Fragment implements View.OnClickLi
     private void search(String text) {
 //        if(text == null || text.length() == 0) {
         if(text == null) {
-            Toast.makeText(getActivity(), "搜索内容不能为空！", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "搜索内容不能为空！", Toast.LENGTH_SHORT).show();
         }else {
             search = text;
             if (data == null)
@@ -174,7 +174,7 @@ public class SelectStageFirstFragment extends Fragment implements View.OnClickLi
                     if(volleyError != null && volleyError.networkResponse != null) {
                         int statusCode = volleyError.networkResponse.statusCode;
                         if(statusCode == 404) {
-                            Toast.makeText(getActivity(), "不存在！", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getActivity(), "不存在！", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }

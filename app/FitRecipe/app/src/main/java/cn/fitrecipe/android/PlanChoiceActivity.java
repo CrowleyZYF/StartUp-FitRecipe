@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -116,7 +115,7 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
         loadingInterface.setVisibility(View.GONE);
         dotsTextView.stop();
         if(isError){
-            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
         }else{
             scrollView.setVisibility(View.VISIBLE);
             scrollView.smoothScrollTo(0, 0);
@@ -155,7 +154,7 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
                             hideLoading(true, getResources().getString(R.string.network_error));
                             int statusCode = volleyError.networkResponse.statusCode;
                             if (statusCode == 404) {
-                                Toast.makeText(PlanChoiceActivity.this, "404！", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(PlanChoiceActivity.this, "404！", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -169,7 +168,7 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
                     hideLoading(true, getResources().getString(R.string.network_error));
                     int statusCode = volleyError.networkResponse.statusCode;
                     if (statusCode == 404) {
-                        Toast.makeText(PlanChoiceActivity.this, "404！", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(PlanChoiceActivity.this, "404！", Toast.LENGTH_SHORT).show();
                     }
                 }
             }

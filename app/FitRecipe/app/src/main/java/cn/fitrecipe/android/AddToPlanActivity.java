@@ -17,20 +17,16 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.entity.BasketRecord;
-import cn.fitrecipe.android.entity.DatePlan;
 import cn.fitrecipe.android.entity.DatePlanItem;
 import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.PunchRecord;
 import cn.fitrecipe.android.entity.Recipe;
-import cn.fitrecipe.android.entity.SeriesPlan;
 import cn.fitrecipe.android.function.Common;
 import cn.fitrecipe.android.function.JsonParseHelper;
 
@@ -487,6 +483,7 @@ public class AddToPlanActivity extends Activity implements View.OnClickListener 
                 FrApplication.getInstance().setDate(Common.getSomeDay(Common.getDate(), choosen_date));
                 FrApplication.getInstance().setType(choosen_meal);
                 FrApplication.getInstance().setPlan_id(plan_id);
+                //Toast.makeText(AddToPlanActivity.this, "更新自定义计划成功！", Toast.LENGTH_SHORT).show();
                 pd.dismiss();
                 finish();
             }

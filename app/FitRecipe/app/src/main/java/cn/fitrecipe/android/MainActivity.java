@@ -183,7 +183,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                         startActivity(intent);
                     }
                     long tt = System.currentTimeMillis();
-                    Toast.makeText(this, "计划" + (tt-t)+"ms", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this, "计划" + (tt-t)+"ms", Toast.LENGTH_SHORT).show();
                     break;
                 case 2:
                     resetTabs();

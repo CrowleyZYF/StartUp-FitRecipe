@@ -228,7 +228,7 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
         loadingInterface.setVisibility(View.GONE);
         dotsTextView.stop();
         if(isError){
-            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
         }else{
             categoryContent.setVisibility(View.VISIBLE);
         }

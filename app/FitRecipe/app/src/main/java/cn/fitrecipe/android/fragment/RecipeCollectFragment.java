@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -108,7 +107,7 @@ public class RecipeCollectFragment extends Fragment
                     try {
                         JSONArray data = res.getJSONArray("data");
                         if(data == null || data.length() == 0 && lastid  != -1) {
-                            Toast.makeText(getActivity(), "没有多余", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getActivity(), "没有多余", Toast.LENGTH_SHORT).show();
                         }else
                             processData(data);
                     } catch (JSONException e) {

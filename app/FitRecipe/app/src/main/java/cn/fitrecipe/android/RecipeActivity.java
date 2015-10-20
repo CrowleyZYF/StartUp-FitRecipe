@@ -208,7 +208,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         loadingInterface.setVisibility(View.GONE);
         dotsTextView.stop();
         if(isError){
-            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
         }else{
             recipeContent.setVisibility(View.VISIBLE);
             float_set.setVisibility(View.VISIBLE);
@@ -217,7 +217,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
     }
 
     private void loadData(String url) {
-        Toast.makeText(this, "URL: "+ url, Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "URL: "+ url, Toast.LENGTH_LONG).show();
         GetRequest request = new GetRequest(url, FrApplication.getInstance().getToken(), new JSONObject(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {
@@ -300,7 +300,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            Toast.makeText(RecipeActivity.this, plan_name, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(RecipeActivity.this, plan_name, Toast.LENGTH_SHORT).show();
                             initData();
                             display();
                         }
@@ -502,7 +502,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
             PostRequest request = new PostRequest(FrServerConfig.getDeleteCollectionUrl("recipe", recipe.getId()), FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject res) {
-                    Toast.makeText(RecipeActivity.this, "取消收藏!", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(RecipeActivity.this, "取消收藏!", Toast.LENGTH_SHORT).show();
                     collect_btn.setIcon(R.drawable.icon_like_noshadow);
                 }
             }, new Response.ErrorListener() {
@@ -528,7 +528,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
             PostRequest request = new PostRequest(url, FrApplication.getInstance().getToken(), params, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject res) {
-                    Toast.makeText(RecipeActivity.this, "收藏成功!", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(RecipeActivity.this, "收藏成功!", Toast.LENGTH_SHORT).show();
                     collect_btn.setIcon(R.drawable.icon_like_green);
                 }
             }, new Response.ErrorListener() {

@@ -18,7 +18,6 @@ import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.dao.FrDbHelper;
-import cn.fitrecipe.android.entity.DatePlan;
 import cn.fitrecipe.android.entity.DatePlanItem;
 
 /**
@@ -98,7 +97,7 @@ public class JoinPlanHelper {
             public void onErrorResponse(VolleyError volleyError) {
                 if(volleyError != null && volleyError.networkResponse != null) {
                     int statusCode = volleyError.networkResponse.statusCode;
-                    Toast.makeText(context, statusCode+"", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, statusCode+"", Toast.LENGTH_SHORT).show();
                 }else
                     Toast.makeText(context, context.getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
             }

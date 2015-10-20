@@ -7,10 +7,7 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.daimajia.androidviewhover.BlurLayout;
-import com.google.gson.Gson;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -82,7 +79,7 @@ public class GetHomeDataService extends Service {
                 String error_info = getResources().getString(R.string.network_error);
                 if(!Common.isOpenNetwork(GetHomeDataService.this))
                     error_info = getResources().getString(R.string.network_close);
-                Toast.makeText(GetHomeDataService.this, error_info, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(GetHomeDataService.this, error_info, Toast.LENGTH_SHORT).show();
                 System.out.println("get Home data " + volleyError.getMessage());
             }
         });
