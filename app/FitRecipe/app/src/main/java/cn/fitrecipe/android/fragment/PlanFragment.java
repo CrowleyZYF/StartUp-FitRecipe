@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -98,6 +99,8 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     private boolean isError = false;
     private boolean isPreEnable = true;
 
+    private ScrollView plan_scrollview;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -133,6 +136,8 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         //加载页面
         loadingInterface = (LinearLayout) v.findViewById(R.id.loading_interface);
         dotsTextView = (DotsTextView) v.findViewById(R.id.dots);
+        //互动
+        plan_scrollview = (ScrollView) v.findViewById(R.id.plan_scrollview);
     }
 
     private void initEvent() {
@@ -602,6 +607,10 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             FrApplication.getInstance().setPr(null);
             switchPlan(pointer, 0);
         }
+    }
+
+    public void scrollToTop(){
+        plan_scrollview.smoothScrollTo(0,0);
     }
 
     private void changePlan(String today, SeriesPlan plan) {

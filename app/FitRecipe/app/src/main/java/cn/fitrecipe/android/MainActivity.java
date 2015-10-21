@@ -182,6 +182,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                         if (frPlanFragment == null) {
                             frPlanFragment = new PlanFragment();
                             transaction.add(R.id.content, frPlanFragment);
+                        }else{
+                            ((PlanFragment) frPlanFragment).scrollToTop();
                         }
                         transaction.show(frPlanFragment);
                         left_btn.setImageResource(R.drawable.icon_nutrition);

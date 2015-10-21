@@ -6,6 +6,7 @@
     >
 
     <ScrollView
+        android:id="@+id/plan_scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none"
@@ -94,14 +95,15 @@
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="40dp"
                     android:text="切换计划"
                     android:textColor="@color/white"
+                    android:textSize="16sp"
                     android:gravity="center"
                     android:layout_marginLeft="30dp"
                     android:layout_marginRight="30dp"
                     android:layout_marginBottom="15dp"
-                    android:background="@drawable/login_button"/>
+                    android:background="@drawable/login_button_no_radius"/>
 
             </LinearLayout>
 
