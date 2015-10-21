@@ -61,6 +61,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     private HomeDataReadyRececiver readyRececiver;
     private IntentFilter intentFilter;
 
+    private boolean isInit[] = {false, false, false};
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -77,6 +79,16 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         agent.sync();
         initView();
         initEvent();
+
+        FragmentManager fm = getSupportFragmentManager();
+        if (!(fm.getFragments() == null)){
+            FragmentTransaction transaction = fm.beginTransaction();
+            for (int i = 0; i<fm.getFragments().size(); i++) {
+                transaction.remove(fm.getFragments().get(i));
+            }
+            transaction.commit();
+
+        }
 
         //init tab
         tab_index=0;
@@ -160,9 +172,9 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                     right_btn.setImageResource(R.drawable.icon_search);
                     frTabs.get(i).setBackgroundColor(getResources().getColor(R.color.active_color));
                     tab_index = 0;
+                    isInit[i]=true;
                     break;
                 case 1:
-                    long t = System.currentTimeMillis();
                     boolean isTest = FrApplication.getInstance().isTested();
                     if(isTest) {
                         resetTabs();
@@ -176,14 +188,13 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                         right_btn.setImageResource(R.drawable.icon_change);
                         frTabs.get(i).setBackgroundColor(getResources().getColor(R.color.active_color));
                         tab_index = 1;
+                        isInit[i]=true;
                     }else{
                         resetTabs();
                         frTabs.get(i).setBackgroundColor(getResources().getColor(R.color.active_color));
                         Intent intent=new Intent(this,PlanTestActivity.class);
                         startActivity(intent);
                     }
-                    long tt = System.currentTimeMillis();
-                    //Toast.makeText(this, "计划" + (tt-t)+"ms", Toast.LENGTH_SHORT).show();
                     break;
                 case 2:
                     resetTabs();
@@ -197,6 +208,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                     left_btn.setImageResource(R.drawable.icon_letter);
                     right_btn.setImageResource(R.drawable.icon_set);
                     tab_index = 2;
+                    isInit[i]=true;
                     break;
                 default:
                     break;

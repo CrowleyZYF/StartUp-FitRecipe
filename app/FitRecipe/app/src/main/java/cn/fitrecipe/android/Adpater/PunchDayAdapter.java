@@ -51,6 +51,12 @@ public class PunchDayAdapter extends RecyclerView.Adapter<PunchDayAdapter.PunchD
         contactViewHolder.punch_day.setText(pd.getDate());
         PunchItemAdapter punchItemAdapter = new PunchItemAdapter(this.context, pd);
         contactViewHolder.punch_items.setAdapter(punchItemAdapter);
+        contactViewHolder.punch_share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Common.toBeContinuedDialog(context).show();
+            }
+        });
     }
 
     @Override
@@ -64,11 +70,13 @@ public class PunchDayAdapter extends RecyclerView.Adapter<PunchDayAdapter.PunchD
     public static class PunchDayViewHolder extends RecyclerView.ViewHolder {
         protected TextView punch_day;
         protected GridView punch_items;
+        protected ImageView punch_share;
 
         public PunchDayViewHolder(View itemView, Context context) {
             super(itemView);
             punch_day =  (TextView) itemView.findViewById(R.id.punch_day);
             punch_items = (GridView) itemView.findViewById(R.id.punch_day_gridview);
+            punch_share = (ImageView) itemView.findViewById(R.id.share_btn);
         }
     }
 
@@ -114,21 +122,13 @@ public class PunchDayAdapter extends RecyclerView.Adapter<PunchDayAdapter.PunchD
                 holder.punch_day = (TextView) convertView.findViewById(R.id.punch_day);
                 holder.punch_type = (TextView) convertView.findViewById(R.id.punch_type);
                 holder.punch_calories = (TextView) convertView.findViewById(R.id.punch_calories);
-                holder.punch_share = (ImageView) convertView.findViewById(R.id.share_btn);
                 //holder.punch_piechart = (PieChartView) convertView.findViewById(R.id.punch_piechart);
                 convertView.setTag(holder);
             }
-            holder.punch_share.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Common.toBeContinuedDialog(context).show();
-                }
-            });
             if(punchItems.get(position).getImageCover() == null || punchItems.get(position).getImageCover().length() == 0)
                 FrApplication.getInstance().getMyImageLoader().displayImage(holder.punch_photo, punchItems.get(position).getDefaultImageCover());
             else
                 FrApplication.getInstance().getMyImageLoader().displayImage(holder.punch_photo, punchItems.get(position).getImageCover());
-
             holder.punch_day.setText((Common.getDiff(datePlan.getDate(), punchItems.get(position).getDate())+1) + "");
             switch (punchItems.get(position).getType()) {
                 case "breakfast" :
@@ -144,8 +144,6 @@ public class PunchDayAdapter extends RecyclerView.Adapter<PunchDayAdapter.PunchD
                     holder.punch_type.setText("夜宵");    break;
             }
             holder.punch_calories.setText(Math.round(punchItems.get(position).getCalories_take()) + "kcal");
-
-
             double sum = punchItems.get(position).getCarbohydrate_take() + punchItems.get(position).getProtein_take() + punchItems.get(position).getFat_take();
 
             int a = (int) Math.round(punchItems.get(position).getCarbohydrate_take() * 100 / sum);
@@ -171,7 +169,6 @@ public class PunchDayAdapter extends RecyclerView.Adapter<PunchDayAdapter.PunchD
             TextView punch_type;
             TextView punch_calories;
             //PieChartView punch_piechart;
-            ImageView punch_share;
         }
     }
 }

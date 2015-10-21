@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/background_color"
     android:layout_marginBottom="20dp">
 
     <RelativeLayout
@@ -15,7 +15,7 @@
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:src="@drawable/icon_day"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="10dp"
             android:layout_centerVertical="true"/>
 
         <TextView
@@ -41,17 +41,24 @@
 
     </RelativeLayout>
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@drawable/theme_line"/>
+
     <cn.fitrecipe.android.UI.PunchGridView
         android:id="@+id/punch_day_gridview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:listSelector="@android:color/transparent"
-        android:paddingTop="1dp"
-        android:paddingBottom="1dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
         android:layout_margin="0dp"
         android:numColumns="3"
-        android:background="@color/white"
+        android:background="@color/background_color"
         android:horizontalSpacing="1px"
         android:verticalSpacing="1px"
         android:scrollbars="none">

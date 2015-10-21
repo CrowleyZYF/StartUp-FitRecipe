@@ -107,6 +107,7 @@
         </RelativeLayout>
 
         <cn.fitrecipe.android.UI.SquareLayout
+            android:id="@+id/punch_img_content"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -467,7 +468,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="3"
                         android:text="营养元素"
-                        android:textSize="16sp"
+                        android:textSize="15sp"
                         android:textColor="@color/login_input_text_color"
                         android:padding="8dp"/>
 
@@ -476,7 +477,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="3"
                         android:text="日均所需"
-                        android:textSize="16sp"
+                        android:textSize="15sp"
                         android:textColor="@color/login_input_text_color"
                         android:padding="8dp"/>
 
@@ -485,11 +486,17 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
                         android:text="摄入"
-                        android:textSize="16sp"
+                        android:textSize="15sp"
                         android:textColor="@color/login_input_text_color"
                         android:padding="8dp"/>
 
                 </LinearLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@drawable/theme_line"/>
+
                 <cn.fitrecipe.android.UI.LinearLayoutForListView
                     android:id="@+id/nutrition_list"
                     android:layout_width="match_parent"

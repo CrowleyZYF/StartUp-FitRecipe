@@ -5,136 +5,6 @@
     android:orientation="vertical"
     >
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal">
-
-        <RelativeLayout
-            android:id="@+id/plan_title"
-            android:layout_width="250dp"
-            android:layout_height="50dp">
-
-            <ImageView
-                android:id="@+id/prev_btn"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:padding="15dp"
-                android:src="@drawable/icon_prev_day"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"/>
-
-            <LinearLayout
-                android:layout_width="180dp"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_centerInParent="true">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:orientation="horizontal"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal">
-
-                    <TextView
-                        android:id="@+id/plan_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="123"
-                        android:textSize="16sp"
-                        android:textColor="@color/login_input_text_color"/>
-
-                    <TextView
-                        android:id="@+id/other_plan_days"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="第(0/7)天"
-                        android:textSize="12sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:visibility="gone"
-                        android:layout_marginLeft="5dp"/>
-
-                </LinearLayout>
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="@drawable/theme_line"/>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"
-                    android:layout_gravity="center">
-
-                    <TextView
-                        android:id="@+id/plan_status"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/plan_status_muscle"
-                        android:textSize="12sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:layout_gravity="center"/>
-
-                    <TextView
-                        android:id="@+id/plan_status_day"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/login_input_text_color"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginRight="3dp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text= "@string/plan_status_unit"
-                        android:textSize="12sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:layout_gravity="center"
-                        android:layout_marginRight="15dp"/>
-
-                    <TextView
-                        android:id="@+id/diy_days"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="12sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:layout_gravity="center"/>
-
-                </LinearLayout>
-            </LinearLayout>
-
-            <ImageView
-                android:id="@+id/next_btn"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:padding="15dp"
-                android:src="@drawable/icon_next_day"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"/>
-
-        </RelativeLayout>
-
-        <ImageView
-            android:id="@+id/shopping_btn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:padding="15dp"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/icon_shopping_gray"/>
-
-    </RelativeLayout>
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@drawable/theme_line"/>
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -142,19 +12,248 @@
         android:background="@color/background_color"
         >
 
-        <cn.fitrecipe.android.UI.LinearLayoutForListView
-            android:id="@+id/plans"
-            android:dividerHeight="0dp"
-            android:divider="@android:color/transparent"
-            android:listSelector="#00000000"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
-        </cn.fitrecipe.android.UI.LinearLayoutForListView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/white">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="累计打卡："
+                            android:textSize="15dp"
+                            android:textColor="@color/login_input_text_color"
+                            android:layout_alignParentLeft="true"
+                            android:paddingLeft="10dp"
+                            android:paddingTop="10dp"/>
+
+                        <ImageView
+                            android:id="@+id/report_btn"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:padding="6dp"
+                            android:src="@drawable/icon_report_blue"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginTop="-2dp"
+                            android:layout_marginRight="4dp"/>
+
+                        <ImageView
+                            android:id="@+id/punch_btn"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:padding="6dp"
+                            android:src="@drawable/icon_punch_blue"
+                            android:layout_toLeftOf="@id/report_btn"
+                            android:layout_marginTop="-2dp"/>
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="111"
+                            android:textSize="60sp"
+                            android:textColor="@color/login_input_text_color"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="天"
+                            android:textSize="15sp"
+                            android:textColor="@color/login_input_text_color"
+                            android:layout_gravity="bottom"
+                            android:layout_marginTop="15dp"/>
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:text="切换计划"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@drawable/login_button"/>
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@drawable/theme_line"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:background="@color/white">
+
+                <RelativeLayout
+                    android:id="@+id/plan_title"
+                    android:layout_width="250dp"
+                    android:layout_height="50dp">
+
+                    <ImageView
+                        android:id="@+id/prev_btn"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:padding="15dp"
+                        android:src="@drawable/icon_prev_day"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"/>
+
+                    <LinearLayout
+                        android:layout_width="180dp"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:layout_centerInParent="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:orientation="horizontal"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal">
+
+                            <TextView
+                                android:id="@+id/plan_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:text="计划"
+                                android:textSize="16sp"
+                                android:textColor="@color/login_input_text_color"/>
+
+                            <TextView
+                                android:id="@+id/other_plan_days"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="第(0/7)天"
+                                android:textSize="12sp"
+                                android:textColor="@color/login_input_text_color"
+                                android:visibility="gone"
+                                android:layout_marginLeft="5dp"/>
+
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="1px"
+                            android:background="@drawable/theme_line"/>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:orientation="horizontal"
+                            android:layout_gravity="center">
+
+                            <TextView
+                                android:id="@+id/plan_status"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/plan_status_muscle"
+                                android:textSize="12sp"
+                                android:textColor="@color/login_input_text_color"
+                                android:layout_gravity="center"/>
+
+                            <TextView
+                                android:id="@+id/plan_status_day"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="20sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/login_input_text_color"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="3dp"
+                                android:layout_marginRight="3dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text= "@string/plan_status_unit"
+                                android:textSize="12sp"
+                                android:textColor="@color/login_input_text_color"
+                                android:layout_gravity="center"
+                                android:layout_marginRight="15dp"/>
+
+                            <TextView
+                                android:id="@+id/diy_days"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="12sp"
+                                android:textColor="@color/login_input_text_color"
+                                android:layout_gravity="center"/>
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/next_btn"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:padding="15dp"
+                        android:src="@drawable/icon_next_day"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"/>
+
+                </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/shopping_btn"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:padding="15dp"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/icon_shopping_gray"/>
+
+            </RelativeLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@drawable/theme_line"/>
+
+            <cn.fitrecipe.android.UI.LinearLayoutForListView
+                android:id="@+id/plans"
+                android:dividerHeight="0dp"
+                android:divider="@android:color/transparent"
+                android:listSelector="#00000000"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+            </cn.fitrecipe.android.UI.LinearLayoutForListView>
+
+        </LinearLayout>
     </ScrollView>
-
 </LinearLayout>
 
 

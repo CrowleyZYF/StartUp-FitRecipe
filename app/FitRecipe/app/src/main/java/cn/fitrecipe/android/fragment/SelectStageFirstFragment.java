@@ -10,14 +10,11 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,9 +34,7 @@ import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.SelectRecipeActivity;
 import cn.fitrecipe.android.UI.BorderScrollView;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
-import cn.fitrecipe.android.entity.Component;
 import cn.fitrecipe.android.entity.PlanComponent;
-import cn.fitrecipe.android.entity.Recipe;
 import cn.fitrecipe.android.function.JsonParseHelper;
 import pl.tajchert.sample.DotsTextView;
 
@@ -158,8 +153,9 @@ public class SelectStageFirstFragment extends Fragment implements View.OnClickLi
                                 hideLoading(false, "");
                             else {
                                 scrollView.setCompleteMore();
-                                if(data.length() == 0)
+                                if(data.length() == 0) {
                                     //Toast.makeText(getActivity(), "没有多余的搜索结果了!", Toast.LENGTH_SHORT).show();
+                                }
                             }
                             start += num;
                         } catch (JSONException e) {

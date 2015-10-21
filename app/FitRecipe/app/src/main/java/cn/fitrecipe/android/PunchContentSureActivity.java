@@ -49,6 +49,7 @@ import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.UI.PieChartView;
+import cn.fitrecipe.android.UI.SquareLayout;
 import cn.fitrecipe.android.entity.DatePlanItem;
 import cn.fitrecipe.android.entity.Nutrition;
 import cn.fitrecipe.android.entity.PlanComponent;
@@ -70,6 +71,7 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
     private CircleImageView me_avatar;
     private LinearLayoutForListView component_list, nutrition_list;
     private ScrollView scrollView;
+    private SquareLayout squareLayout;
     private ProgressDialog pd;
 
     private DatePlanItem item;
@@ -222,6 +224,7 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
 
         scrollView = (ScrollView) findViewById(R.id.scrollView);
         scrollView.smoothScrollTo(0, 0);
+        squareLayout = (SquareLayout) findViewById(R.id.punch_img_content);
     }
 
     @Override
@@ -254,7 +257,8 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
     private void share() {
         ProgressDialog pd = ProgressDialog.show(PunchContentSureActivity.this, "", "正在生成图片...", true, false);
         pd.setCanceledOnTouchOutside(false);
-        Bitmap bitmap = PunchImageGenerator.convertViewToBitmap(scrollView);
+        //Bitmap bitmap = PunchImageGenerator.convertViewToBitmap(scrollView);
+        Bitmap bitmap = PunchImageGenerator.convertViewToPunchShareOne(squareLayout);
         File path  = new File(Environment.getExternalStorageDirectory() + "/fitrecipe/");
         if(!path.exists())
             path.mkdirs();
@@ -272,6 +276,7 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
         }
         pd.dismiss();
         // 设置分享内容
+        UMImage test = new UMImage(this, bitmap);
         mController.setShareImage(new UMImage(this, bitmap));
         mController.setShareContent("友盟社会化组件（SDK）让移动应用快速整合社交分享功能，http://www.umeng.com/social");
         mController.openShare(this, false);
@@ -441,6 +446,7 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
             else
                 convertView.setBackgroundColor(0xffffffff);
 
+
             holder.textView1.setText(data.get(position).getName());
             holder.textView3.setText(String.format("%.1f", data.get(position).getAmount()) + data.get(position).getUnit());
             String str = "";
@@ -543,8 +549,12 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
             holder.textView3.setText(data.get(position).getAmount()+"g");
             if(getItemViewType(position) == 0) {
                 holder.textView2.setText(Math.round(data.get(position).getCalories()) + "kcal");
+                holder.textView1.setTextColor(getResources().getColor(R.color.login_input_text_color));
+                holder.textView3.setTextColor(getResources().getColor(R.color.login_input_text_color));
                 holder.margin_space.setVisibility(View.GONE);
             }else {
+                holder.textView1.setTextColor(getResources().getColor(R.color.nutrition_text_gray));
+                holder.textView3.setTextColor(getResources().getColor(R.color.nutrition_text_gray));
                 holder.margin_space.setVisibility(View.VISIBLE);
             }
             return convertView;
