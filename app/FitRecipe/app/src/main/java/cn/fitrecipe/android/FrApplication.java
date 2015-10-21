@@ -8,6 +8,7 @@ import com.pgyersdk.crash.PgyCrashManager;
 import com.youku.player.YoukuPlayerBaseConfiguration;
 
 import java.util.List;
+import java.util.Map;
 
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.ImageLoader.MyImageLoader;
@@ -16,12 +17,17 @@ import cn.fitrecipe.android.dao.BasketDao;
 import cn.fitrecipe.android.dao.FrDbHelper;
 import cn.fitrecipe.android.dao.HomeDataDao;
 import cn.fitrecipe.android.entity.Author;
+import cn.fitrecipe.android.entity.BasketRecord;
 import cn.fitrecipe.android.entity.Collection;
+import cn.fitrecipe.android.entity.DatePlanItem;
 import cn.fitrecipe.android.entity.HomeData;
+import cn.fitrecipe.android.entity.PlanComponent;
+import cn.fitrecipe.android.entity.PunchRecord;
 import cn.fitrecipe.android.entity.Recipe;
 import cn.fitrecipe.android.entity.Report;
 import cn.fitrecipe.android.entity.Series;
 import cn.fitrecipe.android.entity.SeriesPlan;
+import cn.fitrecipe.android.function.Common;
 
 ;
 
@@ -48,10 +54,15 @@ public class FrApplication extends Application {
 
     private boolean isBasketEmpty;
 
-    private boolean isAddRecipeToPlan;
+    private PlanComponent component;
+    private int type;
+    private String date;
+    private int plan_id;
 
-    //收藏
-    private List<Collection> collections;
+    private Map<String, List<PunchRecord>> punchData;
+    //保存菜篮子
+    private Map<String, List<BasketRecord>> basketData;
+    private PunchRecord pr;
 
     @Override
     public void onCreate() {
@@ -193,12 +204,64 @@ public class FrApplication extends Application {
         this.isBasketEmpty = isBasketEmpty;
     }
 
-    public boolean isAddRecipeToPlan() {
-        return isAddRecipeToPlan;
+    public PlanComponent getComponent() {
+        return component;
     }
 
-    public void setIsAddRecipeToPlan(boolean isAddRecipeToPlan) {
-        this.isAddRecipeToPlan = isAddRecipeToPlan;
+    public void setComponent(PlanComponent component) {
+        this.component = component;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public int getPlan_id() {
+        return plan_id;
+    }
+
+    public void setPlan_id(int plan_id) {
+        this.plan_id = plan_id;
+    }
+
+    public Map<String, List<PunchRecord>> getPunchData() {
+        if(punchData == null)
+            punchData = FrDbHelper.getInstance(this).getPunchInfo(Common.getDate(), Common.getSomeDay(Common.getDate(), 6));
+        return punchData;
+    }
+
+    public void setPunchData(Map<String, List<PunchRecord>> punchData) {
+        this.punchData = punchData;
+    }
+
+    public Map<String, List<BasketRecord>> getBasketData() {
+        if(basketData == null)
+            basketData = FrDbHelper.getInstance(this).getBasketInfo(Common.getDate(), Common.getSomeDay(Common.getDate(), 6));
+        return basketData;
+    }
+
+    public void setBasketData(Map<String, List<BasketRecord>> basketData) {
+        this.basketData = basketData;
+    }
+
+    public PunchRecord getPr() {
+        return pr;
+    }
+
+    public void setPr(PunchRecord pr) {
+        this.pr = pr;
     }
 
 

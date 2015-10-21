@@ -424,7 +424,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            if(backActivity.equals("landingPage")){
+            if(backActivity != null && backActivity.equals("landingPage")){
                 startActivity(new Intent(this, LandingPageActivity.class));
                 finish();
             }else{

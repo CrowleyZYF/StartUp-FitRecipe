@@ -160,8 +160,6 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         //获取前面两天，后面七天的记录
         String today = Common.getDate();
         getData(Common.getSomeDay(today, -2), Common.getSomeDay(today, 5), false);
-        if(FrApplication.getInstance().isAddRecipeToPlan())
-             FrApplication.getInstance().setIsAddRecipeToPlan(false);
     }
 
     // 获取服务器上的记录
@@ -413,7 +411,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 datePlan.setDate(str);
                 datePlan.setPlan_id(now.getId());
                 data.put(str, now.getDatePlans().get(th));
-                indexDate.put(str, "完成("+ (th+1) +"/"+now.getTotal_days()+")天");
+                indexDate.put(str, "("+ (th+1) +"/"+now.getTotal_days()+")");
             }
             str = Common.getSomeDay(str, 1);
         }
@@ -582,11 +580,27 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             FrApplication.getInstance().setIsBasketEmpty(false);
         }
 
-        if(FrApplication.getInstance().isAddRecipeToPlan()) {
-            //获取前面两天，后面七天的记录
-            String today = Common.getDate();
-            getData(Common.getSomeDay(today, -2), Common.getSomeDay(today, 5), false);
-            FrApplication.getInstance().setIsAddRecipeToPlan(false);
+       if(FrApplication.getInstance().getComponent() != null) {
+           String date = FrApplication.getInstance().getDate();
+           int type = FrApplication.getInstance().getType();
+           int plan_id = FrApplication.getInstance().getPlan_id();
+           PlanComponent component = FrApplication.getInstance().getComponent();
+           datePlan = data.get(date);
+           datePlan.setPlan_id(plan_id);
+           datePlan.setDate(date);
+           List<DatePlanItem> items = datePlan.getItems();
+           items.get(type).addContent(component);
+           datePlan.setItems(items);
+           data.put(date, datePlan);
+           FrApplication.getInstance().setComponent(null);
+           switchPlan(pointer, 0);
+       }
+
+        if(FrApplication.getInstance().getPr() != null) {
+            PunchRecord pr = FrApplication.getInstance().getPr();
+            punch(pr);
+            FrApplication.getInstance().setPr(null);
+            switchPlan(pointer, 0);
         }
     }
 
@@ -604,7 +618,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             }else {
                 int th = i % plan.getTotal_days();
                 datePlan = plan.getDatePlans().get(th);
-                indexDate.put(str, "完成("+ (th+1) +"/"+ plan.getTotal_days()+")天");
+                indexDate.put(str, "("+ (th+1) +"/"+ plan.getTotal_days()+")");
                 datePlan.setPlan_id(plan.getId());
             }
             datePlan.setDate(str);
@@ -769,6 +783,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             brs = new ArrayList<>();
         brs.add(br);
         basketData.put(date, brs);
+        FrApplication.getInstance().setBasketData(basketData);
     }
 
     public void removeFromBasket(String date, String type) {
@@ -787,6 +802,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             }
         }
         basketData.put(date, brs);
+        FrApplication.getInstance().setBasketData(basketData);
     }
 
     public void deletePunch(String date, String type) {
@@ -805,19 +821,19 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             }
         }
         punchData.put(date, prs);
+        FrApplication.getInstance().setPunchData(punchData);
     }
 
-    public void punch(String date, String type) {
-        PunchRecord pr = new PunchRecord();
-        pr.setType(type);
-        pr.setDate(date);
+    public void punch(PunchRecord pr) {
         List<PunchRecord> prs;
+        String date = pr.getDate();
         if(punchData.containsKey(date)) {
             prs = punchData.get(date);
         }else
             prs = new ArrayList<>();
         prs.add(pr);
         punchData.put(date, prs);
+        FrApplication.getInstance().setPunchData(punchData);
     }
 
 }

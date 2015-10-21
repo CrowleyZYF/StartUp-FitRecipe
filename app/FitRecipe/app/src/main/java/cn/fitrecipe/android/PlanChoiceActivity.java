@@ -240,6 +240,8 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
                                                 plan1.setJoined_date(Common.getDate());
                                                 FrDbHelper.getInstance(PlanChoiceActivity.this).joinPlan(plan1);
                                                 FrApplication.getInstance().setPlanInUse(plan1);
+                                                FrDbHelper.getInstance(PlanChoiceActivity.this).clearBasket();
+                                                FrApplication.getInstance().setIsBasketEmpty(true);
                                             }
                                         }, Common.getDate());
                                     } catch (JSONException e) {

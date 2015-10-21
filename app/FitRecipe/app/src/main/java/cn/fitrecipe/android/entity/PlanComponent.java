@@ -81,7 +81,7 @@ public class PlanComponent implements Serializable, Comparable<PlanComponent> {
         pcomponent.setType(1);
         pcomponent.setId(recipe.getId());
         for(int i = 0; i < recipe.getNutrition_set().size(); i++)
-            recipe.getNutrition_set().get(i).setAmount(recipe.getNutrition_set().get(i).getAmount() * weight / 100);
+            recipe.getNutrition_set().get(i).setAmount(recipe.getNutrition_set().get(i).getAmount());
         ArrayList<PlanComponent> components = new ArrayList<>();
         for(int i = 0; i < recipe.getComponent_set().size(); i++) {
             PlanComponent component = new PlanComponent();
@@ -93,7 +93,7 @@ public class PlanComponent implements Serializable, Comparable<PlanComponent> {
         }
         pcomponent.setComponents(components);
         pcomponent.setNutritions(recipe.getNutrition_set());
-        pcomponent.setCalories(recipe.getCalories() * weight / 100);
+        pcomponent.setCalories(recipe.getCalories());
         return  pcomponent;
     }
 

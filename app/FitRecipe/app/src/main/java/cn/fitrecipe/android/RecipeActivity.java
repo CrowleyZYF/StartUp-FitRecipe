@@ -38,11 +38,14 @@ import cn.fitrecipe.android.ImageLoader.ILoadingListener;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.UI.PieChartView;
 import cn.fitrecipe.android.entity.Component;
+import cn.fitrecipe.android.entity.DatePlanItem;
+import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.Recipe;
 import cn.fitrecipe.android.entity.Report;
 import cn.fitrecipe.android.floatingactionbutton.FloatingActionButton;
 import cn.fitrecipe.android.floatingactionbutton.FloatingActionsMenu;
 import cn.fitrecipe.android.function.Common;
+import cn.fitrecipe.android.function.FrErrorListener;
 import pl.tajchert.sample.DotsTextView;
 
 public class RecipeActivity extends Activity implements View.OnClickListener, PopupWindow.OnDismissListener {
@@ -227,18 +230,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                     }
                 }
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                hideLoading(true, "网络连接出错!");
-                if(volleyError != null && volleyError.networkResponse != null) {
-                    int statusCode = volleyError.networkResponse.statusCode;
-                    if(statusCode == 404) {
-                       //Toast.makeText(RecipeActivity.this, "食谱不存在！", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-        });
+        }, new FrErrorListener(RecipeActivity.this));
         FrRequest.getInstance().request(request);
     }
 
@@ -252,8 +244,6 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
             component.setAmount(recipe.getComponent_set().get(i).getAmount());
             dataList_copy.add(component);
         }
-
-
 
 
 //        Collections.copy(dataList, recipe.getComponent_set());
@@ -498,6 +488,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
             }
             case R.id.put_in_basket:
                 Intent intent = new Intent(this, AddToPlanActivity.class);
+                intent.putExtra("recipe", recipe);
                 intent.putExtra("id", recipe.getId());
                 intent.putExtra("amount", recipe.getTotal_amount());
                 startActivity(intent);

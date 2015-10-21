@@ -17,6 +17,7 @@ import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.R;
+import cn.fitrecipe.android.dao.FrDbHelper;
 import cn.fitrecipe.android.entity.DatePlanItem;
 
 /**
@@ -71,6 +72,8 @@ public class JoinPlanHelper {
             }
         });
         FrRequest.getInstance().request(request);
+        FrDbHelper.getInstance(context).clearBasket();
+        FrApplication.getInstance().setIsBasketEmpty(true);
     }
 
     public void joinOfficalPlan(int id, final CallBack callBack) throws JSONException {
@@ -100,6 +103,8 @@ public class JoinPlanHelper {
             }
         });
         FrRequest.getInstance().request(request);
+        FrDbHelper.getInstance(context).clearBasket();
+        FrApplication.getInstance().setIsBasketEmpty(true);
     }
 
     public interface CallBack {

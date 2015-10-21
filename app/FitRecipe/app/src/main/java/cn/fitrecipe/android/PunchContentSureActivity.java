@@ -53,6 +53,7 @@ import cn.fitrecipe.android.UI.SquareLayout;
 import cn.fitrecipe.android.entity.DatePlanItem;
 import cn.fitrecipe.android.entity.Nutrition;
 import cn.fitrecipe.android.entity.PlanComponent;
+import cn.fitrecipe.android.entity.PunchRecord;
 import cn.fitrecipe.android.entity.Report;
 import cn.fitrecipe.android.function.Common;
 import cn.fitrecipe.android.function.PunchImageGenerator;
@@ -317,7 +318,7 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
     }
 
     private void saveServerPunchState(String pngName) {
-        JSONObject params = new JSONObject();
+        final JSONObject params = new JSONObject();
         try {
 
             switch (item.getType()) {
@@ -351,7 +352,17 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
             @Override
             public void onResponse(JSONObject res) {
                 if(res.has("data")) {
-                    //Toast.makeText(PunchContentSureActivity.this, "打卡完成!", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(PunchContentSureActivity.this, "打卡完成!", Toast.LENGTH_SHORT).show();
+                    PunchRecord pr = new PunchRecord();
+                    try {
+                        pr.setId(res.getJSONObject("data").getInt("id"));
+                        pr.setType(item.getType());
+                        pr.setDate(item.getDate());
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    FrApplication.getInstance().setPr(pr);
                     Intent intent = new Intent(PunchContentSureActivity.this, RecordActivity.class);
                     startActivity(intent);
                 }

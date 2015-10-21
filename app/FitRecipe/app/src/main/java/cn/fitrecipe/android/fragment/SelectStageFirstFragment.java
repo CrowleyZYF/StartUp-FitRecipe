@@ -153,9 +153,8 @@ public class SelectStageFirstFragment extends Fragment implements View.OnClickLi
                                 hideLoading(false, "");
                             else {
                                 scrollView.setCompleteMore();
-                                if(data.length() == 0) {
-                                    //Toast.makeText(getActivity(), "没有多余的搜索结果了!", Toast.LENGTH_SHORT).show();
-                                }
+                                if(data.length() == 0)
+                                    Toast.makeText(getActivity(), "没有多余的搜索结果了!", Toast.LENGTH_SHORT).show();
                             }
                             start += num;
                         } catch (JSONException e) {
