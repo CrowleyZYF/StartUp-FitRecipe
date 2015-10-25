@@ -361,6 +361,7 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
             params.put("jobType", userEvaluation.getJobType());
             params.put("exerciseFrequency", userEvaluation.getExerciseFrequency());
             params.put("exerciseInterval", userEvaluation.getExerciseInterval());
+            params.put("exerciseTime", userEvaluation.getExerciseTime());
             params.put("date", str);
             System.out.println(params.toString());
         } catch (JSONException e) {

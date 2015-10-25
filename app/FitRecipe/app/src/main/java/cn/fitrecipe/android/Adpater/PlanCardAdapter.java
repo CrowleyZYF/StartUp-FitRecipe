@@ -53,7 +53,7 @@ public class PlanCardAdapter extends RecyclerView.Adapter<PlanCardAdapter.PlanCa
                 Intent intent=new Intent(context,PlanChoiceInfoActivity.class);
                 intent.putExtra("plan_id", planCardsList.get(i).getId());
                 intent.putExtra("isUsed", planCardsList.get(i).isUsed());
-                context.startActivityForResult(intent, PlanChoiceActivity.SWITCH_PLAN_CODE);
+                context.startActivity(intent);
             }
         });
 

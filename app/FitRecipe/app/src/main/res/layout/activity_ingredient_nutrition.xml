@@ -59,8 +59,9 @@
     </LinearLayout>
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:scrollbars="none">
 
@@ -277,14 +278,16 @@
                 android:paddingTop="5dp"
                 android:paddingLeft="5dp"/>
 
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:padding="2dp"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/dash_border"
                 android:layout_marginTop="10dp">
 
@@ -315,10 +318,11 @@
             android:background="@drawable/theme_line" />
 
         <TextView
+            android:id="@+id/back_btn"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="@string/search_finish"
+            android:text="返回"
             android:textSize="16sp"
             android:textColor="@color/base_color"/>
 

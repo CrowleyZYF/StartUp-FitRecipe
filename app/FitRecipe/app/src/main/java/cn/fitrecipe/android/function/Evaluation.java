@@ -33,6 +33,11 @@ public class Evaluation {
     private int jobType;
     private int exerciseFrequency;
     private int exerciseInterval;
+
+    public int getExerciseTime() {
+        return exerciseTime;
+    }
+
     private int exerciseTime;
 	private double weightGoal;
 	private int daysToGoal;

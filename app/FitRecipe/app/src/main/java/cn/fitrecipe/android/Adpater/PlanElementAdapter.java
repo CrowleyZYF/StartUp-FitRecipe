@@ -31,6 +31,7 @@ import cn.fitrecipe.android.FrApplication;
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.PostRequest;
+import cn.fitrecipe.android.IngredientNutritionActivity;
 import cn.fitrecipe.android.PunchPhotoChoiceActivity;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.RecipeActivity;
@@ -139,6 +140,12 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
         holder.plan_punch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
+
+                if(!isValid2) {
+                    Toast.makeText(fragment.getActivity(), "只能打当天的卡！", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 if (item.size() == 0) {
                     Toast.makeText(fragment.getActivity(), "请添加食谱、食材后再打卡！", Toast.LENGTH_SHORT).show();
                     return;
@@ -299,6 +306,10 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
                     Intent intent = new Intent(fragment.getActivity(), RecipeActivity.class);
                     intent.putExtra("id", recipe_id);
                     fragment.startActivity(intent);
+                }else {
+                    Intent intent = new Intent(fragment.getActivity(), IngredientNutritionActivity.class);
+                    intent.putExtra("component", item.getComponents().get(position));
+                    fragment.getActivity().startActivity(intent);
                 }
             }
         });/*

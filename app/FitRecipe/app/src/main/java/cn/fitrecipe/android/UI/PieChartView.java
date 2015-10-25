@@ -48,6 +48,13 @@ public class PieChartView extends View {
         drawPieChart(canvas, rx - square / 2.0f, ry - square / 2.0f, square / 2.0f);
     }
 
+    /**
+     *碳水 ，蛋白质， 脂类
+     * @param value
+     * @param isHasText
+     * @param isDinner
+     * @param isHuge
+     */
     public void setValue(float[] value, boolean isHasText, boolean isDinner, boolean isHuge) {
         this.percents = value;
         this.isHasText = isHasText;
