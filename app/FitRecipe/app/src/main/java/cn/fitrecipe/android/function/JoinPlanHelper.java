@@ -64,11 +64,7 @@ public class JoinPlanHelper {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                if(volleyError != null && volleyError.networkResponse != null) {
-                    int statusCode = volleyError.networkResponse.statusCode;
-                    Toast.makeText(context, statusCode+"", Toast.LENGTH_SHORT).show();
-                }else
-                    Toast.makeText(context, context.getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                RequestErrorHelper.toast(context, volleyError);
             }
         });
         FrRequest.getInstance().request(request);
@@ -95,11 +91,7 @@ public class JoinPlanHelper {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                if(volleyError != null && volleyError.networkResponse != null) {
-                    int statusCode = volleyError.networkResponse.statusCode;
-                    //Toast.makeText(context, statusCode+"", Toast.LENGTH_SHORT).show();
-                }else
-                    Toast.makeText(context, context.getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                RequestErrorHelper.toast(context, volleyError);
             }
         });
         FrRequest.getInstance().request(request);

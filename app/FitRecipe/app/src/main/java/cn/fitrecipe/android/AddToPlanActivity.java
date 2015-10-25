@@ -29,6 +29,7 @@ import cn.fitrecipe.android.entity.PunchRecord;
 import cn.fitrecipe.android.entity.Recipe;
 import cn.fitrecipe.android.function.Common;
 import cn.fitrecipe.android.function.JsonParseHelper;
+import cn.fitrecipe.android.function.RequestErrorHelper;
 
 /**
  * Created by 奕峰 on 2015/5/8.
@@ -302,7 +303,7 @@ public class AddToPlanActivity extends Activity implements View.OnClickListener 
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        Toast.makeText(AddToPlanActivity.this, "出错了", Toast.LENGTH_SHORT).show();
+                        RequestErrorHelper.toast(AddToPlanActivity.this, volleyError);
                         if(pd.isShowing())
                             pd.dismiss();
                     }
@@ -345,7 +346,7 @@ public class AddToPlanActivity extends Activity implements View.OnClickListener 
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        Toast.makeText(AddToPlanActivity.this, "出错了", Toast.LENGTH_SHORT).show();
+                        RequestErrorHelper.toast(AddToPlanActivity.this, volleyError);
                         if(pd.isShowing())
                             pd.dismiss();
                     }
@@ -490,7 +491,7 @@ public class AddToPlanActivity extends Activity implements View.OnClickListener 
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                Toast.makeText(AddToPlanActivity.this, "出错了", Toast.LENGTH_SHORT).show();
+                RequestErrorHelper.toast(AddToPlanActivity.this, volleyError);
                 if(pd.isShowing())
                     pd.dismiss();
             }

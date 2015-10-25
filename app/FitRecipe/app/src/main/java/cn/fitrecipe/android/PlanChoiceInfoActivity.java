@@ -34,6 +34,7 @@ import cn.fitrecipe.android.entity.PlanAuthor;
 import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.SeriesPlan;
 import cn.fitrecipe.android.function.JsonParseHelper;
+import cn.fitrecipe.android.function.RequestErrorHelper;
 import me.relex.circleindicator.CircleIndicator;
 import pl.tajchert.sample.DotsTextView;
 
@@ -100,13 +101,7 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                if (volleyError != null && volleyError.networkResponse != null) {
-                    hideLoading(true, getResources().getString(R.string.network_error));
-                    int statusCode = volleyError.networkResponse.statusCode;
-                    if (statusCode == 404) {
-                        //Toast.makeText(PlanChoiceInfoActivity.this, "404！", Toast.LENGTH_SHORT).show();
-                    }
-                }
+                RequestErrorHelper.toast(PlanChoiceInfoActivity.this, volleyError);
             }
         });
         FrRequest.getInstance().request(request);
@@ -114,102 +109,8 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
     }
 
     private void processData(JSONObject data) throws JSONException{
-        plan = new SeriesPlan();
-        plan.setId(data.getInt("id"));
-        plan.setImg(data.getString("img"));
-        plan.setInrtoduce(data.getString("inrtoduce"));
-        plan.setDifficulty(data.getInt("difficulty"));
-        plan.setDelicious(data.getInt("delicious"));
-        plan.setBenifit(data.getInt("benifit"));
-        plan.setTotal_days(data.getInt("total_days"));
-        plan.setDish_headcount(data.getInt("dish_headcount"));
-        plan.setBrief(data.getString("brief"));
-        plan.setTitle(data.getString("title"));
-        plan.setCover(data.getString("cover"));
 
-        JSONObject author_json = data.getJSONObject("author");
-        plan.setAuthor(new Gson().fromJson(author_json.toString(), PlanAuthor.class));
-
-        ArrayList<DatePlan> datePlans = new ArrayList<>();
-
-        JSONArray routine_set = data.getJSONArray("routine_set");
-        for(int i  = 0; i < routine_set.length(); i++) {
-            JSONObject routine = routine_set.getJSONObject(i);
-            DatePlan datePlan = new DatePlan();
-            datePlan.setPlan_name(plan.getTitle());
-            JSONArray dish_set = routine.getJSONArray("dish_set");
-            List<DatePlanItem> items = new ArrayList<>();
-            for(int j = 0; j < dish_set.length(); j++) {
-                DatePlanItem item = new DatePlanItem();
-                int type = dish_set.getJSONObject(j).getInt("type");
-                switch (type) {
-                    case 0:
-                        item.setType("breakfast");
-                        item.setDefaultImageCover("drawable://" + R.drawable.breakfast);
-                        break;
-                    case 1:
-                        item.setType("add_meal_01");
-                        item.setDefaultImageCover("drawable://" + R.drawable.add_meal_01);
-                        break;
-                    case 2:
-                        item.setType("lunch");
-                        item.setDefaultImageCover("drawable://" + R.drawable.lunch);
-                        break;
-                    case 3:
-                        item.setType("add_meal_02");
-                        item.setDefaultImageCover("drawable://" + R.drawable.add_meal_02);
-                        break;
-                    case 4:
-                        item.setType("supper");
-                        item.setDefaultImageCover("drawable://" + R.drawable.dinner);
-                        break;
-                    case 5:
-                        item.setType("add_meal_03");
-                        item.setDefaultImageCover("drawable://" + R.drawable.add_meal_03);
-                        break;
-                }
-                JSONArray singleingredient_set = dish_set.getJSONObject(j).getJSONArray("singleingredient_set");
-                for(int k = 0; k < singleingredient_set.length(); k++) {
-                    PlanComponent component = new PlanComponent();
-                    component.setType(0);
-                    component.setName(singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getString("name"));
-                    component.setNutritions(JsonParseHelper.getNutritionSetFromJson(singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getJSONObject("nutrition_set")));
-                    component.setAmount(singleingredient_set.getJSONObject(k).getInt("amount"));
-                    component.setCalories(singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getJSONObject("nutrition_set").getJSONObject("Energy").getDouble("amount"));
-//                    componentList.add(component);
-                    item.addContent(component);
-                }
-                JSONArray singlerecipe_set = dish_set.getJSONObject(j).getJSONArray("singlerecipe_set");
-                for(int k = 0; k < singlerecipe_set.length(); k++) {
-                    JSONObject json_recipe = singlerecipe_set.getJSONObject(k);
-                    PlanComponent component = new PlanComponent();
-                    component.setAmount(json_recipe.getInt("amount"));
-                    component.setCalories(json_recipe.getJSONObject("recipe").getDouble("calories"));
-                    component.setType(1);
-                    component.setId(json_recipe.getJSONObject("recipe").getInt("id"));
-                    component.setName(json_recipe.getJSONObject("recipe").getString("title"));
-                    component.setNutritions(JsonParseHelper.getNutritionSetFromJson(json_recipe.getJSONObject("recipe").getJSONObject("nutrition_set")));
-                    JSONArray json_component = json_recipe.getJSONObject("recipe").getJSONArray("component_set");
-                    ArrayList<PlanComponent> components = new ArrayList<>();
-                    for(int q = 0; q < json_component.length(); q++) {
-                        PlanComponent component1 = new PlanComponent();
-                        JSONObject jcomponent = json_component.getJSONObject(q);
-                        component1.setName(jcomponent.getJSONObject("ingredient").getString("name"));
-                        component1.setAmount(jcomponent.getInt("amount"));
-                        component1.setType(0);
-                        components.add(component1);
-                    }
-                    component.setComponents(components);
-//                    componentList.add(component);
-                    item.addContent(component);
-                }
-//                item.setComponents(componentList);
-                items.add(item);
-            }
-            datePlan.setItems(items);
-            datePlans.add(datePlan);
-        }
-        plan.setDatePlans(datePlans);
+        plan = JsonParseHelper.getSeriesPlanFromJson(data);
         plan.setIsUsed(isUsed);
     }
 

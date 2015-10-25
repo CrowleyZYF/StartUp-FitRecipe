@@ -32,6 +32,7 @@ import cn.fitrecipe.android.UI.BorderScrollView;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.entity.Collection;
 import cn.fitrecipe.android.entity.Recipe;
+import cn.fitrecipe.android.function.RequestErrorHelper;
 import pl.tajchert.sample.DotsTextView;
 
 /**
@@ -118,7 +119,7 @@ public class RecipeCollectFragment extends Fragment
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                hideLoading(true, getResources().getString(R.string.network_error));
+                RequestErrorHelper.toast(getActivity(), volleyError);
             }
         });
         FrRequest.getInstance().request(request);

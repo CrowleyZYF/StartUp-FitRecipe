@@ -18,6 +18,7 @@ import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.entity.Article;
+import cn.fitrecipe.android.function.RequestErrorHelper;
 
 public class ArticleActivity extends Activity implements View.OnClickListener{
 
@@ -66,7 +67,7 @@ public class ArticleActivity extends Activity implements View.OnClickListener{
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                RequestErrorHelper.toast(ArticleActivity.this, volleyError);
             }
         });
         FrRequest.getInstance().request(request);

@@ -133,6 +133,7 @@
         <meta-data
             android:name="UMENG_CHANNEL"
             android:value="Test" />
+
         <service
             android:name=".service.GetHomeDataService"
             android:enabled="true"
@@ -191,8 +192,12 @@
             android:name=".PlanNutritionActivity"
             android:label="@string/title_activity_plan_nutrition" >
         </activity>
-
-        <activity android:name=".cropimage.CropImage"/>
+        <activity android:name=".cropimage.CropImage" />
+        <activity
+            android:name=".SelectSwitchDateActivity"
+            android:label="@string/title_activity_select_switch_date"
+            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

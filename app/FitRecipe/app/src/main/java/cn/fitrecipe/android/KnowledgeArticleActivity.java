@@ -27,6 +27,7 @@ import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.entity.Article;
 import cn.fitrecipe.android.entity.Series;
+import cn.fitrecipe.android.function.RequestErrorHelper;
 
 public class KnowledgeArticleActivity extends Activity implements View.OnClickListener {
 
@@ -86,7 +87,7 @@ public class KnowledgeArticleActivity extends Activity implements View.OnClickLi
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                RequestErrorHelper.toast(KnowledgeArticleActivity.this, volleyError);
             }
         });
         FrRequest.getInstance().request(request);
@@ -164,7 +165,7 @@ public class KnowledgeArticleActivity extends Activity implements View.OnClickLi
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
-                    Toast.makeText(KnowledgeArticleActivity.this, getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                    RequestErrorHelper.toast(KnowledgeArticleActivity.this, volleyError);
                 }
             });
             FrRequest.getInstance().request(request);
@@ -188,7 +189,7 @@ public class KnowledgeArticleActivity extends Activity implements View.OnClickLi
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
-                    Toast.makeText(KnowledgeArticleActivity.this, getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                    RequestErrorHelper.toast(KnowledgeArticleActivity.this, volleyError);
                 }
             });
             FrRequest.getInstance().request(request);

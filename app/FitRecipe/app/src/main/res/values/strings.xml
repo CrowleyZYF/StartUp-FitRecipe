@@ -240,6 +240,9 @@
 
 
     <string name="server_error">服务器错误</string>
+    <string name="title_activity_select_switch_date">SelectSwitchDateActivity</string>
 
+    <string name="today">从今天开始</string>
+    <string name="tomorrow">从明天开始</string>
 
 </resources>

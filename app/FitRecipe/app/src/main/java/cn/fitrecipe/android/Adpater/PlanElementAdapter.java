@@ -41,6 +41,7 @@ import cn.fitrecipe.android.entity.DatePlanItem;
 import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.Report;
 import cn.fitrecipe.android.fragment.PlanFragment;
+import cn.fitrecipe.android.function.RequestErrorHelper;
 
 /**
  * Created by wk on 2015/8/26.
@@ -137,7 +138,7 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
         //打卡
         holder.plan_punch.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 if (item.size() == 0) {
                     Toast.makeText(fragment.getActivity(), "请添加食谱、食材后再打卡！", Toast.LENGTH_SHORT).show();
                     return;
@@ -161,7 +162,7 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError volleyError) {
-                            //Toast.makeText(fragment.getActivity(), "取消打卡失败!", Toast.LENGTH_SHORT).show();
+                            RequestErrorHelper.toast(fragment.getActivity(), volleyError);
                         }
                     });
                     FrRequest.getInstance().request(request);

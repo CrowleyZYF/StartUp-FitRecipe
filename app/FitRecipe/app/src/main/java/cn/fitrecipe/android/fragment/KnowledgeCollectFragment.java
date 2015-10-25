@@ -32,6 +32,7 @@ import cn.fitrecipe.android.UI.BorderScrollView;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.entity.Collection;
 import cn.fitrecipe.android.entity.Series;
+import cn.fitrecipe.android.function.RequestErrorHelper;
 import pl.tajchert.sample.DotsTextView;
 
 /**
@@ -90,7 +91,7 @@ public class KnowledgeCollectFragment extends Fragment
             public void onResponse(JSONObject res) {
                 if(res.has("data")) {
                     if(lastid == -1)
-                        hideLoading(false, "");
+                        hideLoading(false);
                     else
                         borderScrollView.setCompleteMore();
                     try {
@@ -107,7 +108,8 @@ public class KnowledgeCollectFragment extends Fragment
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                hideLoading(true, getResources().getString(R.string.network_error));
+                hideLoading(true);
+                RequestErrorHelper.toast(getActivity(), volleyError);
             }
         });
         FrRequest.getInstance().request(request);
@@ -131,11 +133,11 @@ public class KnowledgeCollectFragment extends Fragment
             seriesCardAdapter.notifyDataSetChanged();
     }
 
-    private void hideLoading(boolean isError, String errorMessage){
+    private void hideLoading(boolean isError){
         loadingInterface.setVisibility(View.GONE);
         dotsTextView.stop();
         if(isError){
-            Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+//            Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
         }else{
             borderScrollView.setVisibility(View.VISIBLE);
             borderScrollView.smoothScrollTo(0, 0);

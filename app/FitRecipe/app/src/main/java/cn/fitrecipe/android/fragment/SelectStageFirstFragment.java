@@ -36,6 +36,7 @@ import cn.fitrecipe.android.UI.BorderScrollView;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.function.JsonParseHelper;
+import cn.fitrecipe.android.function.RequestErrorHelper;
 import pl.tajchert.sample.DotsTextView;
 
 /**
@@ -150,7 +151,7 @@ public class SelectStageFirstFragment extends Fragment implements View.OnClickLi
                             JSONArray data = res.getJSONArray("data");
                             processData(data);
                             if(start == 0)
-                                hideLoading(false, "");
+                                hideLoading(false);
                             else {
                                 scrollView.setCompleteMore();
                                 if(data.length() == 0)
@@ -165,13 +166,9 @@ public class SelectStageFirstFragment extends Fragment implements View.OnClickLi
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
-                    hideLoading(true, getResources().getString(R.string.network_error));
-                    if(volleyError != null && volleyError.networkResponse != null) {
-                        int statusCode = volleyError.networkResponse.statusCode;
-                        if(statusCode == 404) {
-                            //Toast.makeText(getActivity(), "不存在！", Toast.LENGTH_SHORT).show();
-                        }
-                    }
+                    hideLoading(true);
+                    RequestErrorHelper.toast(getActivity(), volleyError);
+
                 }
             });
         } catch (UnsupportedEncodingException e) {
@@ -181,6 +178,10 @@ public class SelectStageFirstFragment extends Fragment implements View.OnClickLi
     }
 
     private void processData(JSONArray json) throws JSONException {
+
+        if(json.length() == 0)
+            Toast.makeText(getActivity(), "搜索内容为空", Toast.LENGTH_SHORT).show();
+
         for(int i = 0; i <json.length(); i++) {
             JSONObject obj = json.getJSONObject(i);
             PlanComponent component = new PlanComponent();
@@ -212,11 +213,11 @@ public class SelectStageFirstFragment extends Fragment implements View.OnClickLi
             adapter.notifyDataSetChanged();
     }
 
-    private void hideLoading(boolean isError, String errorMessage){
+    private void hideLoading(boolean isError){
         loadingInterface.setVisibility(View.INVISIBLE);
         dotsTextView.stop();
         if(isError){
-            Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+//            Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
         }else{
             search_content.setVisibility(View.VISIBLE);
         }

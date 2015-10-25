@@ -57,6 +57,7 @@ import cn.fitrecipe.android.entity.PunchRecord;
 import cn.fitrecipe.android.entity.Report;
 import cn.fitrecipe.android.function.Common;
 import cn.fitrecipe.android.function.PunchImageGenerator;
+import cn.fitrecipe.android.function.RequestErrorHelper;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
@@ -370,7 +371,7 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                Toast.makeText(PunchContentSureActivity.this, "打卡出错!", Toast.LENGTH_SHORT).show();
+                RequestErrorHelper.toast(PunchContentSureActivity.this, volleyError);
         }
         });
         FrRequest.getInstance().request(request);

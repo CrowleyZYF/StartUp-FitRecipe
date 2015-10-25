@@ -30,6 +30,7 @@ import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.entity.Author;
 import cn.fitrecipe.android.function.Common;
+import cn.fitrecipe.android.function.RequestErrorHelper;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 
@@ -249,12 +250,7 @@ public class RegisterActivity extends Activity implements OnClickListener {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
-                    if(volleyError != null && volleyError.networkResponse != null) {
-                        int statusCode = volleyError.networkResponse.statusCode;
-                        if(statusCode == 400) {
-                            accountError();
-                        }
-                    }
+                    RequestErrorHelper.toast(RegisterActivity.this, volleyError);
                 }
             });
             FrRequest.getInstance().request(request);

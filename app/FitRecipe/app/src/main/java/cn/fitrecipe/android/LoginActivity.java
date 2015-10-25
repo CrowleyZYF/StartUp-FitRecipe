@@ -41,6 +41,7 @@ import cn.fitrecipe.android.entity.Author;
 import cn.fitrecipe.android.entity.Report;
 import cn.fitrecipe.android.function.Common;
 import cn.fitrecipe.android.function.Evaluation;
+import cn.fitrecipe.android.function.RequestErrorHelper;
 
 
 public class LoginActivity extends Activity implements View.OnClickListener {
@@ -98,12 +99,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 Intent intent = new Intent(nowContext, MainActivity.class);
                 startActivity(intent);
                 LoginActivity.this.finish();
-                if(volleyError != null && volleyError.networkResponse != null) {
-                    int statusCode = volleyError.networkResponse.statusCode;
-                    if(statusCode == 404) {
-                        Toast.makeText(LoginActivity.this, "报告不存在！", Toast.LENGTH_SHORT).show();
-                    }
-                }
             }
         });
         FrRequest.getInstance().request(request);
@@ -286,7 +281,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                RequestErrorHelper.toast(LoginActivity.this, volleyError);
             }
         });
         FrRequest.getInstance().request(request);

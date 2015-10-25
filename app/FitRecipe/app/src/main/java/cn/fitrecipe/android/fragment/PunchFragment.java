@@ -36,6 +36,7 @@ import cn.fitrecipe.android.entity.DatePlanItem;
 import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.function.Common;
 import cn.fitrecipe.android.function.JsonParseHelper;
+import cn.fitrecipe.android.function.RequestErrorHelper;
 import pl.tajchert.sample.DotsTextView;
 
 /**
@@ -100,6 +101,7 @@ public class PunchFragment extends Fragment
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
+                    RequestErrorHelper.toast(getActivity(), volleyError);
                     getPunchDateFromLocal();
                 }
             });

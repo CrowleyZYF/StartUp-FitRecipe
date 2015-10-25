@@ -35,6 +35,7 @@ import cn.fitrecipe.android.ReportActivity;
 import cn.fitrecipe.android.entity.Report;
 import cn.fitrecipe.android.function.Common;
 import cn.fitrecipe.android.function.Evaluation;
+import cn.fitrecipe.android.function.RequestErrorHelper;
 
 /**
  * Created by 奕峰 on 2015/4/25.
@@ -446,7 +447,7 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                Toast.makeText(context, context.getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                RequestErrorHelper.toast(context, volleyError);
             }
         });
         FrRequest.getInstance().request(request);
