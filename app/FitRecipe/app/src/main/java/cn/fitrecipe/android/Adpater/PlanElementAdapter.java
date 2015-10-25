@@ -31,6 +31,7 @@ import cn.fitrecipe.android.FrApplication;
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.PostRequest;
+import cn.fitrecipe.android.IngredientNutritionActivity;
 import cn.fitrecipe.android.PunchPhotoChoiceActivity;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.RecipeActivity;
@@ -306,7 +307,9 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
                     intent.putExtra("id", recipe_id);
                     fragment.startActivity(intent);
                 }else {
-
+                    Intent intent = new Intent(fragment.getActivity(), IngredientNutritionActivity.class);
+                    intent.putExtra("component", item.getComponents().get(position));
+                    fragment.getActivity().startActivity(intent);
                 }
             }
         });/*
