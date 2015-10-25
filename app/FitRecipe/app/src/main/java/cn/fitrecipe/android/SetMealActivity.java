@@ -33,7 +33,7 @@ public class SetMealActivity extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.set_account_btn:
-                Intent dialog = new Intent(this,PunchPhotoChoiceActivity.class);
+                Intent dialog = new Intent(this,ChoosePhotoActivity.class);
                 startActivity(dialog);
                 break;
             case R.id.set_meal_btn:

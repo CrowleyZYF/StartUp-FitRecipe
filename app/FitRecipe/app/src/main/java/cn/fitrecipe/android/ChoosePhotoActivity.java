@@ -25,7 +25,7 @@ import cn.fitrecipe.android.entity.DatePlanItem;
 /**
  * Created by 奕峰 on 2015/5/8.
  */
-public class PunchPhotoChoiceActivity extends Activity implements View.OnClickListener {
+public class ChoosePhotoActivity extends Activity implements View.OnClickListener {
 
     private TextView option_takepic, option_select, option_default;
 
@@ -36,6 +36,7 @@ public class PunchPhotoChoiceActivity extends Activity implements View.OnClickLi
     public static final int REQUEST_CODE_CROP_IMAGE   = 0x3;
     private File mFileTemp;
     private DatePlanItem item;
+    private String from;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +44,10 @@ public class PunchPhotoChoiceActivity extends Activity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_punch_photo_choice);
 
-        item = (DatePlanItem) getIntent().getSerializableExtra("item");
+        from  = getIntent().getStringExtra("from");
+        if(from.equals("punch")) {
+            item = (DatePlanItem) getIntent().getSerializableExtra("item");
+        }
 
         initView();
         initEvent();
@@ -67,6 +71,8 @@ public class PunchPhotoChoiceActivity extends Activity implements View.OnClickLi
         option_takepic = (TextView) findViewById(R.id.option_takepic);
         option_select = (TextView) findViewById(R.id.option_select);
         option_default = (TextView) findViewById(R.id.option_default);
+        if(!from.equals("punch"))
+            option_default.setVisibility(View.GONE);
     }
 
     @Override
@@ -158,11 +164,18 @@ public class PunchPhotoChoiceActivity extends Activity implements View.OnClickLi
                 if (path == null) {
                     return;
                 }
-                Intent intent = new Intent(this, PunchContentSureActivity.class);
-                intent.putExtra("bitmap", mFileTemp.getPath());
-                intent.putExtra("item", item);
-                intent.putExtra("action", "publish");
-                startActivity(intent);
+                if(from.equals("punch")) {
+                    Intent intent = new Intent(this, PunchContentSureActivity.class);
+                    intent.putExtra("bitmap", mFileTemp.getPath());
+                    intent.putExtra("item", item);
+                    intent.putExtra("action", "publish");
+                    startActivity(intent);
+                }else
+                    if (from.equals("avatar")) {
+                        Intent intent = new Intent();
+                        intent.putExtra("bitmap", mFileTemp.getPath());
+                        setResult(RESULT_OK, intent);
+                    }
                 finish();
                 break;
         }
