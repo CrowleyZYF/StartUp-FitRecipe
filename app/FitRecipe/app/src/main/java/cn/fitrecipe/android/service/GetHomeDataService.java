@@ -26,6 +26,7 @@ import cn.fitrecipe.android.entity.Recipe;
 import cn.fitrecipe.android.entity.Recommend;
 import cn.fitrecipe.android.entity.Theme;
 import cn.fitrecipe.android.function.Common;
+import cn.fitrecipe.android.function.RequestErrorHelper;
 
 public class GetHomeDataService extends Service {
 
@@ -76,11 +77,7 @@ public class GetHomeDataService extends Service {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                String error_info = getResources().getString(R.string.network_error);
-                if(!Common.isOpenNetwork(GetHomeDataService.this))
-                    error_info = getResources().getString(R.string.network_close);
-                //Toast.makeText(GetHomeDataService.this, error_info, Toast.LENGTH_SHORT).show();
-                System.out.println("get Home data " + volleyError.getMessage());
+                RequestErrorHelper.toast(GetHomeDataService.this, volleyError);
             }
         });
         FrRequest.getInstance().request(request);

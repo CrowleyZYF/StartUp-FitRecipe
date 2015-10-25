@@ -30,6 +30,7 @@ import cn.fitrecipe.android.UI.BorderScrollView;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.entity.Recipe;
 import cn.fitrecipe.android.entity.Theme;
+import cn.fitrecipe.android.function.RequestErrorHelper;
 import pl.tajchert.sample.DotsTextView;
 
 public class ThemeActivity extends Activity implements View.OnClickListener {
@@ -92,6 +93,7 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+                RequestErrorHelper.toast(ThemeActivity.this, volleyError);
             }
         });
         FrRequest.getInstance().request(request);
@@ -134,7 +136,8 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
                             }
                             themeContent.setCompleteMore();
                         }
-                        start += num;
+                        if(data.length() > 0)
+                            start += num;
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -143,12 +146,7 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                if(start == 0)
-                    hideLoading(true, getResources().getString(R.string.network_error));
-                else {
-                    themeContent.setCompleteMore();
-                    Toast.makeText(ThemeActivity.this, getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
-                }
+                RequestErrorHelper.toast(ThemeActivity.this, volleyError);
             }
         });
         FrRequest.getInstance().request(request);
@@ -258,7 +256,7 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
-                    Toast.makeText(ThemeActivity.this, getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                    RequestErrorHelper.toast(ThemeActivity.this, volleyError);
                 }
             });
             FrRequest.getInstance().request(request);
@@ -282,7 +280,7 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
-                    Toast.makeText(ThemeActivity.this, getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                    RequestErrorHelper.toast(ThemeActivity.this, volleyError);
                 }
             });
             FrRequest.getInstance().request(request);

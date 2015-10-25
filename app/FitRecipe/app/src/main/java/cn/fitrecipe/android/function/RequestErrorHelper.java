@@ -16,16 +16,9 @@ import com.android.volley.VolleyError;
 /**
  * Created by wk on 2015/10/19.
  */
-public class FrErrorListener implements Response.ErrorListener{
+public class RequestErrorHelper{
 
-    private Context context;
-
-    public FrErrorListener(Context context) {
-        this.context = context;
-    }
-
-    @Override
-    public void onErrorResponse(VolleyError volleyError) {
+    public static void toast(Context context, VolleyError volleyError) {
         if(volleyError instanceof TimeoutError) {
             Toast.makeText(context, "访问超时,请检查网络!", Toast.LENGTH_SHORT).show();
         }

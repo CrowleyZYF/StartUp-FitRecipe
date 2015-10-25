@@ -61,6 +61,7 @@
                     android:layout_toRightOf="@id/theme_icon"/>
 
                 <TextView
+                    android:id="@+id/theme_more"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
@@ -101,6 +102,7 @@
                     android:layout_toRightOf="@id/update_icon"/>
 
                 <TextView
+                    android:id="@+id/recipe_more"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="12sp"

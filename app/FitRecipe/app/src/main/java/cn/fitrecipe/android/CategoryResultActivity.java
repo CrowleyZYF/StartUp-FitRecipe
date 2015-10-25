@@ -32,6 +32,7 @@ import cn.fitrecipe.android.UI.BorderScrollView;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.UI.SlidingMenu;
 import cn.fitrecipe.android.entity.Recipe;
+import cn.fitrecipe.android.function.RequestErrorHelper;
 import pl.tajchert.sample.DotsTextView;
 
 public class CategoryResultActivity extends Activity implements View.OnClickListener {
@@ -179,7 +180,8 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
                                 Toast.makeText(CategoryResultActivity.this, "没有多余的食谱", Toast.LENGTH_SHORT).show();
                             categoryContent.setCompleteMore();
                         }
-                        start += num;
+                        if(data.length() > 0)
+                            start += num;
                         try {
                             processData(data);
                         } catch (JSONException e) {
@@ -190,12 +192,7 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
-                    if(!getMore)
-                        hideLoading(true, getResources().getString(R.string.network_error));
-                    else {
-                        categoryContent.setCompleteMore();
-                        Toast.makeText(CategoryResultActivity.this, getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
-                    }
+                    RequestErrorHelper.toast(CategoryResultActivity.this, volleyError);
                 }
             });
             FrRequest.getInstance().request(request);

@@ -1,5 +1,7 @@
 package cn.fitrecipe.android.function;
 
+import com.google.gson.Gson;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,6 +13,7 @@ import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.entity.DatePlan;
 import cn.fitrecipe.android.entity.DatePlanItem;
 import cn.fitrecipe.android.entity.Nutrition;
+import cn.fitrecipe.android.entity.PlanAuthor;
 import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.Series;
 import cn.fitrecipe.android.entity.SeriesPlan;
@@ -48,7 +51,14 @@ public class JsonParseHelper {
         plan.setTotal_days(data.getInt("total_days"));//计划总共的天数
         plan.setDish_headcount(data.getInt("dish_headcount"));//采用计划的人数
         plan.setTitle(data.getString("title"));//计划名称
+        plan.setBrief(data.getString("brief"));
+        plan.setCover(data.getString("cover"));
 
+        //计划作者
+        if(!data.get("author").toString().equals("null")) {
+            JSONObject author_json = data.getJSONObject("author");
+            plan.setAuthor(new Gson().fromJson(author_json.toString(), PlanAuthor.class));
+        }
         //好多天的计划
         ArrayList<DatePlan> datePlans = new ArrayList<>();
 
@@ -106,7 +116,7 @@ public class JsonParseHelper {
                     component.setName(singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getString("name"));//设置名称
                     component.setNutritions(JsonParseHelper.getNutritionSetFromJson(singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getJSONObject("nutrition_set")));//获取营养信息
                     component.setAmount(singleingredient_set.getJSONObject(k).getInt("amount"));//设置重量
-                    component.setCalories(component.getAmount() * singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getJSONObject("nutrition_set").getJSONObject("Energy").getDouble("amount") / 100);//设置卡路里
+                    component.setCalories(singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getJSONObject("nutrition_set").getJSONObject("Energy").getDouble("amount"));//设置卡路里
                     item.addContent(component);
                 }
                 //获取计划中食谱

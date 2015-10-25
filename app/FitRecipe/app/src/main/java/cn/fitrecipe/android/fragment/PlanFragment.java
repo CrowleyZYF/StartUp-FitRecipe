@@ -50,6 +50,7 @@ import cn.fitrecipe.android.entity.SeriesPlan;
 import cn.fitrecipe.android.function.Common;
 import cn.fitrecipe.android.function.JoinPlanHelper;
 import cn.fitrecipe.android.function.JsonParseHelper;
+import cn.fitrecipe.android.function.RequestErrorHelper;
 import pl.tajchert.sample.DotsTextView;
 
 /**
@@ -153,7 +154,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         adapter = new PlanElementAdapter(this, items, report);
         plans.setAdapter(adapter);
         if(report == null) {
-            hideLoading(true, "No report!");
+            hideLoading(true);
             return;
         }
         //显示健身状态
@@ -216,7 +217,8 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        hideLoading(true, getResources().getString(R.string.network_error));
+                        hideLoading(true);
+                        RequestErrorHelper.toast(getActivity(), volleyError);
                         getDataFromLocal(start, end);
                     }
                 });
@@ -305,13 +307,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        if (volleyError != null && volleyError.networkResponse != null) {
-                            hideLoading(true, getResources().getString(R.string.network_error));
-                            int statusCode = volleyError.networkResponse.statusCode;
-                            if (statusCode == 404) {
-                                //Toast.makeText(getActivity(), "404！", Toast.LENGTH_SHORT).show();
-                            }
-                        }
+                        RequestErrorHelper.toast(getActivity(), volleyError);
                     }
                 });
         FrRequest.getInstance().request(request);
@@ -343,7 +339,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 start = nowDate;
             processDatePlan(start, end, plans, nowDate, isPre);
             if(!isPre)
-                hideLoading(false, "");
+                hideLoading(false);
         }else {
             //新用户 默认设定自定义计划
             if(!isPre) {
@@ -360,7 +356,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                         int id = (Integer) res[0];
                         plans.put(finalStart, Common.gerneratePersonalPlan(id));
                         processDatePlan(finalStart, finalEnd, plans, finalNowDate, isPre);
-                        hideLoading(false, "");
+                        hideLoading(false);
                     }
                 }, nowDate);
             }else {
@@ -550,7 +546,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     }
 
 
-    private void hideLoading(boolean isError, String errorMessage){
+    private void hideLoading(boolean isError){
         loadingInterface.setVisibility(View.GONE);
         dotsTextView.stop();
         if(isError){
@@ -771,11 +767,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 info_container.setEnabled(true);
-                if(volleyError != null && volleyError.networkResponse != null) {
-                    int statusCode = volleyError.networkResponse.statusCode;
-                    //Toast.makeText(getActivity(), statusCode+"", Toast.LENGTH_SHORT).show();
-                }else
-                    Toast.makeText(getActivity(), getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                RequestErrorHelper.toast(getActivity(), volleyError);
             }
         });
         FrRequest.getInstance().request(request);

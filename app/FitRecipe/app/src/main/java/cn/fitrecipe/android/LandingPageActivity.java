@@ -27,6 +27,7 @@ import java.util.Random;
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.PostRequest;
+import cn.fitrecipe.android.function.RequestErrorHelper;
 import me.relex.circleindicator.CircleIndicator;
 
 public class LandingPageActivity extends Activity implements ViewPager.OnPageChangeListener, View.OnClickListener{
@@ -55,7 +56,7 @@ public class LandingPageActivity extends Activity implements ViewPager.OnPageCha
         Button btn = (Button) findViewById(R.id.btn);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 final JSONObject params = new JSONObject();
                 //Toast.makeText(LandingPageActivity.this, "注册测试用户!", Toast.LENGTH_SHORT).show();
                 try {
@@ -76,6 +77,7 @@ public class LandingPageActivity extends Activity implements ViewPager.OnPageCha
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
+                        RequestErrorHelper.toast(LandingPageActivity.this, volleyError);
                     }
                 });
                 FrRequest.getInstance().request(request);

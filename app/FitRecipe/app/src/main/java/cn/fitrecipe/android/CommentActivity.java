@@ -29,6 +29,7 @@ import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.UI.BorderScrollView;
 import cn.fitrecipe.android.entity.Author;
 import cn.fitrecipe.android.entity.Comment;
+import cn.fitrecipe.android.function.RequestErrorHelper;
 
 /**
  * Created by 奕峰 on 2015/5/8.
@@ -91,7 +92,7 @@ public class CommentActivity extends Activity implements View.OnClickListener {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                Toast.makeText(CommentActivity.this, getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                RequestErrorHelper.toast(CommentActivity.this, volleyError);
             }
         });
         FrRequest.getInstance().request(request);
@@ -219,7 +220,7 @@ public class CommentActivity extends Activity implements View.OnClickListener {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                RequestErrorHelper.toast(CommentActivity.this, volleyError);
             }
         });
         FrRequest.getInstance().request(request);

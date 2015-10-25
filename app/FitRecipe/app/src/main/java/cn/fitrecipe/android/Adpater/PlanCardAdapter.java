@@ -15,6 +15,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import cn.fitrecipe.android.FrApplication;
+import cn.fitrecipe.android.PlanChoiceActivity;
 import cn.fitrecipe.android.PlanChoiceInfoActivity;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.entity.SeriesPlan;
@@ -52,7 +53,7 @@ public class PlanCardAdapter extends RecyclerView.Adapter<PlanCardAdapter.PlanCa
                 Intent intent=new Intent(context,PlanChoiceInfoActivity.class);
                 intent.putExtra("plan_id", planCardsList.get(i).getId());
                 intent.putExtra("isUsed", planCardsList.get(i).isUsed());
-                context.startActivityForResult(intent, 111);
+                context.startActivityForResult(intent, PlanChoiceActivity.SWITCH_PLAN_CODE);
             }
         });
 

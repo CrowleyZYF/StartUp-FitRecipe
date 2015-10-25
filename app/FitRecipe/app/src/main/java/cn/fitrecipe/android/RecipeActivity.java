@@ -38,14 +38,12 @@ import cn.fitrecipe.android.ImageLoader.ILoadingListener;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.UI.PieChartView;
 import cn.fitrecipe.android.entity.Component;
-import cn.fitrecipe.android.entity.DatePlanItem;
-import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.Recipe;
 import cn.fitrecipe.android.entity.Report;
 import cn.fitrecipe.android.floatingactionbutton.FloatingActionButton;
 import cn.fitrecipe.android.floatingactionbutton.FloatingActionsMenu;
 import cn.fitrecipe.android.function.Common;
-import cn.fitrecipe.android.function.FrErrorListener;
+import cn.fitrecipe.android.function.RequestErrorHelper;
 import pl.tajchert.sample.DotsTextView;
 
 public class RecipeActivity extends Activity implements View.OnClickListener, PopupWindow.OnDismissListener {
@@ -221,7 +219,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         GetRequest request = new GetRequest(url, FrApplication.getInstance().getToken(), new JSONObject(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {
-                if(res != null && res.has("data")) {
+                if (res != null && res.has("data")) {
                     try {
                         JSONObject data = res.getJSONObject("data");
                         processData(data);
@@ -230,7 +228,12 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                     }
                 }
             }
-        }, new FrErrorListener(RecipeActivity.this));
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                RequestErrorHelper.toast(RecipeActivity.this, volleyError);
+            }
+        });
         FrRequest.getInstance().request(request);
     }
 
@@ -308,7 +311,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError volleyError) {
-
+                            RequestErrorHelper.toast(RecipeActivity.this, volleyError);
                         }
                     });
             FrRequest.getInstance().request(request);
@@ -508,7 +511,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
-
+                    RequestErrorHelper.toast(RecipeActivity.this, volleyError);
                 }
             });
             FrRequest.getInstance().request(request);
@@ -534,7 +537,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
-
+                    RequestErrorHelper.toast(RecipeActivity.this, volleyError);
                 }
             });
             FrRequest.getInstance().request(request);

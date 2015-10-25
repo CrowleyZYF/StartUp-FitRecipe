@@ -26,6 +26,8 @@ import cn.fitrecipe.android.Adpater.ThemeCardAdapter;
 import cn.fitrecipe.android.CategoryActivity;
 import cn.fitrecipe.android.FrApplication;
 import cn.fitrecipe.android.R;
+import cn.fitrecipe.android.RecipeListActivity;
+import cn.fitrecipe.android.ThemeListActivity;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.entity.HomeData;
 import cn.fitrecipe.android.entity.Recipe;
@@ -56,6 +58,7 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
     //ScrollView
     private ScrollView scrollView;
 
+    private TextView recipe_more, theme_more;
 
     private List<String> urls;
     List<Recommend>  recommendRecipe;
@@ -132,6 +135,9 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
 
 
         scrollView = (ScrollView) view.findViewById(R.id.index_content);
+
+        recipe_more = (TextView) view.findViewById(R.id.recipe_more);
+        theme_more = (TextView) view.findViewById(R.id.theme_more);
     }
 
     private void processData() throws JSONException {
@@ -160,6 +166,8 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
         recommendIndicator.setOnPageChangeListener(this);
         feedback_btn.setOnClickListener(this);
         category_btn.setOnClickListener(this);
+        recipe_more.setOnClickListener(this);
+        theme_more.setOnClickListener(this);
     }
 
     @Override
@@ -187,6 +195,11 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
             case R.id.category_btn_2:
                 startActivity(new Intent(this.getActivity(), CategoryActivity.class));
                 break;
+            case R.id.recipe_more:
+                startActivity(new Intent(this.getActivity(), RecipeListActivity.class));
+                break;
+            case R.id.theme_more:
+                startActivity(new Intent(this.getActivity(), ThemeListActivity.class));
             default:
                 break;
         }
