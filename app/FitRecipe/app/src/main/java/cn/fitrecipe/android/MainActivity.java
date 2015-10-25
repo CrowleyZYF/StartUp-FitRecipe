@@ -280,8 +280,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                         startActivity(new Intent(this, PlanChoiceActivity.class));
                         break;
                     case 2:
-                        //startActivity(new Intent(this, SetActivity.class));
-                        Common.toBeContinuedDialog(this).show();
+                        startActivity(new Intent(this, SetActivity.class));
                         break;
                 }
                 frTabs.get(tab_index).setBackgroundColor(getResources().getColor(R.color.active_color));
