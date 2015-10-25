@@ -87,15 +87,12 @@ public class ReportActivity extends Activity implements View.OnClickListener{
         report_weight = (TextView) findViewById(R.id.report_weight);
         report_weight.setText("体重：" + report.getWeight() + " kg");
         report_exercise_type = (TextView) findViewById(R.id.report_exercise_type);
-        if(report.isGoalType())
+        if(report.isGoalType() == 0)
             report_exercise_type.setText("增肌");
         else
             report_exercise_type.setText("减脂");
         report_fat = (TextView) findViewById(R.id.report_fat);
-        if(report.getRoughFat() == null)
-            report_fat.setText("体脂：" + report.getPreciseFat()*100+"%");
-        else
-            report_fat.setText("体脂：" + report.getRoughFat());
+        report_fat.setText("体脂：" + report.getPreciseFat()*100+"%");
 
 
         report_bmi_number = (TextView) findViewById(R.id.report_bmi_number);
@@ -179,9 +176,9 @@ public class ReportActivity extends Activity implements View.OnClickListener{
         suggest_fit_time.setText(Math.round(report.getSuggestFitTime()) + "分钟");
 
         piechartview = (PieChartView) findViewById(R.id.piechartview);
-        double sum = report.getProteinIntake() + report.getFatIntake() + report.getCarbohydrateIntake();
-        int a = (int) Math.round(report.getCarbohydrateIntake() * 100 / sum);
-        int b = (int) Math.round(report.getProteinIntake() * 100 / sum);
+        double sum = report.getProteinIntake() * 4 + report.getFatIntake() * 9 + report.getCarbohydrateIntake() * 4;
+        int a = (int) Math.round(report.getCarbohydrateIntake() * 100 * 4 / sum);
+        int b = (int) Math.round(report.getProteinIntake() * 100 * 4 / sum);
         int c = 100 - a - b;
         piechartview.setValue(new float[]{a, b, c}, true, false, false);
 

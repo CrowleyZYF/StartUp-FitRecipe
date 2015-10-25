@@ -146,6 +146,7 @@
     <string name="plan_test_question_04">4. 你的体重？</string>
     <string name="plan_test_question_04_unit">kg</string>
     <string name="plan_test_question_05">5. 你的体脂？</string>
+    <string name="plan_test_question_05_tips">查看体脂示意图</string>
     <string name="plan_test_question_05_unit">%</string>
     <string name="plan_test_question_05_switch_01">没有精确数值</string>
     <string name="plan_test_question_05_switch_02">有精确数值</string>
@@ -158,9 +159,10 @@
     <string name="plan_test_question_05_03_woman">30%~40%</string>
     <string name="plan_test_question_05_04_woman">40%以上</string>
     <string name="plan_test_question_06">6. 你所处职业的劳动强度？</string>
-    <string name="plan_test_question_06_01">轻劳动</string>
-    <string name="plan_test_question_06_02">中等劳动</string>
-    <string name="plan_test_question_06_03">重劳动</string>
+    <string name="plan_test_question_06_tips">劳动强度分级</string>
+    <string name="plan_test_question_06_01">轻度劳动</string>
+    <string name="plan_test_question_06_02">中度劳动</string>
+    <string name="plan_test_question_06_03">重度劳动</string>
     <string name="plan_test_question_06_04">极重劳动</string>
     <string name="plan_test_question_07">7. 运动类型？</string>
     <string name="plan_test_question_07_01">增肌增重</string>

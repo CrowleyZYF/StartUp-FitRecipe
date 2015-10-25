@@ -112,16 +112,14 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         int roughFat = data.getInt("roughFat");
         double preciseFat = data.getDouble("preciseFat");
         int jobType = data.getInt("jobType");
-        boolean goalType = false;
-        if(data.getInt("goalType") == 1)
-            goalType = true;
+        int goalType = data.getInt("goalType");
         int exerciseFrequency = data.getInt("exerciseFrequency");
         int exerciseInterval = data.getInt("exerciseInterval");
         int weightGoal = data.getInt("weightGoal");
         int daysToGoal = data.getInt("daysToGoal");
         String date = data.getString("date");
 
-        Evaluation evaluation = new Evaluation(gender, age, height, weight, roughFat, preciseFat, jobType, goalType, exerciseFrequency, exerciseInterval);
+        Evaluation evaluation = new Evaluation(gender, age, height, weight, preciseFat, jobType, goalType, exerciseFrequency, exerciseInterval);
         evaluation.setWeightGoal(weightGoal);
         evaluation.setDaysToGoal(daysToGoal);
         Report report = evaluation.report(date);

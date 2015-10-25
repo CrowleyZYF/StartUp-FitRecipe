@@ -24,8 +24,6 @@ public class Report implements Serializable{
     @DatabaseField
     private double weight;
     @DatabaseField
-    private String roughFat;
-    @DatabaseField
     private double preciseFat;
     @DatabaseField
     private int daysToGoal;
@@ -167,7 +165,7 @@ public class Report implements Serializable{
     @DatabaseField
     private String updatetime;
     @DatabaseField
-    private boolean goalType;
+    private int goalType;
 
 
     public double getBMI() {
@@ -682,17 +680,6 @@ public class Report implements Serializable{
         this.weight = weight;
     }
 
-    public String getRoughFat() {
-        return roughFat;
-    }
-
-    public void setRoughFat(int roughFat) {
-        if((gender == 0 && roughFat == 4) || (gender == 1 && roughFat == 4))
-            this.roughFat = null;
-        else
-            this.roughFat = new String[]{"小于12%","12%~20%","20%~30%","30%以上", "20%以下","20%~30%","30~40%","40%以上"}[gender * 4 + roughFat];
-    }
-
     public double getPreciseFat() {
         return preciseFat;
     }
@@ -717,11 +704,11 @@ public class Report implements Serializable{
         this.updatetime = updatetime;
     }
 
-    public boolean isGoalType() {
+    public int isGoalType() {
         return goalType;
     }
 
-    public void setGoalType(boolean goalType) {
+    public void setGoalType(int goalType) {
         this.goalType = goalType;
     }
 

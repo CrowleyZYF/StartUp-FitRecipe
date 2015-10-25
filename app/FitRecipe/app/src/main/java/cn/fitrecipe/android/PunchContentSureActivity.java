@@ -152,7 +152,7 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
         plan_time = (TextView) findViewById(R.id.plan_time);
         plan_time.setText(item.getTime());
         goal_type = (TextView) findViewById(R.id.goal_type);
-        if(report.isGoalType())
+        if(report.isGoalType()==0)
             goal_type.setText("增肌ing");
         else
             goal_type.setText("减脂ing");

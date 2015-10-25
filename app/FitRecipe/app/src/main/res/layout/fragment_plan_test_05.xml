@@ -11,8 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="5"
-        android:background="@color/base_color"
-        android:visibility="gone">
+        android:background="@color/base_color">
 
         <TextView
             android:id="@+id/plan_test_question_num"
@@ -100,11 +99,11 @@
             android:layout_marginBottom="10dp"/>
 
         <TextView
-            android:id="@+id/plan_test_switch"
+            android:id="@+id/plan_test_tips"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
-            android:text="@string/plan_test_question_05_switch_01"
+            android:text="@string/plan_test_question_05_tips"
             android:textSize="20sp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
@@ -113,7 +112,7 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
+    <!--<RelativeLayout
         android:id="@+id/test_05_02_up"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -174,7 +173,7 @@
             android:layout_toRightOf="@id/plan_test_question"
             android:layout_marginRight="30dp"/>
 
-    </RelativeLayout>
+    </RelativeLayout>-->
     
     <LinearLayout
         android:id="@+id/test_05_01_down"
@@ -183,14 +182,13 @@
         android:layout_weight="3"
         android:background="@color/white"
         android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:orientation="vertical">
 
         <include layout="@layout/fragment_plan_test_input_list" />
 
     </LinearLayout>
 
-    <LinearLayout
+    <!--<LinearLayout
         android:id="@+id/radioGroup"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -286,5 +284,5 @@
             android:layout_marginRight="15dp"
             android:paddingLeft="15dp" />
 
-    </LinearLayout>
+    </LinearLayout>-->
 </LinearLayout>
