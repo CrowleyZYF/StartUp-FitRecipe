@@ -484,15 +484,16 @@
 
             </cn.fitrecipe.android.UI.LinearLayoutForListView>
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@drawable/theme_line"/>
 
             <RelativeLayout
                 android:id="@+id/add_recipe"
                 android:layout_width="match_parent"
                 android:layout_height="40dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@drawable/theme_line"/>
 
                 <TextView
                     android:layout_width="wrap_content"

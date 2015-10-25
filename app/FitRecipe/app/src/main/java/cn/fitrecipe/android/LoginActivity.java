@@ -117,11 +117,13 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         int exerciseInterval = data.getInt("exerciseInterval");
         int weightGoal = data.getInt("weightGoal");
         int daysToGoal = data.getInt("daysToGoal");
+        int exerciseTime = data.getInt("exerciseTime");
         String date = data.getString("date");
 
         Evaluation evaluation = new Evaluation(gender, age, height, weight, preciseFat, jobType, goalType, exerciseFrequency, exerciseInterval);
         evaluation.setWeightGoal(weightGoal);
         evaluation.setDaysToGoal(daysToGoal);
+        evaluation.setExerciseTime(exerciseTime);
         Report report = evaluation.report(date);
         FrApplication.getInstance().saveReport(report);
         FrApplication.getInstance().setIsTested(true);

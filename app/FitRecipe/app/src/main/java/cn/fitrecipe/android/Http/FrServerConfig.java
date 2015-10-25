@@ -190,10 +190,10 @@ public class FrServerConfig {
 
 
     public static String getAllRecipes(int start, int num) {
-        return HOST + "/api/recipe/list/?start=" + start + "&num=" + num;
+        return HOST + "/api/recipe/update/list/?start=" + start + "&num=" + num;
     }
     public static String getAllTheme(int start, int num) {
-        return HOST + "/api/theme/list/";
+        return HOST + "/api/theme/list/?start=" + start + "&num=" + num;
     }
 
     public static String getSearchRecipeUrl(String keyword, int start, int num) {

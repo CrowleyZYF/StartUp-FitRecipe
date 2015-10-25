@@ -201,6 +201,10 @@
             android:name=".ThemeListActivity"
             android:label="@string/title_activity_theme_list" >
         </activity>
+        <activity
+            android:name=".IngredientNutritionActivity"
+            android:label="@string/title_activity_ingredient_nutrition" >
+        </activity>
     </application>
 
 </manifest>

@@ -139,6 +139,12 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
         holder.plan_punch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
+
+                if(!isValid2) {
+                    Toast.makeText(fragment.getActivity(), "只能打当天的卡！", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 if (item.size() == 0) {
                     Toast.makeText(fragment.getActivity(), "请添加食谱、食材后再打卡！", Toast.LENGTH_SHORT).show();
                     return;
@@ -299,6 +305,8 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
                     Intent intent = new Intent(fragment.getActivity(), RecipeActivity.class);
                     intent.putExtra("id", recipe_id);
                     fragment.startActivity(intent);
+                }else {
+
                 }
             }
         });/*
