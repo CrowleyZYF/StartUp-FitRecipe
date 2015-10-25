@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:dots="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
@@ -35,6 +37,7 @@
                 android:src="@drawable/icon_search_black" />
 
             <EditText
+                android:id="@+id/search_content"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="36dp"
@@ -44,6 +47,7 @@
                 android:textColor="@color/login_input_text_color"
                 android:textSize="12sp"
                 android:layout_marginRight="5dp"
+                android:singleLine="true"
                 android:background="@drawable/login_input" />
 
             <ImageView
@@ -68,4 +72,79 @@
             android:background="@drawable/icon_selector"/>
     </LinearLayout>
 
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/background_color">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+            <cn.fitrecipe.android.UI.BorderScrollView
+                android:id="@+id/theme_content"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@color/background_color"
+                android:scrollbars="none"
+                android:fadingEdge="vertical"
+                android:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@color/background_color">
+
+                    <LinearLayout
+                        android:id="@+id/container_layout"
+                        android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:background="@color/background_color"
+                        android:layout_height="wrap_content">
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/theme_recipe_recycler_view"
+                            android:scrollbars="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+            </cn.fitrecipe.android.UI.BorderScrollView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/loading_interface"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:visibility="gone"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="-20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="拼命加载中"
+                android:textSize="14sp"
+                android:textColor="@color/base_color"
+                android:layout_gravity="bottom"/>
+
+            <pl.tajchert.sample.DotsTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/dots"
+                android:textSize="30sp"
+                android:textColor="@color/base_color"
+                dots:autoplay="true"
+                dots:period="1000"
+                android:layout_gravity="bottom"/>
+
+
+        </LinearLayout>
+
+    </FrameLayout>
 </LinearLayout>

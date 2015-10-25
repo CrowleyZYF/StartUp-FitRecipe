@@ -150,14 +150,18 @@ public class SelectStageFirstFragment extends Fragment implements View.OnClickLi
                         try {
                             JSONArray data = res.getJSONArray("data");
                             processData(data);
-                            if(start == 0)
+                            if(start == 0) {
                                 hideLoading(false);
+                                if(data.length() == 0)
+                                    Toast.makeText(getActivity(), "没有找到符合条件的食谱/食材！", Toast.LENGTH_SHORT).show();
+                            }
                             else {
                                 scrollView.setCompleteMore();
                                 if(data.length() == 0)
                                     Toast.makeText(getActivity(), "没有多余的搜索结果了!", Toast.LENGTH_SHORT).show();
                             }
-                            start += num;
+                            if(data.length() > 0)
+                                start += num;
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

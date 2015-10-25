@@ -188,4 +188,15 @@ public class FrServerConfig {
         return HOST + "/api/plan/punch/" + id + "/delete";
     }
 
+
+    public static String getAllRecipes(int start, int num) {
+        return HOST + "/api/recipe/list/?start=" + start + "&num=" + num;
+    }
+    public static String getAllTheme(int start, int num) {
+        return HOST + "/api/theme/list/";
+    }
+
+    public static String getSearchRecipeUrl(String keyword, int start, int num) {
+        return HOST + "/api/recipe/search/?keyword=" + keyword + "&start=" + start + "&num=" + num;
+    }
 }

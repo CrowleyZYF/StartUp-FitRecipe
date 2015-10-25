@@ -166,15 +166,6 @@
             android:value="c2a436d52422a438b1d6c4aeaaa8f483" />
 
         <activity
-            android:name=".CustomViewTestActivtiy"
-            android:label="@string/title_activity_custom_view_test_activtiy"
-            android:windowSoftInputMode="adjustPan" >
-        </activity>
-        <activity
-            android:name=".CameraActivity"
-            android:label="@string/title_activity_camera" >
-        </activity>
-        <activity
             android:name=".SelectRecipeActivity"
             android:label="@string/title_activity_select_recipe"
             android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar" >
@@ -200,7 +191,15 @@
         <activity
             android:name=".SelectSwitchDateActivity"
             android:label="@string/title_activity_select_switch_date"
-            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar">
+            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".RecipeListActivity"
+            android:label="@string/title_activity_recipe_list" >
+        </activity>
+        <activity
+            android:name=".ThemeListActivity"
+            android:label="@string/title_activity_theme_list" >
         </activity>
     </application>
 

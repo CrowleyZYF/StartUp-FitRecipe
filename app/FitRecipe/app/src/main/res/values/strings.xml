@@ -246,5 +246,9 @@
 
     <string name="today">从今天开始</string>
     <string name="tomorrow">从明天开始</string>
+    <string name="title_activity_recipe_list">RecipeListActivity</string>
+
+    <string name="recipe">食谱</string>
+    <string name="title_activity_theme_list">ThemeListActivity</string>
 
 </resources>

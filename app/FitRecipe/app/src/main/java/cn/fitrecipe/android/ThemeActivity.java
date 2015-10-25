@@ -136,7 +136,8 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
                             }
                             themeContent.setCompleteMore();
                         }
-                        start += num;
+                        if(data.length() > 0)
+                            start += num;
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

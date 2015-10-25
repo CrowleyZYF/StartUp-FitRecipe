@@ -180,7 +180,8 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
                                 Toast.makeText(CategoryResultActivity.this, "没有多余的食谱", Toast.LENGTH_SHORT).show();
                             categoryContent.setCompleteMore();
                         }
-                        start += num;
+                        if(data.length() > 0)
+                            start += num;
                         try {
                             processData(data);
                         } catch (JSONException e) {

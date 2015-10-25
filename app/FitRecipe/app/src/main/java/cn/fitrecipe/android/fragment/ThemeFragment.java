@@ -32,6 +32,7 @@ import cn.fitrecipe.android.UI.BorderScrollView;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.entity.Collection;
 import cn.fitrecipe.android.entity.Theme;
+import cn.fitrecipe.android.function.RequestErrorHelper;
 import pl.tajchert.sample.DotsTextView;
 
 /**
@@ -93,7 +94,7 @@ public class ThemeFragment extends Fragment
                     try {
                         JSONArray data = res.getJSONArray("data");
                         if(data == null || data.length() == 0) {
-                            //Toast.makeText(getActivity(), "没有多余", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "没有多余", Toast.LENGTH_SHORT).show();
                         }else
                             processData(data);
                     } catch (JSONException e) {
@@ -104,7 +105,7 @@ public class ThemeFragment extends Fragment
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                hideLoading(true, getResources().getString(R.string.network_error));
+                RequestErrorHelper.toast(getActivity(), volleyError);
             }
         });
         FrRequest.getInstance().request(request);
