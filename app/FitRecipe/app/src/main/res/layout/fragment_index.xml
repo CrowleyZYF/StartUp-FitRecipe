@@ -38,17 +38,18 @@
 
             </RelativeLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp">
 
                 <ImageView
+                    android:id="@+id/theme_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
-                    android:src="@drawable/icon_left_fat"/>
+                    android:src="@drawable/icon_left_fat"
+                    android:layout_alignParentLeft="true"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -56,8 +57,18 @@
                     android:textSize="15sp"
                     android:paddingLeft="5dp"
                     android:text="主题"
-                    android:layout_gravity="center_vertical"/>
-            </LinearLayout>
+                    android:layout_gravity="center_vertical"
+                    android:layout_toRightOf="@id/theme_icon"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:paddingRight="5dp"
+                    android:text="查看更多"
+                    android:layout_gravity="center_vertical"
+                    android:layout_alignParentRight="true"/>
+            </RelativeLayout>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/theme_recipe_recycler_view"
@@ -67,15 +78,15 @@
                 android:layout_marginBottom="20dp"
                 />
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginTop="20dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp">
 
                 <ImageView
+                    android:id="@+id/update_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
                     android:src="@drawable/icon_left_fat"/>
@@ -86,8 +97,19 @@
                     android:textSize="15sp"
                     android:paddingLeft="5dp"
                     android:text="最近更新"
-                    android:layout_gravity="center_vertical"/>
-            </LinearLayout>
+                    android:layout_gravity="center_vertical"
+                    android:layout_toRightOf="@id/update_icon"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:paddingRight="5dp"
+                    android:text="查看更多"
+                    android:layout_gravity="center_vertical"
+                    android:layout_alignParentRight="true"/>
+
+            </RelativeLayout>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/update_recipe_recycler_view"

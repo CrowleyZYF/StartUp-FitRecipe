@@ -157,7 +157,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             return;
         }
         //显示健身状态
-        if(report.isGoalType()) {
+        if(report.isGoalType() == 0) {
             plan_status.setText("增肌第");
         }else{
             plan_status.setText("减脂第");

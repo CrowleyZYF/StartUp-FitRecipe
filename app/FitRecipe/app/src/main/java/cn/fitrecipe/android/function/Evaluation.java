@@ -4,9 +4,6 @@ package cn.fitrecipe.android.function;
  *
  */
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import cn.fitrecipe.android.entity.Report;
 
 
@@ -17,12 +14,11 @@ public class Evaluation {
 	 * @param age: int, should elder than 18
 	 * @param height: int, cm
 	 * @param weight: double, kg
-	 * @param roughFat: input the rough body fat, choose from pictures, 0 to 6
-     * @param preciseFat: -1 for not sure
-     * @param jobType: 0, 1, 2, 3, 4 for tight, medium, high and very high work intensity, 0 for not sure
-	 * @param goalType: true for gain muscle, false for lose weight
-     * @param exerciseFrequency: 0, 1, 2, 3, 4, 5, 6, 7, 8 times/week, 0 for not sure, 8 for more than 7 times/week
-     * @param exerciseInterval: 0, 1, 2, 3. 0 for not sure, 1 for 0 ~ 30min, 2 for 30 ~ 60min, 3 for more than 30min. it has to be finished if the exerciseFrequency is not empty
+     * @param goalType: 0 for gain muscle, 1 for lose weight
+     * @param preciseFat: fat, 0.18
+     * @param jobType: 0, 1, 2, 3 for tight, medium, high and very high work intensity
+     * @param exerciseFrequency: 0 for 1~2, 1 for 3~5, 2 for 6~7, 3 for more than 7
+     * @param exerciseInterval: 0, 1, 2, 3; 0 for 0 ~ 30min, 1 for 30 ~ 60min, 2 for 60 ~ 90min, 3 for more than 90min
      * @param exerciseTime: 1 for before breakfast, 2 for before lunch, 3 for before supper, 4 for after supper
 	 * @param weightGoal: it should always be positive
 	 * @param daysToGoal: how many days the user want
@@ -32,26 +28,24 @@ public class Evaluation {
 	private int age;
 	private int height;
 	private double weight;
-	private int roughFat;
-	private boolean goalType;
+	private int goalType;
+    private double preciseFat;
+    private int jobType;
+    private int exerciseFrequency;
+    private int exerciseInterval;
+    private int exerciseTime;
 	private double weightGoal;
 	private int daysToGoal;
-	//parameters above this must be filled
-	private double preciseFat;
-	private int jobType;
-	private int exerciseFrequency;
-	private int exerciseInterval;
-    private int exerciseTime;
 	
 	private static final int INVALID = -1;
 	public static final int MALE = 0;
 	public static final int FEMALE = 1;
-	public static final boolean GAINMUSCLE = true;
-	public static final boolean LOSEWEIGHT = false;
-	
-	private static final double[] maleRoughFat = {0.08, 0.15, 0.25, 0.35};
-	private static final double[] femaleRoughFat = {0.15, 0.25, 0.35, 0.45};
-    private static final double[] BMRRate = {1.375, 1.55, 1.725, 1.9};
+	public static final int GAINMUSCLE = 0;
+	public static final int LOSEWEIGHT = 1;
+    private static final double[] BMRRate1 = {1.375, 1.55, 1.725, 1.9};
+    private static final double[][] BMRRate2 = {
+            {1.55, 1.78, 2.1},
+            {1.56, 1.64, 1.8}};
 
     private int calorieWeight = -1;
     private static final int[] calorie = {0, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 10000};
@@ -70,44 +64,11 @@ public class Evaluation {
             {17, 1, 5, 2, 1, 2}
     };
 
-    /**
-     * @author ZYF
-     * Add five functions and there are some change for some parameters
-     * @param roughFat:
-     * maleRoughFat
-     *                0: <12%
-     *                1: 12%~20%
-     *                2: 20%~30%
-     *                3: >30%
-     *                4: empty, do some input to the preciseFat
-     * femaleRoughFat
-     *                0: <20%
-     *                1: 20%~30%
-     *                2: 30%~40%
-     *                3: >40%
-     *                4: empty, do some input to the preciseFat
-     * @param jobType:
-     *               0: tight
-     *               1: medium
-     *               2: high
-     *               3: very high
-     * @param exerciseFrequency:
-     *               0: 1-2
-     *               1: 3-4
-     *               2: 5-6
-     *               3: 7
-     * @param exerciseInterval:
-     *               0: 0 ~ 30min
-     *               1: 30 ~ 60min
-     *               2: 60 ~ 90min
-     *               3: more than 90min
-     */
-    public Evaluation (int gender, int age, int height, double weight, int roughFat, double preciseFat, int jobType, boolean goalType, int exerciseFrequency, int exerciseInterval) {
+    public Evaluation (int gender, int age, int height, double weight, double preciseFat, int jobType, int goalType, int exerciseFrequency, int exerciseInterval) {
         this.gender = gender;
         this.age = age;
         this.height = height;
         this.weight = weight;
-        this.roughFat = roughFat;
         this.preciseFat = preciseFat;
         this.jobType = jobType;
         this.goalType = goalType;
@@ -118,13 +79,6 @@ public class Evaluation {
         this.daysToGoal = INVALID;
     }
 
-    /**
-     * @param exerciseTime:(new added)
-     *               1: for before breakfast
-     *               2: for before lunch
-     *               3: for before supper
-     *               4: for after supper
-     */
     public void setExerciseTime(int exerciseTime){
         this.exerciseTime = exerciseTime;
     }
@@ -137,45 +91,9 @@ public class Evaluation {
         this.daysToGoal = daysToGoal;
     }
 
-    public boolean getGoalType(){
+    public int getGoalType(){
         return this.goalType;
     }
-    //New added finish
-	
-	Evaluation (int gender, int age, int height, double weight, int roughFat, boolean goalType, double weightGoal, int daysToGoal,//these entries have to be filled by every user
-					double preciseFat,	//we can convert it from roughFat
-					int jobType,
-					int exerciseFrequency,	//times pre week
-					int exerciseInterval
-					) {
-		this.gender = gender;
-		this.age = age;
-		this.height = height;
-		this.weight = weight;
-		this.roughFat = roughFat;
-		this.goalType = goalType;
-		this.weightGoal = weightGoal;
-		this.daysToGoal = daysToGoal;
-		this.preciseFat = preciseFat;
-		this.jobType = jobType + 1;
-		this.exerciseFrequency = exerciseFrequency + 1;
-		this.exerciseInterval = exerciseInterval + 1;
-	}
-	
-	Evaluation (int gender, int age, int height, double weight, int roughFat, boolean goalType, double weightGoal, int daysToGoal) {
-		this.gender = gender;
-		this.age = age;
-		this.height = height;
-		this.weight = weight;
-		this.roughFat = roughFat;
-		this.goalType = goalType;
-		this.weightGoal = weightGoal;
-		this.daysToGoal = daysToGoal;
-		this.preciseFat = INVALID;
-		this.jobType = INVALID;
-		this.exerciseFrequency = INVALID;
-		this.exerciseInterval = INVALID;
-	}
 	
 	
 	/**
@@ -203,7 +121,9 @@ public class Evaluation {
      * @return TDEE, Total Daily Energy Expenditure
      */
     private int getTDEE(){
-        return (int) (getBMR() * BMRRate[exerciseFrequency]);
+        int TDEE1 = (int) (getBMR() * BMRRate1[exerciseFrequency]);
+        int TDEE2 = (int) (getBMR() * BMRRate2[gender][jobType]);
+        return TDEE1>=TDEE2 ? TDEE1:TDEE2;
     }
 
     /**
@@ -240,20 +160,20 @@ public class Evaluation {
 	public int getShortestDaysToGoal() {
 		// for lose weight, the delta is -700kcal/day
 		// for gain muscle, the delta is +1000kcal/day
-		double delta = 0;
+		double delta;
 		if (goalType == GAINMUSCLE) {
 			delta = 1000;
 		} else {
 			delta = -700;
 		}
-		return (int)((double)((weightGoal - weight) * 7200) / delta);
+		return (int)(((weightGoal - weight) * 7200) / delta);
 	}
 
     /**
      * @return weekTarget
      */
     public double getWeekTarget(){
-        return (double) (7 * (getWeightGoal() - getWeight()) / getDaysToGoal());
+        return (7 * (getWeightGoal() - getWeight()) / getDaysToGoal());
     }
 
     /**
@@ -322,9 +242,9 @@ public class Evaluation {
      */
     public int getReportExerciseFrequency(){
         if(Math.abs(getWeekTarget())<0.5){
-            return 4;
+            return 3;
         }else{
-            return 6;
+            return 5;
         }
     }
 
@@ -332,19 +252,19 @@ public class Evaluation {
      * @return Protein
      */
     public int[] getProtein(){
-        double temp = 0;
+        double temp;
         int[] result = new int[3];
         if(Math.abs(getWeekTarget())<0.5){
             if (getGoalType()==GAINMUSCLE){
-                temp = 2 * weight;
+                temp = 1.8 * weight;
             }else{
-                temp = 1 * weight;
+                temp = 1.5 * weight;
             }
         }else{
             if (getGoalType()==GAINMUSCLE){
-                temp = 3 * weight;
+                temp = 2.75 * weight;
             }else{
-                temp = 1.5 * weight;
+                temp = 1.8 * weight;
             }
         }
         result[0] = (int) (0.9 * temp);
@@ -357,12 +277,12 @@ public class Evaluation {
      * @return Fat
      */
     public int[] getFat(){
-        double temp = 0;
+        double temp;
         int[] result = new int[3];
         if (getGoalType()==GAINMUSCLE){
-            temp = 0.8 * weight;
+            temp = 1 * weight;
         }else{
-            temp = 0.6 * weight;
+            temp = 0.8 * weight;
         }
         result[0] = (int) (0.9 * temp);
         result[1] = (int) (1.1 * temp);
@@ -382,37 +302,6 @@ public class Evaluation {
         return result;
     }
 	
-	
-	/**
-	 * @return energy consumption/day
-	 */
-	/*public double getBMR() {
-		// get BMR
-		double BMR = 0;
-		double alpha = 0;
-		double beta = 0;
-		if (preciseFat == INVALID) {
-			if (gender == MALE)
-				preciseFat = maleRoughFat[roughFat];
-			else
-				preciseFat = femaleRoughFat[roughFat];
-
-		}
-
-		BMR = Math.max((370 + 21.6 * preciseFat),
-				(13.88 * weight + 4.16 * (double)height - 3.43 * (double)age - 112.4 * (double)gender + 53.34));
-
-		if (jobType != INVALID) {
-			alpha = (double)jobType / 4 * 0.5;
-		}
-		if (exerciseInterval != INVALID) {
-			beta = ((double)exerciseInterval / 4 * 0.5 +  (double)exerciseFrequency / 4 * 0.5) * 0.5;
-		}
-
-		double metabolic = BMR * (1.0 + (alpha + beta) * 0.15);
-		return metabolic;
-	}*/
-	
 	public Report report(String update) {
 		final String NotSure = "ToBeContinued";
 		Report report = new Report();
@@ -423,7 +312,6 @@ public class Evaluation {
 		report.setGoalType(goalType);
         report.setWeightGoal(weightGoal);
         report.setDaysToGoal(daysToGoal);
-		report.setRoughFat(roughFat);
 		report.setPreciseFat(preciseFat);
 		report.setUpdatetime(update);
 
@@ -443,8 +331,8 @@ public class Evaluation {
 
         //Intake
         report.setCaloriesIntake(getSuggestCalorie()[2]);
-        report.setCaloriesIntakeMax(getSuggestCalorie()[0]);
-        report.setCaloriesIntakeMin(getSuggestCalorie()[1]);
+        report.setCaloriesIntakeMin(getSuggestCalorie()[0]);
+        report.setCaloriesIntakeMax(getSuggestCalorie()[1]);
         //Sport
         report.setSuggestFitCalories(getSuggestSport()[2]);
         report.setSuggestFitCaloriesMin(getSuggestSport()[0]);
@@ -510,9 +398,9 @@ public class Evaluation {
 		report.setVDIntakeMax(ULVD);
 		
 		//MealRate
-		report.setBreakfastRate((0.2 + (exerciseTime==1?0.05:0)) * getSuggestCalorie()[2]);
+		report.setBreakfastRate((0.25 + (exerciseTime==1?0.05:0)) * getSuggestCalorie()[2]);
 		report.setSnackMorningRate(0.05 * getSuggestCalorie()[2]);
-		report.setLunchRate((0.35 + (exerciseTime==2?0.05:0)) * getSuggestCalorie()[2]);
+		report.setLunchRate((0.3 + (exerciseTime==2?0.05:0)) * getSuggestCalorie()[2]);
 		report.setSnackAfternoonRate(0.05 * getSuggestCalorie()[2]);
 		report.setDinnerRate((0.25 + (exerciseTime==3?0.05:0)) * getSuggestCalorie()[2]);
 		report.setSnackNightRate((0.05 + (exerciseTime==4?0.05:0)) * getSuggestCalorie()[2]);
@@ -573,19 +461,11 @@ public class Evaluation {
         this.weight = weight;
     }
 
-    public int getRoughFat() {
-        return roughFat;
-    }
-
-    public void setRoughFat(int roughFat) {
-        this.roughFat = roughFat;
-    }
-
-    public boolean isGoalType() {
+    public int isGoalType() {
         return goalType;
     }
 
-    public void setGoalType(boolean goalType) {
+    public void setGoalType(int goalType) {
         this.goalType = goalType;
     }
 

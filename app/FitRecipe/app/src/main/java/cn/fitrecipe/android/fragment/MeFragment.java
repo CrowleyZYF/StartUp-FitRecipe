@@ -91,7 +91,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         if(report == null) {
             me_status.setText("无报告");
         }else {
-            if(report.isGoalType()) {
+            if(report.isGoalType() == 0) {
                 me_status.setText("增肌中...");
             }else {
                 me_status.setText("减脂中...");

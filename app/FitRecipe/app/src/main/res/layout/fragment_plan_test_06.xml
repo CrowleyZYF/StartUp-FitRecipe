@@ -49,6 +49,19 @@
             android:layout_marginLeft="10dp"
             android:layout_marginBottom="10dp"/>
 
+
+        <TextView
+            android:id="@+id/plan_test_tips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="@string/plan_test_question_05_tips"
+            android:textSize="20sp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"/>
+
     </RelativeLayout>
     
     <LinearLayout
@@ -113,29 +126,6 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:text="@string/plan_test_question_06_03"
-            android:textColor="@color/login_input_text_color"
-            android:textSize="20sp"
-            android:layout_gravity="left"
-            android:gravity="center_vertical"
-            app:rbd_strokeColor="@color/base_color"
-            android:layout_marginTop="3dp"
-            android:layout_marginBottom="3dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:paddingLeft="15dp" />
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@drawable/theme_line"/>
-
-        <com.rey.material.widget.RadioButton
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/plan_test_question_06_04"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="@string/plan_test_question_06_04"
             android:textColor="@color/login_input_text_color"
             android:textSize="20sp"
             android:layout_gravity="left"
