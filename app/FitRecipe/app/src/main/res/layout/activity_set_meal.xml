@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color">
+
+    <include layout="@layout/framework_common_headers" ></include>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical"
+                android:background="@drawable/set_border">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="上午加餐"
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:paddingLeft="10dp"/>
+
+                    <com.rey.material.widget.Switch
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:checked="true"
+                        app:sw_thumbColor="@color/base_color"
+                        app:sw_thumbRadius="10dp"
+                        app:sw_trackColor="@color/base_color_light"
+                        app:sw_trackSize="15dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"/>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@drawable/theme_line"
+                        android:layout_alignParentBottom="true"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="下午加餐"
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:paddingLeft="10dp"/>
+
+                    <com.rey.material.widget.Switch
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:checked="true"
+                        app:sw_thumbColor="@color/base_color"
+                        app:sw_thumbRadius="10dp"
+                        app:sw_trackColor="@color/base_color_light"
+                        app:sw_trackSize="15dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"/>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@drawable/theme_line"
+                        android:layout_alignParentBottom="true"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="夜宵"
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:paddingLeft="10dp"/>
+
+                    <com.rey.material.widget.Switch
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:checked="true"
+                        app:sw_thumbColor="@color/base_color"
+                        app:sw_thumbRadius="10dp"
+                        app:sw_trackColor="@color/base_color_light"
+                        app:sw_trackSize="15dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"/>
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="关闭之后，在自定义模式下将关闭该餐次，并将热量配额转至临近餐次"
+                android:textSize="12sp"
+                android:textColor="@color/gray"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:lineSpacingExtra="3dp"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

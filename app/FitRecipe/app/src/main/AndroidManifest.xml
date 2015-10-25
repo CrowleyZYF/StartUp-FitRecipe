@@ -69,6 +69,10 @@
         </activity>
         <activity android:name=".SetActivity" >
         </activity>
+        <activity android:name=".SetAccountActivity" >
+        </activity>
+        <activity android:name=".SetMealActivity" >
+        </activity>
         <activity android:name=".RecipeActivity" >
         </activity>
         <activity android:name=".KnowledgeArticleActivity" >
