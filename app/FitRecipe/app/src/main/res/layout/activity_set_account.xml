@@ -116,8 +116,9 @@
 
                     <EditText
                         android:id="@+id/set_account_nickname"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="2dp"
                         android:text="123456"
                         android:textSize="14sp"
                         android:textColor="@color/login_input_text_color"

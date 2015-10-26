@@ -1,6 +1,7 @@
 package cn.fitrecipe.android;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -28,7 +29,15 @@ public class SetMealActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_set_meal);
 
         initView();
+        initData();
         initEvent();
+    }
+
+    private void initData() {
+        SharedPreferences preferences=getSharedPreferences("user", MODE_PRIVATE);
+        add_meal_01_check.setChecked(preferences.getBoolean("has_add_meal_01", true));
+        add_meal_02_check.setChecked(preferences.getBoolean("has_add_meal_02", true));
+        add_meal_03_check.setChecked(preferences.getBoolean("has_add_meal_03", true));
     }
 
     private void initEvent() {
@@ -52,9 +61,14 @@ public class SetMealActivity extends Activity implements View.OnClickListener {
                 finish();
                 break;
             case R.id.right_btn:
-                Toast.makeText(this, "上午加餐：" + add_meal_01_check.isChecked() +
-                        "，下午加餐：" + add_meal_02_check.isChecked() +
-                        "，夜宵：" + add_meal_03_check.isChecked(), Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences=getSharedPreferences("user", MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean("has_add_meal_01", add_meal_01_check.isChecked());
+                editor.putBoolean("has_add_meal_02", add_meal_02_check.isChecked());
+                editor.putBoolean("has_add_meal_03", add_meal_03_check.isChecked());
+                editor.commit();
+                Toast.makeText(this, "修改完成！", Toast.LENGTH_SHORT).show();
+                finish();
                 break;
         }
 

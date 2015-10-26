@@ -29,6 +29,7 @@ import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.entity.Author;
+import cn.fitrecipe.android.entity.Report;
 import cn.fitrecipe.android.fragment.MeFragment;
 import cn.fitrecipe.android.function.Common;
 import cn.fitrecipe.android.function.RequestErrorHelper;
@@ -51,6 +52,8 @@ public class SetAccountActivity extends Activity implements View.OnClickListener
 
     private String nick_name;
 
+    private Report report;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -58,7 +61,30 @@ public class SetAccountActivity extends Activity implements View.OnClickListener
         setContentView(R.layout.activity_set_account);
 
         initView();
+        initData();
         initEvent();
+    }
+
+    private void initData() {
+        report = FrApplication.getInstance().getReport();
+        set_account_nickname.setText(FrApplication.getInstance().getAuthor().getNick_name());
+        set_account_nickname.setSelection(FrApplication.getInstance().getAuthor().getNick_name().length());
+        FrApplication.getInstance().getMyImageLoader().displayImage(me_avatar, FrApplication.getInstance().getAuthor().getAvatar());
+        if (report == null){
+            set_account_gender.setText("暂无");
+            set_account_age.setText("暂无");
+            set_account_height.setText("暂无");
+            set_account_weight.setText("暂无");
+            set_account_fat.setText("暂无");
+            set_account_target.setText("暂无");
+        }else{
+            set_account_gender.setText(report.getGender()==0?"男":"女");
+            set_account_age.setText(report.getAge()+"岁");
+            set_account_height.setText(report.getHeight()+"厘米");
+            set_account_weight.setText(report.getWeight()+"公斤");
+            set_account_fat.setText(report.getPreciseFat() * 100 + "%");
+            set_account_target.setText(report.isGoalType() == 0 ? "增肌" : "减脂");
+        }
     }
 
     private void initEvent() {
@@ -112,7 +138,7 @@ public class SetAccountActivity extends Activity implements View.OnClickListener
         checkValid();
 
         //上传
-        pd = ProgressDialog.show(this, "", "正在发布...", true);
+        pd = ProgressDialog.show(this, "", "正在修改...", true);
         pd.setCanceledOnTouchOutside(false);
 
         if (bitmap != null) {
@@ -128,7 +154,7 @@ public class SetAccountActivity extends Activity implements View.OnClickListener
             uploadManager.put(baos.toByteArray(), pngName, token, new UpCompletionHandler() {
                 @Override
                 public void complete(String s, ResponseInfo responseInfo, JSONObject jsonObject) {
-                    Toast.makeText(SetAccountActivity.this, "上传完成！", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SetAccountActivity.this, "修改完成！", Toast.LENGTH_SHORT).show();
                     updateServerData();
                 }
             }, null);
@@ -160,6 +186,7 @@ public class SetAccountActivity extends Activity implements View.OnClickListener
                 author.setNick_name(nick_name);
                 FrApplication.getInstance().setAuthor(author);
                 MeFragment.isFresh = true;
+                finish();
             }
         }, new Response.ErrorListener() {
             @Override

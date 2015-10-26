@@ -42,6 +42,11 @@ public class SetAlarmActivity extends Activity implements View.OnClickListener {
     private TextView max_time_change_text;
     private int nowDialog = 0;
     private boolean shouldOpen = false;
+    final String[] nowDialogTimeName = {"凌晨4点", "早餐时间", "上午加餐时间", "午餐时间", "下午加餐时间", "晚餐时间", "夜宵时间", "凌晨"};
+    final String[] nowTime = {"", "07:30", "10:00", "12:00", "15:00", "17:30", "22:00"};
+    final String[] preferenceKeyText = {"", "breakfast_time", "add_meal_01_time", "lunch_time", "add_meal_02_time", "dinner_time", "add_meal_03_time"};
+    final String[] preferenceKeySwitch = {"", "breakfast_check", "add_meal_01_check", "lunch_check", "add_meal_02_check", "dinner_check", "add_meal_03_check"};
+
 
 
     @Override
@@ -56,13 +61,13 @@ public class SetAlarmActivity extends Activity implements View.OnClickListener {
     }
 
     private void initData() {
+        final TextView[] nowTimeTextView = {min_time_change_text, breakfast_time_change_text, add_meal_01_time_change_text, lunch_time_change_text, add_meal_02_time_change_text, dinner_time_change_text, add_meal_03_time_change_text, max_time_change_text};
+        final Switch[] preferenceWidgetSwitch = {breakfast_check, breakfast_check, add_meal_01_check, lunch_check, add_meal_02_check, dinner_check, add_meal_03_check};
         SharedPreferences preferences=getSharedPreferences("user", MODE_PRIVATE);
-        breakfast_time_change_text.setText(preferences.getString("breakfast_time", "07:30"));
-        add_meal_01_time_change_text.setText(preferences.getString("add_meal_01_time", "10:00"));
-        lunch_time_change_text.setText(preferences.getString("lunch_time", "12:00"));
-        add_meal_02_time_change_text.setText(preferences.getString("add_meal_02_time", "15:00"));
-        dinner_time_change_text.setText(preferences.getString("dinner_time", "17:30"));
-        add_meal_03_time_change_text.setText(preferences.getString("add_meal_03_time", "22:00"));
+        for(int i=1; i<=6; i++){
+            nowTimeTextView[i].setText(preferences.getString(preferenceKeyText[i], nowTime[i]));
+            preferenceWidgetSwitch[i].setChecked(preferences.getBoolean(preferenceKeySwitch[i], false));
+        }
     }
 
     private void initEvent() {
@@ -107,16 +112,22 @@ public class SetAlarmActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        final String[] nowDialogTimeName = {"凌晨4点", "早餐时间", "上午加餐时间", "午餐时间", "下午加餐时间", "晚餐时间", "夜宵时间", "凌晨"};
         final TextView[] nowTimeTextView = {min_time_change_text, breakfast_time_change_text, add_meal_01_time_change_text, lunch_time_change_text, add_meal_02_time_change_text, dinner_time_change_text, add_meal_03_time_change_text, max_time_change_text};
+        final Switch[] preferenceWidgetSwitch = {breakfast_check, breakfast_check, add_meal_01_check, lunch_check, add_meal_02_check, dinner_check, add_meal_03_check};
         switch (v.getId()){
             case R.id.left_btn:
                 finish();
                 break;
             case R.id.right_btn:
-                Toast.makeText(this, "上午加餐：" + add_meal_01_check.isChecked() +
-                        "，下午加餐：" + add_meal_02_check.isChecked() +
-                        "，夜宵：" + add_meal_03_check.isChecked(), Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences=getSharedPreferences("user", MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                for(int i = 1; i<=6; i++){
+                    editor.putString(preferenceKeyText[i], nowTimeTextView[i].getText().toString());
+                    editor.putBoolean(preferenceKeySwitch[i], preferenceWidgetSwitch[i].isChecked());
+                }
+                editor.commit();
+                Toast.makeText(this, "修改完成！", Toast.LENGTH_SHORT).show();
+                finish();
                 break;
             case R.id.breakfast_time_change:
                 nowDialog = 0;

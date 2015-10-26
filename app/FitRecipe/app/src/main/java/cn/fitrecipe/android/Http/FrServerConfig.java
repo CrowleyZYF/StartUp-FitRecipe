@@ -201,6 +201,6 @@ public class FrServerConfig {
     }
 
     public static String getUpdateUserInfoUrl() {
-        return HOST + "/api/account/edit/";
+        return HOST + "/api/accounts/edit/";
     }
 }

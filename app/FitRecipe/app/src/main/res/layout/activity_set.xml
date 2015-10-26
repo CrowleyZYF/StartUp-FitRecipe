@@ -95,7 +95,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="餐次闹钟"
+                        android:text="餐次时间"
                         android:textSize="14sp"
                         android:textColor="@color/login_input_text_color"
                         android:layout_centerVertical="true"
@@ -123,36 +123,7 @@
                 android:background="@drawable/set_border">
 
                 <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="关于"
-                        android:textSize="14sp"
-                        android:textColor="@color/login_input_text_color"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentLeft="true"
-                        android:paddingLeft="10dp"/>
-
-                    <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:padding="20dp"
-                        android:src="@drawable/icon_arrow_right_set"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"/>
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="1px"
-                        android:background="@drawable/theme_line"
-                        android:layout_alignParentBottom="true"/>
-
-                </RelativeLayout>
-
-                <RelativeLayout
+                    android:id="@+id/set_share_btn"
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
 
@@ -183,6 +154,7 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/set_feedback_btn"
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
 
@@ -213,6 +185,7 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/set_checkupdate_btn"
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
 
@@ -220,6 +193,68 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="检查更新"
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:paddingLeft="10dp"/>
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:padding="20dp"
+                        android:src="@drawable/icon_arrow_right_set"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"/>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@drawable/theme_line"
+                        android:layout_alignParentBottom="true"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/set_protocol_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="用户协议"
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:paddingLeft="10dp"/>
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:padding="20dp"
+                        android:src="@drawable/icon_arrow_right_set"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"/>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@drawable/theme_line"
+                        android:layout_alignParentBottom="true"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/set_about_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="关于我们"
                         android:textSize="14sp"
                         android:textColor="@color/login_input_text_color"
                         android:layout_centerVertical="true"
