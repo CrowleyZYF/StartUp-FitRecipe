@@ -10,7 +10,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 
-import cn.fitrecipe.android.PunchPhotoChoiceActivity;
+import cn.fitrecipe.android.ChoosePhotoActivity;
 
 /*
  * The solution is taken from here: http://stackoverflow.com/questions/10042695/how-to-get-camera-result-as-a-uri-in-data-folder
@@ -28,7 +28,7 @@ public class InternalStorageContentProvider extends ContentProvider {
 	@Override
 	public boolean onCreate() {
 		try {
-			File mFile = new File(getContext().getFilesDir(), PunchPhotoChoiceActivity.TEMP_PHOTO_FILE_NAME);
+			File mFile = new File(getContext().getFilesDir(), ChoosePhotoActivity.TEMP_PHOTO_FILE_NAME);
 			if(!mFile.exists()) {
 				mFile.createNewFile();
 				getContext().getContentResolver().notifyChange(CONTENT_URI, null);
@@ -53,7 +53,7 @@ public class InternalStorageContentProvider extends ContentProvider {
 	
 	@Override
 	public ParcelFileDescriptor openFile(Uri uri, String mode) throws FileNotFoundException {
-		File f = new File(getContext().getFilesDir(), PunchPhotoChoiceActivity.TEMP_PHOTO_FILE_NAME);
+		File f = new File(getContext().getFilesDir(), ChoosePhotoActivity.TEMP_PHOTO_FILE_NAME);
 		if (f.exists()) {
 			return (ParcelFileDescriptor.open(f, ParcelFileDescriptor.MODE_READ_WRITE));
 		}

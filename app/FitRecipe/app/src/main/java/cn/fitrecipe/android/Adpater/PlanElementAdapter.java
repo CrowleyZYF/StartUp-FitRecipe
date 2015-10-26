@@ -32,7 +32,7 @@ import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.IngredientNutritionActivity;
-import cn.fitrecipe.android.PunchPhotoChoiceActivity;
+import cn.fitrecipe.android.ChoosePhotoActivity;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.RecipeActivity;
 import cn.fitrecipe.android.SelectRecipeActivity;
@@ -153,7 +153,7 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
                 if(!item.isPunch()) {
 //                    ((ImageView)v).setImageResource(R.drawable.icon_plan_punch_active);
 //                    item.setIsPunch(true);
-                    Intent intent = new Intent(fragment.getActivity(), PunchPhotoChoiceActivity.class);
+                    Intent intent = new Intent(fragment.getActivity(), ChoosePhotoActivity.class);
                     intent.putExtra("item", item);
                     fragment.startActivity(intent);
                     //Toast.makeText(fragment.getActivity(), "打卡", Toast.LENGTH_SHORT).show();

@@ -177,7 +177,7 @@
             android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar" >
         </activity>
         <activity
-            android:name=".PunchPhotoChoiceActivity"
+            android:name=".ChoosePhotoActivity"
             android:label="@string/title_activity_punch_photo_choice"
             android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar" >
         </activity>

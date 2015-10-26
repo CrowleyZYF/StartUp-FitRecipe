@@ -40,6 +40,8 @@ public class MeFragment extends Fragment implements View.OnClickListener {
 
     private TextView me_login_btn_text;
 
+    public static boolean isFresh = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -97,6 +99,8 @@ public class MeFragment extends Fragment implements View.OnClickListener {
                 me_status.setText("减脂中...");
             }
         }
+        if(isFresh)
+            initData();
     }
 
     private void initEvent() {

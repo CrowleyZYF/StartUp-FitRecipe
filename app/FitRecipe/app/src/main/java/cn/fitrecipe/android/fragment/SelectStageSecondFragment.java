@@ -32,7 +32,7 @@ public class SelectStageSecondFragment extends Fragment implements View.OnClickL
     private float weight2;             //recipe weight
     private PieChartView piechartview;
     private LinearLayout food_adjust, recipe_adjust;
-    private TextView calorie_data_text, protein_data_text, carbohydrate_data_text, lipids_data_text;
+    private TextView calorie_data_text, protein_data_text, carbohydrate_data_text, lipids_data_text, recipe_amount, recipe_amount_unit;
 
     @Nullable
     @Override
@@ -78,10 +78,19 @@ public class SelectStageSecondFragment extends Fragment implements View.OnClickL
     private void update() {
         int weight = Integer.parseInt(recipe_weight.getText().toString());
         PlanComponent component = ((SelectRecipeActivity)getActivity()).obj_selected;
-        calorie_data_text.setText(Math.round(component.getCalories() * weight / 100)+" kcal");
-        protein_data_text.setText(String.format("%.2f g", component.getNutritions().get(1).getAmount() * weight/ 100));
+        calorie_data_text.setText(Math.round(component.getCalories() * weight / 100) + " kcal");
+        protein_data_text.setText(String.format("%.2f g", component.getNutritions().get(1).getAmount() * weight / 100));
         lipids_data_text.setText(String.format("%.2f g", component.getNutritions().get(2).getAmount() * weight / 100));
         carbohydrate_data_text.setText(String.format("%.2f g", component.getNutritions().get(3).getAmount() * weight / 100));
+    }
+
+    private void update2() {
+        PlanComponent component = ((SelectRecipeActivity)getActivity()).obj_selected;
+        recipe_amount.setText(Math.round(component.getAmount() * weight2) + "");
+        calorie_data_text.setText(Math.round(component.getCalories() * component.getAmount() * weight2 / 100)+" kcal");
+        protein_data_text.setText(String.format("%.2f g", component.getNutritions().get(1).getAmount() * component.getAmount() * weight2 / 100));
+        lipids_data_text.setText(String.format("%.2f g", component.getNutritions().get(2).getAmount() * component.getAmount() * weight2 / 100));
+        carbohydrate_data_text.setText(String.format("%.2f g", component.getNutritions().get(3).getAmount() * component.getAmount() * weight2 / 100));
     }
 
     private void initView() {
@@ -104,6 +113,9 @@ public class SelectStageSecondFragment extends Fragment implements View.OnClickL
         protein_data_text = (TextView) view.findViewById(R.id.protein_data_text);
         carbohydrate_data_text = (TextView) view.findViewById(R.id.carbohydrate_data_text);
         lipids_data_text = (TextView) view.findViewById(R.id.lipids_data_text);
+        recipe_amount = (TextView) view.findViewById(R.id.recipe_amount);
+        recipe_amount_unit = (TextView) view.findViewById(R.id.recipe_amount_unit);
+
         fresh();
     }
 
@@ -120,16 +132,18 @@ public class SelectStageSecondFragment extends Fragment implements View.OnClickL
         PlanComponent component = ((SelectRecipeActivity)getActivity()).obj_selected;
         if(component.getType() == 1) {
             food_adjust.setVisibility(View.GONE);
+            recipe_amount.setVisibility(View.VISIBLE);
             recipe_adjust.setVisibility(View.VISIBLE);
-            recipe_weight.setText(1+"");
+            recipe_amount_unit.setVisibility(View.VISIBLE);
+            recipe_weight.setText(1 + "");
             unit.setText(getResources().getString(R.string.search_recipe_unit));
-            calorie_data_text.setText(Math.round(component.getCalories() * component.getAmount() * weight2 / 100) + " kcal");
-            protein_data_text.setText(String.format("%.2f g", component.getNutritions().get(1).getAmount() * component.getAmount() * weight2 / 100));
-            lipids_data_text.setText(String.format("%.2f g", component.getNutritions().get(2).getAmount() * component.getAmount() * weight2 / 100));
-            carbohydrate_data_text.setText(String.format("%.2f g", component.getNutritions().get(3).getAmount() * component.getAmount() * weight2 / 100));
+            update2();
         }else {
+            recipe_weight.setText("0");
             food_adjust.setVisibility(View.VISIBLE);
             recipe_adjust.setVisibility(View.GONE);
+            recipe_amount.setVisibility(View.GONE);
+            recipe_amount_unit.setVisibility(View.GONE);
             unit.setText(getResources().getString(R.string.search_food_unit));
         }
         recipe_title.setText(component.getName());
@@ -194,11 +208,7 @@ public class SelectStageSecondFragment extends Fragment implements View.OnClickL
                     recipe_weight.setText(String.valueOf(tmp/4));
                 else
                     recipe_weight.setText(String.valueOf(weight2));
-                PlanComponent component = ((SelectRecipeActivity)getActivity()).obj_selected;
-                calorie_data_text.setText(Math.round(component.getCalories() * component.getAmount() * weight2 / 100)+" kcal");
-                protein_data_text.setText(String.format("%.2f g", component.getNutritions().get(1).getAmount() * component.getAmount() * weight2 / 100));
-                lipids_data_text.setText(String.format("%.2f g", component.getNutritions().get(2).getAmount() * component.getAmount() * weight2 / 100));
-                carbohydrate_data_text.setText(String.format("%.2f g", component.getNutritions().get(3).getAmount() * component.getAmount() * weight2 / 100));
+                update2();
                 break;
             case R.id.sub:
                 if(weight2 > 0) {
@@ -209,11 +219,7 @@ public class SelectStageSecondFragment extends Fragment implements View.OnClickL
                     else
                         recipe_weight.setText(String.valueOf(weight2));
                 }
-                component = ((SelectRecipeActivity)getActivity()).obj_selected;
-                calorie_data_text.setText(Math.round(component.getCalories() * component.getAmount() * weight2 / 100)+" kcal");
-                protein_data_text.setText(String.format("%.2f g", component.getNutritions().get(1).getAmount() * component.getAmount() * weight2 / 100));
-                lipids_data_text.setText(String.format("%.2f g", component.getNutritions().get(2).getAmount() * component.getAmount() * weight2 / 100));
-                carbohydrate_data_text.setText(String.format("%.2f g", component.getNutritions().get(3).getAmount() * component.getAmount() * weight2 / 100));
+                update2();
                 break;
 
         }

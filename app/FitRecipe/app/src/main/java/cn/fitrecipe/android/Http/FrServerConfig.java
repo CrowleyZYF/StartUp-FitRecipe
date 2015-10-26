@@ -199,4 +199,8 @@ public class FrServerConfig {
     public static String getSearchRecipeUrl(String keyword, int start, int num) {
         return HOST + "/api/recipe/search/?keyword=" + keyword + "&start=" + start + "&num=" + num;
     }
+
+    public static String getUpdateUserInfoUrl() {
+        return HOST + "/api/account/edit/";
+    }
 }
