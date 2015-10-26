@@ -14,6 +14,7 @@ public class SetActivity extends Activity implements View.OnClickListener {
 
     private RelativeLayout set_account_btn;
     private RelativeLayout set_meal_btn;
+    private RelativeLayout set_alarm_btn;
 
     private ImageView back_btn;
     private ImageView right_btn;
@@ -32,6 +33,7 @@ public class SetActivity extends Activity implements View.OnClickListener {
         back_btn.setOnClickListener(this);
         set_account_btn.setOnClickListener(this);
         set_meal_btn.setOnClickListener(this);
+        set_alarm_btn.setOnClickListener(this);
 
     }
 
@@ -42,6 +44,7 @@ public class SetActivity extends Activity implements View.OnClickListener {
         right_btn.setVisibility(View.GONE);
         set_account_btn = (RelativeLayout) findViewById(R.id.set_account_btn);
         set_meal_btn = (RelativeLayout) findViewById(R.id.set_meal_btn);
+        set_alarm_btn = (RelativeLayout) findViewById(R.id.set_alarm_btn);
     }
 
     @Override
@@ -57,6 +60,10 @@ public class SetActivity extends Activity implements View.OnClickListener {
             case R.id.set_meal_btn:
                 Intent set_meal_btn = new Intent(this,SetMealActivity.class);
                 startActivity(set_meal_btn);
+                break;
+            case R.id.set_alarm_btn:
+                Intent set_alarm_btn = new Intent(this,SetAlarmActivity.class);
+                startActivity(set_alarm_btn);
                 break;
         }
 

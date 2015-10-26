@@ -88,6 +88,7 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/set_alarm_btn"
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
 

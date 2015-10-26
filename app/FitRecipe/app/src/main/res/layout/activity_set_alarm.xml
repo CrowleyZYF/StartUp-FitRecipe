@@ -1,0 +1,582 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/base_color"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/left_btn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="15dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon_back_white"
+            android:background="@drawable/icon_selector"/>
+
+        <TextView
+            android:id="@+id/header_name_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="餐次闹钟"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/right_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:text="保存"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/icon_selector"/>
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/min_time_change_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="04:00"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/max_time_change_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="24:00"
+                android:visibility="gone"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="早餐："
+                android:textSize="16sp"
+                android:textColor="@color/login_input_text_color"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="15dp"
+                android:lineSpacingExtra="3dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical"
+                android:background="@drawable/set_border">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="开启闹钟："
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:paddingLeft="10dp"/>
+
+                    <com.rey.material.widget.Switch
+                        android:id="@+id/breakfast_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:checked="true"
+                        app:sw_thumbColor="@drawable/switch_color_list_thumb"
+                        app:sw_thumbRadius="10dp"
+                        app:sw_trackColor="@drawable/switch_color_list_track"
+                        app:sw_trackSize="15dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"/>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@drawable/theme_line"
+                        android:layout_alignParentBottom="true"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/breakfast_time_change"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="修改时间："
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:paddingLeft="10dp"/>
+
+                    <TextView
+                        android:id="@+id/breakfast_time_change_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="07:30"
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:paddingRight="15dp"/>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="上午加餐："
+                android:textSize="16sp"
+                android:textColor="@color/login_input_text_color"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="10dp"
+                android:lineSpacingExtra="3dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical"
+                android:background="@drawable/set_border">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="开启闹钟："
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:paddingLeft="10dp"/>
+
+                    <com.rey.material.widget.Switch
+                        android:id="@+id/add_meal_01_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:checked="true"
+                        app:sw_thumbColor="@drawable/switch_color_list_thumb"
+                        app:sw_thumbRadius="10dp"
+                        app:sw_trackColor="@drawable/switch_color_list_track"
+                        app:sw_trackSize="15dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"/>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@drawable/theme_line"
+                        android:layout_alignParentBottom="true"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/add_meal_01_time_change"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="修改时间："
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:paddingLeft="10dp"/>
+
+                    <TextView
+                        android:id="@+id/add_meal_01_time_change_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="10:00"
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:paddingRight="15dp"/>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="午餐："
+                android:textSize="16sp"
+                android:textColor="@color/login_input_text_color"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="10dp"
+                android:lineSpacingExtra="3dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical"
+                android:background="@drawable/set_border">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="开启闹钟："
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:paddingLeft="10dp"/>
+
+                    <com.rey.material.widget.Switch
+                        android:id="@+id/lunch_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:checked="true"
+                        app:sw_thumbColor="@drawable/switch_color_list_thumb"
+                        app:sw_thumbRadius="10dp"
+                        app:sw_trackColor="@drawable/switch_color_list_track"
+                        app:sw_trackSize="15dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"/>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@drawable/theme_line"
+                        android:layout_alignParentBottom="true"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/lunch_time_change"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="修改时间："
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:paddingLeft="10dp"/>
+
+                    <TextView
+                        android:id="@+id/lunch_time_change_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="12:00"
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:paddingRight="15dp"/>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="下午加餐："
+                android:textSize="16sp"
+                android:textColor="@color/login_input_text_color"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="10dp"
+                android:lineSpacingExtra="3dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical"
+                android:background="@drawable/set_border">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="开启闹钟："
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:paddingLeft="10dp"/>
+
+                    <com.rey.material.widget.Switch
+                        android:id="@+id/add_meal_02_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:checked="true"
+                        app:sw_thumbColor="@drawable/switch_color_list_thumb"
+                        app:sw_thumbRadius="10dp"
+                        app:sw_trackColor="@drawable/switch_color_list_track"
+                        app:sw_trackSize="15dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"/>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@drawable/theme_line"
+                        android:layout_alignParentBottom="true"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/add_meal_02_time_change"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="修改时间："
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:paddingLeft="10dp"/>
+
+                    <TextView
+                        android:id="@+id/add_meal_02_time_change_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="15:00"
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:paddingRight="15dp"/>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="晚餐："
+                android:textSize="16sp"
+                android:textColor="@color/login_input_text_color"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="10dp"
+                android:lineSpacingExtra="3dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical"
+                android:background="@drawable/set_border">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="开启闹钟："
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:paddingLeft="10dp"/>
+
+                    <com.rey.material.widget.Switch
+                        android:id="@+id/dinner_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:checked="true"
+                        app:sw_thumbColor="@drawable/switch_color_list_thumb"
+                        app:sw_thumbRadius="10dp"
+                        app:sw_trackColor="@drawable/switch_color_list_track"
+                        app:sw_trackSize="15dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"/>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@drawable/theme_line"
+                        android:layout_alignParentBottom="true"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/dinner_time_change"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="修改时间："
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:paddingLeft="10dp"/>
+
+                    <TextView
+                        android:id="@+id/dinner_time_change_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="17:30"
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:paddingRight="15dp"/>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="夜宵："
+                android:textSize="16sp"
+                android:textColor="@color/login_input_text_color"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="10dp"
+                android:lineSpacingExtra="3dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical"
+                android:background="@drawable/set_border">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="开启闹钟："
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:paddingLeft="10dp"/>
+
+                    <com.rey.material.widget.Switch
+                        android:id="@+id/add_meal_03_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:checked="true"
+                        app:sw_thumbColor="@drawable/switch_color_list_thumb"
+                        app:sw_thumbRadius="10dp"
+                        app:sw_trackColor="@drawable/switch_color_list_track"
+                        app:sw_trackSize="15dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"/>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@drawable/theme_line"
+                        android:layout_alignParentBottom="true"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/add_meal_03_time_change"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="修改时间："
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:paddingLeft="10dp"/>
+
+                    <TextView
+                        android:id="@+id/add_meal_03_time_change_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="22:00"
+                        android:textSize="14sp"
+                        android:textColor="@color/login_input_text_color"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:paddingRight="15dp"/>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="vertical"></LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

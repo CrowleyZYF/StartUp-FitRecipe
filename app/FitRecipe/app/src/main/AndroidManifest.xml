@@ -73,6 +73,8 @@
         </activity>
         <activity android:name=".SetMealActivity" >
         </activity>
+        <activity android:name=".SetAlarmActivity" >
+        </activity>
         <activity android:name=".RecipeActivity" >
         </activity>
         <activity android:name=".KnowledgeArticleActivity" >

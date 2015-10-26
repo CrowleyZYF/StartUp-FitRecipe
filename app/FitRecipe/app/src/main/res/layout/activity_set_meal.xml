@@ -6,7 +6,47 @@
     android:layout_height="match_parent"
     android:background="@color/background_color">
 
-    <include layout="@layout/framework_common_headers" ></include>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/base_color"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/left_btn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="15dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon_back_white"
+            android:background="@drawable/icon_selector"/>
+
+        <TextView
+            android:id="@+id/header_name_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="增减餐次"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/right_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:text="保存"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/icon_selector"/>
+
+    </RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -17,7 +57,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginTop="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -28,7 +69,7 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp">
+                    android:layout_height="50dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -41,13 +82,14 @@
                         android:paddingLeft="10dp"/>
 
                     <com.rey.material.widget.Switch
+                        android:id="@+id/add_meal_01_check"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:checked="true"
-                        app:sw_thumbColor="@color/base_color"
+                        app:sw_thumbColor="@drawable/switch_color_list_thumb"
                         app:sw_thumbRadius="10dp"
-                        app:sw_trackColor="@color/base_color_light"
+                        app:sw_trackColor="@drawable/switch_color_list_track"
                         app:sw_trackSize="15dp"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="10dp"/>
@@ -62,7 +104,7 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp">
+                    android:layout_height="50dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -75,13 +117,14 @@
                         android:paddingLeft="10dp"/>
 
                     <com.rey.material.widget.Switch
+                        android:id="@+id/add_meal_02_check"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:checked="true"
-                        app:sw_thumbColor="@color/base_color"
+                        app:sw_thumbColor="@drawable/switch_color_list_thumb"
                         app:sw_thumbRadius="10dp"
-                        app:sw_trackColor="@color/base_color_light"
+                        app:sw_trackColor="@drawable/switch_color_list_track"
                         app:sw_trackSize="15dp"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="10dp"/>
@@ -96,7 +139,7 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp">
+                    android:layout_height="50dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -109,13 +152,14 @@
                         android:paddingLeft="10dp"/>
 
                     <com.rey.material.widget.Switch
+                        android:id="@+id/add_meal_03_check"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:checked="true"
-                        app:sw_thumbColor="@color/base_color"
+                        app:sw_thumbColor="@drawable/switch_color_list_thumb"
                         app:sw_thumbRadius="10dp"
-                        app:sw_trackColor="@color/base_color_light"
+                        app:sw_trackColor="@drawable/switch_color_list_track"
                         app:sw_trackSize="15dp"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="10dp"/>
