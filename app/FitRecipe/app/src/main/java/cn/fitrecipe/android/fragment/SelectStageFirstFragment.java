@@ -3,6 +3,8 @@ package cn.fitrecipe.android.fragment;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,7 +72,29 @@ public class SelectStageFirstFragment extends Fragment implements View.OnClickLi
     private void initEvent() {
         search_cancel.setOnClickListener(this);
         clear_btn.setOnClickListener(this);
+        clear_btn.setVisibility(View.GONE);
         search_btn.setOnClickListener(this);
+        search_input.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (search_input.getText().toString().length() == 0) {
+                    clear_btn.setVisibility(View.GONE);
+                } else {
+                    clear_btn.setVisibility(View.VISIBLE);
+                }
+
+            }
+        });
         search_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

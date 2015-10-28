@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -65,6 +67,7 @@ public class SearchActivity extends Activity implements View.OnClickListener {
     private void initView() {
         back_btn = (ImageView) findViewById(R.id.back_btn);
         clear_btn = (ImageView) findViewById(R.id.clear_btn);
+        clear_btn.setVisibility(View.GONE);
         search_content = (EditText) findViewById(R.id.search_content);
         search_btn = (TextView) findViewById(R.id.search_btn);
 
@@ -94,6 +97,27 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 
             @Override
             public void onTop() {
+
+            }
+        });
+        search_content.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (search_content.getText().toString().length()==0){
+                    clear_btn.setVisibility(View.GONE);
+                }else{
+                    clear_btn.setVisibility(View.VISIBLE);
+                }
 
             }
         });

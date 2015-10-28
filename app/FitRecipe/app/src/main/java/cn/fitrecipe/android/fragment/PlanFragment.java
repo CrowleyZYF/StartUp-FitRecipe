@@ -35,8 +35,9 @@ import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.Http.PostRequest;
-import cn.fitrecipe.android.IngredientActivity;
 import cn.fitrecipe.android.NutritionActivity;
+import cn.fitrecipe.android.PlanChoiceActivity;
+import cn.fitrecipe.android.PlayerActivity;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.dao.FrDbHelper;
@@ -65,7 +66,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     private List<DatePlanItem> items;
     private DatePlan datePlan;
     private PlanElementAdapter adapter;
-    private ImageView shopping_btn, next_btn, prev_btn;
+    private ImageView video_btn, next_btn, prev_btn;
     private TextView plan_status_day, plan_status, diy_days, plan_name;
     private TextView other_plan_days;
 
@@ -104,6 +105,10 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
 
     private long startTime;
 
+    //punch count
+    private TextView punch_count;
+    private TextView change_plan_btn;
+
 
 
     @Override
@@ -122,8 +127,8 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         info_container = (LinearLayout) v.findViewById(R.id.info_container);
         //计划区域
         plans = (LinearLayoutForListView) v.findViewById(R.id.plans);
-        //添加到菜篮子
-        shopping_btn = (ImageView) v.findViewById(R.id.shopping_btn);
+        //打开视频
+        video_btn = (ImageView) v.findViewById(R.id.video_btn);
         //增肌还是减脂
         plan_status = (TextView) v.findViewById(R.id.plan_status);
         //第几天
@@ -143,12 +148,16 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         dotsTextView = (DotsTextView) v.findViewById(R.id.dots);
         //互动
         plan_scrollview = (ScrollView) v.findViewById(R.id.plan_scrollview);
+        //punch_count
+        punch_count = (TextView) v.findViewById(R.id.punch_count);
+        change_plan_btn = (TextView) v.findViewById(R.id.change_plan_btn);
     }
 
     private void initEvent() {
-        shopping_btn.setOnClickListener(this);
+        video_btn.setOnClickListener(this);
         next_btn.setOnClickListener(this);
         prev_btn.setOnClickListener(this);
+        change_plan_btn.setOnClickListener(this);
     }
 
     private void initData() {
@@ -243,6 +252,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
      */
     private void processData(JSONObject data, String start, String end, boolean isPre) throws JSONException {
         if(data != null) {
+            punch_count.setText(data.getString("count"));
             planMap = new ConcurrentHashMap<>();
             count = new AtomicInteger(0);
             if(!data.getString("lastJoined").equals("null")) {
@@ -725,9 +735,15 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.shopping_btn:
-                Intent intent = new Intent(getActivity(), IngredientActivity.class);
+            case R.id.video_btn:
+                /*Intent intent = new Intent(getActivity(), IngredientActivity.class);
+                startActivity(intent);*/
+                Intent intent  = new Intent(getActivity(), PlayerActivity.class);
+                intent.putExtra("vid", "XMTI0OTc5MzEyNA");
                 startActivity(intent);
+                break;
+            case R.id.change_plan_btn:
+                startActivity(new Intent(getActivity(), PlanChoiceActivity.class));
                 break;
             case R.id.next_btn:
                 if(switchPlan(pointer + 1, 1)) {

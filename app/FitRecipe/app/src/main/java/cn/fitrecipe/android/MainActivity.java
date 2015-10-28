@@ -270,7 +270,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                 switch (tab_index){
                     case 0:
                         startActivity(new Intent(this, SearchActivity.class));
-                        Common.toBeContinuedDialog(this).show();
+                        //Common.toBeContinuedDialog(this).show();
                         break;
                     case 1:
                         //startActivity(new Intent(this, PlanChoiceActivity.class));

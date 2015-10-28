@@ -22,7 +22,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="240dp"
-                android:layout_marginBottom="20dp">
+                android:layout_marginBottom="10dp">
 
                 <android.support.v4.view.ViewPager
                     android:id="@+id/recommend"
@@ -40,7 +40,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="34dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp">
 
@@ -49,7 +49,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
                     android:src="@drawable/icon_left_fat"
-                    android:layout_alignParentLeft="true"/>
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -58,17 +59,21 @@
                     android:paddingLeft="5dp"
                     android:text="主题"
                     android:layout_gravity="center_vertical"
-                    android:layout_toRightOf="@id/theme_icon"/>
+                    android:layout_toRightOf="@id/theme_icon"
+                    android:layout_centerVertical="true"/>
 
                 <TextView
                     android:id="@+id/theme_more"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="12sp"
+                    android:layout_height="match_parent"
+                    android:textSize="15sp"
                     android:paddingRight="5dp"
-                    android:text="查看更多"
+                    android:text="更多"
                     android:layout_gravity="center_vertical"
-                    android:layout_alignParentRight="true"/>
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"/>
+
             </RelativeLayout>
 
             <android.support.v7.widget.RecyclerView
@@ -81,8 +86,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_height="34dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp">
 
@@ -90,7 +94,9 @@
                     android:id="@+id/update_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
-                    android:src="@drawable/icon_left_fat"/>
+                    android:src="@drawable/icon_left_fat"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -99,17 +105,20 @@
                     android:paddingLeft="5dp"
                     android:text="最近更新"
                     android:layout_gravity="center_vertical"
-                    android:layout_toRightOf="@id/update_icon"/>
+                    android:layout_toRightOf="@id/update_icon"
+                    android:layout_centerVertical="true"/>
 
                 <TextView
                     android:id="@+id/recipe_more"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="12sp"
+                    android:layout_height="match_parent"
+                    android:textSize="15sp"
                     android:paddingRight="5dp"
-                    android:text="查看更多"
+                    android:text="更多"
                     android:layout_gravity="center_vertical"
-                    android:layout_alignParentRight="true"/>
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"/>
 
             </RelativeLayout>
 

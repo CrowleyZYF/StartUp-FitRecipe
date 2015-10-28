@@ -16,8 +16,8 @@
         <ProgressBar
             android:id="@+id/pb_foot_refreshing"
             style="?android:attr/progressBarStyleSmall"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:indeterminateDrawable="@drawable/get_more_list_view_progressbar"
             android:indeterminateDuration="1000"
             android:layout_centerVertical="true" />
@@ -26,11 +26,12 @@
             android:id="@+id/tv_foot_title"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:textColor="#4a4a4a"
+            android:textColor="@color/gray"
             android:text="正在加载..."
             android:textSize="16dp"
             android:gravity="center"
-            android:clickable="true" />
+            android:clickable="true"
+            android:paddingLeft="10dp"/>
 
     </LinearLayout>
 </RelativeLayout>
