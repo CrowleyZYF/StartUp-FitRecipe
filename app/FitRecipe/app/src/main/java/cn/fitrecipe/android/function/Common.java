@@ -151,21 +151,21 @@ public class Common {
     public static ArrayList<DatePlanItem> generateDatePlan(String date, Context context) {
         ArrayList<DatePlanItem> items = new ArrayList<>();
         DatePlanItem item1 = new DatePlanItem();
-        item1.setTime("08:30am");
+        item1.setTime("07:30am");
         item1.setType("breakfast");
         item1.setDate(date);
         item1.setDefaultImageCover("drawable://" + R.drawable.breakfast);
         items.add(item1);
 
         DatePlanItem item2 = new DatePlanItem();
-        item2.setTime("10:30am");
+        item2.setTime("10:00am");
         item2.setType("add_meal_01");
         item2.setDate(date);
         item2.setDefaultImageCover("drawable://" + R.drawable.add_meal_01);
         items.add(item2);
 
         DatePlanItem item3 = new DatePlanItem();
-        item3.setTime("12:30am");
+        item3.setTime("12:00am");
         item3.setType("lunch");
         item3.setDate(date);
         item3.setDefaultImageCover("drawable://" + R.drawable.lunch);
@@ -173,7 +173,7 @@ public class Common {
 
 
         DatePlanItem item4 = new DatePlanItem();
-        item4.setTime("15:30am");
+        item4.setTime("15:00am");
         item4.setType("add_meal_02");
         item4.setDate(date);
         item4.setDefaultImageCover("drawable://" + R.drawable.add_meal_02);
@@ -181,7 +181,7 @@ public class Common {
 
 
         DatePlanItem item5 = new DatePlanItem();
-        item5.setTime("18:30am");
+        item5.setTime("17:30am");
         item5.setType("supper");
         item5.setDate(date);
         item5.setDefaultImageCover("drawable://" + R.drawable.dinner);
@@ -189,7 +189,7 @@ public class Common {
 
 
         DatePlanItem item6 = new DatePlanItem();
-        item6.setTime("22:30am");
+        item6.setTime("22:00am");
         item6.setType("add_meal_03");
         item6.setDate(date);
         item6.setDefaultImageCover("drawable://" + R.drawable.add_meal_03);

@@ -251,5 +251,6 @@
     <string name="recipe">食谱</string>
     <string name="title_activity_theme_list">ThemeListActivity</string>
     <string name="title_activity_ingredient_nutrition">IngredientNutritionActivity</string>
+    <string name="title_activity_alarm">AlarmActivity</string>
 
 </resources>

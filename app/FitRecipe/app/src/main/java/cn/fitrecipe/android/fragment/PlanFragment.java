@@ -112,6 +112,8 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     private TextView change_plan_btn;
 
 
+    final String[] preferenceKeyText = {"", "breakfast_time", "add_meal_01_time", "lunch_time", "add_meal_02_time", "dinner_time", "add_meal_03_time"};
+    final String[] preferenceKeySwitch = {"", "breakfast_check", "add_meal_01_check", "lunch_check", "add_meal_02_check", "dinner_check", "add_meal_03_check"};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -551,6 +553,30 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             isShow[0] = sp.getBoolean("has_add_meal_01", true);
             isShow[1] = sp.getBoolean("has_add_meal_02", true);
             isShow[2] = sp.getBoolean("has_add_meal_03", true);
+
+            for (int i = 0; i < items.size(); i++) {
+                switch (items.get(i).getType()) {
+                    case "breakfast":
+                        items.get(i).setTime(sp.getString(preferenceKeyText[1], "07:30"));
+                        break;
+                    case "add_meal_01":
+                        items.get(i).setTime(sp.getString(preferenceKeyText[2], "10:00"));
+                        break;
+                    case "lunch":
+                        items.get(i).setTime(sp.getString(preferenceKeyText[3], "12:00"));
+                        break;
+                    case "add_meal_02":
+                        items.get(i).setTime(sp.getString(preferenceKeyText[4], "15:00"));
+                        break;
+                    case "supper":
+                        items.get(i).setTime(sp.getString(preferenceKeyText[5], "17:30"));
+                        break;
+                    case "add_meal_03":
+                        items.get(i).setTime(sp.getString(preferenceKeyText[6], "22:00"));
+                        break;
+                }
+            }
+
             for(int i = 0; i < items.size(); ) {
                 if(items.get(i).getType().equals("add_meal_01") && (!isShow[0]))
                     items.remove(i);

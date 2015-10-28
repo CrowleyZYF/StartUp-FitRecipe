@@ -255,7 +255,7 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
         switch (item.getType()) {
             case "breakfast" :
                 holder.plan_title.setText("早餐");
-                holder.plan_time.setText("08:30 AM");
+                holder.plan_time.setText(item.getTime() + " AM");
                 double x = report.getBreakfastRate();
                 if(!isShow[0])
                     x += report.getSnackMorningRate();
@@ -264,7 +264,7 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
                 break;
             case "lunch":
                 holder.plan_title.setText("午餐");
-                holder.plan_time.setText("12:30 PM");
+                holder.plan_time.setText(item.getTime() + " AM");
                 double y = report.getLunchRate();
                 if(!isShow[1])
                     y += report.getSnackAfternoonRate();
@@ -273,7 +273,7 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
                 break;
             case "supper":
                 holder.plan_title.setText("晚餐");
-                holder.plan_time.setText("18:30 PM");
+                holder.plan_time.setText(item.getTime() + " PM");
                 double z = report.getDinnerRate();
                 if(!isShow[2])
                     z += report.getSnackNightRate();
@@ -282,19 +282,19 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
                 break;
             case "add_meal_01":
                 holder.plan_title.setText("加餐");
-                holder.plan_time.setText("10:30 AM");
+                holder.plan_time.setText(item.getTime() + " AM");
                 holder.calorie_plan_need.setText(Math.round(report.getSnackMorningRate())+"");
                 holder.calorie_plan_radio.setText(Math.round(item.getCalories_take() * 100/ report.getSnackMorningRate())+"");
                 break;
             case "add_meal_02":
                 holder.plan_title.setText("加餐");
-                holder.plan_time.setText("15:30 PM");
+                holder.plan_time.setText(item.getTime() + " PM");
                 holder.calorie_plan_need.setText(Math.round(report.getSnackAfternoonRate())+"");
                 holder.calorie_plan_radio.setText(Math.round(item.getCalories_take() * 100/ report.getSnackAfternoonRate())+"");
                 break;
             case "add_meal_03":
                 holder.plan_title.setText("夜宵");
-                holder.plan_time.setText("21:30 PM");
+                holder.plan_time.setText(item.getTime() + " PM");
                 holder.calorie_plan_need.setText(Math.round(report.getSnackNightRate())+"");
                 holder.calorie_plan_radio.setText(Math.round(item.getCalories_take() * 100/ report.getSnackNightRate())+"");
                 break;

@@ -1,7 +1,11 @@
 package cn.fitrecipe.android;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +16,13 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.rey.material.widget.Switch;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+import cn.fitrecipe.android.function.Common;
 
 /**
  * Created by 奕峰 on 2015/5/8.
@@ -46,7 +57,7 @@ public class SetAlarmActivity extends Activity implements View.OnClickListener {
     final String[] nowTime = {"", "07:30", "10:00", "12:00", "15:00", "17:30", "22:00"};
     final String[] preferenceKeyText = {"", "breakfast_time", "add_meal_01_time", "lunch_time", "add_meal_02_time", "dinner_time", "add_meal_03_time"};
     final String[] preferenceKeySwitch = {"", "breakfast_check", "add_meal_01_check", "lunch_check", "add_meal_02_check", "dinner_check", "add_meal_03_check"};
-
+    final String[] strs = {"", "早餐时间", "上午加餐时间", "午餐时间", "下午加餐时间", "晚餐时间", "夜宵时间"};
 
 
     @Override
@@ -126,7 +137,35 @@ public class SetAlarmActivity extends Activity implements View.OnClickListener {
                     editor.putBoolean(preferenceKeySwitch[i], preferenceWidgetSwitch[i].isChecked());
                 }
                 editor.commit();
+                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                for(int i = 1; i <=6; i++) {
+                    Intent intent = new Intent(this, AlarmActivity.class);
+                    intent.putExtra("msg", strs[i]);
+                    PendingIntent pi = PendingIntent.getActivity(this, i, intent, 0);
+                    alarmManager.cancel(pi);
+                    if(preferenceWidgetSwitch[i].isChecked()) {
+                        String str = nowTimeTextView[i].getText().toString();
+                        String date = Common.getDate();
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd H:mm");
+                        try {
+                            Date now = simpleDateFormat.parse(date + " " + str);
+                            System.out.println("time" + now.getTime());
+                            System.out.println("now" + System.currentTimeMillis());
+                            if(now.getTime() > System.currentTimeMillis())
+                                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, now.getTime(), 24 * 3600 * 1000, pi);
+                            else
+                                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, now.getTime() + 24 * 3600 * 1000, 24 * 3600 * 1000, pi);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+
+
+
                 Toast.makeText(this, "修改完成！", Toast.LENGTH_SHORT).show();
+                FrApplication.getInstance().setIsSettingChanged(true);
                 finish();
                 break;
             case R.id.breakfast_time_change:
