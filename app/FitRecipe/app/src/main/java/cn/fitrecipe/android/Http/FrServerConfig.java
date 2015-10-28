@@ -164,6 +164,10 @@ public class FrServerConfig {
         return HOST + "/api/plan/calendar/?start=" + start + "&end=" + end;
     }
 
+    public static String getPunchCountUrl() {
+        return HOST + "/api/plan/count/";
+    }
+
     public static String getSearchFoodUrl(String keywords, int start, int num) {
         return HOST + "/api/recipe/search/food/?keyword=" + keywords + "&start=" + start + "&num=" + num;
     }

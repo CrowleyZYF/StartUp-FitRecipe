@@ -10,8 +10,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import cn.fitrecipe.android.CollectActivity;
 import cn.fitrecipe.android.FrApplication;
+import cn.fitrecipe.android.Http.FrRequest;
+import cn.fitrecipe.android.Http.FrServerConfig;
+import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.IngredientActivity;
 import cn.fitrecipe.android.LoginActivity;
 import cn.fitrecipe.android.R;
@@ -55,6 +64,30 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    public void freshData(){
+        GetRequest request = new GetRequest(FrServerConfig.getPunchCountUrl(), FrApplication.getInstance().getToken(),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject res) {
+                        if(res != null && res.has("data")) {
+                            try {
+                                int data = res.getJSONObject("data").getInt("count");
+                                me_punch.setText("打卡次数："+data);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        me_punch.setText("打卡次数："+0);
+                    }
+                });
+        FrRequest.getInstance().request(request);
+    }
+
     private void initView(View view) {
         me_name = (TextView) view.findViewById(R.id.me_name);
         me_status = (TextView) view.findViewById(R.id.me_status);
@@ -84,6 +117,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
             me_login_btn_text.setText("登陆");
             me_avatar.setImageResource(R.drawable.pic_header);
         }
+        freshData();
     }
 
     @Override

@@ -267,11 +267,14 @@ public class ReportActivity extends Activity implements View.OnClickListener{
         SharedPreferences.Editor editor = preferences.edit();
         switch (v.getId()) {
             case R.id.back_btn:
-                if(!last.equals("me")) {
+                /*if(!last.equals("me")) {
                     editor.putBoolean("isSpecial", true);
                     editor.commit();
                     finish();
-                }
+                }*/
+                editor.putBoolean("isSpecial", true);
+                editor.commit();
+                finish();
                 break;
             case R.id.check_plan:
                 editor.putBoolean("isSpecial", true);

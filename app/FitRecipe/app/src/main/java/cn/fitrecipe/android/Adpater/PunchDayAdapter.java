@@ -156,6 +156,7 @@ public class PunchDayAdapter extends RecyclerView.Adapter<PunchDayAdapter.PunchD
                     Intent intent = new Intent(context, PunchContentSureActivity.class);
                     intent.putExtra("item", punchItems.get(position));
                     intent.putExtra("action", "share");
+                    intent.putExtra("time", punchItems.get(position).getTh() + "");
                     context.startActivity(intent);
                 }
             });
