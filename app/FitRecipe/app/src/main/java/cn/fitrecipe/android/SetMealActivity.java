@@ -66,6 +66,7 @@ public class SetMealActivity extends Activity implements View.OnClickListener {
                 editor.putBoolean("has_add_meal_01", add_meal_01_check.isChecked());
                 editor.putBoolean("has_add_meal_02", add_meal_02_check.isChecked());
                 editor.putBoolean("has_add_meal_03", add_meal_03_check.isChecked());
+                FrApplication.getInstance().setIsSettingChanged(true);
                 editor.commit();
                 Toast.makeText(this, "修改完成！", Toast.LENGTH_SHORT).show();
                 finish();

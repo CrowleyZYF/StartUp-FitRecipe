@@ -34,7 +34,7 @@ public class JoinPlanHelper {
     public void joinPersonalPlan(final CallBack callBack, String date) throws JSONException {
         JSONObject params = new JSONObject();
         JSONArray dish = new JSONArray();
-        List<DatePlanItem> items = Common.generateDatePlan(date);
+        List<DatePlanItem> items = Common.generateDatePlan(date, context);
         for(int i = 0; i < items.size(); i++) {
             JSONObject obj = new JSONObject();
             obj.put("type", i);

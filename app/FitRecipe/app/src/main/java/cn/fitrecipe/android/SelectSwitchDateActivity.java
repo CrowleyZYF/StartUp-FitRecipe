@@ -65,7 +65,7 @@ public class SelectSwitchDateActivity extends Activity implements View.OnClickLi
                     @Override
                     public void handle(Object... res) {
                         int id = (Integer) res[0];
-                        SeriesPlan plan1 = Common.gerneratePersonalPlan(id);
+                        SeriesPlan plan1 = Common.gerneratePersonalPlan(id, SelectSwitchDateActivity.this);
                         plan1.setJoined_date(date);
                         FrDbHelper.getInstance(SelectSwitchDateActivity.this).joinPlan(plan1);
                         FrApplication.getInstance().setPlanInUse(plan1);

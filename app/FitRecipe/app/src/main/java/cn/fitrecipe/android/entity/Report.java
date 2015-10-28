@@ -589,7 +589,7 @@ public class Report implements Serializable{
     }
 
     public void setSnackNightRate(double snackNightRate) {
-        snackNightRate = snackNightRate;
+        this.SnackNightRate = snackNightRate;
     }
 
     public double getDinnerRate() {

@@ -59,6 +59,8 @@ public class FrApplication extends Application {
     private Map<String, List<BasketRecord>> basketData;
     private PunchRecord pr;
 
+    private boolean isSettingChanged;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -72,7 +74,7 @@ public class FrApplication extends Application {
         //init network
         FrRequest.getInstance().init(this);
 
-        initYouku();
+//        initYouku();
         instance = this;
     }
 
@@ -257,6 +259,14 @@ public class FrApplication extends Application {
 
     public void setPr(PunchRecord pr) {
         this.pr = pr;
+    }
+
+    public boolean isSettingChanged() {
+        return isSettingChanged;
+    }
+
+    public void setIsSettingChanged(boolean isSettingChanged) {
+        this.isSettingChanged = isSettingChanged;
     }
 
 

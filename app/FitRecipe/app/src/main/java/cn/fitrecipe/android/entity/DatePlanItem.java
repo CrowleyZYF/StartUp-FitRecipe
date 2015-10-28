@@ -25,6 +25,7 @@ public class DatePlanItem implements Serializable{
     private String defaultImageCover;
     private int punchNums;
     private ArrayList<PlanComponent> components;
+    private int th;
 
     public ArrayList<Nutrition> getNutritions() {
         return nutritions;
@@ -235,5 +236,13 @@ public class DatePlanItem implements Serializable{
 
     public void setPunchId(int punchId) {
         this.punchId = punchId;
+    }
+
+    public int getTh() {
+        return th;
+    }
+
+    public void setTh(int th) {
+        this.th = th;
     }
 }

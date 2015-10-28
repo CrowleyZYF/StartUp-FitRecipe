@@ -18,6 +18,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +55,7 @@ public class PunchFragment extends Fragment
     private ScrollView info_container;
     private Map<String, DatePlan> map;
     private List<DatePlan> datePlans;
+    private int total;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -90,8 +93,9 @@ public class PunchFragment extends Fragment
                 public void onResponse(JSONObject res) {
                     if (res != null && res.has("data")) {
                         try {
-                            JSONArray data = res.getJSONArray("data");
-                            processData(data);
+                            JSONObject data = res.getJSONObject("data");
+                            total = data.getInt("count");
+                            processData(data.getJSONArray("punchs"));
                             hideLoading(false, "");
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -155,7 +159,7 @@ public class PunchFragment extends Fragment
                     component.setName(singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getString("name"));//设置名称
                     component.setNutritions(JsonParseHelper.getNutritionSetFromJson(singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getJSONObject("nutrition_set")));//获取营养信息
                     component.setAmount(singleingredient_set.getJSONObject(k).getInt("amount"));//设置重量
-                    component.setCalories(component.getAmount() * singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getJSONObject("nutrition_set").getJSONObject("Energy").getDouble("amount") / 100);//设置卡路里
+                    component.setCalories(singleingredient_set.getJSONObject(k).getJSONObject("ingredient").getJSONObject("nutrition_set").getJSONObject("Energy").getDouble("amount"));//设置卡路里
                     item.addContent(component);
                 }
                 //获取计划中食谱
@@ -205,6 +209,20 @@ public class PunchFragment extends Fragment
         Iterator<String> iterator = keyset.iterator();
         while(iterator.hasNext()) {
             datePlans.add(map.get(iterator.next()));
+        }
+        Collections.sort(datePlans, new Comparator<DatePlan>() {
+            @Override
+            public int compare(DatePlan lhs, DatePlan rhs) {
+                return Common.CompareDate(lhs.getDate(), rhs.getDate());
+            }
+        });
+        int x = total;
+        for(int i = 0; i < datePlans.size(); i++) {
+            List<DatePlanItem> tmp = datePlans.get(i).getItems();
+            for(int j = 0; j < tmp.size(); j++)
+                if(tmp.get(j).isPunch())
+                    tmp.get(j).setTh(x--);
+            datePlans.get(i).setItems(tmp);
         }
         punchDayAdapter = new PunchDayAdapter(this.getActivity(), datePlans, FrApplication.getInstance().getReport());
         punchRecordRecyclerView.setAdapter(punchDayAdapter);

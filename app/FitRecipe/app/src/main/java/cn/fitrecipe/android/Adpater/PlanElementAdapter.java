@@ -53,17 +53,20 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
     List<DatePlanItem> items;
     Report report;
     boolean isValid, isValid2; //isValid if can change , isValid2 is if can punch
+    private boolean[] isShow;
 
-    public PlanElementAdapter(Fragment fragment, List<DatePlanItem> items, Report report) {
+    public PlanElementAdapter(Fragment fragment, List<DatePlanItem> items, Report report, boolean[] isShow) {
         this.fragment = fragment;
         this.items = items;
         this.report = report;
+        this.isShow = isShow;
     }
 
-    public void setData(List<DatePlanItem> items, boolean isValid, boolean isValid2) {
+    public void setData(List<DatePlanItem> items, boolean isValid, boolean isValid2, boolean[] isShow) {
         this.items = items;
         this.isValid = isValid;
         this.isValid2 = isValid2;
+        this.isShow = isShow;
         notifyDataSetChanged();
     }
 
@@ -253,20 +256,29 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
             case "breakfast" :
                 holder.plan_title.setText("早餐");
                 holder.plan_time.setText("08:30 AM");
-                holder.calorie_plan_need.setText(Math.round(report.getBreakfastRate())+"");
-                holder.calorie_plan_radio.setText(Math.round(item.getCalories_take() * 100/  report.getBreakfastRate())+"");
+                double x = report.getBreakfastRate();
+                if(!isShow[0])
+                    x += report.getSnackMorningRate();
+                holder.calorie_plan_need.setText(Math.round(x)+"");
+                holder.calorie_plan_radio.setText(Math.round(item.getCalories_take() * 100/ x)+"");
                 break;
             case "lunch":
                 holder.plan_title.setText("午餐");
                 holder.plan_time.setText("12:30 PM");
-                holder.calorie_plan_need.setText(Math.round( report.getLunchRate())+"");
-                holder.calorie_plan_radio.setText(Math.round(item.getCalories_take() * 100/ report.getLunchRate())+"");
+                double y = report.getLunchRate();
+                if(!isShow[1])
+                    y += report.getSnackAfternoonRate();
+                holder.calorie_plan_need.setText(Math.round(y)+"");
+                holder.calorie_plan_radio.setText(Math.round(item.getCalories_take() * 100/ y)+"");
                 break;
             case "supper":
                 holder.plan_title.setText("晚餐");
                 holder.plan_time.setText("18:30 PM");
-                holder.calorie_plan_need.setText(Math.round(report.getDinnerRate())+"");
-                holder.calorie_plan_radio.setText(Math.round(item.getCalories_take() * 100/ report.getDinnerRate())+"");
+                double z = report.getDinnerRate();
+                if(!isShow[2])
+                    z += report.getSnackNightRate();
+                holder.calorie_plan_need.setText(Math.round(z)+"");
+                holder.calorie_plan_radio.setText(Math.round(item.getCalories_take() * 100/ z)+"");
                 break;
             case "add_meal_01":
                 holder.plan_title.setText("加餐");

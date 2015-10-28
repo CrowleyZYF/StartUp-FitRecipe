@@ -1,6 +1,8 @@
 package cn.fitrecipe.android.fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -155,7 +157,12 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         //获取报告
         report = FrDbHelper.getInstance(getActivity()).getReport();
         //初始化一日多餐
-        adapter = new PlanElementAdapter(this, items, report);
+        SharedPreferences sp = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
+        boolean[] isShow = new boolean[3];
+        isShow[0] = sp.getBoolean("has_add_meal_01", true);
+        isShow[1] = sp.getBoolean("has_add_meal_02", true);
+        isShow[2] = sp.getBoolean("has_add_meal_03", true);
+        adapter = new PlanElementAdapter(this, items, report, isShow);
         plans.setAdapter(adapter);
         if(report == null) {
             hideLoading(true);
@@ -376,7 +383,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                     public void handle(Object... res) {
                         //Toast.makeText(getActivity(), "默认设置自定义计划", Toast.LENGTH_SHORT).show();
                         int id = (Integer) res[0];
-                        plans.put(finalStart, Common.gerneratePersonalPlan(id));
+                        plans.put(finalStart, Common.gerneratePersonalPlan(id, getActivity()));
                         processDatePlan(finalStart, finalEnd, plans, finalNowDate, isPre);
                         hideLoading(false);
                     }
@@ -425,7 +432,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                     data.put(str, datePlan);
                 }
                 else {
-                    datePlan = Common.gernerateEmptyPlan(str);
+                    datePlan = Common.gernerateEmptyPlan(str, getActivity());
                     data.put(str, datePlan);
                 }
             }else {
@@ -464,8 +471,9 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             other_plan_days.setVisibility(datePlan.getPlan_name().equals("personal plan") ? View.GONE : View.VISIBLE);
             other_plan_days.setText(indexDate != null && indexDate.containsKey(str) ? indexDate.get(str) : "");
             items = datePlan.getItems();
-            for(int i = 0; i < items.size(); i++)
+            for (int i = 0; i < items.size(); i++)
                 items.get(i).setDate(datePlan.getDate());
+
             if (punchData.containsKey(str)) {
                 List<PunchRecord> prs = punchData.get(str);
                 for (int i = 0; i < prs.size(); i++) {
@@ -528,10 +536,25 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                     }
                 }
             }
+            SharedPreferences sp = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
+            boolean[] isShow = new boolean[3];
+            isShow[0] = sp.getBoolean("has_add_meal_01", true);
+            isShow[1] = sp.getBoolean("has_add_meal_02", true);
+            isShow[2] = sp.getBoolean("has_add_meal_03", true);
+            for(int i = 0; i < items.size(); ) {
+                if(items.get(i).getType().equals("add_meal_01") && (!isShow[0]))
+                    items.remove(i);
+                else if(items.get(i).getType().equals("add_meal_02") && (!isShow[1]))
+                        items.remove(i);
+                    else  if(items.get(i).getType().equals("add_meal_03") && (!isShow[2]))
+                            items.remove(i);
+                            else
+                                i++;
+            }
             if (pointer != 0)
-                adapter.setData(items, datePlan.getPlan_name().equals("personal plan") ? true : false, false);//未来
+                adapter.setData(items, datePlan.getPlan_name().equals("personal plan") ? true : false, false, isShow);//未来
             else
-                adapter.setData(items, datePlan.getPlan_name().equals("personal plan") ? true : false, true);//过去
+                adapter.setData(items, datePlan.getPlan_name().equals("personal plan") ? true : false, true, isShow);//过去
             return true;
         }
         else {
@@ -625,6 +648,11 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             FrApplication.getInstance().setPr(null);
             switchPlan(pointer, 0);
         }
+
+        if(FrApplication.getInstance().isSettingChanged()) {
+            switchPlan(pointer, 0);
+            FrApplication.getInstance().setIsSettingChanged(false);
+        }
     }
 
     public void scrollToTop(){
@@ -640,7 +668,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                     datePlan = plan.getDatePlans().get(0);
                     datePlan.setPlan_id(plan.getId());
                 }else {
-                    datePlan = Common.gernerateEmptyPlan(str);
+                    datePlan = Common.gernerateEmptyPlan(str, getActivity());
                 }
             }else {
                 int th = i % plan.getTotal_days();

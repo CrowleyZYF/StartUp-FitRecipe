@@ -119,7 +119,7 @@ public class PunchDayAdapter extends RecyclerView.Adapter<PunchDayAdapter.PunchD
                 holder = new ViewHolder();
                 convertView = View.inflate(context, R.layout.fragment_record_punch_item, null);
                 holder.punch_photo = (ImageView) convertView.findViewById(R.id.punch_photo);
-                holder.punch_day = (TextView) convertView.findViewById(R.id.punch_day);
+                holder.punch_th = (TextView) convertView.findViewById(R.id.punch_th);
                 holder.punch_type = (TextView) convertView.findViewById(R.id.punch_type);
                 holder.punch_calories = (TextView) convertView.findViewById(R.id.punch_calories);
                 //holder.punch_piechart = (PieChartView) convertView.findViewById(R.id.punch_piechart);
@@ -129,7 +129,7 @@ public class PunchDayAdapter extends RecyclerView.Adapter<PunchDayAdapter.PunchD
                 FrApplication.getInstance().getMyImageLoader().displayImage(holder.punch_photo, punchItems.get(position).getDefaultImageCover());
             else
                 FrApplication.getInstance().getMyImageLoader().displayImage(holder.punch_photo, punchItems.get(position).getImageCover());
-            holder.punch_day.setText((Common.getDiff(datePlan.getDate(), punchItems.get(position).getDate())+1) + "");
+            holder.punch_th.setText(punchItems.get(position).getTh() + "");
             switch (punchItems.get(position).getType()) {
                 case "breakfast" :
                     holder.punch_type.setText("早餐");    break;
@@ -165,7 +165,7 @@ public class PunchDayAdapter extends RecyclerView.Adapter<PunchDayAdapter.PunchD
 
         class ViewHolder {
             ImageView punch_photo;
-            TextView punch_day;
+            TextView punch_th;
             TextView punch_type;
             TextView punch_calories;
             //PieChartView punch_piechart;

@@ -313,7 +313,7 @@ public class AddToPlanActivity extends Activity implements View.OnClickListener 
 
     private void postprpcess(int plan_id) {
         if(plan_id == -1) {
-            items = Common.generateDatePlan(Common.getDate());
+            items = Common.generateDatePlan(Common.getDate(), AddToPlanActivity.this);
             try {
                 update(plan_id);
             } catch (JSONException e) {

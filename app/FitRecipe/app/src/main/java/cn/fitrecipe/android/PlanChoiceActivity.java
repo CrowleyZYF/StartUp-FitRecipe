@@ -225,7 +225,7 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
                                             @Override
                                             public void handle(Object... res) {
                                                 int id = (Integer)res[0];
-                                                SeriesPlan plan1 = Common.gerneratePersonalPlan(id);
+                                                SeriesPlan plan1 = Common.gerneratePersonalPlan(id, PlanChoiceActivity.this);
                                                 plan1.setJoined_date(Common.getDate());
                                                 FrDbHelper.getInstance(PlanChoiceActivity.this).joinPlan(plan1);
                                                 FrApplication.getInstance().setPlanInUse(plan1);

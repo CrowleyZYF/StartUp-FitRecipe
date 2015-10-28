@@ -112,7 +112,7 @@ public class PlanInfoViewPagerAdapter extends PagerAdapter {
                                 public void handle(Object... res) {
                                     choice_join_btn.setText("选用");
                                     int id = (Integer)res[0];
-                                    SeriesPlan plan1 = Common.gerneratePersonalPlan(id);
+                                    SeriesPlan plan1 = Common.gerneratePersonalPlan(id, context);
                                     plan1.setJoined_date(Common.getDate());
                                     FrDbHelper.getInstance(context).joinPlan(plan1);
                                     FrApplication.getInstance().setPlanInUse(plan1);

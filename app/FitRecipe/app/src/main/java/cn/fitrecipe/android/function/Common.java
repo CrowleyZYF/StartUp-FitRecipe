@@ -1,6 +1,7 @@
 package cn.fitrecipe.android.function;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.widget.Toast;
 
@@ -48,14 +49,6 @@ public class Common {
         return false;
     }
 
-
-
-    public static void toastNetworkError(Context context) {
-        String error_info = context.getResources().getString(R.string.network_error);
-        if(!isOpenNetwork(context))
-            error_info = context.getResources().getString(R.string.network_close);
-        Toast.makeText(context, error_info, Toast.LENGTH_SHORT).show();
-    }
 
     public static String getSomeDay(String str, int days) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -155,39 +148,44 @@ public class Common {
      *  generate a custom dateplan
      * @return list of dateplanitem
      */
-    public static ArrayList<DatePlanItem> generateDatePlan(String date) {
+    public static ArrayList<DatePlanItem> generateDatePlan(String date, Context context) {
         ArrayList<DatePlanItem> items = new ArrayList<>();
         DatePlanItem item1 = new DatePlanItem();
         item1.setTime("08:30am");
         item1.setType("breakfast");
         item1.setDate(date);
         item1.setDefaultImageCover("drawable://" + R.drawable.breakfast);
-
+        items.add(item1);
 
         DatePlanItem item2 = new DatePlanItem();
         item2.setTime("10:30am");
         item2.setType("add_meal_01");
         item2.setDate(date);
         item2.setDefaultImageCover("drawable://" + R.drawable.add_meal_01);
-
+        items.add(item2);
 
         DatePlanItem item3 = new DatePlanItem();
         item3.setTime("12:30am");
         item3.setType("lunch");
         item3.setDate(date);
         item3.setDefaultImageCover("drawable://" + R.drawable.lunch);
+        items.add(item3);
+
 
         DatePlanItem item4 = new DatePlanItem();
         item4.setTime("15:30am");
         item4.setType("add_meal_02");
         item4.setDate(date);
         item4.setDefaultImageCover("drawable://" + R.drawable.add_meal_02);
+        items.add(item4);
+
 
         DatePlanItem item5 = new DatePlanItem();
         item5.setTime("18:30am");
         item5.setType("supper");
         item5.setDate(date);
         item5.setDefaultImageCover("drawable://" + R.drawable.dinner);
+        items.add(item5);
 
 
         DatePlanItem item6 = new DatePlanItem();
@@ -195,36 +193,31 @@ public class Common {
         item6.setType("add_meal_03");
         item6.setDate(date);
         item6.setDefaultImageCover("drawable://" + R.drawable.add_meal_03);
-
-        items.add(item1);
-        items.add(item2);
-        items.add(item3);
-        items.add(item4);
-        items.add(item5);
         items.add(item6);
+
         return items;
     }
 
 
-    public static SeriesPlan gerneratePersonalPlan(int id) {
+    public static SeriesPlan gerneratePersonalPlan(int id, Context context) {
         SeriesPlan plan = new SeriesPlan();
         plan.setId(id);
         plan.setTitle("personal plan");
         plan.setTotal_days(1);
         ArrayList<DatePlan> datePlans = new ArrayList<>();
-        datePlans.add(gernerateEmptyPlan(Common.getDate()));
+        datePlans.add(gernerateEmptyPlan(Common.getDate(), context));
         plan.setDatePlans(datePlans);
         return plan;
     }
 
-    public static DatePlan gernerateEmptyPlan(String date) {
+    public static DatePlan gernerateEmptyPlan(String date, Context context) {
         DatePlan datePlan = new DatePlan();
 //        datePlan.setIsPunch(false);
         datePlan.setPlan_name("personal plan");
 //        datePlan.setInBasket(false);
         datePlan.setDate(date);
         datePlan.setPlan_id(-1);
-        datePlan.setItems(Common.generateDatePlan(date));
+        datePlan.setItems(Common.generateDatePlan(date, context));
         return datePlan;
     }
 
