@@ -42,7 +42,7 @@
                     android:layout_marginTop="0dp"
                     android:layout_gravity="center_vertical"
                     android:hint="@string/search_food"
-                    android:text="牛"
+                    android:text=""
                     android:textColor="@color/login_input_text_color"
                     android:textSize="12sp"
                     android:layout_marginRight="5dp"

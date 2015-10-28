@@ -53,15 +53,6 @@
                             android:layout_marginTop="-2dp"
                             android:layout_marginRight="4dp"/>
 
-                        <ImageView
-                            android:id="@+id/punch_btn"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:padding="6dp"
-                            android:src="@drawable/icon_punch_blue"
-                            android:layout_toLeftOf="@id/report_btn"
-                            android:layout_marginTop="-2dp"/>
-
                     </RelativeLayout>
 
                     <LinearLayout
@@ -73,9 +64,10 @@
                         android:paddingBottom="5dp">
 
                         <TextView
+                            android:id="@+id/punch_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="111"
+                            android:text="0"
                             android:textSize="60sp"
                             android:textColor="@color/login_input_text_color"/>
 
@@ -86,7 +78,8 @@
                             android:textSize="15sp"
                             android:textColor="@color/login_input_text_color"
                             android:layout_gravity="bottom"
-                            android:layout_marginTop="15dp"/>
+                            android:layout_marginTop="15dp"
+                            android:layout_marginLeft="5dp"/>
 
 
                     </LinearLayout>
@@ -94,6 +87,7 @@
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/change_plan_btn"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:text="切换计划"
@@ -119,7 +113,7 @@
 
                 <RelativeLayout
                     android:id="@+id/plan_title"
-                    android:layout_width="250dp"
+                    android:layout_width="280dp"
                     android:layout_height="50dp">
 
                     <ImageView
@@ -132,7 +126,7 @@
                         android:layout_centerVertical="true"/>
 
                     <LinearLayout
-                        android:layout_width="180dp"
+                        android:layout_width="210dp"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
                         android:layout_centerInParent="true">
@@ -226,14 +220,6 @@
                         android:layout_centerVertical="true"/>
 
                 </RelativeLayout>
-
-                <ImageView
-                    android:id="@+id/shopping_btn"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:padding="15dp"
-                    android:layout_alignParentRight="true"
-                    android:src="@drawable/icon_shopping_gray"/>
 
                 <ImageView
                     android:id="@+id/video_btn"
