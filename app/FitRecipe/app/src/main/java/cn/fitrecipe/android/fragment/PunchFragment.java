@@ -213,13 +213,16 @@ public class PunchFragment extends Fragment
         Collections.sort(datePlans, new Comparator<DatePlan>() {
             @Override
             public int compare(DatePlan lhs, DatePlan rhs) {
-                return Common.CompareDate(lhs.getDate(), rhs.getDate());
+                return -Common.CompareDate(lhs.getDate(), rhs.getDate());
             }
         });
         int x = total;
         for(int i = 0; i < datePlans.size(); i++) {
             List<DatePlanItem> tmp = datePlans.get(i).getItems();
-            for(int j = 0; j < tmp.size(); j++)
+            /*for(int j = 0; j < tmp.size(); j++)
+                if(tmp.get(j).isPunch())
+                    tmp.get(j).setTh(x--);*/
+            for(int j = tmp.size()-1; j >= 0; j--)
                 if(tmp.get(j).isPunch())
                     tmp.get(j).setTh(x--);
             datePlans.get(i).setItems(tmp);

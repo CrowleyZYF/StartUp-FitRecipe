@@ -46,6 +46,7 @@ import java.util.List;
 
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
+import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.UI.PieChartView;
@@ -139,10 +140,36 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
         left_btn = (ImageView) findViewById(R.id.left_btn);
         right_btn = (TextView) findViewById(R.id.right_btn);
 
-        if(action.equals("share"))
+
+        punch_day = (TextView) findViewById(R.id.punch_day);
+        //punch_day.setText((Common.getDiff(Common.getDate(), report.getUpdatetime()) + 1) +"");
+        if(action.equals("share")) {
             right_btn.setText("分享");
-        else
+            punch_day.setText(getIntent().getStringExtra("time"));
+        }else {
             right_btn.setText("发布");
+            GetRequest request = new GetRequest(FrServerConfig.getPunchCountUrl(), FrApplication.getInstance().getToken(),
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject res) {
+                            if(res != null && res.has("data")) {
+                                try {
+                                    int data = res.getJSONObject("data").getInt("count") + 1;
+                                    punch_day.setText(data+"");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError volleyError) {
+                            punch_day.setText("0");
+                        }
+                    });
+            FrRequest.getInstance().request(request);
+        }
 
         author_name = (TextView) findViewById(R.id.author_name);
         author_name.setText(FrApplication.getInstance().getAuthor().getNick_name());
@@ -156,8 +183,6 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
             goal_type.setText("增肌ing");
         else
             goal_type.setText("减脂ing");
-        punch_day = (TextView) findViewById(R.id.punch_day);
-        punch_day.setText((Common.getDiff(Common.getDate(), report.getUpdatetime()) + 1) +"");
         punch_type = (TextView) findViewById(R.id.punch_type);
         switch (item.getType()) {
             case "breakfast" :
@@ -246,10 +271,13 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
                 finish();
                 break;
             case R.id.right_btn:
-                if(action.equals("share"))
-                    share();
-                else
+                if(action.equals("share")) {
+                    //share();
+                    Common.toBeContinuedDialog(this).show();
+                }else{
                     publish();
+                    finish();
+                }
                 break;
         }
     }

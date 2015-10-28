@@ -41,6 +41,7 @@ import cn.fitrecipe.android.NutritionActivity;
 import cn.fitrecipe.android.PlanChoiceActivity;
 import cn.fitrecipe.android.PlayerActivity;
 import cn.fitrecipe.android.R;
+import cn.fitrecipe.android.ReportActivity;
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.dao.FrDbHelper;
 import cn.fitrecipe.android.entity.BasketRecord;
@@ -68,7 +69,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     private List<DatePlanItem> items;
     private DatePlan datePlan;
     private PlanElementAdapter adapter;
-    private ImageView video_btn, next_btn, prev_btn;
+    private ImageView video_btn, next_btn, prev_btn, report_btn;
     private TextView plan_status_day, plan_status, diy_days, plan_name;
     private TextView other_plan_days;
 
@@ -153,12 +154,14 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         //punch_count
         punch_count = (TextView) v.findViewById(R.id.punch_count);
         change_plan_btn = (TextView) v.findViewById(R.id.change_plan_btn);
+        report_btn = (ImageView) v.findViewById(R.id.report_btn);
     }
 
     private void initEvent() {
         video_btn.setOnClickListener(this);
         next_btn.setOnClickListener(this);
         prev_btn.setOnClickListener(this);
+        report_btn.setOnClickListener(this);
         change_plan_btn.setOnClickListener(this);
     }
 
@@ -262,15 +265,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             punch_count.setText(data.getString("count"));
             planMap = new ConcurrentHashMap<>();
             count = new AtomicInteger(0);
-            if(!data.getString("lastJoined").equals("null")) {
-                count.incrementAndGet();
-                requestPlanDetails(data, data.getJSONObject("lastJoined").getString("joined_date"), data.getJSONObject("lastJoined").getJSONObject("plan").getInt("id"), start, end, isPre);
-            }
-            JSONArray calendar = data.getJSONArray("calendar");
-            for(int i = 0; i < calendar.length(); i++) {
-                count.incrementAndGet();
-                requestPlanDetails(data, calendar.getJSONObject(i).getString("joined_date"), calendar.getJSONObject(i).getJSONObject("plan").getInt("id"), start, end, isPre);
-            }
+
             JSONArray punchs = data.getJSONArray("punch");
             for(int i = 0; i < punchs.length(); i++) {
                 String date = punchs.getJSONObject(i).getString("date");
@@ -295,6 +290,16 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                     prs.add(pr);
                     punchData.put(date, prs);
                 }
+            }
+
+            if(!data.getString("lastJoined").equals("null")) {
+                count.incrementAndGet();
+                requestPlanDetails(data, data.getJSONObject("lastJoined").getString("joined_date"), data.getJSONObject("lastJoined").getJSONObject("plan").getInt("id"), start, end, isPre);
+            }
+            JSONArray calendar = data.getJSONArray("calendar");
+            for(int i = 0; i < calendar.length(); i++) {
+                count.incrementAndGet();
+                requestPlanDetails(data, calendar.getJSONObject(i).getString("joined_date"), calendar.getJSONObject(i).getJSONObject("plan").getInt("id"), start, end, isPre);
             }
             //新用户完全没有记录 直接创建一个新的自定义计划
             if(data.getString("lastJoined").equals("null") && calendar.length()==0){
@@ -782,6 +787,9 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 if(switchPlan(pointer - 1, -1)) {
                     pointer--;
                 }
+                break;
+            case R.id.report_btn:
+                startActivity(new Intent(getActivity(), ReportActivity.class));
                 break;
         }
     }
