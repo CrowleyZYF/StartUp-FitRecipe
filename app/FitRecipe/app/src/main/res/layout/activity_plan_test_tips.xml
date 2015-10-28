@@ -1,19 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/white">
     
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/question_05_tips"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        
+        <cn.fitrecipe.android.UI.SquareLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/fat_man_tips"
-            android:layout_gravity="center"
-            />
+            android:background="@color/white">
 
-    </RelativeLayout>
+            <ImageView
+                android:id="@+id/fat_women_tips"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/fat_women_tips"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                />
+
+            <ImageView
+                android:id="@+id/fat_man_tips"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/fat_man_tips"
+                android:layout_gravity="center"
+                />
+
+        </cn.fitrecipe.android.UI.SquareLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tips：根据图片估算自己的体脂含量"
+            android:textSize="12sp"
+            android:padding="10dp"
+            android:textColor="@color/gray"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="bottom"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/question_06_tips"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="轻体力劳动：办公室工作、修理电器钟表、售货员、酒店服务员、讲课等。"
+            android:textSize="16sp"
+            android:padding="10dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="中体力劳动：学生日常活动、驾驶员、电工安装、车床操作、金工切割等。"
+            android:textSize="16sp"
+            android:padding="10dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="重体力劳动：非机械化农业劳动、炼钢、舞蹈、体育活动、装卸、采矿等。"
+            android:textSize="16sp"
+            android:padding="10dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tips：根据提示选择自己的职业劳动强度"
+            android:textSize="12sp"
+            android:padding="10dp"
+            android:textColor="@color/gray"
+            android:layout_marginBottom="10dp" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@drawable/theme_line" />
+
+    <TextView
+        android:id="@+id/tips_sure_btn"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:gravity="center"
+        android:text="确定"
+        android:textSize="20sp"
+        android:textColor="@color/base_color"
+        android:background="@drawable/list_selector"/>
 
 </LinearLayout>

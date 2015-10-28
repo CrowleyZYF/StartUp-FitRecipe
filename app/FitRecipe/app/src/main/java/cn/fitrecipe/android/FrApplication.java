@@ -13,19 +13,14 @@ import java.util.Map;
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.ImageLoader.MyImageLoader;
 import cn.fitrecipe.android.dao.AuthorDao;
-import cn.fitrecipe.android.dao.BasketDao;
 import cn.fitrecipe.android.dao.FrDbHelper;
 import cn.fitrecipe.android.dao.HomeDataDao;
 import cn.fitrecipe.android.entity.Author;
 import cn.fitrecipe.android.entity.BasketRecord;
-import cn.fitrecipe.android.entity.Collection;
-import cn.fitrecipe.android.entity.DatePlanItem;
 import cn.fitrecipe.android.entity.HomeData;
 import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.PunchRecord;
-import cn.fitrecipe.android.entity.Recipe;
 import cn.fitrecipe.android.entity.Report;
-import cn.fitrecipe.android.entity.Series;
 import cn.fitrecipe.android.entity.SeriesPlan;
 import cn.fitrecipe.android.function.Common;
 
@@ -77,7 +72,7 @@ public class FrApplication extends Application {
         //init network
         FrRequest.getInstance().init(this);
 
-//        initYouku();
+        initYouku();
         instance = this;
     }
 

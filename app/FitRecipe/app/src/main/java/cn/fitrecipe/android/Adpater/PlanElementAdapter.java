@@ -154,6 +154,7 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
 //                    ((ImageView)v).setImageResource(R.drawable.icon_plan_punch_active);
 //                    item.setIsPunch(true);
                     Intent intent = new Intent(fragment.getActivity(), ChoosePhotoActivity.class);
+                    intent.putExtra("from", "punch");
                     intent.putExtra("item", item);
                     fragment.startActivity(intent);
                     //Toast.makeText(fragment.getActivity(), "打卡", Toast.LENGTH_SHORT).show();

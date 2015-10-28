@@ -54,6 +54,7 @@
                     android:textSize="14sp"/>
 
                 <ImageView
+                    android:id="@+id/BMI_intro_btn"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:padding="5dp"
@@ -139,6 +140,7 @@
                     android:textSize="14sp"/>
 
                 <ImageView
+                    android:id="@+id/BMR_intro_btn"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:padding="5dp"
@@ -220,6 +222,7 @@
                     android:textSize="14sp"/>
 
                 <ImageView
+                    android:id="@+id/TDEE_intro_btn"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:padding="5dp"
@@ -301,6 +304,7 @@
                     android:textSize="14sp"/>
 
                 <ImageView
+                    android:id="@+id/heart_intro_btn"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:padding="5dp"

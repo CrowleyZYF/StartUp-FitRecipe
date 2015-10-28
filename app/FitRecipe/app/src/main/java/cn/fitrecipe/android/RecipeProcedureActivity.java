@@ -10,15 +10,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-
-
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.fitrecipe.android.Adpater.ProcedureCardAdapter;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.entity.Procedure;
-import cn.fitrecipe.android.function.Common;
 
 public class RecipeProcedureActivity extends Activity implements View.OnClickListener{
 
@@ -84,8 +81,8 @@ public class RecipeProcedureActivity extends Activity implements View.OnClickLis
                 this.finish();
                 break;
             case R.id.right_btn:
-                //playVideo();
-                Common.toBeContinuedDialog(this);
+                playVideo();
+                //Common.toBeContinuedDialog(this);
                 break;
             default:
         }

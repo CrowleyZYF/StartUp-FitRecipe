@@ -55,7 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
-            android:text="@string/plan_test_question_05_tips"
+            android:text="@string/plan_test_question_06_tips"
             android:textSize="20sp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"

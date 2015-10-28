@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +16,7 @@ import java.text.DecimalFormat;
 import cn.fitrecipe.android.UI.DietStructureView;
 import cn.fitrecipe.android.UI.PieChartView;
 import cn.fitrecipe.android.entity.Report;
+import cn.fitrecipe.android.function.Common;
 
 /**
  * Created by 奕峰 on 2015/5/8.
@@ -23,6 +25,7 @@ import cn.fitrecipe.android.entity.Report;
 public class ReportActivity extends Activity implements View.OnClickListener{
 
     private Report report;
+    private LinearLayout diet_container;
     private ImageView report_sex;
     private TextView report_age, report_height, report_weight, report_fat;
     private TextView report_bmi_number, report_base_intake_number, report_bmi_judgement, report_bmr_number, report_burning_number_min, report_burning_number_max, report_exercise_type;
@@ -40,6 +43,8 @@ public class ReportActivity extends Activity implements View.OnClickListener{
     private ImageView back_btn, restart_btn;
     private TextView check_plan_btn;
     private String last;
+
+    private ImageView BMI_intro_btn, BMR_intro_btn, TDEE_intro_btn, heart_intro_btn;
 
     //view
     @Override
@@ -72,9 +77,17 @@ public class ReportActivity extends Activity implements View.OnClickListener{
     private void initEvent() {
         check_plan_btn.setOnClickListener(this);
         restart_btn.setOnClickListener(this);
+        BMI_intro_btn.setOnClickListener(this);
+        BMR_intro_btn.setOnClickListener(this);
+        TDEE_intro_btn.setOnClickListener(this);
+        heart_intro_btn.setOnClickListener(this);
     }
 
     private void initView() {
+        BMI_intro_btn = (ImageView) findViewById(R.id.BMI_intro_btn);
+        BMR_intro_btn = (ImageView) findViewById(R.id.BMR_intro_btn);
+        TDEE_intro_btn = (ImageView) findViewById(R.id.TDEE_intro_btn);
+        heart_intro_btn = (ImageView) findViewById(R.id.heart_intro_btn);
         report_sex = (ImageView) findViewById(R.id.report_sex);
         if(report.getGender() == 0)
             report_sex.setImageResource(R.drawable.icon_male);
@@ -150,8 +163,7 @@ public class ReportActivity extends Activity implements View.OnClickListener{
         DecimalFormat df2 = new DecimalFormat("0.00");//这样为保持2位
         if(report.getWeight() < report.getWeightGoal()) {
             report_target_weight_weekly.setText("每周目标：+" + df2.format((double) (7 * (report.getWeightGoal() - report.getWeight()) / report.getDaysToGoal())) + "kg");
-        }
-            else
+        }else
             report_target_weight_weekly.setText("每周目标：" + df2.format((double) (7 * (report.getWeightGoal() - report.getWeight()) / report.getDaysToGoal())) + "kg");
 
 
@@ -184,6 +196,9 @@ public class ReportActivity extends Activity implements View.OnClickListener{
 
         dietStructureView = (DietStructureView) findViewById(R.id.dietStructureView);
         dietStructureView.setValue(report);
+        dietStructureView.setVisibility(View.GONE);
+        diet_container = (LinearLayout) findViewById(R.id.diet_container);
+        diet_container.setVisibility(View.GONE);
 
         water_min = (TextView) findViewById(R.id.water_min);
         water_min.setText(Math.round(report.getWaterIntakeMin() * 1000) + "g");
@@ -254,20 +269,35 @@ public class ReportActivity extends Activity implements View.OnClickListener{
             case R.id.back_btn:
                 if(!last.equals("me")) {
                     editor.putBoolean("isSpecial", true);
+                    editor.commit();
+                    finish();
                 }
                 break;
             case R.id.check_plan:
                 editor.putBoolean("isSpecial", true);
+                editor.commit();
+                finish();
                 break;
             case R.id.restart_btn:
                 Intent intent = new Intent(ReportActivity.this, PlanTestActivity.class);
                 startActivity(intent);
+                finish();
+                break;
+            case R.id.BMI_intro_btn:
+                Common.infoDialog(this, "BMI", "BMI指数（即身体质量指数)是目前国际上常用的衡量人体胖瘦程度以及是否健康的一个标准。通常分为5个等级，低于18.5属于过轻，18.5~24.99属于正常，25~28属于过重，28~32属于肥胖，高于32属于非常肥胖。另外需要注意的是，BMI指数并不适合增肌人士作为身体状况的参考。").show();
+                break;
+            case R.id.BMR_intro_btn:
+                Common.infoDialog(this, "BMR", "基础代谢率（BMR）是指人体在清醒而又极端安静的状态下，不受肌肉活动、环境温度、食物及精神紧张等影响时的能量代谢率。简单来说，就是一个人即便一天躺在床上什么都不做都会消耗的热量。").show();
+                break;
+            case R.id.TDEE_intro_btn:
+                Common.infoDialog(this, "TDEE", "每日热量总消耗（TDEE　Total Daily Energy Expenditure）是指根据工作强度或者运动频率估算得出的身体每日所需的热量，一般而言，增肌增重阶段，每日摄入热量可高于该数值；减脂减肥阶段，可低于该数值；维持体型阶段，可等于该数值。").show();
+                break;
+            case R.id.heart_intro_btn:
+                Common.infoDialog(this, "燃脂心率", "即人体在进行燃脂运动时保持的心率状态。").show();
                 break;
             default:
                 break;
         }
-        editor.commit();
-        finish();
     }
 
 

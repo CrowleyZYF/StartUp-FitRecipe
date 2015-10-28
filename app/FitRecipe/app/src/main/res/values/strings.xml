@@ -159,7 +159,7 @@
     <string name="plan_test_question_05_03_woman">30%~40%</string>
     <string name="plan_test_question_05_04_woman">40%以上</string>
     <string name="plan_test_question_06">6. 你所处职业的劳动强度？</string>
-    <string name="plan_test_question_06_tips">劳动强度分级</string>
+    <string name="plan_test_question_06_tips">查看劳动强度分级</string>
     <string name="plan_test_question_06_01">轻度劳动</string>
     <string name="plan_test_question_06_02">中度劳动</string>
     <string name="plan_test_question_06_03">重度劳动</string>
@@ -205,7 +205,7 @@
     <string name="report_base_info_burning">燃脂心率</string>
     <string name="report_base_info_best_weight">最佳体重</string>
     <string name="report_base_info_weight_range">健康体重范围</string>
-    <string name="report_nutrition_info_rate">宏量营养元素比 ( 蛋白质：碳水化合物：脂类 )</string>
+    <string name="report_nutrition_info_rate">宏量营养供能比 ( 蛋白质：碳水化合物：脂类 )</string>
     <string name="report_nutrition_info_diet">膳食结构</string>
     <string name="report_nutrition_info_nutrition">营养元素</string>
     <string name="login_tip">请登录！</string>

@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -20,8 +19,6 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.Toast;
 
 import com.umeng.fb.FeedbackAgent;
 
@@ -33,7 +30,6 @@ import cn.fitrecipe.android.fragment.MeFragment;
 import cn.fitrecipe.android.fragment.PlanFragment;
 import cn.fitrecipe.android.function.Common;
 import cn.fitrecipe.android.service.GetHomeDataService;
-import pl.tajchert.sample.DotsTextView;
 
 public class MainActivity extends FragmentActivity implements OnClickListener
 {
@@ -187,7 +183,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                         }
                         transaction.show(frPlanFragment);
                         left_btn.setImageResource(R.drawable.icon_nutrition);
-                        right_btn.setImageResource(R.drawable.icon_change);
+                        right_btn.setImageResource(R.drawable.icon_shopping_white);
                         frTabs.get(i).setBackgroundColor(getResources().getColor(R.color.active_color));
                         tab_index = 1;
                         isInit[i]=true;
@@ -277,7 +273,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                         Common.toBeContinuedDialog(this).show();
                         break;
                     case 1:
-                        startActivity(new Intent(this, PlanChoiceActivity.class));
+                        //startActivity(new Intent(this, PlanChoiceActivity.class));
+                        startActivity(new Intent(this, IngredientActivity.class));
                         break;
                     case 2:
                         startActivity(new Intent(this, SetActivity.class));

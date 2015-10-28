@@ -82,7 +82,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="天"
+                            android:text="次"
                             android:textSize="15sp"
                             android:textColor="@color/login_input_text_color"
                             android:layout_gravity="bottom"
@@ -115,7 +115,6 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:orientation="horizontal"
                 android:background="@color/white">
 
                 <RelativeLayout
@@ -235,6 +234,14 @@
                     android:padding="15dp"
                     android:layout_alignParentRight="true"
                     android:src="@drawable/icon_shopping_gray"/>
+
+                <ImageView
+                    android:id="@+id/video_btn"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:padding="15dp"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/icon_video_gray"/>
 
             </RelativeLayout>
 

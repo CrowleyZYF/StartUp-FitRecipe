@@ -354,6 +354,7 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
             params.put("age", userEvaluation.getAge());
             params.put("height", userEvaluation.getHeight());
             params.put("weight", userEvaluation.getWeight());
+            params.put("roughFat", 0);
             params.put("preciseFat", userEvaluation.getPreciseFat());
             params.put("goalType", userEvaluation.getGoalType());
             params.put("weightGoal", userEvaluation.getWeightGoal());

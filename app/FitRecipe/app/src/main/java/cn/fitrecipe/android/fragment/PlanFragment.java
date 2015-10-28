@@ -102,6 +102,10 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
 
     private ScrollView plan_scrollview;
 
+    private long startTime;
+
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -200,14 +204,18 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
      * @param isPre
      */
     private void getDataFromServer(final String start, final String end, final boolean isPre) {
+        //startTime = System.currentTimeMillis();
         GetRequest request = new GetRequest(FrServerConfig.getDatePlanUrl(start, end), FrApplication.getInstance().getToken(),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject res) {
                         if(res != null && res.has("data")) {
                             try {
+                                //long time = System.currentTimeMillis();
+                                //Toast.makeText(getActivity(), "拿到数据："+(time - startTime)+"s", Toast.LENGTH_LONG).show();
                                 JSONObject data = res.getJSONObject("data");
                                 processData(data, start, end, isPre);
+                                //Toast.makeText(getActivity(), "总时间："+(System.currentTimeMillis() - startTime)+"s" + "处理时间："+(System.currentTimeMillis() - time)+"s", Toast.LENGTH_LONG).show();
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -239,12 +247,12 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             count = new AtomicInteger(0);
             if(!data.getString("lastJoined").equals("null")) {
                 count.incrementAndGet();
-                requestPlanDetails(data.getJSONObject("lastJoined").getString("joined_date"), data.getJSONObject("lastJoined").getJSONObject("plan").getInt("id"), start, end, isPre);
+                requestPlanDetails(data, data.getJSONObject("lastJoined").getString("joined_date"), data.getJSONObject("lastJoined").getJSONObject("plan").getInt("id"), start, end, isPre);
             }
             JSONArray calendar = data.getJSONArray("calendar");
             for(int i = 0; i < calendar.length(); i++) {
                 count.incrementAndGet();
-                requestPlanDetails(calendar.getJSONObject(i).getString("joined_date"), calendar.getJSONObject(i).getJSONObject("plan").getInt("id"), start, end, isPre);
+                requestPlanDetails(data, calendar.getJSONObject(i).getString("joined_date"), calendar.getJSONObject(i).getJSONObject("plan").getInt("id"), start, end, isPre);
             }
             JSONArray punchs = data.getJSONArray("punch");
             for(int i = 0; i < punchs.length(); i++) {
@@ -286,8 +294,22 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
      * @param end
      * @param isPre
      */
-    private void requestPlanDetails(final String join_date, int plan_id, final String start, final String end, final boolean isPre) {
-        GetRequest request = new GetRequest(FrServerConfig.getPlanDetails(plan_id), null,
+    private void requestPlanDetails(JSONObject data, final String join_date, int plan_id, final String start, final String end, final boolean isPre) {
+        try {
+            JSONArray plans = data.getJSONArray("plans");
+            for (int i =0; i<plans.length(); i++){
+                if (plans.getJSONObject(i).getString("id").equals(plan_id+"")){
+                    planMap.put(join_date, JsonParseHelper.getSeriesPlanFromJson(plans.getJSONObject(i)));//和日期对应
+                    count.decrementAndGet();
+                    if(count.compareAndSet(0, 0))
+                        postprocess(start, end, isPre);
+                    i=plans.length()+1;
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        /*GetRequest request = new GetRequest(FrServerConfig.getPlanDetails(plan_id), null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject res) {
@@ -310,7 +332,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                         RequestErrorHelper.toast(getActivity(), volleyError);
                     }
                 });
-        FrRequest.getInstance().request(request);
+        FrRequest.getInstance().request(request);*/
     }
 
     /**
