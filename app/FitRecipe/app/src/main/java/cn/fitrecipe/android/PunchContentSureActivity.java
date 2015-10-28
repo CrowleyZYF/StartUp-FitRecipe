@@ -276,7 +276,6 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
                     Common.toBeContinuedDialog(this).show();
                 }else{
                     publish();
-                    finish();
                 }
                 break;
         }
@@ -394,6 +393,7 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
                     FrApplication.getInstance().setPr(pr);
                     Intent intent = new Intent(PunchContentSureActivity.this, RecordActivity.class);
                     startActivity(intent);
+                    finish();
                 }
             }
         }, new Response.ErrorListener() {

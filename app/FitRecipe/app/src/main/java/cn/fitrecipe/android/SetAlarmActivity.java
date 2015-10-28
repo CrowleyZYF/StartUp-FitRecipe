@@ -57,7 +57,7 @@ public class SetAlarmActivity extends Activity implements View.OnClickListener {
     final String[] nowTime = {"", "07:30", "10:00", "12:00", "15:00", "17:30", "22:00"};
     final String[] preferenceKeyText = {"", "breakfast_time", "add_meal_01_time", "lunch_time", "add_meal_02_time", "dinner_time", "add_meal_03_time"};
     final String[] preferenceKeySwitch = {"", "breakfast_check", "add_meal_01_check", "lunch_check", "add_meal_02_check", "dinner_check", "add_meal_03_check"};
-    final String[] strs = {"", "早餐时间", "上午加餐时间", "午餐时间", "下午加餐时间", "晚餐时间", "夜宵时间"};
+    final String[] strs = {"", "早餐", "上午加餐", "午餐", "下午加餐", "晚餐", "夜宵"};
 
 
     @Override
@@ -140,7 +140,7 @@ public class SetAlarmActivity extends Activity implements View.OnClickListener {
                 AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                 for(int i = 1; i <=6; i++) {
                     Intent intent = new Intent(this, AlarmActivity.class);
-                    intent.putExtra("msg", strs[i]);
+                    intent.putExtra("msg", "该吃" + strs[i] + "了^_^");
                     PendingIntent pi = PendingIntent.getActivity(this, i, intent, 0);
                     alarmManager.cancel(pi);
                     if(preferenceWidgetSwitch[i].isChecked()) {
@@ -161,10 +161,6 @@ public class SetAlarmActivity extends Activity implements View.OnClickListener {
 
                     }
                 }
-
-
-
-                Toast.makeText(this, "修改完成！", Toast.LENGTH_SHORT).show();
                 FrApplication.getInstance().setIsSettingChanged(true);
                 finish();
                 break;
