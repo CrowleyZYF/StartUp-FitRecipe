@@ -69,7 +69,7 @@ public class LandingPageActivity extends Activity implements ViewPager.OnPageCha
                     @Override
                     public void onResponse(JSONObject res) {
                         try {
-                            Toast.makeText(LandingPageActivity.this, params.getInt("phone")+"", 10000).show();
+                            Toast.makeText(LandingPageActivity.this, params.getInt("phone")+"", Toast.LENGTH_LONG).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

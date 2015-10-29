@@ -9,7 +9,8 @@ import org.json.JSONObject;
 public class FrServerConfig {
 
     //server host
-    public final static String HOST = "https://fitrecipe.cn";
+    //public final static String HOST = "https://fitrecipe.cn";
+    public final static String HOST = "http://121.41.41.13";
 
 
     //login
