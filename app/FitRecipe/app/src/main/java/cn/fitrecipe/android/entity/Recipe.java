@@ -2,9 +2,6 @@ package cn.fitrecipe.android.entity;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.field.ForeignCollectionField;
-import com.j256.ormlite.table.DatabaseTable;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,7 +10,6 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 
 import cn.fitrecipe.android.Http.FrServerConfig;
@@ -51,6 +47,7 @@ public class Recipe implements Serializable{
     private double calories;
     private int collection_count;
     private boolean has_collected;
+    private int collect_id;
     private int comment_count;
     private String tags;
 
@@ -190,6 +187,9 @@ public class Recipe implements Serializable{
         if(data.has("has_collected"))
             recipe.setHas_collected(data.getBoolean("has_collected"));
 
+        if (data.has("collect_id"))
+            recipe.setCollect_id(data.getInt("collect_id"));
+
         if(data.has("comment_set")) {
             String jsona = data.getJSONArray("comment_set").toString();
             ArrayList<Comment>  comments = new Gson().fromJson(jsona, new TypeToken<ArrayList<Comment>>() {
@@ -217,6 +217,14 @@ public class Recipe implements Serializable{
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getCollect_id() {
+        return collect_id;
+    }
+
+    public void setCollect_id(int id) {
+        this.collect_id = id;
     }
 
 

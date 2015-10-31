@@ -1,16 +1,13 @@
 package cn.fitrecipe.android.UI;
 
 import android.content.Context;
-import android.hardware.TriggerEvent;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import cn.fitrecipe.android.FollowActivity;
 import cn.fitrecipe.android.R;
 
 
@@ -118,7 +115,8 @@ public class BorderScrollView extends ScrollView {
 
     public void setCompleteMore() {
         isScroll = true;
-        footView.setVisibility(View.GONE);
+        if (footView!=null)
+            footView.setVisibility(View.GONE);
     }
 
     public void setNoMore() {

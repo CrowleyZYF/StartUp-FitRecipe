@@ -1,5 +1,6 @@
 package cn.fitrecipe.android.fragment;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -50,6 +51,7 @@ public class ThemeFragment extends Fragment
     private RecyclerViewLayoutManager themeRecipeLayoutManager;
 
     List<Theme> themeCards;
+    private ArrayList<Integer> themeCardsId;
     private int lastid = -1;
 
     @Override
@@ -63,6 +65,20 @@ public class ThemeFragment extends Fragment
         initEvent();
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        SharedPreferences preferences=getActivity().getSharedPreferences("user", getActivity().MODE_PRIVATE);
+        if(themeCardsId != null && preferences.getBoolean("hasDelete", false) && themeCardsId.indexOf(preferences.getInt("delete_id", -1))!=-1){
+            themeCards.remove(themeCardsId.indexOf(preferences.getInt("delete_id", -1)));
+            themeCardsId.remove(themeCardsId.indexOf(preferences.getInt("delete_id", -1)));
+            themeCardAdapter.notifyDataSetChanged();
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("hasDelete", false);
+            editor.commit();
+        }
     }
 
     private void initEvent() {
@@ -93,10 +109,9 @@ public class ThemeFragment extends Fragment
                         borderScrollView.setCompleteMore();
                     try {
                         JSONArray data = res.getJSONArray("data");
-                        if(data == null || data.length() == 0) {
-                            Toast.makeText(getActivity(), "没有多余", Toast.LENGTH_SHORT).show();
-                        }else
+                        if(!(data == null || data.length() == 0)) {
                             processData(data);
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -113,16 +128,23 @@ public class ThemeFragment extends Fragment
 
     private void processData(JSONArray data)  {
         List<Collection> collections = new Gson().fromJson(data.toString(), new TypeToken<List<Collection>>(){}.getType());
-        if(themeCards == null)
+        if(themeCards == null) {
             themeCards = new ArrayList<>();
+            themeCardsId = new ArrayList<>();
+        }
+        if (lastid==-1){
+            themeCards.clear();
+            themeCardsId.clear();
+        }
         if(collections != null && collections.size() > 0) {
             lastid = collections.get(collections.size() - 1).getId();
             for(int i = 0; i < collections.size(); i++) {
                 themeCards.add(collections.get(i).getTheme());
+                themeCardsId.add(collections.get(i).getId());
             }
         }
         if(themeCardAdapter == null) {
-            themeCardAdapter = new ThemeCardAdapter(getActivity(), themeCards);
+            themeCardAdapter = new ThemeCardAdapter(getActivity(), themeCards, themeCardsId, true);
             themeRecipeRecyclerView.setAdapter(themeCardAdapter);
         }else
             themeCardAdapter.notifyDataSetChanged();

@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -127,30 +126,38 @@ public class RegisterActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
         case R.id.back_btn:
-            if(backActivity != null && backActivity.equals("landingPage")){
+            /*if(backActivity.equals("landingPage")){
                 startActivity(new Intent(this, LandingPageActivity.class));
                 finish();
-            }else{
+            }else if (backActivity.equals("login")){
+                Intent temp = new Intent(this, LoginActivity.class);
+                temp.putExtra("back","register");
+                startActivity(temp);
                 finish();
-            }
+            }else {
+                finish();
+            }*/
+            finish();
             break;
         case R.id.login_btn:
-            startActivity(new Intent(this, LoginActivity.class));
-            break;
         case R.id.login_linearlayout:
+            /*Intent temp = new Intent(this, LoginActivity.class);
+            temp.putExtra("back","register");*/
             startActivity(new Intent(this, LoginActivity.class));
             break;
 		case R.id.get_code://获取验证码
             if(get_enable.getVisibility()!=View.GONE){
-                if(!TextUtils.isEmpty(account.getText().toString())){
+                if(TextUtils.isEmpty(account.getText().toString())){
+                    Common.errorDialog(this, "注册失败", "手机号不能为空").show();
+                } else if (account.getText().toString().length()!=11){
+                    Common.errorDialog(this, "注册失败", "手机号位数为11位").show();
+                }else {
                     SMSSDK.getVerificationCode("86",account.getText().toString());
                     phString=account.getText().toString();
                     get_enable.setVisibility(View.GONE);
                     get_disable.setVisibility(View.VISIBLE);
                     countdownRunnable=new ThreadShow();
                     new Thread(countdownRunnable).start();
-                }else {
-                    Common.errorDialog(this, "注册失败", "电话不能为空").show();
                 }
             }
 			break;
@@ -291,21 +298,6 @@ public class RegisterActivity extends Activity implements OnClickListener {
             }
         }
     };
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            if(backActivity.equals("landingPage")){
-                startActivity(new Intent(this, LandingPageActivity.class));
-                finish();
-            }else{
-                finish();
-            }
-            return false;
-        }else {
-            return super.onKeyDown(keyCode, event);
-        }
-    }
 
     private void registerSuccess(JSONObject data) throws JSONException {
         Author author = new Gson().fromJson(data.toString(), Author.class);

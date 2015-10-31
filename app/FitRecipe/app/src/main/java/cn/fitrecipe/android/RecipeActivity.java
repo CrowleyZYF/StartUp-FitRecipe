@@ -2,6 +2,7 @@ package cn.fitrecipe.android;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +48,6 @@ import cn.fitrecipe.android.function.RequestErrorHelper;
 import pl.tajchert.sample.DotsTextView;
 
 public class RecipeActivity extends Activity implements View.OnClickListener, PopupWindow.OnDismissListener {
-    private ScrollView recipe_scrollView;
     private ScrollView recipeContent;
     private LinearLayout loadingInterface;
     private DotsTextView dotsTextView;
@@ -122,6 +122,8 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
     private boolean open = false;
     //食谱是否已经收藏
     private boolean isCollected = false;
+    //收藏记录的ID
+    private int collect_id = -1;
 
     //the recipe displayed
     private Recipe recipe;
@@ -131,6 +133,10 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
     private List<Component> dataList_copy;
 
     private String plan_name;
+
+    //检测是否进行了取消收藏的操作
+    private boolean hasDelete = false;
+    private int delete_id = -1;
 
     // 首先在您的Activity中添加如下成员变量
     final UMSocialService mController = UMServiceFactory.getUMSocialService("com.umeng.share");
@@ -143,21 +149,18 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         setContentView(R.layout.activity_recipe_container);
         //获取ID
         Intent intent =getIntent();
-//        Map<String,Object> params=new HashMap<String, Object>();
-//        params.put("id", );
         String id = intent.getStringExtra("id");
         //初始化
         initView();
         loadData(FrServerConfig.getRecipeDetails(id));
         initEvent();
 
-        recipe_scrollView.smoothScrollTo(0, 0);
+        recipeContent.smoothScrollTo(0, 0);
     }
 
 
 
     private void initView() {
-        recipe_scrollView = (ScrollView) findViewById(R.id.recipe_scrollview);
         recipe_pic = (ImageView) findViewById(R.id.recipe_pic);
         recipe_tags = (TextView) findViewById(R.id.recipe_tags);
         recipe_name = (TextView) findViewById(R.id.recipe_name);
@@ -177,7 +180,6 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         ingredient_listView = (LinearLayoutForListView) findViewById(R.id.recipe_ingredient_list);
         nutrition_listView = (LinearLayoutForListView) findViewById(R.id.recipe_nutrition_list);
         addto_plan = (TextView) findViewById(R.id.put_in_basket);
-//        basketStateChange();
         toggle_btn = (LinearLayout) findViewById(R.id.toggle_btn);
 
         check_procedure_btn = (TextView) findViewById(R.id.check_procedure);
@@ -210,7 +212,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         }else{
             recipeContent.setVisibility(View.VISIBLE);
             float_set.setVisibility(View.VISIBLE);
-            recipe_scrollView.smoothScrollTo(0, 0);
+            recipeContent.smoothScrollTo(0, 0);
         }
     }
 
@@ -502,11 +504,16 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
 
     public void collect_recipe() {
         if(isCollected){
-            PostRequest request = new PostRequest(FrServerConfig.getDeleteCollectionUrl("recipe", recipe.getId()), FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
+            PostRequest request = new PostRequest(FrServerConfig.getDeleteCollectionUrl("recipe", recipe.getCollect_id()), FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject res) {
                     //Toast.makeText(RecipeActivity.this, "取消收藏!", Toast.LENGTH_SHORT).show();
                     collect_btn.setIcon(R.drawable.icon_like_noshadow);
+                    SharedPreferences preferences=getSharedPreferences("user", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putBoolean("hasDelete", true);
+                    editor.putInt("delete_id", recipe.getCollect_id());
+                    editor.commit();
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -533,6 +540,11 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                 public void onResponse(JSONObject res) {
                     //Toast.makeText(RecipeActivity.this, "收藏成功!", Toast.LENGTH_SHORT).show();
                     collect_btn.setIcon(R.drawable.icon_like_green);
+                    SharedPreferences preferences=getSharedPreferences("user", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putBoolean("hasDelete", false);
+                    editor.putInt("delete_id", -1);
+                    editor.commit();
                 }
             }, new Response.ErrorListener() {
                 @Override

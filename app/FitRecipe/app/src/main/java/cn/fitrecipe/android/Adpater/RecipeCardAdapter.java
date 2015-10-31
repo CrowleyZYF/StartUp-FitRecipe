@@ -9,12 +9,23 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
+import org.json.JSONObject;
+
 import java.util.List;
 
 import cn.fitrecipe.android.FrApplication;
+import cn.fitrecipe.android.Http.FrRequest;
+import cn.fitrecipe.android.Http.FrServerConfig;
+import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.RecipeActivity;
 import cn.fitrecipe.android.entity.Recipe;
+import cn.fitrecipe.android.function.Common;
+import cn.fitrecipe.android.function.RequestErrorHelper;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
  * Created by 奕峰 on 2015/4/24.
@@ -22,12 +33,23 @@ import cn.fitrecipe.android.entity.Recipe;
 public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.RecipeCardViewHolder> implements View.OnClickListener {
 
     private List<Recipe> recipeCardsList;
+    private List<Integer> recipeCardsListID;
     private Context context;
+    private boolean isCollect;
 
 
     public RecipeCardAdapter(Context context, List<Recipe> recipeCardsList) {
         this.context = context;
         this.recipeCardsList = recipeCardsList;
+        this.recipeCardsListID = null;
+        this.isCollect = false;
+    }
+
+    public RecipeCardAdapter(Context context, List<Recipe> recipeCardsList, List<Integer> recipeCardsListID, boolean isCollect) {
+        this.context = context;
+        this.recipeCardsList = recipeCardsList;
+        this.recipeCardsListID = recipeCardsListID;
+        this.isCollect = isCollect;
     }
 
     @Override
@@ -42,7 +64,7 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Re
     }
 
     @Override
-    public void onBindViewHolder(RecipeCardAdapter.RecipeCardViewHolder contactViewHolder, int i) {
+    public void onBindViewHolder(RecipeCardAdapter.RecipeCardViewHolder contactViewHolder, final int i) {
         Recipe rc = recipeCardsList.get(i);
         contactViewHolder.recipe_id.setText(rc.getId()+"");
         contactViewHolder.recipe_name.setText(rc.getTitle());
@@ -74,8 +96,44 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Re
         contactViewHolder.recipe_calorie.setText("热量： " + Math.round(rc.getCalories()) +"kcal/100g");
         contactViewHolder.recipe_time.setText("烹饪时间： " + rc.getDuration() + " min");
         contactViewHolder.recipe_like.setText("收藏 " + rc.getCollection_count());
-//        contactViewHolder.recipe_background.setBackground (this.context.getResources().getDrawable(rc.getRecipe_background()));
         FrApplication.getInstance().getMyImageLoader().displayImage(contactViewHolder.recipe_background, rc.getThumbnail());
+        if (isCollect){
+            contactViewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Common.infoDialog(context, "取消收藏", "确认取消" + recipeCardsList.get(i).getTitle() + "的收藏?")
+                            .setCancelText("取消")
+                            .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                    sweetAlertDialog.dismiss();
+                                }
+                            })
+                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(final SweetAlertDialog sweetAlertDialog) {
+                                    String url = FrServerConfig.getDeleteCollectionUrl("recipe", recipeCardsListID.get(i));
+                                    PostRequest request = new PostRequest(url, FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
+                                        @Override
+                                        public void onResponse(JSONObject res) {
+                                            recipeCardsList.remove(i);
+                                            recipeCardsListID.remove(i);
+                                            notifyDataSetChanged();
+                                            sweetAlertDialog.dismiss();
+                                        }
+                                    }, new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError volleyError) {
+                                            RequestErrorHelper.toast(context, volleyError);
+                                        }
+                                    });
+                                    FrRequest.getInstance().request(request);
+                                }
+                            }).show();
+                    return false;
+                }
+            });
+        }
     }
 
     @Override
@@ -104,9 +162,11 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Re
         protected TextView recipe_calorie;
         protected TextView recipe_like;
         protected RelativeLayout recipe_background;
+        public View itemView;
 
         public RecipeCardViewHolder(View itemView) {
             super(itemView);
+            this.itemView = itemView;
             recipe_name =  (TextView) itemView.findViewById(R.id.recipe_name);
             recipe_id = (TextView) itemView.findViewById(R.id.recipe_id);
             recipe_function = (TextView)  itemView.findViewById(R.id.recipe_function);

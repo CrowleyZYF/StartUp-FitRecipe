@@ -51,7 +51,10 @@ public class CollectActivity extends FragmentActivity implements View.OnClickLis
     private ImageView collect_theme_active_line_1;
     private ImageView collect_theme_active_line_2;
 
-    private List<Collection> collections;
+
+
+    private Boolean hasDelete = false;
+    private int delete_id = -1;
 
 
     @Override
@@ -69,6 +72,15 @@ public class CollectActivity extends FragmentActivity implements View.OnClickLis
             setSelect(0);
         }
     }
+
+    public Boolean getHasDelete() {
+        return hasDelete;
+    }
+
+    public int getDelete_id() {
+        return delete_id;
+    }
+
     private void initEvent() {
         back_btn.setOnClickListener(this);
         me_collect_recipe.setOnClickListener(this);
@@ -154,5 +166,4 @@ public class CollectActivity extends FragmentActivity implements View.OnClickLis
             transaction.hide(recipe_fragment);
         }
     }
-
 }

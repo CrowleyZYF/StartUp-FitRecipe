@@ -100,7 +100,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@drawable/line"
+                android:background="@drawable/line_white"
                 android:layout_marginBottom="5dp"/>
 
             <LinearLayout
@@ -146,7 +146,7 @@
                     <ImageView
                         android:layout_width="14dp"
                         android:layout_height="14dp"
-                        android:background="@drawable/icon_question"
+                        android:background="@drawable/icon_question_white"
                         />
                     </LinearLayout>
                 </LinearLayout>
@@ -154,7 +154,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@drawable/line"/>
+                android:background="@drawable/line_white"/>
 
             </LinearLayout>
 
@@ -190,8 +190,8 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/other_part"
-                android:layout_marginBottom="10dp"/>
+                android:src="@drawable/icon_otherpart_white"
+                android:layout_marginBottom="15dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -207,10 +207,10 @@
                     android:gravity="center_horizontal">
 
                     <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
                         android:src="@drawable/icon_wechat"
-                        android:layout_marginBottom="3dp"/>
+                        android:layout_marginBottom="5dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -229,10 +229,10 @@
                     android:gravity="center_horizontal">
 
                     <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
                         android:src="@drawable/icon_sina"
-                        android:layout_marginBottom="3dp"/>
+                        android:layout_marginBottom="5dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -251,10 +251,10 @@
                     android:gravity="center_horizontal">
 
                     <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
                         android:src="@drawable/icon_qq"
-                        android:layout_marginBottom="3dp"/>
+                        android:layout_marginBottom="5dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -275,7 +275,7 @@
     <LinearLayout
         android:id="@+id/register_linearlayout"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="55dp"
         android:background="@color/login_color"
         android:gravity="center_horizontal|center_vertical"
         android:orientation="horizontal">

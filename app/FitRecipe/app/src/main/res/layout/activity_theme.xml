@@ -14,8 +14,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:background="@color/base_color"
-            android:gravity="center">
+            android:background="@color/base_color">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -35,15 +34,6 @@
                 android:layout_centerVertical="true"
                 android:src="@drawable/icon_back_white"
                 android:background="@drawable/icon_selector"/>
-
-            <ImageView
-                android:id="@+id/follow_icon"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:padding="15dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/icon_like_noshadow"/>
         </RelativeLayout>
 
         <cn.fitrecipe.android.UI.BorderScrollView
@@ -59,7 +49,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="@color/background_color">
+                android:background="@color/background_color"
+                android:layout_marginBottom="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -90,13 +81,15 @@
 
                     <TextView
                         android:id="@+id/follow_btn"
-                        android:layout_width="250dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp"
-                        android:gravity="center_horizontal"
+                        android:layout_marginLeft="35dp"
+                        android:layout_marginRight="35dp"
+                        android:gravity="center"
                         android:text="@string/follow"
-                        android:textSize="14sp"
+                        android:textSize="16sp"
                         android:textColor="#ffffff"
                         android:background="@color/active_color"
                         android:layout_gravity="center"
