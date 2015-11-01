@@ -297,7 +297,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                                 if (res != null && res.has("data") && res.getJSONObject("data").has("plan")) {
                                     plan_name = res.getJSONObject("data").getJSONObject("plan").getString("title");
                                     if (plan_name.equals("personal plan")) {
-                                        addto_plan.setEnabled(true);
+                                        //addto_plan.setEnabled(true);
                                         addto_plan.setTextColor(getResources().getColor(R.color.active_color));
                                         toggle_btn.setBackground(getResources().getDrawable(R.drawable.recipe_button_border));
                                     }
@@ -416,6 +416,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         //check_btn.setOnClickListener(this);
         comment_btn.setOnClickListener(this);
         share_btn.setOnClickListener(this);
+        addto_plan.setEnabled(true);
         addto_plan.setOnClickListener(this);
     }
 
@@ -492,11 +493,15 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                 break;
             }
             case R.id.put_in_basket:
-                Intent intent = new Intent(this, AddToPlanActivity.class);
-                intent.putExtra("recipe", recipe);
-                intent.putExtra("id", recipe.getId());
-                intent.putExtra("amount", recipe.getTotal_amount());
-                startActivity(intent);
+                if (plan_name.equals("personal plan")){
+                    Intent intent = new Intent(this, AddToPlanActivity.class);
+                    intent.putExtra("recipe", recipe);
+                    intent.putExtra("id", recipe.getId());
+                    intent.putExtra("amount", recipe.getTotal_amount());
+                    startActivity(intent);
+                }else{
+                    Common.infoDialog(this,"添加失败","只有处于自定义计划下，才可以添加到计划哦~").show();
+                }
                 break;
 
         }

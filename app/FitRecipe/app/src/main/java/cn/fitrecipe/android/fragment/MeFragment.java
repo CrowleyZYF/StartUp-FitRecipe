@@ -27,6 +27,7 @@ import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.RecordActivity;
 import cn.fitrecipe.android.ReportActivity;
 import cn.fitrecipe.android.entity.Report;
+import cn.fitrecipe.android.function.Common;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -73,6 +74,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
                             try {
                                 int data = res.getJSONObject("data").getInt("count");
                                 me_punch.setText("打卡次数："+data);
+                                Common.setPunchCount(getActivity(), data);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
