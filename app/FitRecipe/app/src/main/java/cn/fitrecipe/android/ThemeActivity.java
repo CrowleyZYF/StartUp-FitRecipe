@@ -2,6 +2,7 @@ package cn.fitrecipe.android;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -51,9 +52,10 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
     Theme theme;
 
     private TextView follow_btn;
-    private ImageView follow_icon;
     //食谱是否已经收藏
     private boolean isCollected = false;
+    //删除收藏记录的ID
+    private int collect_id = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,14 +68,14 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
         theme = (Theme) intent.getSerializableExtra("theme");
         try {
             initView();
-            getCollectionInfo();
+            initData();
         } catch (JSONException e) {
             e.printStackTrace();
         }
         initEvent();
     }
 
-    private void getCollectionInfo() {
+    private void initData() {
         GetRequest request = new GetRequest(FrServerConfig.getThemeInfo(theme.getId()), FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {
@@ -82,7 +84,14 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
                         JSONObject data = res.getJSONObject("data");
                         if (data != null) {
                             isCollected = data.getBoolean("has_collected");
-                            initData();
+                            collect_id = data.getInt("collect_id");
+                            if (isCollected){
+                                follow_btn.setText(R.string.cancel_follow);
+                                follow_btn.setBackground(getResources().getDrawable(R.color.disable_color));
+                            }else{
+                                follow_btn.setText(R.string.follow);
+                                follow_btn.setBackground(getResources().getDrawable(R.color.active_color));
+                            }
                             getData();
                         }
                     } catch (JSONException e) {
@@ -99,18 +108,6 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
         FrRequest.getInstance().request(request);
     }
 
-    private void initData() {
-        if(isCollected){
-            follow_btn.setText(R.string.cancel_follow);
-            follow_btn.setBackground(getResources().getDrawable(R.color.disable_color));
-            follow_icon.setImageResource(R.drawable.icon_like_green);
-        }else{
-            follow_btn.setText(R.string.follow);
-            follow_btn.setBackground(getResources().getDrawable(R.color.active_color));
-            follow_icon.setImageResource(R.drawable.icon_like_noshadow);
-        }
-    }
-
     private void getData() throws JSONException {
         //get Data from network
         String token = FrApplication.getInstance().getToken();
@@ -119,7 +116,6 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
         params.put("start", start);
         params.put("num", num);
         String url = FrServerConfig.getThemeDetailsUrl(params);
-//        Toast.makeText(this, url, Toast.LENGTH_LONG).show();
         GetRequest request = new GetRequest(url, token, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {
@@ -189,7 +185,6 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
         dotsTextView = (DotsTextView) findViewById(R.id.dots);
 
         follow_btn = (TextView) findViewById(R.id.follow_btn);
-        follow_icon = (ImageView) findViewById(R.id.follow_icon);
     }
 
     private void hideLoading(boolean isError, String errorMessage){
@@ -205,11 +200,9 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
     private void initEvent() {
         back_btn.setOnClickListener(this);
         follow_btn.setOnClickListener(this);
-        follow_icon.setOnClickListener(this);
         themeContent.setOnBorderListener(new BorderScrollView.OnBorderListener() {
             @Override
             public void onBottom() {
-//                Toast.makeText(ThemeActivity.this, "onBottom", Toast.LENGTH_LONG).show();
                 try {
                     getData();
                 } catch (JSONException e) {
@@ -231,8 +224,8 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
                 finish();
                 break;
             case R.id.follow_btn:
-            case R.id.follow_icon:
                 collect_recipe();
+                break;
             default:
                 break;
         }
@@ -244,14 +237,17 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
             return;
         }
         if(isCollected){
-            String url = FrServerConfig.getDeleteCollectionUrl("theme", theme.getId());
+            String url = FrServerConfig.getDeleteCollectionUrl("theme", collect_id);
             PostRequest request = new PostRequest(url, FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject res) {
-                    //Toast.makeText(ThemeActivity.this, "取消收藏!", Toast.LENGTH_SHORT).show();
                     follow_btn.setText(R.string.follow);
                     follow_btn.setBackground(getResources().getDrawable(R.color.active_color));
-                    follow_icon.setImageResource(R.drawable.icon_like_noshadow);
+                    SharedPreferences preferences=getSharedPreferences("user", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putBoolean("hasDelete", true);
+                    editor.putInt("delete_id", collect_id);
+                    editor.commit();
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -272,10 +268,13 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
             PostRequest request = new PostRequest(url, FrApplication.getInstance().getToken(), params, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject res) {
-                    //Toast.makeText(ThemeActivity.this, "收藏成功!", Toast.LENGTH_SHORT).show();
                     follow_btn.setText(R.string.cancel_follow);
                     follow_btn.setBackground(getResources().getDrawable(R.color.disable_color));
-                    follow_icon.setImageResource(R.drawable.icon_like_green);
+                    SharedPreferences preferences=getSharedPreferences("user", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putBoolean("hasDelete", false);
+                    editor.putInt("delete_id", -1);
+                    editor.commit();
                 }
             }, new Response.ErrorListener() {
                 @Override

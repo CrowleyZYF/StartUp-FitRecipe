@@ -21,14 +21,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.fitrecipe.android.Adpater.RecipeCardAdapter;
 import cn.fitrecipe.android.Adpater.ThemeCardAdapter;
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.UI.BorderScrollView;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
-import cn.fitrecipe.android.entity.Recipe;
 import cn.fitrecipe.android.entity.Theme;
 import cn.fitrecipe.android.function.RequestErrorHelper;
 import pl.tajchert.sample.DotsTextView;
@@ -60,7 +58,6 @@ public class ThemeListActivity extends Activity implements View.OnClickListener{
         //get Data from network
         String token = FrApplication.getInstance().getToken();
         String url = FrServerConfig.getAllTheme(start, num);
-//        Toast.makeText(this, url, Toast.LENGTH_LONG).show();
         GetRequest request = new GetRequest(url, token, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {

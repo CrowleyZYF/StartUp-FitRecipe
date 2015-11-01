@@ -25,6 +25,7 @@
             android:src="@drawable/icon_plan_shopping"/>
 
         <ImageView
+            android:id="@+id/dish_line_1"
             android:layout_width="1dp"
             android:layout_height="15dp"
             android:layout_marginLeft="25dp"
@@ -38,6 +39,7 @@
             android:src="@drawable/icon_plan_punch"/>
 
         <ImageView
+            android:id="@+id/dish_line_2"
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="25dp"

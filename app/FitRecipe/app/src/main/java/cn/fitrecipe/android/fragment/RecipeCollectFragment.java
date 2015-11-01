@@ -1,5 +1,6 @@
 package cn.fitrecipe.android.fragment;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -49,6 +50,7 @@ public class RecipeCollectFragment extends Fragment
     private RecipeCardAdapter recipeCardAdapter;
     private RecyclerViewLayoutManager collectRecipeLayoutManager;
     List<Recipe> recipeCards;
+    List<Integer> recipeCardsID;
     private int lastid = -1;
 
     @Override
@@ -60,6 +62,20 @@ public class RecipeCollectFragment extends Fragment
         getData();
         initEvent();
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        SharedPreferences preferences=getActivity().getSharedPreferences("user", getActivity().MODE_PRIVATE);
+        if(recipeCardsID != null && preferences.getBoolean("hasDelete", false) && recipeCardsID.indexOf(preferences.getInt("delete_id", -1))!=-1){
+            recipeCards.remove(recipeCardsID.indexOf(preferences.getInt("delete_id", -1)));
+            recipeCardsID.remove(recipeCardsID.indexOf(preferences.getInt("delete_id", -1)));
+            recipeCardAdapter.notifyDataSetChanged();
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("hasDelete", false);
+            editor.commit();
+        }
     }
 
     private void initView(View view) {
@@ -127,16 +143,23 @@ public class RecipeCollectFragment extends Fragment
 
     private void processData(JSONArray data)  {
         List<Collection> collections = new Gson().fromJson(data.toString(), new TypeToken<List<Collection>>(){}.getType());
-        if(recipeCards == null)
+        if(recipeCards == null) {
             recipeCards = new ArrayList<>();
+            recipeCardsID = new ArrayList<>();
+        }
+        if (lastid == -1){
+            recipeCards.clear();
+            recipeCardsID.clear();
+        }
         if(collections != null && collections.size() > 0) {
             lastid = collections.get(collections.size() - 1).getId();
             for(int i = 0; i < collections.size(); i++) {
                 recipeCards.add(collections.get(i).getRecipe());
+                recipeCardsID.add(collections.get(i).getId());
             }
         }
         if(recipeCardAdapter == null) {
-            recipeCardAdapter = new RecipeCardAdapter(getActivity(), recipeCards);
+            recipeCardAdapter = new RecipeCardAdapter(getActivity(), recipeCards, recipeCardsID, true);
             collectRecipeRecyclerView.setAdapter(recipeCardAdapter);
         }else
             recipeCardAdapter.notifyDataSetChanged();

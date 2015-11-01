@@ -5,8 +5,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -40,6 +43,8 @@ public class LandingPageActivity extends Activity implements ViewPager.OnPageCha
     private TextView frIndexButton;
     private View layout;
     private List<Bitmap> bitmaps;
+    // 定义一个变量，来标识是否退出
+    private static boolean isExit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +74,7 @@ public class LandingPageActivity extends Activity implements ViewPager.OnPageCha
                     @Override
                     public void onResponse(JSONObject res) {
                         try {
-                            Toast.makeText(LandingPageActivity.this, params.getInt("phone")+"", 10000).show();
+                            Toast.makeText(LandingPageActivity.this, params.getInt("phone")+"", Toast.LENGTH_LONG).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -159,15 +164,11 @@ public class LandingPageActivity extends Activity implements ViewPager.OnPageCha
         switch (v.getId()){
             case R.id.login_button:
                 Intent intent = new Intent(this, LoginActivity.class);
-                intent.putExtra("back","landingPage");
                 startActivity(intent);
-                LandingPageActivity.this.finish();
                 break;
             case R.id.register_button:
                 Intent intent2 = new Intent(this, RegisterActivity.class);
-                intent2.putExtra("back","landingPage");
                 startActivity(intent2);
-                LandingPageActivity.this.finish();
                 break;
             case R.id.index_button:
                 startActivity(new Intent(this, MainActivity.class));
@@ -184,5 +185,34 @@ public class LandingPageActivity extends Activity implements ViewPager.OnPageCha
             if(!bitmaps.get(i).isRecycled())
                 bitmaps.get(i).recycle();;
         super.onDestroy();
+    }
+
+    private static Handler mHandler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            isExit = false;
+        }
+    };
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            exit();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void exit() {
+        if (!isExit) {
+            isExit = true;
+            Toast.makeText(getApplicationContext(), "再一次将退出健食记", Toast.LENGTH_SHORT).show();
+            // 利用handler延迟发送更改状态信息
+            mHandler.sendEmptyMessageDelayed(0, 2000);
+        } else {
+            this.finish();
+        }
     }
 }

@@ -10,6 +10,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rey.material.widget.CheckBox;
 
@@ -118,7 +119,14 @@ public class CategoryActivity extends Activity implements View.OnClickListener, 
                 break;
             case R.id.right_btn:
             case R.id.filter_sure_btn:
-                mRightMenu.toggle();
+                updateFilter();
+                if(!(filter_check[0]||filter_check[1]||filter_check[2]||filter_check[3])){
+                    Toast.makeText(this,"至少勾选一种特色",Toast.LENGTH_SHORT).show();
+                }else if(!(filter_check[4]||filter_check[5]||filter_check[6])){
+                    Toast.makeText(this,"至少勾选一种用餐时间",Toast.LENGTH_SHORT).show();
+                }else{
+                    mRightMenu.toggle();
+                }
                 break;
             default:
                 break;

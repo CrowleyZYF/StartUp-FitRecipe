@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -32,6 +33,7 @@ import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
 import cn.fitrecipe.android.R;
+import cn.fitrecipe.android.UI.BorderScrollView;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.entity.DatePlan;
 import cn.fitrecipe.android.entity.DatePlanItem;
@@ -52,10 +54,11 @@ public class PunchFragment extends Fragment
 
     private LinearLayout loadingInterface;
     private DotsTextView dotsTextView;
-    private ScrollView info_container;
+    private BorderScrollView info_container;
     private Map<String, DatePlan> map;
     private List<DatePlan> datePlans;
     private int total;
+    private int start = 0, num = 15;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -78,39 +81,55 @@ public class PunchFragment extends Fragment
 
         loadingInterface = (LinearLayout)view.findViewById(R.id.loading_interface);
         dotsTextView = (DotsTextView) view.findViewById(R.id.dots);
-        info_container = (ScrollView) view.findViewById(R.id.info_container);
+        info_container = (BorderScrollView) view.findViewById(R.id.info_container);
+        info_container.setOnBorderListener(new BorderScrollView.OnBorderListener() {
+            @Override
+            public void onBottom() {
+                getData();
+            }
+
+            @Override
+            public void onTop() {
+
+            }
+        });
     }
 
     private void getData() {
-
-        if(!Common.isOpenNetwork(getActivity())) {
-            getPunchDateFromLocal();
-        }else {
-            String today = Common.getDate();
-            String url = FrServerConfig.getPunchListUrl(Common.dateFormat(Common.getSomeDay(today, -15)), Common.dateFormat(today));
-            GetRequest request = new GetRequest(url, FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject res) {
-                    if (res != null && res.has("data")) {
-                        try {
-                            JSONObject data = res.getJSONObject("data");
-                            total = data.getInt("count");
-                            processData(data.getJSONArray("punchs"));
+        String today = Common.getDate();
+        String url = FrServerConfig.getPunchListUrl(Common.dateFormat(Common.getSomeDay(today, - start - num)), Common.dateFormat(Common.getSomeDay(today, -start)));
+        GetRequest request = new GetRequest(url, FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject res) {
+                if (res != null && res.has("data")) {
+                    try {
+                        JSONObject data = res.getJSONObject("data");
+                        total = data.getInt("count");
+                        processData(data.getJSONArray("punchs"));
+                        if(start == 0)
                             hideLoading(false, "");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                        else {
+                            if (data.getJSONArray("punchs").length() == 0) {
+                                info_container.setNoMore();
+                                Toast.makeText(getActivity(), "没有多余的主题", Toast.LENGTH_SHORT).show();
+                            }
+                            info_container.setCompleteMore();
                         }
+                        if(data.length() > 0)
+                            start += num;
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError volleyError) {
-                    RequestErrorHelper.toast(getActivity(), volleyError);
-                    getPunchDateFromLocal();
-                }
-            });
-            FrRequest.getInstance().request(request);
-        }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                RequestErrorHelper.toast(getActivity(), volleyError);
+                getPunchDateFromLocal();
+            }
+        });
+        FrRequest.getInstance().request(request);
     }
 
     private void processData(JSONArray data) throws JSONException {

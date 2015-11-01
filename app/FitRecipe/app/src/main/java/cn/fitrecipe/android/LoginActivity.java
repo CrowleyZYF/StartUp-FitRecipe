@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -205,6 +204,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             Common.errorDialog(this, "登陆失败", "未连接网络").show();
         }else if(accountString.equals("")){
             Common.errorDialog(this, "登陆失败", "手机号不得为空").show();
+        }else if(accountString.length()!=11){
+            Common.errorDialog(this, "登陆失败", "手机号位数为11位").show();
         }else if(passwordString.equals("")){
             Common.errorDialog(this, "登陆失败", "密码不得为空").show();
         }else {
@@ -393,17 +394,23 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 Common.toBeContinuedDialog(this).show();
                 break;
             case R.id.back_btn:
-                if(backActivity != null && backActivity.equals("landingPage")){
+                /*if(backActivity.equals("landingPage")){
                     startActivity(new Intent(this, LandingPageActivity.class));
                     finish();
-                }else{
+                }else if (backActivity.equals("register")){
+                    Intent temp = new Intent(this, RegisterActivity.class);
+                    temp.putExtra("back","login");
+                    startActivity(temp);
                     finish();
-                }
+                }else {
+                    finish();
+                }*/
+                finish();
                 break;
             case R.id.register_btn:
-                startActivity(new Intent(this, RegisterActivity.class));
-                break;
             case R.id.register_linearlayout:
+                /*Intent temp = new Intent(this, RegisterActivity.class);
+                temp.putExtra("back","login");*/
                 startActivity(new Intent(this, RegisterActivity.class));
                 break;
             case R.id.login_btn:
@@ -411,23 +418,11 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 String passwordString=password.getText().toString();
                 doLogin(accountString, passwordString);
                 break;
+            case R.id.forget_password:
+                Common.toBeContinuedDialog(this).show();
+                break;
             default:
                 break;
-        }
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            if(backActivity != null && backActivity.equals("landingPage")){
-                startActivity(new Intent(this, LandingPageActivity.class));
-                finish();
-            }else{
-                finish();
-            }
-            return false;
-        }else {
-            return super.onKeyDown(keyCode, event);
         }
     }
 

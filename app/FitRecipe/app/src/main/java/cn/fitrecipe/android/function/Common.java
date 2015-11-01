@@ -3,7 +3,6 @@ package cn.fitrecipe.android.function;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
-import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,6 +46,18 @@ public class Common {
             return connManager.getActiveNetworkInfo().isAvailable();
         }
         return false;
+    }
+
+    public static void setPunchCount(Context context, int count){
+        SharedPreferences sp = context.getSharedPreferences("user", context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt("punch_count", count);
+        editor.commit();
+    }
+
+    public static int getPunchCount(Context context){
+        SharedPreferences sp = context.getSharedPreferences("user", context.MODE_PRIVATE);
+        return sp.getInt("punch_count", 0);
     }
 
 
@@ -120,11 +131,17 @@ public class Common {
         return sdf.format(afterDate);
     }
 
-    public static int CompareDate(String a, String b) {
+    /**
+     * 比较两个时间的前后关系
+     * @param date_1
+     * @param date_2
+     * @return 如果date_1小于date_2，返回-1；相同，返回0；比data_2大，返回1；
+     */
+    public static int CompareDate(String date_1, String date_2) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            Date date1 = sdf.parse(a);
-            Date date2 = sdf.parse(b);
+            Date date1 = sdf.parse(date_1);
+            Date date2 = sdf.parse(date_2);
             return date1.compareTo(date2);
         } catch (ParseException e) {
             e.printStackTrace();
@@ -212,9 +229,7 @@ public class Common {
 
     public static DatePlan gernerateEmptyPlan(String date, Context context) {
         DatePlan datePlan = new DatePlan();
-//        datePlan.setIsPunch(false);
         datePlan.setPlan_name("personal plan");
-//        datePlan.setInBasket(false);
         datePlan.setDate(date);
         datePlan.setPlan_id(-1);
         datePlan.setItems(Common.generateDatePlan(date, context));

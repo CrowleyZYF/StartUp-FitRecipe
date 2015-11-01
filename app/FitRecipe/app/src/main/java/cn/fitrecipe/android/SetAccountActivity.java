@@ -135,43 +135,51 @@ public class SetAccountActivity extends Activity implements View.OnClickListener
 
     private void update() {
 
-        checkValid();
+        if(checkValid()){
+            //上传
+            pd = ProgressDialog.show(this, "", "正在修改...", true);
+            pd.setCanceledOnTouchOutside(false);
 
-        //上传
-        pd = ProgressDialog.show(this, "", "正在修改...", true);
-        pd.setCanceledOnTouchOutside(false);
+            if (bitmap != null) {
+                UploadManager uploadManager = new UploadManager();
+                Auth auth = Auth.create("LV1xTmPqkwCWd3yW4UNn90aaXyPZCGPG-MdaA3Ob", "mfMEtgpxmdRrgM7No-AwtaFCkCM6mOVr_FYbq6MR");        //get token from access key and secret key
+                String token = auth.uploadToken("fitrecipe");
 
-        if (bitmap != null) {
-            UploadManager uploadManager = new UploadManager();
-            Auth auth = Auth.create("LV1xTmPqkwCWd3yW4UNn90aaXyPZCGPG-MdaA3Ob", "mfMEtgpxmdRrgM7No-AwtaFCkCM6mOVr_FYbq6MR");        //get token from access key and secret key
-            String token = auth.uploadToken("fitrecipe");
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
 
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-
-            pngName = FrApplication.getInstance().getAuthor().getNick_name() + Common.getTime();
-            //Toast.makeText(PunchContentSureActivity.this, pngName, Toast.LENGTH_SHORT).show();
-            uploadManager.put(baos.toByteArray(), pngName, token, new UpCompletionHandler() {
-                @Override
-                public void complete(String s, ResponseInfo responseInfo, JSONObject jsonObject) {
-                    Toast.makeText(SetAccountActivity.this, "修改完成！", Toast.LENGTH_SHORT).show();
-                    updateServerData();
-                }
-            }, null);
+                pngName = FrApplication.getInstance().getAuthor().getNick_name() + Common.getTime();
+                uploadManager.put(baos.toByteArray(), pngName, token, new UpCompletionHandler() {
+                    @Override
+                    public void complete(String s, ResponseInfo responseInfo, JSONObject jsonObject) {
+                        updateServerData();
+                    }
+                }, null);
+            }else {
+                updateServerData();
+            }
+        }else{
+            Toast.makeText(SetAccountActivity.this, "昵称不能为空!", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void checkValid() {
+    private boolean checkValid() {
         nick_name = set_account_nickname.getText().toString();
-        if(nick_name == null || nick_name.length() == 0)
-            Toast.makeText(SetAccountActivity.this, "昵称不能为空!", Toast.LENGTH_SHORT).show();
+        if(nick_name == null || nick_name.length() == 0){
+            return false;
+        }else {
+            return true;
+        }
+
     }
 
     private void updateServerData() {
         JSONObject params = new JSONObject();
         try {
             if(pngName != null)
-            params.put("avatar", FrServerConfig.getQiNiuHost() + pngName);
+                params.put("avatar", FrServerConfig.getQiNiuHost() + pngName);
+            else
+                params.put("avatar", FrApplication.getInstance().getAuthor().getAvatar());
             params.put("nick_name", nick_name);
         }catch (JSONException e) {
             throw new RuntimeException(e);
@@ -179,10 +187,12 @@ public class SetAccountActivity extends Activity implements View.OnClickListener
         PostRequest request = new PostRequest(FrServerConfig.getUpdateUserInfoUrl(), FrApplication.getInstance().getToken(), params, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {
+                Toast.makeText(SetAccountActivity.this, "修改完成！", Toast.LENGTH_SHORT).show();
                 pd.dismiss();
                 // 保存本地
                 Author author = FrApplication.getInstance().getAuthor();
-                author.setAvatar(FrServerConfig.getQiNiuHost() + pngName);
+                if(pngName != null)
+                    author.setAvatar(FrServerConfig.getQiNiuHost() + pngName);
                 author.setNick_name(nick_name);
                 FrApplication.getInstance().setAuthor(author);
                 MeFragment.isFresh = true;

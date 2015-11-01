@@ -69,6 +69,7 @@ public class JsonParseHelper {
 
             //某一天的计划
             DatePlan datePlan = new DatePlan();
+            datePlan.setVideo(routine.getString("video"));
             datePlan.setPlan_name(plan.getTitle());
 
             JSONArray dish_set = routine.getJSONArray("dish_set");

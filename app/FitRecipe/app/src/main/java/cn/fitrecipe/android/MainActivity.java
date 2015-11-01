@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -19,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.umeng.fb.FeedbackAgent;
 
@@ -58,6 +61,9 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     private IntentFilter intentFilter;
 
     private boolean isInit[] = {false, false, false};
+
+    // 定义一个变量，来标识是否退出
+    private static boolean isExit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -332,12 +338,32 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         }
     }
 
+    private static Handler mHandler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            isExit = false;
+        }
+    };
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-            finish();
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            exit();
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private void exit() {
+        if (!isExit) {
+            isExit = true;
+            Toast.makeText(getApplicationContext(), "再一次将退出健食记", Toast.LENGTH_SHORT).show();
+            // 利用handler延迟发送更改状态信息
+            mHandler.sendEmptyMessageDelayed(0, 2000);
+        } else {
+            this.finish();
+        }
     }
 }

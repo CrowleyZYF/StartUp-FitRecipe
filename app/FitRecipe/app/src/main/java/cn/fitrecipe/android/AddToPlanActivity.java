@@ -450,7 +450,26 @@ public class AddToPlanActivity extends Activity implements View.OnClickListener 
         JSONArray dish = new JSONArray();
         for(int i = 0; i < items.size(); i++) {
             JSONObject obj = new JSONObject();
-            obj.put("type", i);
+            switch (items.get(i).getType()) {
+                case "breakfast":
+                    obj.put("type", 0);
+                    break;
+                case "add_meal_01":
+                    obj.put("type", 1);
+                    break;
+                case "lunch":
+                    obj.put("type", 2);
+                    break;
+                case "add_meal_02":
+                    obj.put("type", 3);
+                    break;
+                case "supper":
+                    obj.put("type", 4);
+                    break;
+                case "add_meal_03":
+                    obj.put("type", 5);
+                    break;
+            }
             JSONArray ingredient = new JSONArray();
             JSONArray recipe = new JSONArray();
             ArrayList<PlanComponent> components = items.get(i).getComponents();

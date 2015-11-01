@@ -142,7 +142,6 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
 
 
         punch_day = (TextView) findViewById(R.id.punch_day);
-        //punch_day.setText((Common.getDiff(Common.getDate(), report.getUpdatetime()) + 1) +"");
         if(action.equals("share")) {
             right_btn.setText("分享");
             punch_day.setText(getIntent().getStringExtra("time"));
@@ -386,7 +385,8 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
                         pr.setId(res.getJSONObject("data").getInt("id"));
                         pr.setType(item.getType());
                         pr.setDate(item.getDate());
-
+                        Common.setPunchCount(PunchContentSureActivity.this, Common.getPunchCount(PunchContentSureActivity.this)+1);
+                        Toast.makeText(PunchContentSureActivity.this, Common.getPunchCount(PunchContentSureActivity.this)+"", Toast.LENGTH_SHORT).show();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

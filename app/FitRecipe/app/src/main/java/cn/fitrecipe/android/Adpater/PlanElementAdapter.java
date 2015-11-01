@@ -1,5 +1,6 @@
 package cn.fitrecipe.android.Adpater;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -25,14 +26,16 @@ import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import cn.fitrecipe.android.ChoosePhotoActivity;
 import cn.fitrecipe.android.FrApplication;
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.IngredientNutritionActivity;
-import cn.fitrecipe.android.ChoosePhotoActivity;
 import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.RecipeActivity;
 import cn.fitrecipe.android.SelectRecipeActivity;
@@ -42,38 +45,79 @@ import cn.fitrecipe.android.entity.DatePlanItem;
 import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.Report;
 import cn.fitrecipe.android.fragment.PlanFragment;
+import cn.fitrecipe.android.function.Common;
 import cn.fitrecipe.android.function.RequestErrorHelper;
 
 /**
  * Created by wk on 2015/8/26.
  */
-public class PlanElementAdapter extends BaseAdapter implements View.OnClickListener{
+public class PlanElementAdapter extends BaseAdapter{
 
     Fragment fragment;
     List<DatePlanItem> items;
     Report report;
     boolean isValid, isValid2; //isValid if can change , isValid2 is if can punch
     private boolean[] isShow;
+    private int dir;
+    private Map<Integer, Integer> map;
+    int cnt = 0;
 
     public PlanElementAdapter(Fragment fragment, List<DatePlanItem> items, Report report, boolean[] isShow) {
         this.fragment = fragment;
         this.items = items;
         this.report = report;
         this.isShow = isShow;
+        map = new HashMap<>();
     }
 
-    public void setData(List<DatePlanItem> items, boolean isValid, boolean isValid2, boolean[] isShow) {
+    public void setData(List<DatePlanItem> items, boolean isValid, boolean isValid2, boolean[] isShow, int dir) {
         this.items = items;
         this.isValid = isValid;
         this.isValid2 = isValid2;
         this.isShow = isShow;
+        this.dir = dir;
+        map.clear();
+        cnt = 0;
+        if(items != null) {
+            for (int i = 0; i < items.size(); i++) {
+                switch (items.get(i).getType()) {
+                    case "breakfast":
+                        map.put(cnt, i);
+                        cnt++;
+                        break;
+                    case "add_meal_01":
+                        map.put(cnt, i);
+                        if (isShow[0])
+                            cnt++;
+                        break;
+                    case "lunch":
+                        map.put(cnt, i);
+                        cnt++;
+                        break;
+                    case "add_meal_02":
+                        map.put(cnt, i);
+                        if (isShow[1])
+                            cnt++;
+                        break;
+                    case "supper":
+                        map.put(cnt, i);
+                        cnt++;
+                        break;
+                    case "add_meal_03":
+                        map.put(cnt, i);
+                        if (isShow[0])
+                            cnt++;
+                        break;
+                }
+            }
+        }
         notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
         if(items == null)   return 0;
-        return items.size();
+        return cnt;
     }
 
     @Override
@@ -88,7 +132,8 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+        final ViewHolder holder;
+        int xposition = map.get(position);
         if(convertView == null) {
             convertView = View.inflate(fragment.getActivity(), R.layout.plan_list_item, null);
             holder = new ViewHolder(convertView);
@@ -106,10 +151,10 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
         }
 
         //获取某一餐的信息
-        final DatePlanItem item = items.get(position);
+        final DatePlanItem item = items.get(xposition);
 
         //滑动删除
-        final ContentAdapter adapter = new ContentAdapter(item);
+        final ContentAdapter adapter = new ContentAdapter(fragment.getActivity(), item, dir);
         holder.plan_content.setAdapter(adapter);
         //添加食谱的按钮
         final RelativeLayout addBtn = holder.add_recipe;
@@ -121,20 +166,20 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
                     Toast.makeText(fragment.getActivity(), "请添加食谱、食材后再加入菜篮子！", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if (dir<0){
+                    Toast.makeText(fragment.getActivity(), "昨天的食谱/食材不能添加到菜篮子中！", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if(!item.isInBasket()) {
-                    addBtn.setEnabled(false);
                     ((ImageView)v).setImageResource(R.drawable.icon_plan_shopping_active);
                     item.setIsInBasket(true);
                     ((PlanFragment) fragment).addToBasket(item.getDate(), item.getType());
                     FrDbHelper.getInstance(fragment.getActivity()).addToBasket(item.getComponents(), item.getDate(), item.getType());
-                    //Toast.makeText(fragment.getActivity(), "加入菜篮子", Toast.LENGTH_SHORT).show();
                 }else {
-                    addBtn.setEnabled(true);
                     ((ImageView)v).setImageResource(R.drawable.icon_plan_shopping);
                     item.setIsInBasket(false);
                     ((PlanFragment) fragment).removeFromBasket(item.getDate(), item.getType());
                     FrDbHelper.getInstance(fragment.getActivity()).removeFromBasket(item.getComponents(), item.getDate(), item.getType());
-                    //Toast.makeText(fragment.getActivity(), "从菜篮子取出", Toast.LENGTH_SHORT).show();
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -143,32 +188,32 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
         holder.plan_punch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-
                 if(!isValid2) {
                     Toast.makeText(fragment.getActivity(), "只能打当天的卡！", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
                 if (item.size() == 0) {
                     Toast.makeText(fragment.getActivity(), "请添加食谱、食材后再打卡！", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(!item.isPunch()) {
-//                    ((ImageView)v).setImageResource(R.drawable.icon_plan_punch_active);
-//                    item.setIsPunch(true);
                     Intent intent = new Intent(fragment.getActivity(), ChoosePhotoActivity.class);
                     intent.putExtra("from", "punch");
                     intent.putExtra("item", item);
                     fragment.startActivity(intent);
-                    //Toast.makeText(fragment.getActivity(), "打卡", Toast.LENGTH_SHORT).show();
                 }else {
-                    item.setIsPunch(false);
-                    ((ImageView)v).setImageResource(R.drawable.icon_plan_punch);
-                    item.setImageCover(null);
                     PostRequest request = new PostRequest(FrServerConfig.getPunchDeleteUrl(item.getPunchId()), FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject jsonObject) {
-                            //Toast.makeText(fragment.getActivity(), "取消打卡成功!", Toast.LENGTH_SHORT).show();
+                            item.setIsPunch(false);
+                            ((ImageView)v).setImageResource(R.drawable.icon_plan_punch);
+                            item.setImageCover(null);
+                            Toast.makeText(fragment.getActivity(), "打卡记录已删除", Toast.LENGTH_SHORT).show();
+                            FrDbHelper.getInstance(fragment.getActivity()).unpunch(item.getDate(), item.getType());
+                            ((PlanFragment)fragment).deletePunch(item.getDate(), item.getType());
+                            Common.setPunchCount(fragment.getActivity(), Common.getPunchCount(fragment.getActivity())-1);
+                            Toast.makeText(fragment.getActivity(), Common.getPunchCount(fragment.getActivity())+"", Toast.LENGTH_SHORT).show();
+                            notifyDataSetChanged();
                         }
                     }, new Response.ErrorListener() {
                         @Override
@@ -177,11 +222,7 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
                         }
                     });
                     FrRequest.getInstance().request(request);
-                    FrDbHelper.getInstance(fragment.getActivity()).unpunch(item.getDate(), item.getType());
-                    ((PlanFragment)fragment).deletePunch(item.getDate(), item.getType());
-                    notifyDataSetChanged();
                 }
-//                adapter.notifyDataSetChanged();
             }
 
         });
@@ -207,51 +248,61 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
         }
         if(item.isInBasket()) {
             holder.plan_shopping.setImageResource(R.drawable.icon_plan_shopping_active);
-
         }else {
             holder.plan_shopping.setImageResource(R.drawable.icon_plan_shopping);
         }
 
+        if (dir<0){
+            holder.plan_shopping.setImageResource(R.drawable.icon_plan_shopping_disable);
+            holder.dish_line_1.setBackground(fragment.getActivity().getResources().getDrawable(R.drawable.line_v_plan_gray));
+            holder.dish_line_2.setBackground(fragment.getActivity().getResources().getDrawable(R.drawable.line_v_plan_gray));
+        }else{
+            holder.dish_line_1.setBackground(fragment.getActivity().getResources().getDrawable(R.drawable.line_v_base_color));
+            holder.dish_line_2.setBackground(fragment.getActivity().getResources().getDrawable(R.drawable.line_v_base_color));
+        }
+
         if(!isValid) {
             holder.add_recipe.setVisibility(View.GONE);
-
-        }
-        else {
+        } else {
             holder.add_recipe.setVisibility(View.VISIBLE);
-            holder.add_recipe.setEnabled((!item.isInBasket()) && (!(item.isPunch())));
         }
         holder.add_recipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (item.getType()) {
-                    case "breakfast":
-                        Intent intent = new Intent(fragment.getActivity(), SelectRecipeActivity.class);
-                        fragment.startActivityForResult(intent, PlanFragment.BREAKFAST_CODE);
-                        break;
-                    case "add_meal_01":
-                        Intent intent1 = new Intent(fragment.getActivity(), SelectRecipeActivity.class);
-                        fragment.startActivityForResult(intent1, PlanFragment.ADDMEAL_01_CODE);
-                        break;
-                    case "lunch":
-                        Intent intent2 = new Intent(fragment.getActivity(), SelectRecipeActivity.class);
-                        fragment.startActivityForResult(intent2, PlanFragment.LUNCH_CODE);
-                        break;
-                    case "add_meal_02":
-                        Intent intent4 = new Intent(fragment.getActivity(), SelectRecipeActivity.class);
-                        fragment.startActivityForResult(intent4, PlanFragment.ADDMEAL_02_CODE);
-                        break;
-                    case "supper":
-                        Intent intent3 = new Intent(fragment.getActivity(), SelectRecipeActivity.class);
-                        fragment.startActivityForResult(intent3, PlanFragment.SUPPER_CODE);
-                        break;
-                    case "add_meal_03":
-                        Intent intent5 = new Intent(fragment.getActivity(), SelectRecipeActivity.class);
-                        fragment.startActivityForResult(intent5, PlanFragment.ADDMEAL_03_CODE);
-                        break;
+                if (item.isInBasket()) {
+                    Common.infoDialog(fragment.getActivity(), "添加失败", "该餐已经添加到菜篮子中，如需再添加新的食谱/食材，请先再次点击菜篮子，将食谱/食材取出").show();
+                } else if (item.isPunch()) {
+                    Common.infoDialog(fragment.getActivity(), "添加失败", "该餐已经打过卡了，如需再添加新的食谱/食材，请先再次点击打卡，将打卡记录删除").show();
+                } else {
+                    switch (item.getType()) {
+                        case "breakfast":
+                            Intent intent = new Intent(fragment.getActivity(), SelectRecipeActivity.class);
+                            fragment.startActivityForResult(intent, PlanFragment.BREAKFAST_CODE);
+                            break;
+                        case "add_meal_01":
+                            Intent intent1 = new Intent(fragment.getActivity(), SelectRecipeActivity.class);
+                            fragment.startActivityForResult(intent1, PlanFragment.ADDMEAL_01_CODE);
+                            break;
+                        case "lunch":
+                            Intent intent2 = new Intent(fragment.getActivity(), SelectRecipeActivity.class);
+                            fragment.startActivityForResult(intent2, PlanFragment.LUNCH_CODE);
+                            break;
+                        case "add_meal_02":
+                            Intent intent4 = new Intent(fragment.getActivity(), SelectRecipeActivity.class);
+                            fragment.startActivityForResult(intent4, PlanFragment.ADDMEAL_02_CODE);
+                            break;
+                        case "supper":
+                            Intent intent3 = new Intent(fragment.getActivity(), SelectRecipeActivity.class);
+                            fragment.startActivityForResult(intent3, PlanFragment.SUPPER_CODE);
+                            break;
+                        case "add_meal_03":
+                            Intent intent5 = new Intent(fragment.getActivity(), SelectRecipeActivity.class);
+                            fragment.startActivityForResult(intent5, PlanFragment.ADDMEAL_03_CODE);
+                            break;
+                    }
                 }
             }
         });
-
         switch (item.getType()) {
             case "breakfast" :
                 holder.plan_title.setText("早餐");
@@ -308,8 +359,6 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
             FrApplication.getInstance().getMyImageLoader().displayImage(holder.plan_image_cover, item.getDefaultImageCover());
         }else
             FrApplication.getInstance().getMyImageLoader().displayImage(holder.plan_image_cover, item.getImageCover());
-
-        //
         holder.plan_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -325,25 +374,14 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
                     fragment.getActivity().startActivity(intent);
                 }
             }
-        });/*
-        if(position == 0) {
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            params.setMargins(0, 20, 0, 0);
-            convertView.setLayoutParams(params);
-        }*/
+        });
+
         return convertView;
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-
-        }
-    }
-
-
     class ViewHolder {
         ImageView plan_shopping, plan_punch, plan_nutrition;
+        ImageView dish_line_1, dish_line_2;
         TextView plan_title, plan_time;
         TextView calorie_plan_intake, calorie_plan_need, calorie_plan_radio;
         TextView plan_carbohydrate_intake, plan_carbohydrate_need, plan_carbohydrate_rate;
@@ -356,6 +394,8 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
 
         public ViewHolder(View v) {
             plan_shopping = (ImageView) v.findViewById(R.id.plan_shopping);
+            dish_line_1 = (ImageView) v.findViewById(R.id.dish_line_1);
+            dish_line_2 = (ImageView) v.findViewById(R.id.dish_line_2);
             plan_punch = (ImageView) v.findViewById(R.id.plan_punch);
             plan_nutrition = (ImageView) v.findViewById(R.id.plan_nutrition);
             plan_title = (TextView) v.findViewById(R.id.plan_title);
@@ -383,10 +423,14 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
 
     class ContentAdapter extends BaseSwipeAdapter {
 
+        private Context context;
         DatePlanItem item;
+        private int dir;
 
-        public ContentAdapter(DatePlanItem item) {
+        public ContentAdapter(Context context, DatePlanItem item, int dir) {
+            this.context = context;
             this.item = item;
+            this.dir = dir;
         }
 
         @Override
@@ -423,10 +467,18 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
             text1.setText(component.getName());
             text2.setText(component.getAmount()+"g");
             text3.setText(Math.round(component.getCalories() * component.getAmount() / 100) + "kcal");
+            if (dir<0){
+                text1.setTextColor(context.getResources().getColor(R.color.plan_gray));
+                text2.setTextColor(context.getResources().getColor(R.color.plan_gray));
+                text3.setTextColor(context.getResources().getColor(R.color.plan_gray));
+            }else{
+                text1.setTextColor(context.getResources().getColor(R.color.login_input_text_color));
+                text2.setTextColor(context.getResources().getColor(R.color.login_input_text_color));
+                text3.setTextColor(context.getResources().getColor(R.color.login_input_text_color));
+            }
             view.findViewById(R.id.trash).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    FrDbHelper.getInstance(fragment.getActivity()).deletePlanItem(item, i);
                     item.deleteContent(i);
                     try {
                         ((PlanFragment) fragment).update();
@@ -434,7 +486,6 @@ public class PlanElementAdapter extends BaseAdapter implements View.OnClickListe
                         e.printStackTrace();
                     }
                     notifyDataSetChanged();
-                    //Toast.makeText(fragment.getActivity(), "click delete", Toast.LENGTH_SHORT).show();
                 }
             });
         }
