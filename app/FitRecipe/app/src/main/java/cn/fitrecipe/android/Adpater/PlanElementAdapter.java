@@ -78,7 +78,7 @@ public class PlanElementAdapter extends BaseAdapter{
         this.dir = dir;
         map.clear();
         cnt = 0;
-        if(items != null) {
+        if(items != null && isShow != null) {
             for (int i = 0; i < items.size(); i++) {
                 switch (items.get(i).getType()) {
                     case "breakfast":
@@ -133,7 +133,9 @@ public class PlanElementAdapter extends BaseAdapter{
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         final ViewHolder holder;
-        int xposition = map.get(position);
+        int xposition = position;
+        if(map.size() > 0)
+            xposition = map.get(position);
         if(convertView == null) {
             convertView = View.inflate(fragment.getActivity(), R.layout.plan_list_item, null);
             holder = new ViewHolder(convertView);
