@@ -487,7 +487,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             }
             SharedPreferences sp = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
             boolean[] isShow = null;
-            if(datePlan.equals("personal plan")) {
+            if(datePlan.getPlan_name().equals("personal plan")) {
                 isShow = new boolean[3];
                 isShow[0] = sp.getBoolean("has_add_meal_01", true);
                 isShow[1] = sp.getBoolean("has_add_meal_02", true);
