@@ -38,7 +38,7 @@
                 android:layout_gravity="bottom"/>
         </LinearLayout>
 
-        <ScrollView
+        <cn.fitrecipe.android.UI.BorderScrollView
             android:layout_width="match_parent"
             android:id="@+id/info_container"
             android:layout_height="match_parent"
@@ -47,17 +47,23 @@
             android:fadingEdge="vertical"
             android:visibility="gone"
             android:padding="0dp">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/punch_record"
-                android:scrollbars="vertical"
+            <LinearLayout
+                android:id="@+id/container_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="0dp"
-                android:clipToPadding="false"
-                android:layout_marginBottom="20dp"
-                />
+                android:orientation="vertical"
+                android:background="@color/background_color"
+                android:layout_height="wrap_content">
 
-        </ScrollView>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/punch_record"
+                    android:scrollbars="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="0dp"
+                    android:clipToPadding="false"
+                    android:layout_marginBottom="20dp"
+                    />
+            </LinearLayout>
+        </cn.fitrecipe.android.UI.BorderScrollView>
     </FrameLayout>
 </LinearLayout>

@@ -488,44 +488,37 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 }
             }
             SharedPreferences sp = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
-            boolean[] isShow = new boolean[3];
-            isShow[0] = sp.getBoolean("has_add_meal_01", true);
-            isShow[1] = sp.getBoolean("has_add_meal_02", true);
-            isShow[2] = sp.getBoolean("has_add_meal_03", true);
+            boolean[] isShow = null;
+            if(datePlan.equals("personal plan")) {
+                isShow = new boolean[3];
+                isShow[0] = sp.getBoolean("has_add_meal_01", true);
+                isShow[1] = sp.getBoolean("has_add_meal_02", true);
+                isShow[2] = sp.getBoolean("has_add_meal_03", true);
 
-            for (int i = 0; i < items.size(); i++) {
-                switch (items.get(i).getType()) {
-                    case "breakfast":
-                        items.get(i).setTime(sp.getString(preferenceKeyText[1], "07:30"));
-                        break;
-                    case "add_meal_01":
-                        items.get(i).setTime(sp.getString(preferenceKeyText[2], "10:00"));
-                        break;
-                    case "lunch":
-                        items.get(i).setTime(sp.getString(preferenceKeyText[3], "12:00"));
-                        break;
-                    case "add_meal_02":
-                        items.get(i).setTime(sp.getString(preferenceKeyText[4], "15:00"));
-                        break;
-                    case "supper":
-                        items.get(i).setTime(sp.getString(preferenceKeyText[5], "17:30"));
-                        break;
-                    case "add_meal_03":
-                        items.get(i).setTime(sp.getString(preferenceKeyText[6], "22:00"));
-                        break;
+                for (int i = 0; i < items.size(); i++) {
+                    switch (items.get(i).getType()) {
+                        case "breakfast":
+                            items.get(i).setTime(sp.getString(preferenceKeyText[1], "07:30"));
+                            break;
+                        case "add_meal_01":
+                            items.get(i).setTime(sp.getString(preferenceKeyText[2], "10:00"));
+                            break;
+                        case "lunch":
+                            items.get(i).setTime(sp.getString(preferenceKeyText[3], "12:00"));
+                            break;
+                        case "add_meal_02":
+                            items.get(i).setTime(sp.getString(preferenceKeyText[4], "15:00"));
+                            break;
+                        case "supper":
+                            items.get(i).setTime(sp.getString(preferenceKeyText[5], "17:30"));
+                            break;
+                        case "add_meal_03":
+                            items.get(i).setTime(sp.getString(preferenceKeyText[6], "22:00"));
+                            break;
+                    }
                 }
             }
 
-            for(int i = 0; i < items.size(); ) {
-                if(items.get(i).getType().equals("add_meal_01") && (!isShow[0]) && datePlan.getPlan_name().equals("personal plan"))
-                    items.remove(i);
-                else if(items.get(i).getType().equals("add_meal_02") && (!isShow[1]) && datePlan.getPlan_name().equals("personal plan"))
-                        items.remove(i);
-                    else  if(items.get(i).getType().equals("add_meal_03") && (!isShow[2]) && datePlan.getPlan_name().equals("personal plan"))
-                            items.remove(i);
-                            else
-                                i++;
-            }
             if (pointer != 0)
                 adapter.setData(items, datePlan.getPlan_name().equals("personal plan") ? true : false, false, isShow, Common.CompareDate(diy_days.getText().toString(), Common.getDate()));
             else
@@ -769,7 +762,26 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         JSONArray dish = new JSONArray();
         for(int i = 0; i < items.size(); i++) {
             JSONObject obj = new JSONObject();
-            obj.put("type", i);
+            switch (items.get(i).getType()) {
+                case "breakfast":
+                    obj.put("type", 0);
+                    break;
+                case "add_meal_01":
+                    obj.put("type", 1);
+                    break;
+                case "lunch":
+                    obj.put("type", 2);
+                    break;
+                case "add_meal_02":
+                    obj.put("type", 3);
+                    break;
+                case "supper":
+                    obj.put("type", 4);
+                    break;
+                case "add_meal_03":
+                    obj.put("type", 5);
+                    break;
+            }
             JSONArray ingredient = new JSONArray();
             JSONArray recipe = new JSONArray();
             ArrayList<PlanComponent> components = items.get(i).getComponents();

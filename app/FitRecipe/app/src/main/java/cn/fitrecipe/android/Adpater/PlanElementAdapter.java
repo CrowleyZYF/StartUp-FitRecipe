@@ -26,7 +26,9 @@ import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.fitrecipe.android.ChoosePhotoActivity;
 import cn.fitrecipe.android.FrApplication;
@@ -57,12 +59,15 @@ public class PlanElementAdapter extends BaseAdapter{
     boolean isValid, isValid2; //isValid if can change , isValid2 is if can punch
     private boolean[] isShow;
     private int dir;
+    private Map<Integer, Integer> map;
+    int cnt = 0;
 
     public PlanElementAdapter(Fragment fragment, List<DatePlanItem> items, Report report, boolean[] isShow) {
         this.fragment = fragment;
         this.items = items;
         this.report = report;
         this.isShow = isShow;
+        map = new HashMap<>();
     }
 
     public void setData(List<DatePlanItem> items, boolean isValid, boolean isValid2, boolean[] isShow, int dir) {
@@ -71,13 +76,48 @@ public class PlanElementAdapter extends BaseAdapter{
         this.isValid2 = isValid2;
         this.isShow = isShow;
         this.dir = dir;
+        map.clear();
+        cnt = 0;
+        if(items != null && isShow != null) {
+            for (int i = 0; i < items.size(); i++) {
+                switch (items.get(i).getType()) {
+                    case "breakfast":
+                        map.put(cnt, i);
+                        cnt++;
+                        break;
+                    case "add_meal_01":
+                        map.put(cnt, i);
+                        if (isShow[0])
+                            cnt++;
+                        break;
+                    case "lunch":
+                        map.put(cnt, i);
+                        cnt++;
+                        break;
+                    case "add_meal_02":
+                        map.put(cnt, i);
+                        if (isShow[1])
+                            cnt++;
+                        break;
+                    case "supper":
+                        map.put(cnt, i);
+                        cnt++;
+                        break;
+                    case "add_meal_03":
+                        map.put(cnt, i);
+                        if (isShow[0])
+                            cnt++;
+                        break;
+                }
+            }
+        }
         notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
         if(items == null)   return 0;
-        return items.size();
+        return cnt;
     }
 
     @Override
@@ -93,6 +133,9 @@ public class PlanElementAdapter extends BaseAdapter{
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         final ViewHolder holder;
+        int xposition = position;
+        if(map.size() > 0)
+            xposition = map.get(position);
         if(convertView == null) {
             convertView = View.inflate(fragment.getActivity(), R.layout.plan_list_item, null);
             holder = new ViewHolder(convertView);
@@ -110,7 +153,7 @@ public class PlanElementAdapter extends BaseAdapter{
         }
 
         //获取某一餐的信息
-        final DatePlanItem item = items.get(position);
+        final DatePlanItem item = items.get(xposition);
 
         //滑动删除
         final ContentAdapter adapter = new ContentAdapter(fragment.getActivity(), item, dir);
@@ -228,11 +271,11 @@ public class PlanElementAdapter extends BaseAdapter{
         holder.add_recipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (item.isInBasket()){
-                    Common.infoDialog(fragment.getActivity(),"添加失败","该餐已经添加到菜篮子中，如需再添加新的食谱/食材，请先再次点击菜篮子，将食谱/食材取出").show();
-                }else if(item.isPunch()){
-                    Common.infoDialog(fragment.getActivity(),"添加失败","该餐已经打过卡了，如需再添加新的食谱/食材，请先再次点击打卡，将打卡记录删除").show();
-                }else{
+                if (item.isInBasket()) {
+                    Common.infoDialog(fragment.getActivity(), "添加失败", "该餐已经添加到菜篮子中，如需再添加新的食谱/食材，请先再次点击菜篮子，将食谱/食材取出").show();
+                } else if (item.isPunch()) {
+                    Common.infoDialog(fragment.getActivity(), "添加失败", "该餐已经打过卡了，如需再添加新的食谱/食材，请先再次点击打卡，将打卡记录删除").show();
+                } else {
                     switch (item.getType()) {
                         case "breakfast":
                             Intent intent = new Intent(fragment.getActivity(), SelectRecipeActivity.class);
@@ -334,6 +377,7 @@ public class PlanElementAdapter extends BaseAdapter{
                 }
             }
         });
+
         return convertView;
     }
 

@@ -86,7 +86,7 @@ public class BorderScrollView extends ScrollView {
 
     private void doOnBorderListener() {
         if (contentView != null && contentView.getMeasuredHeight() <= getScrollY() + getHeight()) {
-            synchronized (BorderScrollView.class){
+            synchronized (BorderScrollView.class) {
                 if (onBorderListener != null && isScroll) {
                     onBorderListener.onBottom();
                     System.out.println("显示进度！");

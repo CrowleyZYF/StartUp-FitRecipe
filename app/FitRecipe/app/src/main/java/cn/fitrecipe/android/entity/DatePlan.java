@@ -29,6 +29,8 @@ public class DatePlan implements Serializable, Comparable<DatePlan>{
     private String plan_name;
     @DatabaseField
     private int plan_id;
+    @DatabaseField
+    private String video;
 
     public String getPlan_name() {
         return plan_name;
@@ -100,5 +102,13 @@ public class DatePlan implements Serializable, Comparable<DatePlan>{
 
     public void setPlan_id(int plan_id) {
         this.plan_id = plan_id;
+    }
+
+    public String getVideo() {
+        return video;
+    }
+
+    public void setVideo(String video) {
+        this.video = video;
     }
 }
