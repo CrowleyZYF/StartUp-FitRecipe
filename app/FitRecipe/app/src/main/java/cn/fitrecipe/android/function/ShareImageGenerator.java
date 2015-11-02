@@ -9,6 +9,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 
 import cn.fitrecipe.android.R;
@@ -17,9 +18,21 @@ import cn.fitrecipe.android.UI.SquareLayout;
 /**
  * Created by wk on 2015/9/23.
  */
-public class PunchImageGenerator {
+public class ShareImageGenerator {
 
-    public static Bitmap convertViewToPunchShareOne(SquareLayout view){
+    public static Bitmap convertViewToPunchShare(SquareLayout view){
+        Bitmap bitmap = Bitmap.createBitmap(view.getWidth(),view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        Drawable bgDrawable = view.getBackground();
+        if (bgDrawable != null)
+            bgDrawable.draw(canvas);
+        else
+            canvas.drawColor(Color.WHITE);
+        view.draw(canvas);
+        return bitmap;
+    }
+
+    public static Bitmap convertViewToRecipeShare(ImageView view){
         Bitmap bitmap = Bitmap.createBitmap(view.getWidth(),view.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         Drawable bgDrawable = view.getBackground();

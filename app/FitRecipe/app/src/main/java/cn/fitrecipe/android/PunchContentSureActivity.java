@@ -57,7 +57,7 @@ import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.PunchRecord;
 import cn.fitrecipe.android.entity.Report;
 import cn.fitrecipe.android.function.Common;
-import cn.fitrecipe.android.function.PunchImageGenerator;
+import cn.fitrecipe.android.function.ShareImageGenerator;
 import cn.fitrecipe.android.function.RequestErrorHelper;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -286,13 +286,11 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
         }
     }
 
-
-
     private void share() {
         ProgressDialog pd = ProgressDialog.show(PunchContentSureActivity.this, "", "正在生成图片...", true, false);
         pd.setCanceledOnTouchOutside(false);
         //Bitmap bitmap = PunchImageGenerator.convertViewToBitmap(scrollView);
-        Bitmap bitmap = PunchImageGenerator.convertViewToPunchShareOne(squareLayout);
+        Bitmap bitmap = ShareImageGenerator.convertViewToPunchShare(squareLayout);
         File path  = new File(Environment.getExternalStorageDirectory() + "/fitrecipe/");
         if(!path.exists())
             path.mkdirs();
@@ -311,6 +309,7 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
         pd.dismiss();
         // 设置分享内容
         UMImage test = new UMImage(this, bitmap);
+        mController.getConfig().setDefaultShareLocation(false);
         mController.setShareImage(new UMImage(this, bitmap));
         mController.setShareContent(FrApplication.getInstance().getAuthor().getNick_name()+
                 "在⌈健食记⌋中完成了"+punch_type.getText().toString()+
@@ -396,6 +395,7 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
                         pr.setId(res.getJSONObject("data").getInt("id"));
                         pr.setType(item.getType());
                         pr.setDate(item.getDate());
+                        pr.setImg(res.getJSONObject("data").getString("img"));
                         Common.setPunchCount(PunchContentSureActivity.this, Common.getPunchCount(PunchContentSureActivity.this)+1);
                         //Toast.makeText(PunchContentSureActivity.this, Common.getPunchCount(PunchContentSureActivity.this)+"", Toast.LENGTH_SHORT).show();
                     } catch (JSONException e) {

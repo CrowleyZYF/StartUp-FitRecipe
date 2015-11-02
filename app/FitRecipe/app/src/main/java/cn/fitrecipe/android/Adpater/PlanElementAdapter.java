@@ -26,9 +26,7 @@ import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import cn.fitrecipe.android.ChoosePhotoActivity;
 import cn.fitrecipe.android.FrApplication;
@@ -57,28 +55,30 @@ public class PlanElementAdapter extends BaseAdapter{
     List<DatePlanItem> items;
     Report report;
     boolean isValid, isValid2; //isValid if can change , isValid2 is if can punch
-    private boolean[] isShow;
+    //private boolean[] isShow;
     private int dir;
-    private Map<Integer, Integer> map;
-    int cnt = 0;
+    //private Map<Integer, Integer> map;
+    //int cnt = 0;
 
-    public PlanElementAdapter(Fragment fragment, List<DatePlanItem> items, Report report, boolean[] isShow) {
+    //public PlanElementAdapter(Fragment fragment, List<DatePlanItem> items, Report report, boolean[] isShow) {
+    public PlanElementAdapter(Fragment fragment, List<DatePlanItem> items, Report report) {
         this.fragment = fragment;
         this.items = items;
         this.report = report;
-        this.isShow = isShow;
-        map = new HashMap<>();
+        //this.isShow = isShow;
+        //map = new HashMap<>();
     }
 
-    public void setData(List<DatePlanItem> items, boolean isValid, boolean isValid2, boolean[] isShow, int dir) {
+    //public void setData(List<DatePlanItem> items, boolean isValid, boolean isValid2, boolean[] isShow, int dir) {
+    public void setData(List<DatePlanItem> items, boolean isValid, boolean isValid2, int dir) {
         this.items = items;
         this.isValid = isValid;
         this.isValid2 = isValid2;
-        this.isShow = isShow;
+        //this.isShow = isShow;
         this.dir = dir;
-        map.clear();
-        cnt = 0;
-        if(items != null && isShow != null) {
+        //map.clear();
+        //cnt = 0;
+        /*if(items != null && isShow != null) {
             for (int i = 0; i < items.size(); i++) {
                 switch (items.get(i).getType()) {
                     case "breakfast":
@@ -110,14 +110,15 @@ public class PlanElementAdapter extends BaseAdapter{
                         break;
                 }
             }
-        }
+        }*/
         notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
         if(items == null)   return 0;
-        return cnt;
+        //return cnt;
+        return items.size();
     }
 
     @Override
@@ -134,8 +135,8 @@ public class PlanElementAdapter extends BaseAdapter{
     public View getView(final int position, View convertView, ViewGroup parent) {
         final ViewHolder holder;
         int xposition = position;
-        if(map.size() > 0)
-            xposition = map.get(position);
+        /*if(map.size() > 0)
+            xposition = map.get(position);*/
         if(convertView == null) {
             convertView = View.inflate(fragment.getActivity(), R.layout.plan_list_item, null);
             holder = new ViewHolder(convertView);
@@ -310,8 +311,8 @@ public class PlanElementAdapter extends BaseAdapter{
                 holder.plan_title.setText("早餐");
                 holder.plan_time.setText(item.getTime() + " AM");
                 double x = report.getBreakfastRate();
-                if(!isShow[0])
-                    x += report.getSnackMorningRate();
+                /*if(!isShow[0])
+                    x += report.getSnackMorningRate();*/
                 holder.calorie_plan_need.setText(Math.round(x)+"");
                 holder.calorie_plan_radio.setText(Math.round(item.getCalories_take() * 100/ x)+"");
                 break;
@@ -319,8 +320,8 @@ public class PlanElementAdapter extends BaseAdapter{
                 holder.plan_title.setText("午餐");
                 holder.plan_time.setText(item.getTime() + " AM");
                 double y = report.getLunchRate();
-                if(!isShow[1])
-                    y += report.getSnackAfternoonRate();
+                /*if(!isShow[1])
+                    y += report.getSnackAfternoonRate();*/
                 holder.calorie_plan_need.setText(Math.round(y)+"");
                 holder.calorie_plan_radio.setText(Math.round(item.getCalories_take() * 100/ y)+"");
                 break;
@@ -328,8 +329,8 @@ public class PlanElementAdapter extends BaseAdapter{
                 holder.plan_title.setText("晚餐");
                 holder.plan_time.setText(item.getTime() + " PM");
                 double z = report.getDinnerRate();
-                if(!isShow[2])
-                    z += report.getSnackNightRate();
+                /*if(!isShow[2])
+                    z += report.getSnackNightRate();*/
                 holder.calorie_plan_need.setText(Math.round(z)+"");
                 holder.calorie_plan_radio.setText(Math.round(item.getCalories_take() * 100/ z)+"");
                 break;
@@ -359,8 +360,13 @@ public class PlanElementAdapter extends BaseAdapter{
         holder.plan_fat_intake.setText(Math.round(item.getFat_take()) + "");
         if(item.getImageCover() == null || item.getImageCover().equals("")) {
             FrApplication.getInstance().getMyImageLoader().displayImage(holder.plan_image_cover, item.getDefaultImageCover());
-        }else
+            if (item.getDefaultImageCover().equals("drawable://" + R.drawable.add_meal_03)){
+                Log.i("add_meal_pic", item.getType());
+            }
+        }else {
             FrApplication.getInstance().getMyImageLoader().displayImage(holder.plan_image_cover, item.getImageCover());
+            Log.i("add_meal_sp", item.getType());
+        }
         holder.plan_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

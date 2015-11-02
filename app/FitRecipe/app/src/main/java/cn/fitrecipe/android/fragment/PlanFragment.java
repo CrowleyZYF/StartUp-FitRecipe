@@ -170,12 +170,13 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         //获取报告
         report = FrDbHelper.getInstance(getActivity()).getReport();
         //初始化一日多餐
-        SharedPreferences sp = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
+        /*SharedPreferences sp = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
         boolean[] isShow = new boolean[3];
         isShow[0] = sp.getBoolean("has_add_meal_01", true);
         isShow[1] = sp.getBoolean("has_add_meal_02", true);
         isShow[2] = sp.getBoolean("has_add_meal_03", true);
-        adapter = new PlanElementAdapter(this, items, report, isShow);
+        adapter = new PlanElementAdapter(this, items, report, isShow);*/
+        adapter = new PlanElementAdapter(this, items, report);
         plans.setAdapter(adapter);
         if(report == null) {
             hideLoading(true);
@@ -488,41 +489,46 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 }
             }
             SharedPreferences sp = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
-            boolean[] isShow = null;
+            /*boolean[] isShow = {true, true, true};
             if(datePlan.equals("personal plan")) {
                 isShow = new boolean[3];
                 isShow[0] = sp.getBoolean("has_add_meal_01", true);
                 isShow[1] = sp.getBoolean("has_add_meal_02", true);
                 isShow[2] = sp.getBoolean("has_add_meal_03", true);
+            }*/
 
-                for (int i = 0; i < items.size(); i++) {
-                    switch (items.get(i).getType()) {
-                        case "breakfast":
-                            items.get(i).setTime(sp.getString(preferenceKeyText[1], "07:30"));
-                            break;
-                        case "add_meal_01":
-                            items.get(i).setTime(sp.getString(preferenceKeyText[2], "10:00"));
-                            break;
-                        case "lunch":
-                            items.get(i).setTime(sp.getString(preferenceKeyText[3], "12:00"));
-                            break;
-                        case "add_meal_02":
-                            items.get(i).setTime(sp.getString(preferenceKeyText[4], "15:00"));
-                            break;
-                        case "supper":
-                            items.get(i).setTime(sp.getString(preferenceKeyText[5], "17:30"));
-                            break;
-                        case "add_meal_03":
-                            items.get(i).setTime(sp.getString(preferenceKeyText[6], "22:00"));
-                            break;
-                    }
+
+
+            for (int i = 0; i < items.size(); i++) {
+                switch (items.get(i).getType()) {
+                    case "breakfast":
+                        items.get(i).setTime(sp.getString(preferenceKeyText[1], "07:30"));
+                        break;
+                    case "add_meal_01":
+                        items.get(i).setTime(sp.getString(preferenceKeyText[2], "10:00"));
+                        break;
+                    case "lunch":
+                        items.get(i).setTime(sp.getString(preferenceKeyText[3], "12:00"));
+                        break;
+                    case "add_meal_02":
+                        items.get(i).setTime(sp.getString(preferenceKeyText[4], "15:00"));
+                        break;
+                    case "supper":
+                        items.get(i).setTime(sp.getString(preferenceKeyText[5], "17:30"));
+                        break;
+                    case "add_meal_03":
+                        items.get(i).setTime(sp.getString(preferenceKeyText[6], "22:00"));
+                        break;
                 }
             }
 
-            if (pointer != 0)
-                adapter.setData(items, datePlan.getPlan_name().equals("personal plan") ? true : false, false, isShow, Common.CompareDate(diy_days.getText().toString(), Common.getDate()));
-            else
-                adapter.setData(items, datePlan.getPlan_name().equals("personal plan") ? true : false, true, isShow, Common.CompareDate(diy_days.getText().toString(), Common.getDate()));//今天
+            if (pointer != 0) {
+                //adapter.setData(items, datePlan.getPlan_name().equals("personal plan") ? true : false, false, isShow, Common.CompareDate(diy_days.getText().toString(), Common.getDate()));
+                adapter.setData(items, datePlan.getPlan_name().equals("personal plan") ? true : false, false, Common.CompareDate(diy_days.getText().toString(), Common.getDate()));
+            }else {
+                //adapter.setData(items, datePlan.getPlan_name().equals("personal plan") ? true : false, true, isShow, Common.CompareDate(diy_days.getText().toString(), Common.getDate()));//今天
+                adapter.setData(items, datePlan.getPlan_name().equals("personal plan") ? true : false, true, Common.CompareDate(diy_days.getText().toString(), Common.getDate()));//今天
+            }
             return true;
         }
         else {

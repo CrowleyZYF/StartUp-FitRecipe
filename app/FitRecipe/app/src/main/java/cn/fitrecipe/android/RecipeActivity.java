@@ -1,9 +1,12 @@
 package cn.fitrecipe.android;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -18,16 +21,22 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
+import com.umeng.socialize.media.SinaShareContent;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.sso.QZoneSsoHandler;
 import com.umeng.socialize.sso.SinaSsoHandler;
 import com.umeng.socialize.sso.TencentWBSsoHandler;
 import com.umeng.socialize.sso.UMQQSsoHandler;
 import com.umeng.socialize.sso.UMSsoHandler;
+import com.umeng.socialize.weixin.media.WeiXinShareContent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,12 +54,14 @@ import cn.fitrecipe.android.floatingactionbutton.FloatingActionButton;
 import cn.fitrecipe.android.floatingactionbutton.FloatingActionsMenu;
 import cn.fitrecipe.android.function.Common;
 import cn.fitrecipe.android.function.RequestErrorHelper;
+import cn.fitrecipe.android.function.ShareImageGenerator;
 import pl.tajchert.sample.DotsTextView;
 
 public class RecipeActivity extends Activity implements View.OnClickListener, PopupWindow.OnDismissListener {
     private ScrollView recipeContent;
     private LinearLayout loadingInterface;
     private DotsTextView dotsTextView;
+    private LinearLayout share_content;
     //成品图
     private ImageView recipe_pic;
     //标签
@@ -172,6 +183,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
     }
 
     private void initView() {
+        share_content = (LinearLayout) findViewById(R.id.share_content);
         recipe_pic = (ImageView) findViewById(R.id.recipe_pic);
         recipe_tags = (TextView) findViewById(R.id.recipe_tags);
         recipe_name = (TextView) findViewById(R.id.recipe_name);
@@ -274,6 +286,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         }
 
         //Sina
+        mController.getConfig().setDefaultShareLocation(false);
         mController.getConfig().setSsoHandler(new SinaSsoHandler());
         //QQ weibo
         mController.getConfig().setSsoHandler(new TencentWBSsoHandler());
@@ -464,7 +477,8 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                 //openSet();
                 //startActivity(new Intent(this, IngredientActivity.class));
                 //mController.openShare(this, false);
-                Common.toBeContinuedDialog(this).show();
+                //Common.toBeContinuedDialog(this).show();
+                share();
                 break;
             }
             case R.id.back_btn:{
@@ -500,7 +514,8 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                 break;
             }
             case R.id.action_share:{
-                Common.toBeContinuedDialog(this).show();
+                //Common.toBeContinuedDialog(this).show();
+                share();
                 float_set.collapse();
                 //mController.openShare(this, false);
                 //openSet();
@@ -519,6 +534,55 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                 break;
 
         }
+    }
+
+    private void share() {
+        ProgressDialog pd = ProgressDialog.show(RecipeActivity.this, "", "正在生成图片...", true, false);
+        pd.setCanceledOnTouchOutside(false);
+        Bitmap bitmap = ShareImageGenerator.convertViewToRecipeShare(recipe_pic);
+        File path  = new File(Environment.getExternalStorageDirectory() + "/fitrecipe/");
+        if(!path.exists())
+            path.mkdirs();
+        File file = new File(path.getAbsolutePath() + "/abc.jpg");
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+
+        }
+        pd.dismiss();
+        // 设置分享内容
+        WeiXinShareContent test1;
+        SinaShareContent test2;
+
+
+        UMImage test = new UMImage(this, bitmap);
+        mController.setShareImage(new UMImage(this, bitmap));
+        String share_feature = recipe_feature.getText().toString();
+        double protein = recipe.getNutrition_set().get(1).getAmount();
+        double fat = recipe.getNutrition_set().get(2).getAmount();
+        double car = recipe.getNutrition_set().get(3).getAmount();
+        double sum = protein+fat+car;
+        if (share_feature.equals("高蛋白")){
+            share_feature = "，蛋白质在三大宏量营养元素中，质量占比高达" + String.format("%.2f", protein / sum * 100) + "%，";
+        } else if (share_feature.equals("低脂")){
+            share_feature = "，脂类在三大宏量营养元素中，质量占比仅有" + String.format("%.2f", fat / sum * 100) + "%，";
+        } else if (share_feature.equals("低卡")){
+            share_feature = "，每一百克食谱的热量仅有" + recipe.getCalories() + "大卡，";
+        } else {
+            share_feature = "，高蛋白、低脂、低卡全部符合！！";
+        }
+        mController.setShareContent("我在⌈健食记⌋中发现了一道"+recipe_feature.getText().toString()+
+                "的#健身食谱#，来自于@"+author_name.getText().toString()+
+                " 的"+recipe_name.getText().toString()+share_feature+
+                "快点下载APP和我一起试试吧~http://fitrecipe.cn/downloads/ "+
+                "（分享自 @健食记 Android版）");
+        mController.openShare(this, false);
     }
 
     public void collect_recipe() {
