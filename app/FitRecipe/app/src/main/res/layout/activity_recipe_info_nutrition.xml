@@ -87,7 +87,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:text="是您每日所需摄入热量"
+                    android:text="占日均所需热量"
                     android:textSize="12sp"
                     android:textColor="@color/login_input_text_color"/>
 

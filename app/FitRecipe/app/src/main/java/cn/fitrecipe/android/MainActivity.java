@@ -263,7 +263,13 @@ public class MainActivity extends FragmentActivity implements OnClickListener
                         startActivity(new Intent(this, CategoryActivity.class));
                         break;
                     case 1:
-                        if(frPlanFragment != null) ((PlanFragment)frPlanFragment).toggle("all");
+                        if(frPlanFragment != null){
+                            if (((PlanFragment) frPlanFragment).getData){
+                                ((PlanFragment)frPlanFragment).toggle("all");
+                            }else{
+                                Common.infoDialog(this, "稍等一下", "数据正在读取中~").show();
+                            }
+                        }
                         break;
                     case 2:
                         //startActivity(new Intent(this, LetterActivity.class));

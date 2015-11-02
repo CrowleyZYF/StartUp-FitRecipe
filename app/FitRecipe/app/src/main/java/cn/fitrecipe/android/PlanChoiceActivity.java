@@ -231,6 +231,7 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
                                                 FrApplication.getInstance().setPlanInUse(plan1);
                                                 FrDbHelper.getInstance(PlanChoiceActivity.this).clearBasket();
                                                 FrApplication.getInstance().setIsBasketEmpty(true);
+                                                FrApplication.getInstance().setJustChangePlan(true);
                                             }
                                         }, Common.getDate());
                                     } catch (JSONException e) {

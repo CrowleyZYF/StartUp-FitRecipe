@@ -1,7 +1,9 @@
 package cn.fitrecipe.android;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -54,6 +56,7 @@ public class CommentActivity extends Activity implements View.OnClickListener {
     private int recipeId;
     private int lastid = -1;
     private int authorId;
+    private int addCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +77,6 @@ public class CommentActivity extends Activity implements View.OnClickListener {
 
     private void getData() {
         String url = FrServerConfig.getCommentByRecipe(recipeId, lastid);
-        Toast.makeText(this, url, Toast.LENGTH_SHORT).show();
         GetRequest request = new GetRequest(url, FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {
@@ -155,6 +157,10 @@ public class CommentActivity extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.back_btn:
+                SharedPreferences sp = getSharedPreferences("user",MODE_PRIVATE);
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putInt("addCommentCount", addCount);
+                editor.commit();
                 finish();
                 break;
             case R.id.comment_cancel_reply:
@@ -169,10 +175,8 @@ public class CommentActivity extends Activity implements View.OnClickListener {
                     Toast.makeText(this,"回复内容不得为空><",Toast.LENGTH_LONG).show();
                 }else{
                     if(cancelBtn.getVisibility()==View.GONE){
-                        Toast.makeText(this,"回复内容为： "+content,Toast.LENGTH_LONG).show();
                         comment(null, content);
                     }else{
-                        Toast.makeText(this,"回复用户的ID： "+ replyUserID.getText() + " 回复评论的ID： "+replyCommentID.getText() + " 回复内容为： "+content, Toast.LENGTH_LONG).show();
                         comment(replyUserID.getText().toString(), content);
                     }
                 }
@@ -180,6 +184,18 @@ public class CommentActivity extends Activity implements View.OnClickListener {
             default:
                 break;
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0){
+            SharedPreferences sp = getSharedPreferences("user",MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putInt("addCommentCount", addCount);
+            editor.commit();
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     private void comment(String id, String content) {
@@ -212,6 +228,7 @@ public class CommentActivity extends Activity implements View.OnClickListener {
                         Comment comment = new Gson().fromJson(res.getJSONObject("data").toString(), Comment.class);
                         comments.add(0, comment);
                         commentAdapter.notifyDataSetChanged();
+                        addCount++;
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

@@ -109,6 +109,8 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     private TextView punch_count;
     private TextView change_plan_btn;
 
+    public boolean getData = false;
+
 
     final String[] preferenceKeyText = {"", "breakfast_time", "add_meal_01_time", "lunch_time", "add_meal_02_time", "dinner_time", "add_meal_03_time"};
     final String[] preferenceKeySwitch = {"", "breakfast_check", "add_meal_01_check", "lunch_check", "add_meal_02_check", "dinner_check", "add_meal_03_check"};
@@ -565,6 +567,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
 
 
     private void hideLoading(boolean isError){
+        getData = true;
         loadingInterface.setVisibility(View.GONE);
         dotsTextView.stop();
         if(isError){
@@ -577,6 +580,11 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onResume() {
         super.onResume();
+
+        if (FrApplication.getInstance().isJustChangePlan()){
+            FrApplication.getInstance().setJustChangePlan(false);
+            punchData.remove(Common.getDate());
+        }
 
         if(FrApplication.getInstance().getPlanInUse() != null) {
             String select_name = FrApplication.getInstance().getPlanInUse().getTitle();
@@ -620,7 +628,6 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             punch(pr);
             FrApplication.getInstance().setPr(null);
             switchPlan(pointer, 0);
-            Toast.makeText(getActivity(), "OnResume:"+Common.getPunchCount(getActivity()), Toast.LENGTH_SHORT).show();
             punch_count.setText(Common.getPunchCount(getActivity())+"");
         }
 
@@ -628,6 +635,8 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             switchPlan(pointer, 0);
             FrApplication.getInstance().setIsSettingChanged(false);
         }
+
+        scrollToTop();
     }
 
     public void scrollToTop(){

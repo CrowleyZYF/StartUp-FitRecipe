@@ -16,6 +16,7 @@ import java.util.List;
 import cn.fitrecipe.android.Adpater.ProcedureCardAdapter;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.entity.Procedure;
+import cn.fitrecipe.android.function.Common;
 
 public class RecipeProcedureActivity extends Activity implements View.OnClickListener{
 
@@ -30,6 +31,7 @@ public class RecipeProcedureActivity extends Activity implements View.OnClickLis
     private LinearLayout tips_area;
     private TextView tips_content;
     private String tips;
+    private String video;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,7 @@ public class RecipeProcedureActivity extends Activity implements View.OnClickLis
         title = getIntent().getStringExtra("recipe_title");
         procedureCards = (ArrayList<Procedure>) getIntent().getSerializableExtra("procedure_set");
         tips = getIntent().getStringExtra("recipe_tips");
+        video = getIntent().getStringExtra("video");
         initView();
         initData();
         initEvent();
@@ -81,7 +84,11 @@ public class RecipeProcedureActivity extends Activity implements View.OnClickLis
                 this.finish();
                 break;
             case R.id.right_btn:
-                playVideo();
+                if (video.equals("")){
+                    Common.infoDialog(this, "暂无视频", "视频还在录制中，敬请期待啦~").show();
+                }else{
+                    playVideo();
+                }
                 //Common.toBeContinuedDialog(this);
                 break;
             default:
@@ -90,7 +97,7 @@ public class RecipeProcedureActivity extends Activity implements View.OnClickLis
 
     private void playVideo() {
         Intent intent  = new Intent(RecipeProcedureActivity.this, PlayerActivity.class);
-        intent.putExtra("vid", "XMTI0OTc5MzEyNA");
+        intent.putExtra("vid", video);
         startActivity(intent);
     }
 }

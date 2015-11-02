@@ -43,6 +43,7 @@ public class Recipe implements Serializable{
     private String title;
     private String introduce;
     private String tips;
+    private String video;
     private int duration;
     private double calories;
     private int collection_count;
@@ -169,6 +170,9 @@ public class Recipe implements Serializable{
         if(data.has("title"))
             recipe.setTitle(data.getString("title"));
 
+        if(data.has("video"))
+            recipe.setVideo(data.getString("video"));
+
         if(data.has("introduce"))
             recipe.setIntroduce(data.getString("introduce"));
 
@@ -183,6 +187,9 @@ public class Recipe implements Serializable{
 
         if(data.has("collection_count"))
             recipe.setCollection_count(data.getInt("collection_count"));
+
+        if(data.has("comment_count"))
+            recipe.setComment_count(data.getInt("comment_count"));
 
         if(data.has("has_collected"))
             recipe.setHas_collected(data.getBoolean("has_collected"));
@@ -358,6 +365,14 @@ public class Recipe implements Serializable{
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getVideo() {
+        return video;
+    }
+
+    public void setVideo(String video) {
+        this.video = video;
     }
 
     public String getIntroduce() {
