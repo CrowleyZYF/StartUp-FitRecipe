@@ -86,6 +86,11 @@ public class Author implements Serializable{
         return FrServerConfig.getAvatarCompressed(avatar);
     }
 
+
+    public String getRawAvatar() {
+        return  avatar;
+    }
+
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }

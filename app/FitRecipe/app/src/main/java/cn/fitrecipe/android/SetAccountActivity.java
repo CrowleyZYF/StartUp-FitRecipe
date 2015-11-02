@@ -178,8 +178,9 @@ public class SetAccountActivity extends Activity implements View.OnClickListener
         try {
             if(pngName != null)
                 params.put("avatar", FrServerConfig.getQiNiuHost() + pngName);
-            else
-                params.put("avatar", FrApplication.getInstance().getAuthor().getAvatar());
+            else {
+                params.put("avatar", FrApplication.getInstance().getAuthor().getRawAvatar());
+            }
             params.put("nick_name", nick_name);
         }catch (JSONException e) {
             throw new RuntimeException(e);
