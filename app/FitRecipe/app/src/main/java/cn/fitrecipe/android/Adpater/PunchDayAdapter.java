@@ -126,7 +126,7 @@ public class PunchDayAdapter extends RecyclerView.Adapter<PunchDayAdapter.PunchD
                 convertView.setTag(holder);
             }
             if(punchItems.get(position).getImageCover() == null || punchItems.get(position).getImageCover().length() == 0)
-                FrApplication.getInstance().getMyImageLoader().displayImage(holder.punch_photo, punchItems.get(position).getDefaultImageCover());
+                FrApplication.getInstance().getMyImageLoader().displayImage(holder.punch_photo, punchItems.get(position).getDefaultImageCoverS());
             else
                 FrApplication.getInstance().getMyImageLoader().displayImage(holder.punch_photo, punchItems.get(position).getImageCover());
             holder.punch_th.setText(punchItems.get(position).getTh() + "");
@@ -154,6 +154,7 @@ public class PunchDayAdapter extends RecyclerView.Adapter<PunchDayAdapter.PunchD
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, PunchContentSureActivity.class);
+                    intent.putExtra("punch_id", punchItems.get(position).getPunchId());
                     intent.putExtra("item", punchItems.get(position));
                     intent.putExtra("action", "share");
                     intent.putExtra("time", punchItems.get(position).getTh() + "");

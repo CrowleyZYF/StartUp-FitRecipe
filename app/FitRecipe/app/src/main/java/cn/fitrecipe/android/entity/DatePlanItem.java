@@ -200,6 +200,28 @@ public class DatePlanItem implements Serializable{
         return defaultImageCover;
     }
 
+    public String getDefaultImageCoverS() {
+        if (type.equals("breakfast")){
+            return "drawable://" + R.drawable.breakfast_s;
+        }
+        if (type.equals("add_meal_01")){
+            return "drawable://" + R.drawable.add_meal_01_s;
+        }
+        if (type.equals("lunch")){
+            return "drawable://" + R.drawable.lunch_s;
+        }
+        if (type.equals("add_meal_02")){
+            return "drawable://" + R.drawable.add_meal_02_s;
+        }
+        if (type.equals("supper")){
+            return "drawable://" + R.drawable.dinner_s;
+        }
+        if (type.equals("add_meal_03")){
+            return "drawable://" + R.drawable.add_meal_03_s;
+        }
+        return "";
+    }
+
     public void setDefaultImageCover(String defaultImageCover) {
         this.defaultImageCover = defaultImageCover;
         if (type.equals("breakfast")){

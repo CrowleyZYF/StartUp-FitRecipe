@@ -140,6 +140,7 @@ public class PunchFragment extends Fragment
                 DatePlanItem item = new DatePlanItem();
                 String date = obj.getString("date");
                 //确定餐的类型
+                item.setPunchId(obj.getInt("id"));
                 int type = obj.getInt("type");
                 switch (type) {
                     case 0:
@@ -238,9 +239,6 @@ public class PunchFragment extends Fragment
         int x = total;
         for(int i = 0; i < datePlans.size(); i++) {
             List<DatePlanItem> tmp = datePlans.get(i).getItems();
-            /*for(int j = 0; j < tmp.size(); j++)
-                if(tmp.get(j).isPunch())
-                    tmp.get(j).setTh(x--);*/
             for(int j = tmp.size()-1; j >= 0; j--)
                 if(tmp.get(j).isPunch())
                     tmp.get(j).setTh(x--);

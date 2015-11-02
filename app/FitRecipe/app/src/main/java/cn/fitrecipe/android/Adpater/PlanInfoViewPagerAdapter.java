@@ -118,6 +118,7 @@ public class PlanInfoViewPagerAdapter extends PagerAdapter {
                                     FrApplication.getInstance().setPlanInUse(plan1);
                                     choice_join_btn.setTextColor(context.getResources().getColor(R.color.white));
                                     choice_join_btn.setBackground(context.getResources().getDrawable(R.drawable.join_button));
+                                    FrApplication.getInstance().setJustChangePlan(true);
                                     //
                                     pd.dismiss();
                                 }

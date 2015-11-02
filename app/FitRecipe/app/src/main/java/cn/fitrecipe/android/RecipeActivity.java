@@ -158,7 +158,18 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         recipeContent.smoothScrollTo(0, 0);
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences sp = getSharedPreferences("user", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        if (sp.getInt("addCommentCount", 0)!=0 && recipe!=null){
+            recipe.setComment_count(recipe.getComment_count()+sp.getInt("addCommentCount", 0));
+            recipe_comment.setText("评论 " + recipe.getComment_count()+"");
+            editor.putInt("addCommentCount", 0);
+            editor.commit();
+        }
+    }
 
     private void initView() {
         recipe_pic = (ImageView) findViewById(R.id.recipe_pic);
@@ -445,6 +456,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                 intent.putExtra("procedure_set", recipe.getProcedure_set());
                 intent.putExtra("recipe_title", recipe_name.getText().toString());
                 intent.putExtra("recipe_tips", recipe.getTips());
+                intent.putExtra("video", recipe.getVideo());
                 startActivity(intent);
                 break;
             }
@@ -483,11 +495,13 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                 intent.putExtra("author_id", recipe.getAuthor().getId());
                 intent.putExtra("comment_set", recipe.getComment_set());
                 startActivity(intent);
+                float_set.collapse();
                 //openSet();
                 break;
             }
             case R.id.action_share:{
                 Common.toBeContinuedDialog(this).show();
+                float_set.collapse();
                 //mController.openShare(this, false);
                 //openSet();
                 break;
@@ -519,6 +533,8 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                     editor.putBoolean("hasDelete", true);
                     editor.putInt("delete_id", recipe.getCollect_id());
                     editor.commit();
+                    recipe.setCollection_count(recipe.getCollection_count() - 1);
+                    recipe_collect.setText("收藏 " + recipe.getCollection_count());
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -544,12 +560,19 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                 @Override
                 public void onResponse(JSONObject res) {
                     //Toast.makeText(RecipeActivity.this, "收藏成功!", Toast.LENGTH_SHORT).show();
+                    try {
+                        recipe.setCollect_id(res.getJSONObject("data").getInt("id"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     collect_btn.setIcon(R.drawable.icon_like_green);
                     SharedPreferences preferences=getSharedPreferences("user", MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putBoolean("hasDelete", false);
                     editor.putInt("delete_id", -1);
                     editor.commit();
+                    recipe.setCollection_count(recipe.getCollection_count()+1);
+                    recipe_collect.setText("收藏 " + recipe.getCollection_count());
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -560,6 +583,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
             FrRequest.getInstance().request(request);
         }
         isCollected=!isCollected;
+        float_set.collapse();
     }
 
     public void adjustWeight(boolean isAdd){

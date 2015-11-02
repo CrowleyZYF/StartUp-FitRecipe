@@ -49,6 +49,8 @@ public class FrApplication extends Application {
 
     private boolean isBasketEmpty;
 
+    private boolean justChangePlan;
+
     private PlanComponent component;
     private int type;
     private String date;
@@ -199,6 +201,14 @@ public class FrApplication extends Application {
 
     public void setIsBasketEmpty(boolean isBasketEmpty) {
         this.isBasketEmpty = isBasketEmpty;
+    }
+
+    public boolean isJustChangePlan() {
+        return justChangePlan;
+    }
+
+    public void setJustChangePlan(boolean justChangePlan) {
+        this.justChangePlan = justChangePlan;
     }
 
     public PlanComponent getComponent() {

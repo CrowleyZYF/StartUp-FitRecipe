@@ -88,6 +88,8 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
 
     private String action;
 
+    private int punch_id = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +98,9 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
         if(getIntent().hasExtra("bitmap")) {
             String path = getIntent().getStringExtra("bitmap");
             bitmap = BitmapFactory.decodeFile(path);
+        }
+        if (getIntent().hasExtra("punch_id")){
+            punch_id = getIntent().getIntExtra("punch_id", -1);
         }
 
         action = getIntent().getStringExtra("action");
@@ -132,7 +137,7 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
             punch_photo.setImageBitmap(bitmap);
         else
             if(item.getImageCover() == null || item.getImageCover().length() == 0)
-                FrApplication.getInstance().getMyImageLoader().displayImage(punch_photo, item.getDefaultImageCover());
+                FrApplication.getInstance().getMyImageLoader().displayImage(punch_photo, item.getDefaultImageCoverS());
             else
                 FrApplication.getInstance().getMyImageLoader().displayImage(punch_photo, item.getImageCover());
 
@@ -191,8 +196,9 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
             case "supper":
                 punch_type.setText("晚餐");    break;
             case "add_meal_01":
+                punch_type.setText("上午加餐");    break;
             case "add_meal_02":
-                punch_type.setText("加餐");    break;
+                punch_type.setText("下午加餐");    break;
             case "add_meal_03":
                 punch_type.setText("夜宵");    break;
         }
@@ -271,8 +277,8 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
                 break;
             case R.id.right_btn:
                 if(action.equals("share")) {
-                    //share();
-                    Common.toBeContinuedDialog(this).show();
+                    share();
+                    //Common.toBeContinuedDialog(this).show();
                 }else{
                     publish();
                 }
@@ -306,7 +312,12 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
         // 设置分享内容
         UMImage test = new UMImage(this, bitmap);
         mController.setShareImage(new UMImage(this, bitmap));
-        mController.setShareContent("友盟社会化组件（SDK）让移动应用快速整合社交分享功能，http://www.umeng.com/social");
+        mController.setShareContent(FrApplication.getInstance().getAuthor().getNick_name()+
+                "在⌈健食记⌋中完成了"+punch_type.getText().toString()+
+                "的打卡，摄入了"+item_calories.getText().toString()+
+                "大卡，占日均所需的"+caloire_ratio.getText()+
+                "，快来看看我的"+punch_type.getText().toString()+
+                "吧~"+"http://fitrecipe.cn/punch/"+punch_id);
         mController.openShare(this, false);
     }
 
@@ -386,7 +397,7 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
                         pr.setType(item.getType());
                         pr.setDate(item.getDate());
                         Common.setPunchCount(PunchContentSureActivity.this, Common.getPunchCount(PunchContentSureActivity.this)+1);
-                        Toast.makeText(PunchContentSureActivity.this, Common.getPunchCount(PunchContentSureActivity.this)+"", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(PunchContentSureActivity.this, Common.getPunchCount(PunchContentSureActivity.this)+"", Toast.LENGTH_SHORT).show();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

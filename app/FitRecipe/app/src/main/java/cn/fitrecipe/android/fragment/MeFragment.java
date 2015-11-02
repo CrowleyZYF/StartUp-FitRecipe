@@ -74,6 +74,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
                             try {
                                 int data = res.getJSONObject("data").getInt("count");
                                 me_punch.setText("打卡次数："+data);
+                                me_work.setText("收藏食谱："+res.getJSONObject("data").getInt("recipe"));
                                 Common.setPunchCount(getActivity(), data);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -113,13 +114,13 @@ public class MeFragment extends Fragment implements View.OnClickListener {
             //login_platform.setText("平台："+preferences.getString("platform", "出错啦"));
             FrApplication.getInstance().getMyImageLoader().displayImage(me_avatar, FrApplication.getInstance().getAuthor().getAvatar());
             me_login_btn_text.setText("退出登陆");
+            freshData();
         }else{
             me_name.setText("未登录");
             //login_platform.setText("平台：暂无");
             me_login_btn_text.setText("登陆");
             me_avatar.setImageResource(R.drawable.pic_header);
         }
-        freshData();
     }
 
     @Override
