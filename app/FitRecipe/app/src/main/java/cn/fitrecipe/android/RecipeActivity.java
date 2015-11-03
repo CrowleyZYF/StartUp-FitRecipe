@@ -19,15 +19,20 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
+import com.umeng.socialize.media.QQShareContent;
+import com.umeng.socialize.media.QZoneShareContent;
 import com.umeng.socialize.media.SinaShareContent;
+import com.umeng.socialize.media.TencentWbShareContent;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.sso.QZoneSsoHandler;
 import com.umeng.socialize.sso.SinaSsoHandler;
 import com.umeng.socialize.sso.TencentWBSsoHandler;
 import com.umeng.socialize.sso.UMQQSsoHandler;
 import com.umeng.socialize.sso.UMSsoHandler;
+import com.umeng.socialize.weixin.controller.UMWXHandler;
 import com.umeng.socialize.weixin.media.WeiXinShareContent;
 
 import org.json.JSONException;
@@ -297,15 +302,16 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(this, "100424468","c7394704798a158208a74ab60104f0ba");
         qqSsoHandler.addToSocialSDK();
 
-        // 设置分享内容
-        mController.setShareContent("友盟社会化组件（SDK）让移动应用快速整合社交分享功能，http://www.umeng.com/social");
-        // 设置分享图片, 参数2为图片的url地址
-        mController.setShareMedia(new UMImage(this, R.drawable.welcome));
-        // 设置分享图片，参数2为本地图片的资源引用
-        //mController.setShareMedia(new UMImage(getActivity(), R.drawable.icon));
-        // 设置分享图片，参数2为本地图片的路径(绝对路径)
-        //mController.setShareMedia(new UMImage(getActivity(),
-        //                                BitmapFactory.decodeFile("/mnt/sdcard/icon.png")));
+        String appID = "wx967daebe835fbeac";
+        String appSecret = "5fa9e68ca3970e87a1f83e563c8dcbce";
+        // 添加微信平台
+        UMWXHandler wxHandler = new UMWXHandler(this,appID,appSecret);
+        wxHandler.addToSocialSDK();
+        // 添加微信朋友圈
+        UMWXHandler wxCircleHandler = new UMWXHandler(this,appID,appSecret);
+        wxCircleHandler.setToCircle(true);
+        wxCircleHandler.addToSocialSDK();
+
     }
 
     private void processData(JSONObject data) throws JSONException {
@@ -459,6 +465,13 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         else
             calorie_radio.setText(" --%");
         component_adapter.notifyDataSetChanged();
+        nutrition_adapter.notifyDataSetChanged();
+        double protein = recipe.getNutrition_set().get(1).getAmount();
+        double fat = recipe.getNutrition_set().get(2).getAmount();
+        double car = recipe.getNutrition_set().get(3).getAmount();
+        protein_ratio.setText(String.format("%.2f g", protein * weight * 1.0 / 100));
+        carbohydrate_ratio.setText(String.format("%.2f g", car * weight * 1.0 / 100));
+        lipids_ratio.setText(String.format("%.2f g", fat * weight * 1.0 / 100));
     }
 
     @Override
@@ -474,11 +487,11 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                 break;
             }
             case R.id.set_btn:{
-                //openSet();
-                //startActivity(new Intent(this, IngredientActivity.class));
-                //mController.openShare(this, false);
-                //Common.toBeContinuedDialog(this).show();
-                share();
+                if (loadingInterface.getVisibility()==View.GONE){
+                    share();
+                }else {
+                    Common.infoDialog(this, "稍等一下", "数据正在读取中~").show();
+                }
                 break;
             }
             case R.id.back_btn:{
@@ -561,8 +574,9 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         SinaShareContent test2;
 
 
-        UMImage test = new UMImage(this, bitmap);
-        mController.setShareImage(new UMImage(this, bitmap));
+        UMImage shareImage = new UMImage(this, bitmap);
+
+        //sina
         String share_feature = recipe_feature.getText().toString();
         double protein = recipe.getNutrition_set().get(1).getAmount();
         double fat = recipe.getNutrition_set().get(2).getAmount();
@@ -577,11 +591,49 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
         } else {
             share_feature = "，高蛋白、低脂、低卡全部符合！！";
         }
-        mController.setShareContent("我在⌈健食记⌋中发现了一道"+recipe_feature.getText().toString()+
+        String sinaContent = "我在⌈健食记⌋中发现了一道"+recipe_feature.getText().toString()+
                 "的#健身食谱#，来自于@"+author_name.getText().toString()+
                 " 的"+recipe_name.getText().toString()+share_feature+
                 "快点下载APP和我一起试试吧~http://fitrecipe.cn/downloads/ "+
-                "（分享自 @健食记 Android版）");
+                "（分享自 @健食记 Android版）";
+        SinaShareContent sinaShareContent = new SinaShareContent(sinaContent);
+        sinaShareContent.setShareImage(shareImage);
+        mController.setShareMedia(sinaShareContent);
+
+        //TencentWB
+        String tencentContent = "我在⌈健食记⌋中发现了一道"+recipe_feature.getText().toString()+
+                "的#健身食谱#，来自于"+author_name.getText().toString()+
+                "的"+recipe_name.getText().toString()+share_feature+
+                "快点下载APP和我一起试试吧~http://fitrecipe.cn/downloads/ "+
+                "（分享自 @健食记 Android版）";
+        TencentWbShareContent tencentWbShareContent = new TencentWbShareContent(tencentContent);
+        tencentWbShareContent.setShareImage(shareImage);
+        mController.setShareMedia(tencentWbShareContent);
+
+        //QQ
+        String qqContent = "我在⌈健食记⌋中发现了一道"+recipe_feature.getText().toString()+"食谱，快来和我一起试试吧~";
+        QQShareContent qqShareContent = new QQShareContent(qqContent);
+        qqShareContent.setTitle("⌈健身食谱⌋ "+recipe_name.getText().toString());
+        qqShareContent.setTargetUrl("http://fitrecipe.cn/downloads/");
+        qqShareContent.setShareImage(shareImage);
+        mController.setShareMedia(qqShareContent);
+
+        //QZone
+        QZoneShareContent qZoneShareContent = new QZoneShareContent(qqContent);
+        qZoneShareContent.setTitle("⌈健身食谱⌋ "+recipe_name.getText().toString());
+        qZoneShareContent.setTargetUrl("http://fitrecipe.cn/downloads/");
+        qZoneShareContent.setShareImage(shareImage);
+        mController.setShareMedia(qZoneShareContent);
+
+        /*//Wechat
+        String weixinContent = "我在⌈健食记⌋中发现了一道我在⌈健食记⌋中发现了一道我在⌈健食记⌋中发现了一道我在⌈健食记⌋中发现了一道我在⌈健食记⌋中发现了一道";
+        WeiXinShareContent weiXinShareContent = new WeiXinShareContent(weixinContent);
+        //weiXinShareContent.setShareImage(shareImage);
+        weiXinShareContent.setTitle("我在⌈健食记⌋中发现了一道我在⌈健食记⌋中发现了一道我在⌈健食记⌋中发现了一道我在⌈健食记⌋中发现了一道我在⌈健食记⌋中发现了一道");
+        weiXinShareContent.setTargetUrl("http://fitrecipe.cn/downloads/");
+        mController.setShareMedia(weiXinShareContent);*/
+
+        mController.getConfig().removePlatform(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE);
         mController.openShare(this, false);
     }
 
@@ -652,12 +704,12 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
 
     public void adjustWeight(boolean isAdd){
         if(isAdd){
-            weight +=  recipe.getTotal_amount() / 4;
+            weight +=  recipe.getTotal_amount() / 2;
             adjustComponent();
         }else{
-            if(weight >= recipe.getTotal_amount()/4) {
-                if (!(weight - recipe.getTotal_amount() / 4 <= 0)){
-                    weight -=  recipe.getTotal_amount() / 4;
+            if(weight >= recipe.getTotal_amount()/2) {
+                if (!(weight - recipe.getTotal_amount() / 2 <= 0)){
+                    weight -=  recipe.getTotal_amount() / 2;
                     adjustComponent();
                 }
             }

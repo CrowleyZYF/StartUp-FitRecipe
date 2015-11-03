@@ -202,20 +202,34 @@ public class SelectStageSecondFragment extends Fragment implements View.OnClickL
                 }
                 break;
             case R.id.add:
-                weight2 += 0.25;
+                /*weight2 += 0.25;
                 int tmp = (int)(weight2 * 4);
                 if(tmp % 4 == 0)
                     recipe_weight.setText(String.valueOf(tmp/4));
+                else
+                    recipe_weight.setText(String.valueOf(weight2));*/
+                weight2 += 0.5;
+                int tmp = (int)(weight2 * 2);
+                if(tmp % 2 == 0)
+                    recipe_weight.setText(String.valueOf(tmp/2));
                 else
                     recipe_weight.setText(String.valueOf(weight2));
                 update2();
                 break;
             case R.id.sub:
-                if(weight2 > 0) {
+                /*if(weight2 > 0) {
                     weight2 -= 0.25;
                     tmp = (int)(weight2 * 4);
                     if(tmp % 4 == 0)
                         recipe_weight.setText(String.valueOf(tmp/4));
+                    else
+                        recipe_weight.setText(String.valueOf(weight2));
+                }*/
+                if(weight2 > 0) {
+                    weight2 -= 0.5;
+                    tmp = (int)(weight2 * 2);
+                    if(tmp % 2 == 0)
+                        recipe_weight.setText(String.valueOf(tmp/2));
                     else
                         recipe_weight.setText(String.valueOf(weight2));
                 }

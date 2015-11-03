@@ -54,7 +54,7 @@ public class AddToPlanActivity extends Activity implements View.OnClickListener 
 
     private ArrayList<String> date_text_array;
     private String[] meal_text_array = {"早餐", "上午加餐", "午餐", "下午加餐", "晚餐", "夜宵"};
-    private Button add_to_plan_btn;
+    private Button add_to_plan_btn, cancel_button;
     private int choosen_date = 0;
     private int choosen_meal = 0;
     private int adjust_unit_weight;//每次调整的基本单位
@@ -79,7 +79,7 @@ public class AddToPlanActivity extends Activity implements View.OnClickListener 
         now_weight = getIntent().getIntExtra("amount", 0);
         recipe_id = getIntent().getIntExtra("id", 0);
         recipe = (Recipe) getIntent().getSerializableExtra("recipe");
-        adjust_unit_weight = now_weight / 4;
+        adjust_unit_weight = now_weight / 2;
         initView();
         initData();
         initEvent();
@@ -93,6 +93,7 @@ public class AddToPlanActivity extends Activity implements View.OnClickListener 
         setClickEvent(date_btn_array);
         setClickEvent(meal_btn_array);
         add_to_plan_btn.setOnClickListener(this);
+        cancel_button.setOnClickListener(this);
         minus_btn.setOnClickListener(this);
         add_btn.setOnClickListener(this);
     }
@@ -127,6 +128,7 @@ public class AddToPlanActivity extends Activity implements View.OnClickListener 
         meal_btn_array.add(nowMeal_5_btn);
 
         add_to_plan_btn = (Button) findViewById(R.id.add_to_plan_btn);
+        cancel_button = (Button) findViewById(R.id.cancel_button);
 
         minus_btn = (TextView) findViewById(R.id.minus_btn);
         add_btn = (TextView) findViewById(R.id.add_btn);
@@ -189,6 +191,9 @@ public class AddToPlanActivity extends Activity implements View.OnClickListener 
                 break;
             case R.id.add_to_plan_btn:
                 addToPlan();
+                break;
+            case R.id.cancel_button:
+                finish();
                 break;
             case R.id.minus_btn:
                 if (now_weight > adjust_unit_weight){

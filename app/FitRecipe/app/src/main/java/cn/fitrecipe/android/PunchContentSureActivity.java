@@ -23,8 +23,13 @@ import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
 import com.qiniu.util.Auth;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
+import com.umeng.socialize.media.QQShareContent;
+import com.umeng.socialize.media.QZoneShareContent;
+import com.umeng.socialize.media.SinaShareContent;
+import com.umeng.socialize.media.TencentWbShareContent;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.sso.QZoneSsoHandler;
 import com.umeng.socialize.sso.SinaSsoHandler;
@@ -307,16 +312,41 @@ public class PunchContentSureActivity extends Activity implements View.OnClickLi
 
         }
         pd.dismiss();
-        // 设置分享内容
-        UMImage test = new UMImage(this, bitmap);
-        mController.getConfig().setDefaultShareLocation(false);
-        mController.setShareImage(new UMImage(this, bitmap));
-        mController.setShareContent(FrApplication.getInstance().getAuthor().getNick_name()+
+        //设置分享内容
+        UMImage shareImage = new UMImage(this, bitmap);
+
+        //sina && TencentWB
+        String sinaContent = FrApplication.getInstance().getAuthor().getNick_name()+
                 "在⌈健食记⌋中完成了"+punch_type.getText().toString()+
                 "的打卡，摄入了"+item_calories.getText().toString()+
                 "大卡，占日均所需的"+caloire_ratio.getText()+
                 "，快来看看我的"+punch_type.getText().toString()+
-                "吧~"+"http://fitrecipe.cn/punch/"+punch_id);
+                "吧~"+"http://fitrecipe.cn/punch/"+punch_id;
+        SinaShareContent sinaShareContent = new SinaShareContent(sinaContent);
+        sinaShareContent.setShareImage(shareImage);
+        mController.setShareMedia(sinaShareContent);
+        TencentWbShareContent tencentWbShareContent = new TencentWbShareContent(sinaContent);
+        tencentWbShareContent.setShareImage(shareImage);
+        mController.setShareMedia(tencentWbShareContent);
+
+        //QQ && QZone
+        String qqContent = "我的"+punch_type.getText().toString()+
+                "摄入了"+item_calories.getText().toString()+
+                "大卡，占日均所需的"+caloire_ratio.getText()+
+                "，快来看看吧~";
+        QQShareContent qqShareContent = new QQShareContent(qqContent);
+        qqShareContent.setTitle(FrApplication.getInstance().getAuthor().getNick_name() + "的" + punch_type.getText().toString() + "打卡");
+        qqShareContent.setTargetUrl("http://fitrecipe.cn/punch/"+punch_id);
+        qqShareContent.setShareImage(shareImage);
+        mController.setShareMedia(qqShareContent);
+        QZoneShareContent qZoneShareContent = new QZoneShareContent(qqContent);
+        qZoneShareContent.setTitle(FrApplication.getInstance().getAuthor().getNick_name() + "的" + punch_type.getText().toString() + "打卡");
+        qZoneShareContent.setTargetUrl("http://fitrecipe.cn/punch/"+punch_id);
+        qZoneShareContent.setShareImage(shareImage);
+        mController.setShareMedia(qZoneShareContent);
+
+        mController.getConfig().removePlatform(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE);
+        mController.getConfig().setDefaultShareLocation(false);
         mController.openShare(this, false);
     }
 

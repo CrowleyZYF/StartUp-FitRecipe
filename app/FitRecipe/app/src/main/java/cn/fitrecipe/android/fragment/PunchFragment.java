@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -96,7 +95,7 @@ public class PunchFragment extends Fragment
     }
 
     private void getData() {
-        String today = Common.getDate();
+        final String today = Common.getDate();
         String url = FrServerConfig.getPunchListUrl(Common.dateFormat(Common.getSomeDay(today, - start - num)), Common.dateFormat(Common.getSomeDay(today, -start)));
         GetRequest request = new GetRequest(url, FrApplication.getInstance().getToken(), new Response.Listener<JSONObject>() {
             @Override
@@ -104,14 +103,15 @@ public class PunchFragment extends Fragment
                 if (res != null && res.has("data")) {
                     try {
                         JSONObject data = res.getJSONObject("data");
-                        total = data.getInt("count");
+                        if (datePlans==null)
+                            total = data.getInt("count");
                         processData(data.getJSONArray("punchs"));
                         if(start == 0)
                             hideLoading(false, "");
                         else {
                             if (data.getJSONArray("punchs").length() == 0) {
                                 info_container.setNoMore();
-                                Toast.makeText(getActivity(), "没有多余的主题", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "没有更多记录了", Toast.LENGTH_SHORT).show();
                             }
                             info_container.setCompleteMore();
                         }
@@ -224,7 +224,9 @@ public class PunchFragment extends Fragment
             }
         }
 
-        datePlans = new ArrayList<>();
+        if(datePlans==null){
+            datePlans = new ArrayList<>();
+        }
         Set<String> keyset = map.keySet();
         Iterator<String> iterator = keyset.iterator();
         while(iterator.hasNext()) {

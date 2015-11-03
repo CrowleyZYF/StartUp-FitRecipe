@@ -9,6 +9,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.umeng.fb.FeedbackAgent;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
 import com.umeng.socialize.sso.QZoneSsoHandler;
@@ -16,6 +17,12 @@ import com.umeng.socialize.sso.SinaSsoHandler;
 import com.umeng.socialize.sso.TencentWBSsoHandler;
 import com.umeng.socialize.sso.UMQQSsoHandler;
 import com.umeng.socialize.sso.UMSsoHandler;
+import com.umeng.update.UmengUpdateAgent;
+import com.umeng.update.UmengUpdateListener;
+import com.umeng.update.UpdateResponse;
+import com.umeng.update.UpdateStatus;
+
+import cn.fitrecipe.android.function.Common;
 
 /**
  * Created by 奕峰 on 2015/5/8.
@@ -113,8 +120,9 @@ public class SetActivity extends Activity implements View.OnClickListener {
                 }
                 break;
             case R.id.set_meal_btn:
-                Intent set_meal_btn = new Intent(this,SetMealActivity.class);
-                startActivity(set_meal_btn);
+                /*Intent set_meal_btn = new Intent(this,SetMealActivity.class);
+                startActivity(set_meal_btn);*/
+                Common.toBeContinuedDialog(this).show();
                 break;
             case R.id.set_alarm_btn:
                 Intent set_alarm_btn = new Intent(this,SetAlarmActivity.class);
@@ -132,6 +140,27 @@ public class SetActivity extends Activity implements View.OnClickListener {
                 agent.startFeedbackActivity();
                 break;
             case R.id.set_checkupdate_btn:
+                UmengUpdateAgent.setUpdateAutoPopup(false);
+                UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
+                    @Override
+                    public void onUpdateReturned(int updateStatus,UpdateResponse updateInfo) {
+                        switch (updateStatus) {
+                            case UpdateStatus.Yes: // has update
+                                UmengUpdateAgent.showUpdateDialog(SetActivity.this, updateInfo);
+                                break;
+                            case UpdateStatus.No: // has no update
+                                Toast.makeText(SetActivity.this, "目前版本已经是最新的啦~", Toast.LENGTH_SHORT).show();
+                                break;
+                            case UpdateStatus.NoneWifi: // none wifi
+                                Toast.makeText(SetActivity.this, "没有wifi连接， 只在wifi下更新哦~", Toast.LENGTH_SHORT).show();
+                                break;
+                            case UpdateStatus.Timeout: // time out
+                                Toast.makeText(SetActivity.this, "连接超时，等等再来试试吧~", Toast.LENGTH_SHORT).show();
+                                break;
+                        }
+                    }
+                });
+                UmengUpdateAgent.forceUpdate(this);
                 break;
             case R.id.set_protocol_btn:
                 break;
@@ -140,8 +169,10 @@ public class SetActivity extends Activity implements View.OnClickListener {
 
     private void share() {
         // 设置分享内容
-        mController.setShareContent("下载健食记，选择属于自己的健身饮食计划。讲究自己的每一餐，因为健身从不将就。http://fitrecipe.cn");
+        mController.getConfig().setDefaultShareLocation(false);
+        mController.setShareContent("下载健食记，选择属于自己的健身饮食计划。讲究自己的每一餐，因为健身从不将就。http://fitrecipe.cn/downloads/");
         //mController.
+        mController.getConfig().removePlatform(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE);
         mController.openShare(this, false);
     }
 }

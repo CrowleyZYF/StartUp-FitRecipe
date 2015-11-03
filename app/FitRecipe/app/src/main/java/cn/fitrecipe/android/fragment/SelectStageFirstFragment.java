@@ -149,8 +149,8 @@ public class SelectStageFirstFragment extends Fragment implements View.OnClickLi
 
     private void search(String text) {
 //        if(text == null || text.length() == 0) {
-        if(text == null) {
-            //Toast.makeText(getActivity(), "搜索内容不能为空！", Toast.LENGTH_SHORT).show();
+        if(text == null || text.length() == 0) {
+            Toast.makeText(getActivity(), "搜索内容不能为空！", Toast.LENGTH_SHORT).show();
         }else {
             search = text;
             if (data == null)

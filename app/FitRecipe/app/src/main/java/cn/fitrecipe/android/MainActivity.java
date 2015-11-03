@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.umeng.fb.FeedbackAgent;
+import com.umeng.update.UmengUpdateAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +70,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+        UmengUpdateAgent.update(this);
         layout = View.inflate(this, R.layout.framework_main_container, null);
         setContentView(layout);
 
@@ -116,6 +119,9 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         }else{
             resetTabs();
             frTabs.get(tab_index).setBackgroundColor(getResources().getColor(R.color.active_color));
+            /*if (tab_index==1 && frPlanFragment!=null){
+                ((PlanFragment) frPlanFragment).scrollToTop();
+            }*/
         }
 
         registerReceiver(readyRececiver, intentFilter);

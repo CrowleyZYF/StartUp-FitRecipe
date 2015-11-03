@@ -79,7 +79,7 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
 
     private final String DURATION = "duration";
     private final String CALORIES = "calories";
-    private final String LIKE = "like";
+    private final String LIKE = "collection";
 
     private boolean getMore = false;
 
@@ -293,7 +293,7 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
                 }
                 sort_des = !sort_des;
                 desc = sort_des;
-                order = "";
+                order = LIKE;
                 getMore = false;
                 getData();
                 break;

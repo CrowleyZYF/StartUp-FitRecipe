@@ -19,7 +19,6 @@ import cn.fitrecipe.android.R;
 import cn.fitrecipe.android.entity.DatePlan;
 import cn.fitrecipe.android.entity.DatePlanItem;
 import cn.fitrecipe.android.entity.Report;
-import cn.fitrecipe.android.function.Common;
 
 /**
  * Created by 奕峰 on 2015/4/24.
@@ -51,12 +50,13 @@ public class PunchDayAdapter extends RecyclerView.Adapter<PunchDayAdapter.PunchD
         contactViewHolder.punch_day.setText(pd.getDate());
         PunchItemAdapter punchItemAdapter = new PunchItemAdapter(this.context, pd);
         contactViewHolder.punch_items.setAdapter(punchItemAdapter);
-        contactViewHolder.punch_share.setOnClickListener(new View.OnClickListener() {
+        contactViewHolder.punch_share.setVisibility(View.GONE);
+        /*contactViewHolder.punch_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Common.toBeContinuedDialog(context).show();
             }
-        });
+        });*/
     }
 
     @Override

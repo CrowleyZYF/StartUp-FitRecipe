@@ -356,17 +356,41 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/add_to_plan_btn"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:padding="8dp"
-        android:gravity="center"
-        android:text="确定添加"
-        android:textSize="12sp"
-        android:textColor="@color/white"
-        android:background="@drawable/add_to_plan_chosen"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"/>
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/add_to_plan_btn"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:padding="8dp"
+            android:gravity="center"
+            android:text="确定添加"
+            android:textSize="12sp"
+            android:textColor="@color/white"
+            android:background="@drawable/add_to_plan_chosen"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"/>
+
+        <Button
+            android:id="@+id/cancel_button"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:padding="8dp"
+            android:gravity="center"
+            android:text="取消"
+            android:textSize="12sp"
+            android:textColor="@color/base_color"
+            android:background="@drawable/add_to_plan"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"/>
+
+    </LinearLayout>
+
+
 
 </LinearLayout>

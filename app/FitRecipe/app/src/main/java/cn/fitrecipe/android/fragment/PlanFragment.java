@@ -111,6 +111,8 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
 
     public boolean getData = false;
 
+    private String video_id = "";
+
 
     final String[] preferenceKeyText = {"", "breakfast_time", "add_meal_01_time", "lunch_time", "add_meal_02_time", "dinner_time", "add_meal_03_time"};
     final String[] preferenceKeySwitch = {"", "breakfast_check", "add_meal_01_check", "lunch_check", "add_meal_02_check", "dinner_check", "add_meal_03_check"};
@@ -423,6 +425,10 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             other_plan_days.setVisibility(datePlan.getPlan_name().equals("personal plan") ? View.GONE : View.VISIBLE);
             other_plan_days.setText(indexDate != null && indexDate.containsKey(str) ? indexDate.get(str) : "");
             items = datePlan.getItems();
+            video_id = datePlan.getVideo();
+            if (datePlan.getPlan_name().equals("personal plan")){
+                video_btn.setVisibility(View.GONE);
+            }
             for (int i = 0; i < items.size(); i++)
                 items.get(i).setDate(datePlan.getDate());
 
@@ -635,7 +641,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             FrApplication.getInstance().setIsSettingChanged(false);
         }
 
-        scrollToTop();
+        //scrollToTop();
     }
 
     public void scrollToTop(){
@@ -739,9 +745,16 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             case R.id.video_btn:
                 /*Intent intent = new Intent(getActivity(), IngredientActivity.class);
                 startActivity(intent);*/
-                Intent intent  = new Intent(getActivity(), PlayerActivity.class);
-                intent.putExtra("vid", "XMTI0OTc5MzEyNA");
-                startActivity(intent);
+                /*if (plan_name.getText().toString().equals("自定义计划")){
+                    Common.infoDialog(this.getActivity(), "没有视频", "自定义计划没有相关视频的~").show();
+                }else */
+                if(video_id.equals("")){
+                    Common.infoDialog(this.getActivity(), "暂无视频", "视频还在录制中，敬请期待啦~").show();
+                }else{
+                    Intent intent  = new Intent(getActivity(), PlayerActivity.class);
+                    intent.putExtra("vid", video_id);
+                    startActivity(intent);
+                }
                 break;
             case R.id.change_plan_btn:
                 startActivity(new Intent(getActivity(), PlanChoiceActivity.class));

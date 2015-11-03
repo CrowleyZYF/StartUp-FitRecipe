@@ -49,10 +49,12 @@ public class Common {
     }
 
     public static void setPunchCount(Context context, int count){
-        SharedPreferences sp = context.getSharedPreferences("user", context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putInt("punch_count", count);
-        editor.commit();
+        if (context!=null){
+            SharedPreferences sp = context.getSharedPreferences("user", context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putInt("punch_count", count);
+            editor.commit();
+        }
     }
 
     public static int getPunchCount(Context context){
@@ -65,7 +67,7 @@ public class Common {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
             Date date = sdf.parse(str);
-            long after = date.getTime() + days * 24 * 3600 * 1000;
+            long after = date.getTime() + (((long) days) * 24 * 3600 * 1000);
             Date afterDate = new Date(after);
             return sdf.format(afterDate);
         } catch (ParseException e) {
@@ -83,7 +85,7 @@ public class Common {
 
     public static String getAddDate(int days) {
         SimpleDateFormat sdf = new SimpleDateFormat("MM月dd日");
-        long now = System.currentTimeMillis() + days * 24 * 3600 * 1000;
+        long now = System.currentTimeMillis() + (((long) days) * 24 * 3600 * 1000);
         Date afterDate = new Date(now);
         return sdf.format(afterDate);
     }

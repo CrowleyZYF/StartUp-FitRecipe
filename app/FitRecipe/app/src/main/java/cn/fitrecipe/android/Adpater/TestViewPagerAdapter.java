@@ -58,7 +58,7 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
     private final int WEIGHT_MIN=40;
     private final int WEIGHT_MAX=250;
     private final int FAT=5;
-    private final int FAT_MIN=0;
+    private final int FAT_MIN=5;
     private final int FAT_MAX=100;
     private final int TARGET=11;
     private final String[][] input={{},{},{},{},{},

@@ -32,6 +32,14 @@
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Holo.Light.NoActionBar"
         tools:replace="android:icon,android:theme" >
+        <service
+            android:name="com.umeng.update.net.DownloadingService"
+            android:process=":DownloadingService" >
+        </service>
+        <activity
+            android:name="com.umeng.update.UpdateDialogActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
         <activity
             android:name=".WelcomeActivity"
             android:label="@string/app_name" >
@@ -103,6 +111,12 @@
         </activity>
         <activity android:name=".PunchContentSureActivity" >
         </activity>
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity android:name="com.umeng.fb.ConversationActivity" />
         <!-- ###################注册SDK使用的Activity###################### -->
         <!-- 分享编辑页 -->

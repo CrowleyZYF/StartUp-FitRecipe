@@ -209,7 +209,7 @@ public class PlanChoiceActivity extends Activity implements View.OnClickListener
                 }else{
                     new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
                             .setTitleText("切换计划")
-                            .setContentText("确定切换至自定义计划么？他将会覆盖今天之后的第三方计划")
+                            .setContentText("确定切换至自定义计划么？他将会覆盖今天之后的第三方计划和打卡记录")
                             .setConfirmText("确定").setCancelText("取消").showCancelButton(true)
                             .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                 @Override

@@ -106,14 +106,20 @@
                 android:layout_height="1px"
                 android:background="@drawable/theme_line"/>
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@color/white">
 
-                <RelativeLayout
+                <!--<RelativeLayout
                     android:id="@+id/plan_title"
                     android:layout_width="280dp"
+                    android:layout_height="50dp">-->
+
+                <RelativeLayout
+                    android:id="@+id/plan_title"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="50dp">
 
                     <ImageView
@@ -226,10 +232,11 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:padding="15dp"
+                    android:layout_marginLeft="30dp"
                     android:layout_alignParentRight="true"
                     android:src="@drawable/icon_video_gray"/>
 
-            </RelativeLayout>
+            </LinearLayout>
 
             <ImageView
                 android:layout_width="match_parent"

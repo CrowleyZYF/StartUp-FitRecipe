@@ -33,6 +33,7 @@ import cn.fitrecipe.android.entity.DatePlanItem;
 import cn.fitrecipe.android.entity.PlanAuthor;
 import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.entity.SeriesPlan;
+import cn.fitrecipe.android.function.Common;
 import cn.fitrecipe.android.function.JsonParseHelper;
 import cn.fitrecipe.android.function.RequestErrorHelper;
 import me.relex.circleindicator.CircleIndicator;
@@ -68,6 +69,7 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
 
     private int nowY;
     private boolean isUsed;
+    private String video_id = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +132,7 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
         for(int i  = 0; i < routine_set.length(); i++) {
             JSONObject routine = routine_set.getJSONObject(i);
             DatePlan datePlan = new DatePlan();
+            datePlan.setVideo(routine.getString("video"));
             datePlan.setPlan_name(plan.getTitle());
             JSONArray dish_set = routine.getJSONArray("dish_set");
             List<DatePlanItem> items = new ArrayList<>();
@@ -235,8 +238,8 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
         back_btn.setImageResource(R.drawable.icon_back_white);
         author_btn = (ImageView) findViewById(R.id.right_btn);
         author_btn.setBackgroundColor(getResources().getColor(R.color.transparent));
-        author_btn.setImageResource(R.drawable.icon_user);
-        author_btn.setVisibility(View.GONE);
+        author_btn.setImageResource(R.drawable.icon_video);
+        //author_btn.setVisibility(View.GONE);
         planDetailViewPager = (PlanDetailViewPager) findViewById(R.id.plan_detail);
         prev_day_btn = (ImageView) findViewById(R.id.prev_day_btn);
         next_day_btn = (ImageView) findViewById(R.id.next_day_btn);
@@ -250,6 +253,7 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
     private void initData() {
         plan_day.setText(1 + "/" + plan.getTotal_days());
         plan_calories.setText(Math.round(plan.getDatePlans().get(0).getTotalCalories())+"");
+        video_id = plan.getDatePlans().get(0).getVideo();
         planDetailViewPagerAdapter = new PlanDetailViewPagerAdapter(this, plan);
         planDetailViewPager.setAdapter(planDetailViewPagerAdapter);
         planInfoViewPagerAdapter = new PlanInfoViewPagerAdapter(this, plan);
@@ -316,6 +320,18 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
                 goNext();
                 break;
             }
+            case R.id.right_btn:{
+                if (loadingInterface.getVisibility()==View.VISIBLE){
+                    Common.infoDialog(this, "稍等一下", "数据正在读取中~").show();
+                }else if (video_id.equals("")){
+                    Common.infoDialog(this, "暂无视频", "视频还在录制中，敬请期待啦~").show();
+                }else{
+                    Intent intent  = new Intent(this, PlayerActivity.class);
+                    intent.putExtra("vid", video_id);
+                    startActivity(intent);
+                }
+                break;
+            }
         }
     }
 
@@ -324,6 +340,7 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
         planDetailViewPager.setCurrentItem(planDetailViewPager.getCurrentItem()+1, true);
         plan_day.setText((planDetailViewPager.getCurrentItem()+1) + "/" + plan.getTotal_days());
         plan_calories.setText(Math.round(plan.getDatePlans().get(planDetailViewPager.getCurrentItem()).getTotalCalories())+"");
+        video_id = plan.getDatePlans().get(planDetailViewPager.getCurrentItem()).getVideo();
         info_container.smoothScrollTo(0, nowY);
     }
 
@@ -331,6 +348,8 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
         nowY = info_container.getScrollY();
         planDetailViewPager.setCurrentItem(planDetailViewPager.getCurrentItem()-1, true);
         plan_day.setText((planDetailViewPager.getCurrentItem()+1) + "/" + plan.getTotal_days());
+        plan_calories.setText(Math.round(plan.getDatePlans().get(planDetailViewPager.getCurrentItem()).getTotalCalories()) + "");
+        video_id = plan.getDatePlans().get(planDetailViewPager.getCurrentItem()).getVideo();
         info_container.smoothScrollTo(0, nowY);
     }
 
