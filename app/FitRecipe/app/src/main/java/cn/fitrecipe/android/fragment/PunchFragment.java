@@ -74,7 +74,7 @@ public class PunchFragment extends Fragment
     private void initView(View view) {
         punchRecordRecyclerView = (RecyclerView) view.findViewById(R.id.punch_record);
         punchRecordRecyclerView.setHasFixedSize(true);
-        punchRecordLayoutManager = new RecyclerViewLayoutManager(this.getActivity());
+        punchRecordLayoutManager = new RecyclerViewLayoutManager(FrApplication.getInstance());
         punchRecordLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         punchRecordRecyclerView.setLayoutManager(punchRecordLayoutManager);
 
@@ -111,7 +111,7 @@ public class PunchFragment extends Fragment
                         else {
                             if (data.getJSONArray("punchs").length() == 0) {
                                 info_container.setNoMore();
-                                Toast.makeText(getActivity(), "没有更多记录了", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(FrApplication.getInstance(), "没有更多记录了", Toast.LENGTH_SHORT).show();
                             }
                             info_container.setCompleteMore();
                         }
@@ -125,7 +125,7 @@ public class PunchFragment extends Fragment
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                RequestErrorHelper.toast(getActivity(), volleyError);
+                RequestErrorHelper.toast(FrApplication.getInstance(), volleyError);
                 getPunchDateFromLocal();
             }
         });
@@ -246,15 +246,15 @@ public class PunchFragment extends Fragment
                     tmp.get(j).setTh(x--);
             datePlans.get(i).setItems(tmp);
         }
-        punchDayAdapter = new PunchDayAdapter(this.getActivity(), datePlans, FrApplication.getInstance().getReport());
+        punchDayAdapter = new PunchDayAdapter(getActivity(), datePlans, FrApplication.getInstance().getReport());
         punchRecordRecyclerView.setAdapter(punchDayAdapter);
     }
 
     private void getPunchDateFromLocal() {
-//        datePlans = FrDbHelper.getInstance(getActivity()).getPunchDatePlans();
+//        datePlans = FrDbHelper.getInstance(FrApplication.getInstance()).getPunchDatePlans();
         hideLoading(true, getResources().getString(R.string.network_error));
         if(punchDayAdapter == null) {
-            punchDayAdapter = new PunchDayAdapter(this.getActivity(), datePlans, FrApplication.getInstance().getReport());
+            punchDayAdapter = new PunchDayAdapter(getActivity(), datePlans, FrApplication.getInstance().getReport());
             punchRecordRecyclerView.setAdapter(punchDayAdapter);
         }else
             punchDayAdapter.notifyDataSetChanged();
@@ -264,7 +264,7 @@ public class PunchFragment extends Fragment
         loadingInterface.setVisibility(View.GONE);
         dotsTextView.stop();
         if(isError){
-            //Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+            //Toast.makeText(FrApplication.getInstance(), errorMessage, Toast.LENGTH_LONG).show();
         }
         info_container.setVisibility(View.VISIBLE);
         info_container.smoothScrollTo(0, 0);

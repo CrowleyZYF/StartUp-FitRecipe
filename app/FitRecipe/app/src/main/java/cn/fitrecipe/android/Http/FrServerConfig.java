@@ -47,8 +47,12 @@ public class FrServerConfig {
 
     //get compressed avatar data
     public static String getAvatarCompressed(String url) {
-        String scale = "?imageMogr2/thumbnail/35000@";
-        return url + scale;
+        if (url.contains("7xk6xp.com1.z0.glb.clouddn.com")){
+            String scale = "?imageMogr2/thumbnail/35000@";
+            return url + scale;
+        }else {
+            return url;
+        }
     }
 
     public static String getArticleImageCompressed(String url) {

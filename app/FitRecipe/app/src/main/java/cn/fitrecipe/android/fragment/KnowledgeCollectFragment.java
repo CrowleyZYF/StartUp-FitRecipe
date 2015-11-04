@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -64,7 +63,7 @@ public class KnowledgeCollectFragment extends Fragment
 
     private void initView(View view) {
         knowledgeSeriesRecyclerView = (RecyclerView) view.findViewById(R.id.collect_knowledge_series_recycler_view);
-        knowledgeSeriesLayoutManager = new RecyclerViewLayoutManager(this.getActivity());
+        knowledgeSeriesLayoutManager = new RecyclerViewLayoutManager(FrApplication.getInstance());
         knowledgeSeriesLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         knowledgeSeriesRecyclerView.setLayoutManager(knowledgeSeriesLayoutManager);
 
@@ -97,7 +96,7 @@ public class KnowledgeCollectFragment extends Fragment
                     try {
                         JSONArray data = res.getJSONArray("data");
                         if(data == null || data.length() == 0) {
-                            //Toast.makeText(getActivity(), "没有多余", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(FrApplication.getInstance(), "没有多余", Toast.LENGTH_SHORT).show();
                         }else
                             processData(data);
                     } catch (JSONException e) {
@@ -109,7 +108,7 @@ public class KnowledgeCollectFragment extends Fragment
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 hideLoading(true);
-                RequestErrorHelper.toast(getActivity(), volleyError);
+                RequestErrorHelper.toast(FrApplication.getInstance(), volleyError);
             }
         });
         FrRequest.getInstance().request(request);
@@ -137,7 +136,7 @@ public class KnowledgeCollectFragment extends Fragment
         loadingInterface.setVisibility(View.GONE);
         dotsTextView.stop();
         if(isError){
-//            Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+//            Toast.makeText(FrApplication.getInstance(), errorMessage, Toast.LENGTH_LONG).show();
         }else{
             borderScrollView.setVisibility(View.VISIBLE);
             borderScrollView.smoothScrollTo(0, 0);

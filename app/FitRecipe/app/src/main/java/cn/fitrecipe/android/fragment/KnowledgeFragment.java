@@ -79,7 +79,7 @@ public class KnowledgeFragment extends Fragment{
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                RequestErrorHelper.toast(getActivity(), volleyError);
+                RequestErrorHelper.toast(FrApplication.getInstance(), volleyError);
             }
         });
         FrRequest.getInstance().request(request);
@@ -90,7 +90,7 @@ public class KnowledgeFragment extends Fragment{
         loadingInterface.setVisibility(View.GONE);
         dotsTextView.stop();
         if(isError){
-            //Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+            //Toast.makeText(FrApplication.getInstance(), errorMessage, Toast.LENGTH_LONG).show();
         }else{
             knowledge_series_list.setVisibility(View.VISIBLE);
             knowledge_series_list.smoothScrollTo(0, 0);
@@ -100,13 +100,13 @@ public class KnowledgeFragment extends Fragment{
     private void processData(JSONArray data) {
         dataList = new Gson().fromJson(data.toString(), new TypeToken<ArrayList<Series>>(){}.getType());
         backup = new ArrayList<>(dataList);
-        seriesCardAdapter = new SeriesCardAdapter(this.getActivity(), dataList);
+        seriesCardAdapter = new SeriesCardAdapter(getActivity(), dataList);
         frKnowledgeSeriesRecyclerView.setAdapter(seriesCardAdapter);
     }
 
     private void initView(View v) {
         frKnowledgeSeriesRecyclerView = (RecyclerView) v.findViewById(R.id.knowledge_series_recycler_view);
-        frKnowledgeSeriesLayoutManager = new RecyclerViewLayoutManager(this.getActivity());
+        frKnowledgeSeriesLayoutManager = new RecyclerViewLayoutManager(FrApplication.getInstance());
         frKnowledgeSeriesLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         frKnowledgeSeriesRecyclerView.setLayoutManager(frKnowledgeSeriesLayoutManager);
 

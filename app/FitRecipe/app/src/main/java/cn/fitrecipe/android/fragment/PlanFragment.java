@@ -170,9 +170,9 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
 
     private void initData() {
         //获取报告
-        report = FrDbHelper.getInstance(getActivity()).getReport();
+        report = FrDbHelper.getInstance(FrApplication.getInstance()).getReport();
         //初始化一日多餐
-        /*SharedPreferences sp = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
+        /*SharedPreferences sp = FrApplication.getInstance().getSharedPreferences("user", Context.MODE_PRIVATE);
         boolean[] isShow = new boolean[3];
         isShow[0] = sp.getBoolean("has_add_meal_01", true);
         isShow[1] = sp.getBoolean("has_add_meal_02", true);
@@ -210,7 +210,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             punchData = new TreeMap<>();
         if(indexDate == null)
             indexDate = new TreeMap<>();
-        if(Common.isOpenNetwork(getActivity())) {
+        if(Common.isOpenNetwork(FrApplication.getInstance())) {
             start = Common.dateFormat(start);
             end = Common.dateFormat(end);
             getDataFromServer(start, end, isPre);
@@ -244,7 +244,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
                         hideLoading(true);
-                        RequestErrorHelper.toast(getActivity(), volleyError);
+                        RequestErrorHelper.toast(FrApplication.getInstance(), volleyError);
                         getDataFromLocal(start, end);
                     }
                 });
@@ -261,7 +261,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
      */
     private void processData(JSONObject data, String start, String end, boolean isPre) throws JSONException {
         punch_count.setText(data.getString("count"));
-        Common.setPunchCount(getActivity(), Integer.parseInt(data.getString("count")));
+        Common.setPunchCount(FrApplication.getInstance(), Integer.parseInt(data.getString("count")));
         planMap = new ConcurrentHashMap<>();
         JSONArray punchs = data.getJSONArray("punch");
         for(int i = 0; i < punchs.length(); i++) {
@@ -332,18 +332,18 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 final String finalStart = start;
                 final String finalEnd = end;
                 final String finalNowDate = nowDate;
-                new JoinPlanHelper(getActivity()).joinPersonalPlan(new JoinPlanHelper.CallBack() {
+                new JoinPlanHelper(FrApplication.getInstance()).joinPersonalPlan(new JoinPlanHelper.CallBack() {
                     @Override
                     public void handle(Object... res) {
-                        //Toast.makeText(getActivity(), "默认设置自定义计划", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(FrApplication.getInstance(), "默认设置自定义计划", Toast.LENGTH_SHORT).show();
                         int id = (Integer) res[0];
-                        plans.put(finalStart, Common.gerneratePersonalPlan(id, getActivity()));
+                        plans.put(finalStart, Common.gerneratePersonalPlan(id, FrApplication.getInstance()));
                         processDatePlan(finalStart, finalEnd, plans, finalNowDate, isPre);
                         hideLoading(false);
                     }
                 }, nowDate);
             }else {
-                //Toast.makeText(getActivity(), "预取 " + start + "-" + end + "为空！", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(FrApplication.getInstance(), "预取 " + start + "-" + end + "为空！", Toast.LENGTH_SHORT).show();
                 isPreEnable = false;
             }
         }
@@ -362,7 +362,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         /**
          * 获取菜篮子信息
          */
-        basketData = FrDbHelper.getInstance(getActivity()).getBasketInfo(start, end);
+        basketData = FrDbHelper.getInstance(FrApplication.getInstance()).getBasketInfo(start, end);
         SeriesPlan now = plans.get(nowDate);//切换的不同计划
         String str = start;
         while(Common.CompareDate(str, end) <= 0) {
@@ -386,7 +386,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                     data.put(str, datePlan);
                 }
                 else {
-                    datePlan = Common.gernerateEmptyPlan(str, getActivity());
+                    datePlan = Common.gernerateEmptyPlan(str, FrApplication.getInstance());
                     data.put(str, datePlan);
                 }
             }else {
@@ -428,6 +428,8 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             video_id = datePlan.getVideo();
             if (datePlan.getPlan_name().equals("personal plan")){
                 video_btn.setVisibility(View.GONE);
+            } else {
+                video_btn.setVisibility(View.VISIBLE);
             }
             for (int i = 0; i < items.size(); i++)
                 items.get(i).setDate(datePlan.getDate());
@@ -494,7 +496,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                     }
                 }
             }
-            SharedPreferences sp = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
+            SharedPreferences sp = FrApplication.getInstance().getSharedPreferences("user", Context.MODE_PRIVATE);
             /*boolean[] isShow = {true, true, true};
             if(datePlan.getPlan_name().equals("personal plan")) {
                 isShow = new boolean[3];
@@ -538,7 +540,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             return true;
         }
         else {
-            //Toast.makeText(getActivity(), "已经无计划了!", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(FrApplication.getInstance(), "已经无计划了!", Toast.LENGTH_SHORT).show();
             return false;
         }
     }
@@ -561,7 +563,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             isPreEnable = false;
         }
         if(Common.CompareDate(start, end) <= 0) {
-            //Toast.makeText(getActivity(), "预取" + start + "-" + end, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(FrApplication.getInstance(), "预取" + start + "-" + end, Toast.LENGTH_SHORT).show();
             getData(start, end, true);
         }
     }
@@ -576,7 +578,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         loadingInterface.setVisibility(View.GONE);
         dotsTextView.stop();
         if(isError){
-            //Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+            //Toast.makeText(FrApplication.getInstance(), errorMessage, Toast.LENGTH_LONG).show();
         }else{
             info_container.setVisibility(View.VISIBLE);
         }
@@ -589,6 +591,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         if (FrApplication.getInstance().isJustChangePlan()){
             FrApplication.getInstance().setJustChangePlan(false);
             punchData.remove(Common.getDate());
+            scrollToTop();
         }
 
         if(FrApplication.getInstance().getPlanInUse() != null) {
@@ -633,7 +636,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             punch(pr);
             FrApplication.getInstance().setPr(null);
             switchPlan(pointer, 0);
-            punch_count.setText(Common.getPunchCount(getActivity())+"");
+            punch_count.setText(Common.getPunchCount(FrApplication.getInstance())+"");
         }
 
         if(FrApplication.getInstance().isSettingChanged()) {
@@ -657,7 +660,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                     datePlan = plan.getDatePlans().get(0);
                     datePlan.setPlan_id(plan.getId());
                 }else {
-                    datePlan = Common.gernerateEmptyPlan(str, getActivity());
+                    datePlan = Common.gernerateEmptyPlan(str, FrApplication.getInstance());
                 }
             }else {
                 int th = i % plan.getTotal_days();
@@ -715,8 +718,8 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
 
 
     public void toggle(String type) {
-//        Toast.makeText(getActivity(), type.value()+"", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(getActivity(), NutritionActivity.class);
+//        Toast.makeText(FrApplication.getInstance(), type.value()+"", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(FrApplication.getInstance(), NutritionActivity.class);
         boolean f = true;
        if(type.equals("all")) {
            f = false;
@@ -734,7 +737,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
             intent.putExtra("dateplan", datePlan);
             startActivity(intent);
         }else {
-            Toast.makeText(getActivity(), "请添加食谱和食材！", Toast.LENGTH_SHORT).show();
+            Toast.makeText(FrApplication.getInstance(), "请添加食谱和食材！", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -743,21 +746,21 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.video_btn:
-                /*Intent intent = new Intent(getActivity(), IngredientActivity.class);
+                /*Intent intent = new Intent(FrApplication.getInstance(), IngredientActivity.class);
                 startActivity(intent);*/
                 /*if (plan_name.getText().toString().equals("自定义计划")){
-                    Common.infoDialog(this.getActivity(), "没有视频", "自定义计划没有相关视频的~").show();
+                    Common.infoDialog(this.FrApplication.getInstance(), "没有视频", "自定义计划没有相关视频的~").show();
                 }else */
                 if(video_id.equals("")){
-                    Common.infoDialog(this.getActivity(), "暂无视频", "视频还在录制中，敬请期待啦~").show();
+                    Common.infoDialog(FrApplication.getInstance(), "暂无视频", "视频还在录制中，敬请期待啦~").show();
                 }else{
-                    Intent intent  = new Intent(getActivity(), PlayerActivity.class);
+                    Intent intent  = new Intent(FrApplication.getInstance(), PlayerActivity.class);
                     intent.putExtra("vid", video_id);
                     startActivity(intent);
                 }
                 break;
             case R.id.change_plan_btn:
-                startActivity(new Intent(getActivity(), PlanChoiceActivity.class));
+                startActivity(new Intent(FrApplication.getInstance(), PlanChoiceActivity.class));
                 break;
             case R.id.next_btn:
                 if(switchPlan(pointer + 1, 1)) {
@@ -770,7 +773,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 }
                 break;
             case R.id.report_btn:
-                startActivity(new Intent(getActivity(), ReportActivity.class));
+                startActivity(new Intent(FrApplication.getInstance(), ReportActivity.class));
                 break;
         }
     }
@@ -835,13 +838,13 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                //Toast.makeText(getActivity(), "更新自定义计划成功！", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(FrApplication.getInstance(), "更新自定义计划成功！", Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 info_container.setEnabled(true);
-                RequestErrorHelper.toast(getActivity(), volleyError);
+                RequestErrorHelper.toast(FrApplication.getInstance(), volleyError);
             }
         });
         FrRequest.getInstance().request(request);

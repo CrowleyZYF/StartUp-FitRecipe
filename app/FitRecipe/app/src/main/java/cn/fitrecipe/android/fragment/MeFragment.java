@@ -75,7 +75,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
                                 int data = res.getJSONObject("data").getInt("count");
                                 me_punch.setText("打卡次数："+data);
                                 me_work.setText("收藏食谱："+res.getJSONObject("data").getInt("recipe"));
-                                Common.setPunchCount(getActivity(), data);
+                                Common.setPunchCount(FrApplication.getInstance(), data);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -154,31 +154,31 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()){
             case R.id.me_record_btn:{
                 if(!FrApplication.getInstance().isLogin()) {
-                    Toast.makeText(getActivity(), getResources().getString(R.string.login_tip), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(FrApplication.getInstance(), getResources().getString(R.string.login_tip), Toast.LENGTH_SHORT).show();
                 }else
-                    startActivity(new Intent(getActivity(), RecordActivity.class));
+                    startActivity(new Intent(FrApplication.getInstance(), RecordActivity.class));
                 break;
             }
             case R.id.me_collect_btn:{
                 if(!FrApplication.getInstance().isLogin()) {
-                    Toast.makeText(getActivity(), getResources().getString(R.string.login_tip), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(FrApplication.getInstance(), getResources().getString(R.string.login_tip), Toast.LENGTH_SHORT).show();
                 }
                 else
-                    startActivity(new Intent(getActivity(), CollectActivity.class));
+                    startActivity(new Intent(FrApplication.getInstance(), CollectActivity.class));
                 break;
             }
             case R.id.me_report_btn:{
                 if(!FrApplication.getInstance().isLogin()) {
-                    Toast.makeText(getActivity(), getResources().getString(R.string.login_tip), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(FrApplication.getInstance(), getResources().getString(R.string.login_tip), Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    Intent intent = new Intent(getActivity(), ReportActivity.class);
+                    Intent intent = new Intent(FrApplication.getInstance(), ReportActivity.class);
                     startActivity(intent);
                 }
                 break;
             }
             case R.id.me_shopping_btn:{
-                startActivity(new Intent(getActivity(), IngredientActivity.class));
+                startActivity(new Intent(FrApplication.getInstance(), IngredientActivity.class));
                 break;
             }
             case R.id.me_login_btn:
@@ -186,7 +186,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
                     FrApplication.getInstance().logOut();
                     initData();
                 }else{
-                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                    startActivity(new Intent(FrApplication.getInstance(), LoginActivity.class));
                 }
                 break;
             default:

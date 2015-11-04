@@ -67,7 +67,7 @@ public class RecipeCollectFragment extends Fragment
     @Override
     public void onResume() {
         super.onResume();
-        SharedPreferences preferences=getActivity().getSharedPreferences("user", getActivity().MODE_PRIVATE);
+        SharedPreferences preferences=FrApplication.getInstance().getSharedPreferences("user", FrApplication.getInstance().MODE_PRIVATE);
         if(recipeCardsID != null && preferences.getBoolean("hasDelete", false) && recipeCardsID.indexOf(preferences.getInt("delete_id", -1))!=-1){
             recipeCards.remove(recipeCardsID.indexOf(preferences.getInt("delete_id", -1)));
             recipeCardsID.remove(recipeCardsID.indexOf(preferences.getInt("delete_id", -1)));
@@ -80,7 +80,7 @@ public class RecipeCollectFragment extends Fragment
 
     private void initView(View view) {
         collectRecipeRecyclerView = (RecyclerView) view.findViewById(R.id.collect_recipe_recycler_view);
-        collectRecipeLayoutManager = new RecyclerViewLayoutManager(this.getActivity());
+        collectRecipeLayoutManager = new RecyclerViewLayoutManager(FrApplication.getInstance());
         collectRecipeLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         collectRecipeRecyclerView.setLayoutManager(collectRecipeLayoutManager);
 
@@ -104,7 +104,7 @@ public class RecipeCollectFragment extends Fragment
         loadingInterface.setVisibility(View.GONE);
         dotsTextView.stop();
         if(isError){
-            Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+            Toast.makeText(FrApplication.getInstance(), errorMessage, Toast.LENGTH_LONG).show();
         }else{
             borderScrollView.setVisibility(View.VISIBLE);
             borderScrollView.smoothScrollTo(0, 0);
@@ -124,7 +124,7 @@ public class RecipeCollectFragment extends Fragment
                     try {
                         JSONArray data = res.getJSONArray("data");
                         if(data == null || data.length() == 0 && lastid  != -1) {
-                            //Toast.makeText(getActivity(), "没有多余", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(FrApplication.getInstance(), "没有多余", Toast.LENGTH_SHORT).show();
                         }else
                             processData(data);
                     } catch (JSONException e) {
@@ -135,7 +135,7 @@ public class RecipeCollectFragment extends Fragment
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                RequestErrorHelper.toast(getActivity(), volleyError);
+                RequestErrorHelper.toast(FrApplication.getInstance(), volleyError);
             }
         });
         FrRequest.getInstance().request(request);
