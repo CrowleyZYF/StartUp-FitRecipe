@@ -31,7 +31,6 @@ import cn.fitrecipe.android.function.Common;
  */
 public class FrApplication extends Application {
 
-    private static FrApplication instance;
     private MyImageLoader myImageLoader;
     public static YoukuPlayerBaseConfiguration configuration;
 
@@ -63,9 +62,12 @@ public class FrApplication extends Application {
 
     private boolean isSettingChanged;
 
+    private static FrApplication instance;
+
     @Override
     public void onCreate() {
         super.onCreate();
+        instance = this;
 
         //初始化蒲公英
         initPgy();

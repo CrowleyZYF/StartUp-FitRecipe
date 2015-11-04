@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.umeng.fb.FeedbackAgent;
 
@@ -87,7 +86,7 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
 //            @Override
 //            public void run() {
 //                if(!FrApplication.getInstance().isHomeDataNew())
-//                    Common.toastNetworkError(IndexFragment.this.getActivity());
+//                    Common.toastNetworkError(IndexFragment.this.FrApplication.getInstance());
 //            }
 //        }, 3000);
         return view;
@@ -121,12 +120,12 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
         recommendIndicator = (CircleIndicator) view.findViewById(R.id.indicator_default);
         //初始化更新组件视图
         updateRecipeRecyclerView = (RecyclerView) view.findViewById(R.id.update_recipe_recycler_view);
-        updateRecipeLayoutManager = new RecyclerViewLayoutManager(this.getActivity());
+        updateRecipeLayoutManager = new RecyclerViewLayoutManager(FrApplication.getInstance());
         updateRecipeLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         updateRecipeRecyclerView.setLayoutManager(updateRecipeLayoutManager);
         //初始化主题组件视图
         themeRecipeRecyclerView = (RecyclerView) view.findViewById(R.id.theme_recipe_recycler_view);
-        themeRecipeLayoutManager = new RecyclerViewLayoutManager(this.getActivity());
+        themeRecipeLayoutManager = new RecyclerViewLayoutManager(FrApplication.getInstance());
         themeRecipeLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         themeRecipeRecyclerView.setLayoutManager(themeRecipeLayoutManager);
         //初始化反馈、分类按钮
@@ -189,17 +188,17 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.feedback_btn:
-                FeedbackAgent agent = new FeedbackAgent(getActivity());
+                FeedbackAgent agent = new FeedbackAgent(FrApplication.getInstance());
                 agent.startFeedbackActivity();
                 break;
             case R.id.category_btn_2:
-                startActivity(new Intent(this.getActivity(), CategoryActivity.class));
+                startActivity(new Intent(FrApplication.getInstance(), CategoryActivity.class));
                 break;
             case R.id.recipe_more:
-                startActivity(new Intent(this.getActivity(), RecipeListActivity.class));
+                startActivity(new Intent(FrApplication.getInstance(), RecipeListActivity.class));
                 break;
             case R.id.theme_more:
-                startActivity(new Intent(this.getActivity(), ThemeListActivity.class));
+                startActivity(new Intent(FrApplication.getInstance(), ThemeListActivity.class));
             default:
                 break;
         }

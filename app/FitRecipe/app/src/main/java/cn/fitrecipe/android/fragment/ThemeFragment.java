@@ -70,7 +70,7 @@ public class ThemeFragment extends Fragment
     @Override
     public void onResume() {
         super.onResume();
-        SharedPreferences preferences=getActivity().getSharedPreferences("user", getActivity().MODE_PRIVATE);
+        SharedPreferences preferences=FrApplication.getInstance().getSharedPreferences("user", FrApplication.getInstance().MODE_PRIVATE);
         if(themeCardsId != null && preferences.getBoolean("hasDelete", false) && themeCardsId.indexOf(preferences.getInt("delete_id", -1))!=-1){
             themeCards.remove(themeCardsId.indexOf(preferences.getInt("delete_id", -1)));
             themeCardsId.remove(themeCardsId.indexOf(preferences.getInt("delete_id", -1)));
@@ -90,7 +90,7 @@ public class ThemeFragment extends Fragment
         loadingInterface.setVisibility(View.GONE);
         dotsTextView.stop();
         if(isError){
-            Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+            Toast.makeText(FrApplication.getInstance(), errorMessage, Toast.LENGTH_LONG).show();
         }else{
             borderScrollView.setVisibility(View.VISIBLE);
             borderScrollView.smoothScrollTo(0, 0);
@@ -120,7 +120,7 @@ public class ThemeFragment extends Fragment
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                RequestErrorHelper.toast(getActivity(), volleyError);
+                RequestErrorHelper.toast(FrApplication.getInstance(), volleyError);
             }
         });
         FrRequest.getInstance().request(request);
@@ -152,7 +152,7 @@ public class ThemeFragment extends Fragment
 
     private void initView(View view) {
         themeRecipeRecyclerView = (RecyclerView) view.findViewById(R.id.collect_theme_recycler_view);
-        themeRecipeLayoutManager = new RecyclerViewLayoutManager(this.getActivity());
+        themeRecipeLayoutManager = new RecyclerViewLayoutManager(FrApplication.getInstance());
         themeRecipeLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         themeRecipeRecyclerView.setLayoutManager(themeRecipeLayoutManager);
 

@@ -61,10 +61,10 @@ public class SetActivity extends Activity implements View.OnClickListener {
         //QQ weibo
         mController.getConfig().setSsoHandler(new TencentWBSsoHandler());
         //QQ空间
-        QZoneSsoHandler qZoneSsoHandler = new QZoneSsoHandler(this, "100424468", "c7394704798a158208a74ab60104f0ba");
+        QZoneSsoHandler qZoneSsoHandler = new QZoneSsoHandler(this, "1104855371","pVgLsBzG07wLQ33X");
         qZoneSsoHandler.addToSocialSDK();
         //QQ好友
-        UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(this, "100424468","c7394704798a158208a74ab60104f0ba");
+        UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(this, "1104855371","pVgLsBzG07wLQ33X");
         qqSsoHandler.addToSocialSDK();
     }
 

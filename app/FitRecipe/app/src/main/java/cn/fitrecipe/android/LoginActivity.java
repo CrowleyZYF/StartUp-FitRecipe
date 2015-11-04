@@ -62,6 +62,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private JSONObject result = null;
     private Context nowContext;
     private String backActivity;
+    private String account_avatar="";
 
     private ProgressDialog pd;
 
@@ -70,8 +71,27 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         Author author = new Gson().fromJson(data.toString(), Author.class);
         author.setIsLogin(true);
         FrApplication.getInstance().setAuthor(author);
-        //Toast.makeText(getApplicationContext(), "欢迎："+ author.getNick_name(), Toast.LENGTH_LONG).show();
         getReport();
+        if (!account_avatar.equals("")){
+            JSONObject params = new JSONObject();
+            params.put("avatar", account_avatar);
+            params.put("nick_name", author.getNick_name());
+            PostRequest request = new PostRequest(FrServerConfig.getUpdateUserInfoUrl(), FrApplication.getInstance().getToken(), params, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject res) {
+                    // 保存本地
+                    Author author = FrApplication.getInstance().getAuthor();
+                    author.setAvatar(account_avatar);
+                    FrApplication.getInstance().setAuthor(author);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    Toast.makeText(LoginActivity.this, "获取头像失败", Toast.LENGTH_SHORT).show();
+                }
+            });
+            FrRequest.getInstance().request(request);
+        }
     }
 
     private void getReport() {
@@ -174,7 +194,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         mController.getConfig().setSsoHandler(new SinaSsoHandler());
 
         //QQ
-        UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(LoginActivity.this, "1104537242","tDAlabTzuOR4Fvy3");
+        UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(LoginActivity.this, "1104855371","pVgLsBzG07wLQ33X");
         qqSsoHandler.addToSocialSDK();
 
         //wechat
@@ -310,6 +330,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                             String userId = bundle.getString("openid");
                             String platform = "qq";
                             String username = (String) info.get("screen_name");
+                            account_avatar = (String) info.get("profile_image_url");
                             doOtherLogin(userId,username,platform);
                         }else{
                             Log.d("TestData","发生错误："+status);
@@ -370,6 +391,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                     String userId = Long.toString((Long) info.get("uid"));
                     String platform = "sina";
                     String username = (String) info.get("screen_name");
+                    account_avatar = (String) info.get("profile_image_url");
                     doOtherLogin(userId,username,platform);
                 }else{
                     Toast.makeText(LoginActivity.this, "Nothing", Toast.LENGTH_SHORT).show();
@@ -382,16 +404,16 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.sina_login:
-                //login(SHARE_MEDIA.SINA);
-                Common.toBeContinuedDialog(this).show();
+                login(SHARE_MEDIA.SINA);
+                //Common.toBeContinuedDialog(this).show();
                 break;
             case R.id.wechat_login:
                 //login(SHARE_MEDIA.WEIXIN);
                 Common.toBeContinuedDialog(this).show();
                 break;
             case R.id.qq_login:
-                //login_qq();
-                Common.toBeContinuedDialog(this).show();
+                login_qq();
+                //Common.toBeContinuedDialog(this).show();
                 break;
             case R.id.back_btn:
                 /*if(backActivity.equals("landingPage")){
