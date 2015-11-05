@@ -19,6 +19,7 @@ import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
 import com.qiniu.util.Auth;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,6 +64,20 @@ public class SetAccountActivity extends Activity implements View.OnClickListener
         initView();
         initData();
         initEvent();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("SetAccountActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("SetAccountActivity");
+        MobclickAgent.onResume(this);
     }
 
     private void initData() {

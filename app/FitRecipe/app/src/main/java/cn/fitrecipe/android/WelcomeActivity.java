@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.umeng.analytics.MobclickAgent;
+
 import cn.fitrecipe.android.service.GetHomeDataService;
 
 public class WelcomeActivity extends Activity{
@@ -24,6 +26,20 @@ public class WelcomeActivity extends Activity{
             }
         }, SPLASH_DISPLAY_LENGTH);
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("WelcomeActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("WelcomeActivity");
+        MobclickAgent.onResume(this);
     }
 
 

@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,7 +36,7 @@ import me.relex.circleindicator.CircleIndicator;
 
 public class LandingPageActivity extends Activity implements ViewPager.OnPageChangeListener, View.OnClickListener{
     private ViewPager frViewPager;
-    private int[] frImgIds = new int[]{R.drawable.landing_intro1,R.drawable.landing_intro2,R.drawable.landing_intro3};
+    private int[] frImgIds = new int[]{R.drawable.landing_intro1,R.drawable.landing_intro2};
     private List<ImageView> mImages = new ArrayList<ImageView>();
     boolean misScrolled = false;
     private Button frLoginButton;
@@ -214,5 +215,19 @@ public class LandingPageActivity extends Activity implements ViewPager.OnPageCha
         } else {
             this.finish();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("LandingPageActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("LandingPageActivity");
+        MobclickAgent.onResume(this);
     }
 }

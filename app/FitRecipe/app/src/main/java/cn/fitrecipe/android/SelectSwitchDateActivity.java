@@ -1,12 +1,11 @@
 package cn.fitrecipe.android;
 
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONException;
 
@@ -32,6 +31,20 @@ public class SelectSwitchDateActivity extends Activity implements View.OnClickLi
             plan = FrApplication.getInstance().getPlanInUse();
         initView();
         initEvent();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("SelectSwitchDateActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("SelectSwitchDateActivity");
+        MobclickAgent.onResume(this);
     }
 
     private void initEvent() {

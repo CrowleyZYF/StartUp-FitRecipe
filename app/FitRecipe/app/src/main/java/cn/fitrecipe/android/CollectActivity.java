@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONObject;
 
@@ -71,6 +72,20 @@ public class CollectActivity extends FragmentActivity implements View.OnClickLis
         }else {
             setSelect(0);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("CollectActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("CollectActivity");
+        MobclickAgent.onResume(this);
     }
 
     public Boolean getHasDelete() {

@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.fb.FeedbackAgent;
 
 import org.json.JSONException;
@@ -90,6 +91,18 @@ public class IndexFragment extends Fragment implements ViewPager.OnPageChangeLis
 //            }
 //        }, 3000);
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("Index");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("Index");
     }
 
     public void fresh() {

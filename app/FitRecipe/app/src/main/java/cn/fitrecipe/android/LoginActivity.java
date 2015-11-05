@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
@@ -371,10 +372,12 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             }
 
             @Override
-            public void onError(SocializeException e, SHARE_MEDIA share_media) {}
+            public void onError(SocializeException e, SHARE_MEDIA share_media) {
+            }
 
             @Override
-            public void onCancel(SHARE_MEDIA share_media) {}
+            public void onCancel(SHARE_MEDIA share_media) {
+            }
         });
     }
 
@@ -382,18 +385,19 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private void getUserInfo(SHARE_MEDIA platform) {
         mController.getPlatformInfo(LoginActivity.this, platform, new SocializeListeners.UMDataListener() {
             @Override
-            public void onStart() {}
+            public void onStart() {
+            }
 
             @Override
             public void onComplete(int i, Map<String, Object> info) {
                 Toast.makeText(LoginActivity.this, "授权完成，正在跳转...", Toast.LENGTH_SHORT).show();
-                if ( info != null ) {
-                    String userId = Long.toString((Long) info.get("uid"));
+                if (info != null) {
+                    String userId = info.get("uid").toString();
                     String platform = "sina";
                     String username = (String) info.get("screen_name");
                     account_avatar = (String) info.get("profile_image_url");
-                    doOtherLogin(userId,username,platform);
-                }else{
+                    doOtherLogin(userId, username, platform);
+                } else {
                     Toast.makeText(LoginActivity.this, "Nothing", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -456,5 +460,19 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         if(ssoHandler != null){
             ssoHandler.authorizeCallBack(requestCode, resultCode, data);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("LoginActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("LoginActivity");
+        MobclickAgent.onResume(this);
     }
 }

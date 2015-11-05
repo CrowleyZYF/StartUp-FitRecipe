@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,6 +64,12 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         initEvent();
 
         return view;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("Me");
     }
 
     public void freshData(){
@@ -139,6 +146,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         }
         if(isFresh)
             initData();
+        MobclickAgent.onPageStart("Me");
     }
 
     private void initEvent() {

@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -91,6 +92,20 @@ public class RegisterActivity extends Activity implements OnClickListener {
 		};
 		SMSSDK.registerEventHandler(eh);
 	}
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("RegisterActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("RegisterActivity");
+        MobclickAgent.onResume(this);
+    }
 
     private void initEvents() {
         back_btn.setOnClickListener(this);

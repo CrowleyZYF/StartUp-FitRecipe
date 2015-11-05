@@ -15,6 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -73,6 +74,20 @@ public class CommentActivity extends Activity implements View.OnClickListener {
         authorId = getIntent().getIntExtra("author_id", -1);
         display();
         initEvent();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("CommentActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("CommentActivity");
+        MobclickAgent.onResume(this);
     }
 
     private void getData() {

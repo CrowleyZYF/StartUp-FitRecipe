@@ -15,6 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -76,6 +77,13 @@ public class RecipeCollectFragment extends Fragment
             editor.putBoolean("hasDelete", false);
             editor.commit();
         }
+        MobclickAgent.onPageStart("RecipeCollect");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("RecipeCollect");
     }
 
     private void initView(View view) {

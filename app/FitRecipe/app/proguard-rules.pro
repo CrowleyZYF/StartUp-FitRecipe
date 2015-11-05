@@ -17,50 +17,63 @@
 #}pro
 
 
+# 指定代码的压缩级别
+-optimizationpasses 5
+# 是否使用大小写混合
 -dontusemixedcaseclassnames
--dontshrink
--dontoptimize
+# 是否混淆第三方jar
+-dontskipnonpubliclibraryclasses
+# 混淆时是否做预校验
 -dontpreverify
--dontwarn com.umeng.comm.**
--dontwarn com.google.android.maps.**
--dontwarn javax.persistence.**
--dontwarn com.facebook.android.**
--dontwarn java.awt.**
--dontwarn org.slf4j.**
--dontwarn com.baseproject.utils.**
--dontwarn com.qiniu.http.**
--dontwarn android.webkit.WebView
--keepattributes *Annotation*
--keep class com.activeandroid.** {*;}
-
--keep,allowshrinking class org.android.agoo.service.* {
-    public <fields>;
-    public <methods>;
+# 混淆时是否记录日志
+-verbose
+# 混淆时所采用的算法
+-optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
+#-ignorewarnings
+-keep public class cn.fitrecipe.android.R$*{
+    public static final int *;
 }
--keep,allowshrinking class com.umeng.message.* {
-    public <fields>;
-    public <methods>;
-}
+-keep public class cn.fitrecipe.android.entity.*
+-keep public class cn.fitrecipe.android.entity.*{*;}
+-keep public class cn.fitrecipe.android.FrApplication.*
+-keep public class cn.fitrecipe.android.FrApplication.*{*;}
 
--keep public class [应用包名].R$*{
-   public static final int *;
-}
 
--keep class com.umeng.comm.push.UmengPushImpl {
-    public * ;
-}
+# 保持哪些类不被混淆
+-keep public class * extends android.app.Activity
+-keep public class * extends android.app.Application
+-keep public class * extends android.app.Service
+-keep public class * extends android.content.BroadcastReceiver
+-keep public class * extends android.content.ContentProvider
+-keep public class * extends android.app.backup.BackupAgentHelper
+-keep public class * extends android.preference.Preference
+-keep public class com.android.vending.licensing.ILicensingService
 
-#分享相关混淆
--dontwarn android.webkit.WebView
+-dontwarn com.daimajia.**
+-keep class com.daimajia*.**{*;}
+-dontwarn com.google.**
+-keep class com.google*.**{*;}
+-dontwarn com.j256.**
+-keep class com.j256*.**{*;}
+-dontwarn com.qiniu.**
+-keep class com.qiniu*.**{*;}
+-dontwarn cn.smssdk.**
+-keep class cn.smssdk*.**{*;}
+-dontwarn com.nostra13.**
+-keep class com.nostra13*.**{*;}
+-dontwarn com.android.volley
+-keep class com.android.volley{*;}
 -dontwarn com.umeng.**
--dontwarn com.tencent.weibo.sdk.**
--keepattributes Exceptions,InnerClasses,Signature
--keepattributes SourceFile,LineNumberTable
--keep public interface com.tencent.**
--keep public interface com.umeng.socialize.**
--keep public class com.umeng.socialize.* {*;}
--keep public class javax.**
--keep public class android.webkit.**
--keep public class com.tencent.** {*;}
--keep class com.tencent.mm.sdk.modelmsg.WXMediaMessage {*;}
--keep class com.tencent.mm.sdk.modelmsg.** implements com.tencent.mm.sdk.modelmsg.WXMediaMessage$IMediaObject {*;}
+-keep class com.umeng*.**{*;}
+-dontwarn com.youku.**
+-keep class com.youku*.**{*;}
+-dontwarn android.support-v4.**
+-keep class android.support-v4.**{*;}
+-dontwarn org.apache.**
+-keep class org.apache.**{*;}
+-dontwarn java.awt.**
+-keep class java.awt.**{*;}
+-dontwarn com.facebook.**
+-keep class com.facebook.**{*;}
+-dontwarn com.tencent.**
+-keep class com.tencent.**{*;}

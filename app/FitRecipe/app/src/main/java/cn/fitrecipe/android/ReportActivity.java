@@ -11,6 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.umeng.analytics.MobclickAgent;
+
 import java.text.DecimalFormat;
 
 import cn.fitrecipe.android.UI.DietStructureView;
@@ -72,6 +74,20 @@ public class ReportActivity extends Activity implements View.OnClickListener{
             startActivity(intent);
             finish();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("ReportActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("ReportActivity");
+        MobclickAgent.onResume(this);
     }
 
     private void initEvent() {

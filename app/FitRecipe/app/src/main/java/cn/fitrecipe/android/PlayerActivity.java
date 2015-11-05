@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.baseproject.utils.Logger;
+import com.umeng.analytics.MobclickAgent;
 import com.youku.player.ApiManager;
 import com.youku.player.VideoQuality;
 import com.youku.player.base.YoukuBasePlayerManager;
@@ -165,15 +166,19 @@ public class PlayerActivity extends Activity {
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
         basePlayerManager.onPause();
+        MobclickAgent.onPageEnd("PlayerActivity");
+        MobclickAgent.onResume(this);
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         basePlayerManager.onResume();
+        MobclickAgent.onPageStart("PlayerActivity");
+        MobclickAgent.onResume(this);
     }
 
     @Override

@@ -11,6 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.umeng.analytics.MobclickAgent;
+
 import java.util.ArrayList;
 
 import cn.fitrecipe.android.R;
@@ -45,6 +47,18 @@ public class SelectStageSecondFragment extends Fragment implements View.OnClickL
         initEvent();
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("SelectStageSecond");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("SelectStageSecond");
     }
 
     private void initEvent() {

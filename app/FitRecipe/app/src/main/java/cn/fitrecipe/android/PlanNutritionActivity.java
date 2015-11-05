@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.umeng.analytics.MobclickAgent;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +55,20 @@ public class PlanNutritionActivity extends Activity implements View.OnClickListe
         initView();
         initDate();
         initEvent();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("PlanNutritionActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("PlanNutritionActivity");
+        MobclickAgent.onResume(this);
     }
 
     private void initEvent() {

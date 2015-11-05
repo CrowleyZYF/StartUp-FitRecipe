@@ -2,16 +2,14 @@ package cn.fitrecipe.android;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
@@ -19,7 +17,6 @@ import cn.fitrecipe.android.UI.LinearLayoutForListView;
 import cn.fitrecipe.android.UI.PieChartView;
 import cn.fitrecipe.android.entity.Nutrition;
 import cn.fitrecipe.android.entity.PlanComponent;
-import cn.fitrecipe.android.function.Common;
 
 public class IngredientNutritionActivity extends Activity implements View.OnClickListener{
 
@@ -43,6 +40,20 @@ public class IngredientNutritionActivity extends Activity implements View.OnClic
         initView();
         initData();
         initEvent();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("IngredientNutritionActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("IngredientNutritionActivity");
+        MobclickAgent.onResume(this);
     }
 
     private void initData() {

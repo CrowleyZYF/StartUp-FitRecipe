@@ -3,8 +3,14 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/welcome">
+    android:background="@drawable/login_bg_s">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="80dp"
+        android:src="@drawable/welcome_text"/>
+<!--
     <ImageView
         android:layout_width="130dp"
         android:layout_height="130dp"
@@ -37,7 +43,7 @@
         android:text="@string/slogan_next"
         android:layout_marginTop="8dp"
         android:textColor="@color/white"
-        />
+        />-->
 
 
 

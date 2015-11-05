@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.umeng.analytics.MobclickAgent;
+
 import cn.fitrecipe.android.fragment.PunchFragment;
 import cn.fitrecipe.android.fragment.RecipeFragment;
 import cn.fitrecipe.android.fragment.WorkFragment;
@@ -43,6 +45,20 @@ public class RecordActivity extends FragmentActivity implements View.OnClickList
         initView();
         initEvent();
         setSelect(0);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("RecordActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("RecordActivity");
+        MobclickAgent.onResume(this);
     }
 
     private void initEvent() {

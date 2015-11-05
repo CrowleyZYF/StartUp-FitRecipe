@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -73,6 +74,20 @@ public class ThemeActivity extends Activity implements View.OnClickListener {
             e.printStackTrace();
         }
         initEvent();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("ThemeActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("ThemeActivity");
+        MobclickAgent.onResume(this);
     }
 
     private void initData() {

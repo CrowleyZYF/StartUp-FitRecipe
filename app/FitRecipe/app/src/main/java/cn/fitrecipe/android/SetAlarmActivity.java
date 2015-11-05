@@ -16,10 +16,10 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.rey.material.widget.Switch;
+import com.umeng.analytics.MobclickAgent;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 import cn.fitrecipe.android.function.Common;
@@ -69,6 +69,20 @@ public class SetAlarmActivity extends Activity implements View.OnClickListener {
         initView();
         initData();
         initEvent();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("SetAlarmActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("SetAlarmActivity");
+        MobclickAgent.onResume(this);
     }
 
     private void initData() {

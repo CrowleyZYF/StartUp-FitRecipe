@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -645,6 +646,8 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
         }
 
         //scrollToTop();
+
+        MobclickAgent.onPageStart("Plan");
     }
 
     public void scrollToTop(){
@@ -678,6 +681,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onPause() {
         super.onPause();
+        MobclickAgent.onPageEnd("Plan");
     }
 
     @Override
@@ -752,7 +756,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                     Common.infoDialog(this.FrApplication.getInstance(), "没有视频", "自定义计划没有相关视频的~").show();
                 }else */
                 if(video_id.equals("")){
-                    Common.infoDialog(FrApplication.getInstance(), "暂无视频", "视频还在录制中，敬请期待啦~").show();
+                    Common.infoDialog(getActivity(), "暂无视频", "视频还在录制中，敬请期待啦~").show();
                 }else{
                     Intent intent  = new Intent(FrApplication.getInstance(), PlayerActivity.class);
                     intent.putExtra("vid", video_id);

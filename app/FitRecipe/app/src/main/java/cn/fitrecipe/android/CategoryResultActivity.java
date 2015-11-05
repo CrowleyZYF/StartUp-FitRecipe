@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.rey.material.widget.CheckBox;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -101,6 +102,20 @@ public class CategoryResultActivity extends Activity implements View.OnClickList
         initView();
         getData();
         initEvent();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("CategoryResultActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("CategoryResultActivity");
+        MobclickAgent.onResume(this);
     }
 
     private void initView() {

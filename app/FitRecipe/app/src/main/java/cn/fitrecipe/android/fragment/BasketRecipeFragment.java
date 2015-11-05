@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.umeng.analytics.MobclickAgent;
+
 import cn.fitrecipe.android.Adpater.BasketAdapter;
 import cn.fitrecipe.android.IngredientActivity;
 import cn.fitrecipe.android.R;
@@ -26,6 +28,18 @@ public class BasketRecipeFragment extends Fragment {
         View v = View.inflate(getActivity(), R.layout.fragment_ingredient_2, null);
         initView(v);
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("BasketRecipe");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("BasketRecipe");
     }
 
     private void initView(View v) {

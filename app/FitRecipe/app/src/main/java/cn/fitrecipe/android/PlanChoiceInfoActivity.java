@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -80,6 +81,20 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
         isUsed = getIntent().getBooleanExtra("isUsed", false);
         initView();
         getData(plan_id);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("PlanChoiceInfoActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("PlanChoiceInfoActivity");
+        MobclickAgent.onResume(this);
     }
 
     private void getData(int id) {
@@ -366,10 +381,5 @@ public class PlanChoiceInfoActivity extends Activity implements View.OnClickList
     @Override
     public void onPageScrollStateChanged(int state) {
 
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
     }
 }

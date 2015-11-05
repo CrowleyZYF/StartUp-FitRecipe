@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
@@ -175,7 +176,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         SharedPreferences sp = getSharedPreferences("user", MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
@@ -185,6 +186,15 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
             editor.putInt("addCommentCount", 0);
             editor.commit();
         }
+        MobclickAgent.onPageStart("RecipeActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("RecipeActivity");
+        MobclickAgent.onResume(this);
     }
 
     private void initView() {
@@ -535,7 +545,10 @@ public class RecipeActivity extends Activity implements View.OnClickListener, Po
                 break;
             }
             case R.id.put_in_basket:
-                if (plan_name.equals("personal plan")){
+                if(!FrApplication.getInstance().isLogin()) {
+                    Toast.makeText(RecipeActivity.this, "请先登录账号!", Toast.LENGTH_SHORT).show();
+                }
+                else if (plan_name.equals("personal plan")){
                     Intent intent = new Intent(this, AddToPlanActivity.class);
                     intent.putExtra("recipe", recipe);
                     intent.putExtra("id", recipe.getId());

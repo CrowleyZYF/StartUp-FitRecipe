@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.fb.FeedbackAgent;
 import com.umeng.update.UmengUpdateAgent;
 
@@ -107,7 +108,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         SharedPreferences preferences=getSharedPreferences("user", MODE_PRIVATE);
         boolean isSpecial = preferences.getBoolean("isSpecial", false);
@@ -126,12 +127,16 @@ public class MainActivity extends FragmentActivity implements OnClickListener
         }
 
         registerReceiver(readyRececiver, intentFilter);
+        MobclickAgent.onPageStart("MainActivity");
+        MobclickAgent.onResume(this);
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         unregisterReceiver(readyRececiver);
         super.onPause();
+        MobclickAgent.onPageEnd("MainActivity");
+        MobclickAgent.onResume(this);
     }
 
     private void initEvent()

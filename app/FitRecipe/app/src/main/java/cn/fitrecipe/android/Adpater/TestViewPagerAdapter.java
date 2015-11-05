@@ -444,7 +444,7 @@ public class TestViewPagerAdapter extends PagerAdapter implements View.OnClickLi
                     Toast.makeText(context,"身高不要低于"+HEIGHT_MIN+"厘米",Toast.LENGTH_SHORT).show();
                 } else if(value>HEIGHT_MAX){
                     Toast.makeText(context,"身高不要高于"+HEIGHT_MAX+"厘米",Toast.LENGTH_SHORT).show();
-                }else{
+                } else{
                     result = true;
                 }
                 break;

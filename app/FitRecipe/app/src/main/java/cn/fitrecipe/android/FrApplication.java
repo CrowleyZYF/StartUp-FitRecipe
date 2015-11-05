@@ -5,6 +5,7 @@ import android.app.Application;
 import android.os.Bundle;
 
 import com.pgyersdk.crash.PgyCrashManager;
+import com.umeng.analytics.MobclickAgent;
 import com.youku.player.YoukuPlayerBaseConfiguration;
 
 import java.util.List;
@@ -24,7 +25,6 @@ import cn.fitrecipe.android.entity.Report;
 import cn.fitrecipe.android.entity.SeriesPlan;
 import cn.fitrecipe.android.function.Common;
 
-;
 
 /**
  * Created by 奕峰 on 2015/5/5.
@@ -79,7 +79,10 @@ public class FrApplication extends Application {
         FrRequest.getInstance().init(this);
 
         initYouku();
-        instance = this;
+        //instance = this;
+        MobclickAgent.setDebugMode(true);
+        MobclickAgent.openActivityDurationTrack(false);
+        MobclickAgent.updateOnlineConfig(this);
     }
 
     private void initPgy() {

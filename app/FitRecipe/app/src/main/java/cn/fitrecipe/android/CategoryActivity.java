@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rey.material.widget.CheckBox;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,12 +55,27 @@ public class CategoryActivity extends Activity implements View.OnClickListener, 
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("CategoryActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("CategoryActivity");
+        MobclickAgent.onResume(this);
+    }
+
     private void initView() {
         back_btn = (ImageView) findViewById(R.id.left_btn);
         back_btn.setImageResource(R.drawable.icon_back_white);
 
         filter_btn = (ImageView) findViewById(R.id.right_btn);
         filter_btn.setImageResource(R.drawable.icon_filter);
+        filter_btn.setVisibility(View.GONE);
 
         sure_btn = (TextView) findViewById(R.id.filter_sure_btn);
 

@@ -6,7 +6,7 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.View;
 
-import java.util.List;
+import com.umeng.analytics.MobclickAgent;
 
 import cn.fitrecipe.android.entity.PlanComponent;
 import cn.fitrecipe.android.fragment.SelectStageFirstFragment;
@@ -26,6 +26,20 @@ public class SelectRecipeActivity extends Activity implements View.OnClickListen
 
         fragments = new Fragment[2];
         setFragment(0);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("SelectRecipeActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("SelectRecipeActivity");
+        MobclickAgent.onResume(this);
     }
 
     public void setFragment(int i) {

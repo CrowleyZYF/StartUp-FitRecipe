@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -67,6 +68,18 @@ public class SelectStageFirstFragment extends Fragment implements View.OnClickLi
         initEvent();
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("SelectStageFirst");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("SelectStageFirst");
     }
 
     private void initEvent() {

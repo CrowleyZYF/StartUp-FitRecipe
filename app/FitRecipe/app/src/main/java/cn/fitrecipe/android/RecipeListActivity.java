@@ -1,19 +1,17 @@
 package cn.fitrecipe.android;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,11 +24,9 @@ import cn.fitrecipe.android.Adpater.RecipeCardAdapter;
 import cn.fitrecipe.android.Http.FrRequest;
 import cn.fitrecipe.android.Http.FrServerConfig;
 import cn.fitrecipe.android.Http.GetRequest;
-import cn.fitrecipe.android.Http.PostRequest;
 import cn.fitrecipe.android.UI.BorderScrollView;
 import cn.fitrecipe.android.UI.RecyclerViewLayoutManager;
 import cn.fitrecipe.android.entity.Recipe;
-import cn.fitrecipe.android.entity.Theme;
 import cn.fitrecipe.android.function.RequestErrorHelper;
 import pl.tajchert.sample.DotsTextView;
 
@@ -57,6 +53,20 @@ public class RecipeListActivity extends Activity implements View.OnClickListener
         initView();
         getData();
         initEvent();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("RecipeListActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("RecipeListActivity");
+        MobclickAgent.onResume(this);
     }
 
     private void getData() {

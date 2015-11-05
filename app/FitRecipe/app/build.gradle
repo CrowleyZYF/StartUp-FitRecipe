@@ -9,7 +9,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
         renderscriptTargetApi 19
         renderscriptSupportModeEnabled true
     }
@@ -72,4 +72,5 @@ dependencies {
     compile 'com.qiniu:happy-dns:0.2.3.2'
     compile files('libs/qiniu-java-sdk.jar')
     compile files('libs/umeng-update-v2.6.0.1.jar')
+    compile 'com.umeng.analytics:analytics:latest.integration'
 }

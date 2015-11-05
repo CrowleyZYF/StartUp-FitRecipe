@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/login"
-            android:textColor="#333333"
+            android:textColor="#ffffff"
             android:textSize="18sp" />
 
         <TextView
@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/register"
-            android:textColor="#333333"
+            android:textColor="#ffffff"
             android:textSize="12sp"
             android:padding="15dp"
             android:layout_alignParentRight="true"
@@ -36,7 +36,7 @@
             android:padding="17dp"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:src="@drawable/icon_back"/>
+            android:src="@drawable/icon_back_white"/>
 
     </RelativeLayout>
 
@@ -170,12 +170,10 @@
             <Button
                 android:id="@+id/login_btn"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="40dp"
                 android:text="@string/login"
-                android:textColor="@color/white"
-                android:background="@drawable/login_button"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"/>
+                android:textColor="@color/login_input_text_color"
+                android:background="@drawable/landingpage_in_button"/>
 
             </LinearLayout>
 
@@ -273,12 +271,18 @@
         </LinearLayout>
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"></LinearLayout>
+
+    <LinearLayout
         android:id="@+id/register_linearlayout"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:background="@color/login_color"
         android:gravity="center_horizontal|center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
 
         <TextView

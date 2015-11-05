@@ -114,8 +114,8 @@
                         android:paddingBottom="5dp"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
-                        android:textColor="@color/white"
-                        android:background="@drawable/code_button"/>
+                        android:textColor="@color/login_input_text_color"
+                        android:background="@drawable/landingpage_in_button"/>
 
                     <TextView
                         android:id="@+id/get_disable"
@@ -214,12 +214,10 @@
             <Button
                 android:id="@+id/register_btn"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="40dp"
                 android:text="@string/register"
-                android:textColor="@color/white"
-                android:background="@drawable/login_button"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"/>
+                android:textColor="@color/login_input_text_color"
+                android:background="@drawable/landingpage_in_button"/>
 
             </LinearLayout>
 
@@ -241,7 +239,8 @@
         android:layout_height="55dp"
         android:background="@color/login_color"
         android:gravity="center_horizontal|center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
 
         <TextView

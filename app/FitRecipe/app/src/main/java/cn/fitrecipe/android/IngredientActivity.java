@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.umeng.analytics.MobclickAgent;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -46,6 +48,13 @@ public class IngredientActivity extends Activity implements View.OnClickListener
         initEvent();
         initData();
         setFragment(0);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("IngredientActivity");
+        MobclickAgent.onResume(this);
     }
 
     private void initData() {
@@ -144,7 +153,7 @@ public class IngredientActivity extends Activity implements View.OnClickListener
 
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         for(int i = 0; i < data.size(); i++) {
             if(data.get(i).getName().equals("其它")) {
                 ArrayList<PlanComponent> components = data.get(i).getComponents();
@@ -156,6 +165,8 @@ public class IngredientActivity extends Activity implements View.OnClickListener
         basket.setContent(data);
         FrDbHelper.getInstance(this).saveBasket(basket);
         super.onPause();
+        MobclickAgent.onPageEnd("IngredientActivity");
+        MobclickAgent.onResume(this);
     }
 
     public List<PlanComponent> getData(){

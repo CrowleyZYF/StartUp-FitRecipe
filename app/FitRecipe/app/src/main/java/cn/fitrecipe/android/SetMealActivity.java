@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rey.material.widget.Switch;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * Created by 奕峰 on 2015/5/8.
@@ -31,6 +32,20 @@ public class SetMealActivity extends Activity implements View.OnClickListener {
         initView();
         initData();
         initEvent();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("SetMealActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("SetMealActivity");
+        MobclickAgent.onResume(this);
     }
 
     private void initData() {

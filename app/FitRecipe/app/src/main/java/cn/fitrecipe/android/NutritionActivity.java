@@ -11,6 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.umeng.analytics.MobclickAgent;
+
 import java.util.List;
 
 import cn.fitrecipe.android.UI.LinearLayoutForListView;
@@ -61,6 +63,20 @@ public class NutritionActivity extends Activity implements View.OnClickListener 
         initView();
         initData();
         initEvent();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("NutritionActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("NutritionActivity");
+        MobclickAgent.onResume(this);
     }
 
     private void initView() {

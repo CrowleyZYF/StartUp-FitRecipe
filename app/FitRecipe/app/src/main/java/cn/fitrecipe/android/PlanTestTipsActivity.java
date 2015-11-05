@@ -8,6 +8,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.umeng.analytics.MobclickAgent;
+
 
 /**
  * Created by 奕峰 on 2015/5/8.
@@ -28,6 +30,20 @@ public class PlanTestTipsActivity extends Activity {
 
         initView(getIntent());
         initEvent();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("PlanTestTipsActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("PlanTestTipsActivity");
+        MobclickAgent.onResume(this);
     }
 
     private void initEvent() {
