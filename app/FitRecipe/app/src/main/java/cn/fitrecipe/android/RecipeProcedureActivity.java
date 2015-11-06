@@ -100,10 +100,14 @@ public class RecipeProcedureActivity extends Activity implements View.OnClickLis
                 this.finish();
                 break;
             case R.id.right_btn:
-                if (video.equals("")){
-                    Common.infoDialog(this, "暂无视频", "视频还在录制中，敬请期待啦~").show();
-                }else{
-                    playVideo();
+                if (!FrApplication.getInstance().isCanYouKu()){
+                    Common.infoDialog(this, "不兼容", "由于优酷官方提供的程序接口不支持64位手机，所以暂时不能播放视频，但是我们团队会尽快想办法修复哒~小伙伴们也可以去优酷或者腾讯搜索健食记观看视频哈").show();
+                } else{
+                    if (video.equals("")){
+                        Common.infoDialog(this, "暂无视频", "视频还在录制中，敬请期待啦~").show();
+                    }else{
+                        playVideo();
+                    }
                 }
                 //Common.toBeContinuedDialog(this);
                 break;

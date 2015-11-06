@@ -2,6 +2,7 @@ package cn.fitrecipe.android;
 
 import android.app.Activity;
 import android.app.Application;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.pgyersdk.crash.PgyCrashManager;
@@ -64,6 +65,12 @@ public class FrApplication extends Application {
 
     private static FrApplication instance;
 
+    public boolean isCanYouKu() {
+        return canYouKu;
+    }
+
+    private boolean canYouKu = true;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -78,9 +85,16 @@ public class FrApplication extends Application {
         //init network
         FrRequest.getInstance().init(this);
 
-        initYouku();
+        //System.loadLibrary("libluajava");
+        String cpu_set = Build.CPU_ABI;
+        if (cpu_set.contains("64")){
+            canYouKu = false;
+        }
+        if (canYouKu){
+            initYouku();
+        }
         //instance = this;
-        MobclickAgent.setDebugMode(true);
+        //MobclickAgent.setDebugMode(true);
         MobclickAgent.openActivityDurationTrack(false);
         MobclickAgent.updateOnlineConfig(this);
     }

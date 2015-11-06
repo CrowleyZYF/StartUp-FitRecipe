@@ -152,7 +152,7 @@
         </meta-data>
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="Test" />
+            android:value="Android" />
 
         <service
             android:name=".service.GetHomeDataService"

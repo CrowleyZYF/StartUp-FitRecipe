@@ -755,12 +755,16 @@ public class PlanFragment extends Fragment implements View.OnClickListener{
                 /*if (plan_name.getText().toString().equals("自定义计划")){
                     Common.infoDialog(this.FrApplication.getInstance(), "没有视频", "自定义计划没有相关视频的~").show();
                 }else */
-                if(video_id.equals("")){
-                    Common.infoDialog(getActivity(), "暂无视频", "视频还在录制中，敬请期待啦~").show();
+                if (!FrApplication.getInstance().isCanYouKu()){
+                    Common.infoDialog(getActivity(), "不兼容", "由于优酷官方提供的程序接口不支持64位手机，所以暂时不能播放视频，但是我们团队会尽快想办法修复哒~小伙伴们也可以去优酷或者腾讯搜索健食记观看视频哈").show();
                 }else{
-                    Intent intent  = new Intent(FrApplication.getInstance(), PlayerActivity.class);
-                    intent.putExtra("vid", video_id);
-                    startActivity(intent);
+                    if(video_id.equals("")){
+                        Common.infoDialog(getActivity(), "暂无视频", "视频还在录制中，敬请期待啦~").show();
+                    }else{
+                        Intent intent  = new Intent(FrApplication.getInstance(), PlayerActivity.class);
+                        intent.putExtra("vid", video_id);
+                        startActivity(intent);
+                    }
                 }
                 break;
             case R.id.change_plan_btn:
