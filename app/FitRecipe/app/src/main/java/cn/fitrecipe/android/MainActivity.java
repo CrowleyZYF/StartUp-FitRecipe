@@ -26,7 +26,7 @@ import android.widget.Toast;
 
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.fb.FeedbackAgent;
-import com.umeng.update.UmengUpdateAgent;
+//import com.umeng.update.UmengUpdateAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +73,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
     {
         super.onCreate(savedInstanceState);
 
-        UmengUpdateAgent.update(this);
+        //UmengUpdateAgent.update(this);
         layout = View.inflate(this, R.layout.framework_main_container, null);
         setContentView(layout);
 

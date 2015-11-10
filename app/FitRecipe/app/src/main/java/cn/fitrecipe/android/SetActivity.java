@@ -18,10 +18,6 @@ import com.umeng.socialize.sso.SinaSsoHandler;
 import com.umeng.socialize.sso.TencentWBSsoHandler;
 import com.umeng.socialize.sso.UMQQSsoHandler;
 import com.umeng.socialize.sso.UMSsoHandler;
-import com.umeng.update.UmengUpdateAgent;
-import com.umeng.update.UmengUpdateListener;
-import com.umeng.update.UpdateResponse;
-import com.umeng.update.UpdateStatus;
 
 import cn.fitrecipe.android.function.Common;
 
@@ -155,7 +151,7 @@ public class SetActivity extends Activity implements View.OnClickListener {
                 agent.startFeedbackActivity();
                 break;
             case R.id.set_checkupdate_btn:
-                UmengUpdateAgent.setUpdateAutoPopup(false);
+                /*UmengUpdateAgent.setUpdateAutoPopup(false);
                 UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
                     @Override
                     public void onUpdateReturned(int updateStatus,UpdateResponse updateInfo) {
@@ -175,7 +171,7 @@ public class SetActivity extends Activity implements View.OnClickListener {
                         }
                     }
                 });
-                UmengUpdateAgent.forceUpdate(this);
+                UmengUpdateAgent.forceUpdate(this);*/
                 break;
             case R.id.set_protocol_btn:
                 break;

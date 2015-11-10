@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:id="@android:id/background">
+        <shape>
+            <solid android:color="#ff475867"/>
+        </shape>
+    </item>
+	<item android:id="@android:id/progress">
+	    <clip>
+	        <shape>
+	            <solid android:color="#ff129e00"/>
+	        </shape>
+        </clip>
+	</item>
+</layer-list>
+<!-- From: file:/E:/fitRecipe/app/FitRecipe/bDIntegrationSDK_LibProject/src/main/res/drawable/bdp_update_progress_download.xml --><!-- From: file:/E:/fitRecipe/app/FitRecipe/bDIntegrationSDK_LibProject/build/intermediates/bundles/debug/res/drawable/bdp_update_progress_download.xml -->
